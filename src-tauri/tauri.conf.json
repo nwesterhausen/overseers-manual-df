@@ -7,7 +7,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "Overseer&#x27;s Reference Manual",
+    "productName": "overseers-manual-df",
     "version": "0.1.0"
   },
   "tauri": {
@@ -29,7 +29,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "games.nwest.dwarffortress.overseer-manual",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
