@@ -1,0 +1,27 @@
+{
+  "name": "overseers-manual-df",
+  "version": "0.0.1",
+  "description": "Tauri app to provide Dwarf Fortress players with personalized raws-accurate references.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "tauri": "tauri"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.nwest.xyz:nwest/overseers-manual-df.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@tauri-apps/cli": "1.0.0-rc.13",
+    "typescript": "^4.6.4",
+    "vite": "^2.9.9",
+    "vite-plugin-solid": "^2.2.6",
+    "vite-plugin-windicss": "^1.8.4"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "1.0.0-rc.6",
+    "solid-js": "^1.4.2"
+  }
+}
