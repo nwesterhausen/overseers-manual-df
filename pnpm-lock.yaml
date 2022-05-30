@@ -6,6 +6,7 @@ specifiers:
   bootswatch: ^5.1.3
   solid-bootstrap: ^1.0.8
   solid-js: ^1.4.2
+  solidjs-icons: ^1.0.11
   typescript: ^4.6.4
   vite: ^2.9.9
   vite-plugin-solid: ^2.2.6
@@ -18,6 +19,7 @@ devDependencies:
   '@tauri-apps/cli': 1.0.0-rc.13
   bootswatch: 5.1.3
   solid-bootstrap: 1.0.8_solid-js@1.4.2
+  solidjs-icons: 1.0.11_solid-js@1.4.2
   typescript: 4.6.4
   vite: 2.9.9
   vite-plugin-solid: 2.2.6
@@ -962,6 +964,14 @@ packages:
       '@babel/generator': 7.17.7
       '@babel/helper-module-imports': 7.16.7
       '@babel/types': 7.17.0
+      solid-js: 1.4.2
+    dev: true
+
+  /solidjs-icons/1.0.11_solid-js@1.4.2:
+    resolution: {integrity: sha512-rIrcbaOV1UaHwBf4ChAyaofLig2DwN4b90noj8DcO4Rowb1DdpXuOZrYR4eBiQHVrDmeYAU6ysmhXCWow8jFcQ==}
+    peerDependencies:
+      solid-js: '*'
+    dependencies:
       solid-js: 1.4.2
     dev: true
 
