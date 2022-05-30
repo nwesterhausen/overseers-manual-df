@@ -1,4 +1,4 @@
-import { Container, Navbar, Tabs, Tab, Nav } from 'solid-bootstrap';
+import { Container, Navbar, Tabs, Tab, Nav, Form, FormControl, Button } from 'solid-bootstrap';
 import type { Component } from 'solid-js';
 import Listing from './components/Listing';
 import { LIB_VERSION } from './version';
@@ -15,9 +15,20 @@ const App: Component = () => {
         </Nav>
       </Container>
     </Navbar>
-    <div class="p-2 container">
+    <Container class='p-2'>
 
-      <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" class="mb-3">
+      <Form class="d-flex">
+        <FormControl
+          type="search"
+          placeholder="Filter results"
+          class="me-2"
+          aria-label="Search"
+        />
+      </Form>
+    </Container>
+    <Container class='p-2'>
+
+      <Tabs defaultActiveKey="all" id="uncontrolled-tab-example" class="mb-3">
         <Tab eventKey="all" title="All">
           <Listing />
         </Tab>
@@ -28,7 +39,7 @@ const App: Component = () => {
           <Listing />
         </Tab>
       </Tabs>
-    </div>
+    </Container>
   </>
   );
 };
