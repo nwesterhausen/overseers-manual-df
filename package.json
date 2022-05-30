@@ -6,19 +6,21 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "prebuild":  "node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git@git.nwest.xyz:nwest/overseers-manual-df.git"
+    "url": "git@github.com:nwesterhausen/overseers-manual-df.git"
   },
   "license": "MIT",
   "devDependencies": {
     "@tauri-apps/cli": "1.0.0-rc.13",
+    "bootswatch": "^5.1.3",
+    "solid-bootstrap": "^1.0.8",
     "typescript": "^4.6.4",
     "vite": "^2.9.9",
-    "vite-plugin-solid": "^2.2.6",
-    "vite-plugin-windicss": "^1.8.4"
+    "vite-plugin-solid": "^2.2.6"
   },
   "dependencies": {
     "@tauri-apps/api": "1.0.0-rc.6",
