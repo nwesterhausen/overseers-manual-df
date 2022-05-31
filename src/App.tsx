@@ -1,43 +1,71 @@
-import { Container, Tabs, Tab, Form, FormControl, Alert, Accordion } from 'solid-bootstrap';
+import { Container, Tabs, Tab, Form, FormControl, Alert, Accordion, Button } from 'solid-bootstrap';
 import { emit, listen } from '@tauri-apps/api/event'
-import { Accessor, Component, createMemo, createSignal } from 'solid-js';
+import {open as tauriOpen, OpenDialogOptions} from '@tauri-apps/api/dialog'
+import { Accessor, Component, createMemo, createResource, createSignal } from 'solid-js';
 import HeaderBar from './components/HeaderBar';
 import Listing from './components/Listing';
 import RawPathDisplay from './components/RawPathDisplay';
 
-function getRawPathFromWorldDat(datpath: string) {
-  if (datpath.indexOf("\\") !== -1) {
+const openDialogOptions: OpenDialogOptions = {
+  directory: true,
+  title: "Select your current DF Save Folder (e.g. ...DF/data/saves/region1)"
+}
 
-    return datpath.split("\\").slice(0, -1);
+async function performTauriOpenDiaglog(source, { value, refetching}) {
+  try {
+    let folderPath = await tauriOpen(openDialogOptions);
+    if (Array.isArray(folderPath)) {
+      return folderPath[0];
+    }
+    return folderPath;
+  } catch(error) {
+    console.error(error);
+    return "";
   }
-  return datpath.split("/").slice(0, -1);
+}
+
+function getRawPathFromWorldDat(dadpath: string, manpath: string) {
+  let targetPath = dadpath;
+  if (manpath && manpath !== "") {
+    targetPath = manpath; 
+  }
+
+  if (targetPath.indexOf("\\") !== -1) {
+
+    return targetPath.split("\\").slice(0, -1);
+  }
+  return targetPath.split("/").slice(0, -1);
 }
 
 const App: Component = () => {
-  const [dfpath, setDfpath] = createSignal(""); // Path to the dropped file location
-  const rawFolderPath = createMemo(() => getRawPathFromWorldDat(dfpath()));
+  const [dragAndDropPath, setDragAndDropPath] = createSignal(""); // Path to the dropped file location
+  const [doManualFolderSelect, setManualFolderSelect] = createSignal(false); // Change to true to perform open folder diaglog
+  const [manuallySpecifiedPath, { mutate, refetch }]  = createResource(doManualFolderSelect, performTauriOpenDiaglog)
+  const rawFolderPath = createMemo(() => getRawPathFromWorldDat(dragAndDropPath(), manuallySpecifiedPath()));
+  
 
   // Listen for a file being dropped on the window to change the save location.
   listen("tauri://file-drop", (event) => {
-    setDfpath(event.payload[0]);
+    setDragAndDropPath(event.payload[0]);
   })
 
 
   return (<>
     <HeaderBar />
     <Container class='p-2'>
-      {dfpath() === "" ? <>
+      {rawFolderPath().length == 0 ? <>
         <Alert variant="warning" dismissible>
           <Alert.Heading>Dwarf Fortress Path Unset</Alert.Heading>
           <p>
             To set the path to your Dwarf Fortress Save, drag and drop the <code>world.dat</code> file from
-            the save folder onto this window, or use the filepicker below to browse for the save folder.
+            the save folder onto this window, or use the button below to pull up a folder selection dialog.
           </p>
+          <Container class='p-3'>
+            <Button variant="primary" onClick={() => {
+              setManualFolderSelect(true);
+            }}>Set Save Directory</Button>
+          </Container>
         </Alert>
-        <Form.Group controlId="formFile" class="mb-3">
-          <Form.Label>Browse to the save folder. (Ideally select the <code>world.dat</code> file.)</Form.Label>
-          <Form.Control type="file" />
-        </Form.Group>
       </> : <>
         <Accordion flush>
           <Accordion.Item eventKey="0">
