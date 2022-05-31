@@ -8,7 +8,7 @@ import RawPathDisplay from './components/RawPathDisplay';
 
 const openDialogOptions: OpenDialogOptions = {
   directory: true,
-  title: "Select your current DF Save Folder (e.g. ...DF/data/saves/region1)"
+  title: "Select your current DF Save Folder (e.g. ...DF/data/saves)"
 }
 
 async function performTauriOpenDiaglog(source, { value, refetching}) {
@@ -24,24 +24,31 @@ async function performTauriOpenDiaglog(source, { value, refetching}) {
   }
 }
 
-function getRawPathFromWorldDat(dadpath: string, manpath: string) {
+function getSavePathFromWorldDat(dadpath: string, manpath: string) {
   let targetPath = dadpath;
   if (manpath && manpath !== "") {
     targetPath = manpath; 
   }
-
+  let pathDelimation = "/";
   if (targetPath.indexOf("\\") !== -1) {
-
-    return targetPath.split("\\").slice(0, -1);
+    pathDelimation = "\\";
   }
-  return targetPath.split("/").slice(0, -1);
+  let pathArr = targetPath.split(pathDelimation);
+  while(pathArr[pathArr.length - 1] !== "save") {
+    pathArr = pathArr.slice(0, -1);  
+    if (pathArr.length === 0) {
+      return [];
+    }
+  }
+  return pathArr;
+  
 }
 
 const App: Component = () => {
   const [dragAndDropPath, setDragAndDropPath] = createSignal(""); // Path to the dropped file location
   const [doManualFolderSelect, setManualFolderSelect] = createSignal(false); // Change to true to perform open folder diaglog
   const [manuallySpecifiedPath, { mutate, refetch }]  = createResource(doManualFolderSelect, performTauriOpenDiaglog)
-  const rawFolderPath = createMemo(() => getRawPathFromWorldDat(dragAndDropPath(), manuallySpecifiedPath()));
+  const saveFolderPath = createMemo(() => getSavePathFromWorldDat(dragAndDropPath(), manuallySpecifiedPath()));
   
 
   // Listen for a file being dropped on the window to change the save location.
@@ -53,12 +60,13 @@ const App: Component = () => {
   return (<>
     <HeaderBar />
     <Container class='p-2'>
-      {rawFolderPath().length == 0 ? <>
-        <Alert variant="warning" dismissible>
-          <Alert.Heading>Dwarf Fortress Path Unset</Alert.Heading>
+      {saveFolderPath().length == 0 ? <>
+        <Alert variant="warning">
+          <Alert.Heading>Dwarf Fortress save directory path is unset!</Alert.Heading>
           <p>
-            To set the path to your Dwarf Fortress Save, drag and drop the <code>world.dat</code> file from
-            the save folder onto this window, or use the button below to pull up a folder selection dialog.
+            To set the path to your Dwarf Fortress Save, drag and drop a <code>world.dat</code> file from
+            any of the saves in your save folder onto this window, or use the button below to pull up a folder 
+            selection dialog.
           </p>
           <Container class='p-3'>
             <Button variant="primary" onClick={() => {
@@ -69,9 +77,9 @@ const App: Component = () => {
       </> : <>
         <Accordion flush>
           <Accordion.Item eventKey="0">
-            <Accordion.Header>Current Raws Folder</Accordion.Header>
+            <Accordion.Header>Current Saves Folder</Accordion.Header>
             <Accordion.Body>
-              <RawPathDisplay path={rawFolderPath()} />
+              <RawPathDisplay path={saveFolderPath()} />
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
