@@ -1,10 +1,10 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+name = "overseers-manual-tauriapp"
+version = "0.0.1"
+description = "A Tauri App to analyze your Dwarf Fortress raw files and present a searchabled reference"
+authors = ["Nicholas Westerhausen"]
+license = "MIT"
+repository = "github.com:nwesterhausen/overseers-manual-df.git"
 default-run = "app"
 edition = "2021"
 rust-version = "1.57"
@@ -26,3 +26,9 @@ default = [ "custom-protocol" ]
 # this feature is used used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
 custom-protocol = [ "tauri/custom-protocol" ]
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
