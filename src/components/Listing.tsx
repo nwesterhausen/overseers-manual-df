@@ -1,5 +1,4 @@
 import { Component, createSignal, For } from 'solid-js';
-import { createLocalStore } from '../utils';
 
 const Listing: Component = () => {
     const [pages, setPages] = createSignal([]);
