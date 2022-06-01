@@ -5,14 +5,13 @@ import { appWindow } from '@tauri-apps/api/window';
 import { Component, createEffect, createMemo, createResource, createSignal, For } from 'solid-js';
 import Listing from './components/Listing';
 import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH, LAST_SAVE } from './settings';
-import { AiFillGithub } from 'solidjs-icons/ai';
 import { readDir } from '@tauri-apps/api/fs';
-import { getName, getVersion } from '@tauri-apps/api/app';
+import { getVersion } from '@tauri-apps/api/app';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual"
 // App url for github link
-const APP_REPO = "https://github.com/nwesterhausen/overseers-manual-df"
+// const APP_REPO = "https://github.com/nwesterhausen/overseers-manual-df"
 
 /**
  * Dialog options for the select directory window
@@ -161,9 +160,6 @@ const App: Component = () => {
               }
             </For>
           </NavDropdown>
-        </Nav>
-        <Nav>
-          <a href={APP_REPO} target="_blank" class='link-dark icon-link'><AiFillGithub /></a>
         </Nav>
       </Container>
     </Navbar>

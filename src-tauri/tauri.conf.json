@@ -26,10 +26,6 @@
         "all": false,
         "setTitle": true
       },
-      "shell": {
-        "all": false,
-        "open": true
-      }
     },
     "bundle": {
       "active": true,
