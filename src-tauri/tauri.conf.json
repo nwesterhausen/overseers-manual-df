@@ -14,6 +14,20 @@
     "allowlist": {
       "all": false,
       "dialog": {
+        "all": false,
+        "open": true
+      },
+      "fs": {
+        "scope": ["**"],
+        "all": false,
+        "readDir": true
+      },
+      "window": {
+        "all": false,
+        "setTitle": true
+      },
+      "shell": {
+        "all": false,
         "open": true
       }
     },

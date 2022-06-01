@@ -1,18 +1,38 @@
 import { Container, Navbar, Nav, NavDropdown, Tabs, Tab, Form, FormControl, Alert, Button } from 'solid-bootstrap';
 import { listen } from '@tauri-apps/api/event'
 import { open as tauriOpen, OpenDialogOptions } from '@tauri-apps/api/dialog'
-import { Component, createEffect, createMemo, createResource, createSignal } from 'solid-js';
+import { appWindow } from '@tauri-apps/api/window';
+import { Component, createEffect, createMemo, createResource, createSignal, For } from 'solid-js';
 import Listing from './components/Listing';
-import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH } from './settings';
-import { LIB_VERSION } from './version';
+import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH, LAST_SAVE } from './settings';
 import { AiFillGithub } from 'solidjs-icons/ai';
+import { readDir } from '@tauri-apps/api/fs';
+import { getName, getVersion } from '@tauri-apps/api/app';
 
+// App name for title
+const APP_NAME = "Overseer's Reference Manual"
+// App url for github link
+const APP_REPO = "https://github.com/nwesterhausen/overseers-manual-df"
+
+/**
+ * Dialog options for the select directory window
+ */
 const openDialogOptions: OpenDialogOptions = {
   directory: true,
   title: "Select your current DF Save Folder (e.g. ...DF/data/saves)"
 }
 
-function getSavePathFromWorldDat(dadpath: string, manpath: string) {
+/**
+ * Helper function to turn the path from a drag and dropped file OR the manually selected save folder
+ * into an array of directories ending with the Dwarf Fortress save folder. This is done pretty crudely,
+ * it splits the path based on `/` unless if finds `\` in the path, then it spits by `\`. After splitting
+ * the path, keeps removing indeces at the end of the array until the final index is 'save' (or the array
+ * is empty).
+ * @param dadpath path from drag-and-dropped file
+ * @param manpath path from the open directory dialog
+ * @returns array of directories leading to the save directory
+ */
+function getSavePathFromWorldDat(dadpath: string, manpath: string): string[] {
   let targetPath = dadpath;
   if (manpath && manpath !== "") {
     targetPath = manpath;
@@ -33,17 +53,61 @@ function getSavePathFromWorldDat(dadpath: string, manpath: string) {
 }
 
 const App: Component = () => {
-  const [dragAndDropPath, setDragAndDropPath] = createSignal(""); // Path to the dropped file location
-  const [doManualFolderSelect, setManualFolderSelect] = createSignal(false); // Change to true to perform open folder diaglog
+  // Tauri provides the app version in a promise, so we use a resource for it
+  const [appVersion] = createResource(async () => {
+    return await getVersion();
+  })
+  // Path to the dropped file location
+  const [dragAndDropPath, setDragAndDropPath] = createSignal("");
+  // Signal to open the directory open dialog, change to true to open it
+  const [doManualFolderSelect, setManualFolderSelect] = createSignal(false);
+  // This resource calls the Tauri API to open a file dialog
   const [manuallySpecifiedPath, { mutate, refetch }] = createResource(doManualFolderSelect, performTauriOpenDiaglog)
+  // Since we are splitting (and verifying) the path, we use a memo which reacts if either a file is dropped or if the
+  // resource is updated
   const saveFolderPath = createMemo(() => getSavePathFromWorldDat(dragAndDropPath(), manuallySpecifiedPath()));
+  // Based on the memo changing, we update the save folder path (and save it to our settings storage)
   createEffect(() => {
     if (saveFolderPath().length) {
-      saveToStore(SAVES_PATH, saveFolderPath().join("/"));
+      saveToStore(SAVES_PATH, saveFolderPath().join("/")); // Decided to deliminate with `/` in the settings file
+    }
+  })
+  // List of possible save folders (each can have their own raws)
+  const [saveDirectoryOptions, setSaveDirectoryOptions] = createSignal<string[]>([]);
+  // Currently selected save signal
+  const [currentSave, setCurrentSave] = createSignal<string>("");
+  // When we update the save directory, we need to update the list of possible saves
+  createEffect(() => {
+    if (saveFolderPath().length) {
+      readDir(saveFolderPath().join("/"))
+        .then(values => {
+          console.log(values);
+          let saveArr = [];
+          values.forEach(fileEntry => {
+            saveArr.push(fileEntry.name);
+          });
+          setSaveDirectoryOptions(saveArr);
+        })
+        .catch(console.error);
+    }
+  })
+  // When we update the currently selected save, we want to save it so we remember next time the app opens
+  // Also update the title depending on the current save or app version changing
+  createEffect(() => {
+    if (currentSave() !== "") {
+      appWindow.setTitle(`${APP_NAME} ${appVersion()} - ${currentSave()}`)
+      saveToStore(LAST_SAVE, currentSave());
+    } else {
+      appWindow.setTitle(`${APP_NAME} ${appVersion()}`);
     }
   })
 
-  async function performTauriOpenDiaglog(source, { value, refetching }) {
+  /**
+   * This opens a directory selection dialog using the settings defined earlier.
+   * @returns The selected path (or first selected path if more than one is chosen). Returns an empty string if it
+   * encounters an error.
+   */
+  async function performTauriOpenDiaglog(): Promise<string> {
     setManualFolderSelect(false);
     try {
       let folderPath = await tauriOpen(openDialogOptions);
@@ -57,15 +121,22 @@ const App: Component = () => {
     }
   }
 
-  initStore().then(() => {
-    return getFromStore(SAVES_PATH);
-  })
-    .then(val => {
-      if (val !== "") {
-        setDragAndDropPath(val);
-      }
-    })
-    .catch(console.error)
+  setTimeout(() => {
+    // Setting up the settings storage.
+    initStore()
+      // After its setup, try to get the save directory from the settings
+      .then(() => {
+        return getFromStore(SAVES_PATH);
+      })
+      // With the save folder, set it as the drag and drop path, since that's the path we set programmatically
+      // and let the effects do the rest.
+      .then(val => {
+        if (val !== "") {
+          setDragAndDropPath(val);
+        }
+      })
+      .catch(console.error)
+  }, 10);
 
   // Listen for a file being dropped on the window to change the save location.
   listen("tauri://file-drop", (event) => {
@@ -84,22 +155,15 @@ const App: Component = () => {
             }}>Pick new folder..</NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Change Save" id="basic-nav-dropdown" >
-            <NavDropdown.Item href="#action/3.1">current</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.1">region1</NavDropdown.Item>
-            <NavDropdown.Item active href="#action/3.1">region2</NavDropdown.Item>
+            <For each={saveDirectoryOptions()} fallback={<NavDropdown.Header>No saves found in directory.</NavDropdown.Header>}>
+              {(save) =>
+                <NavDropdown.Item active={save === currentSave()} onClick={() => setCurrentSave(save)}>{save}</NavDropdown.Item>
+              }
+            </For>
           </NavDropdown>
         </Nav>
         <Nav>
-          <ul class='list-inline'>
-
-            <li class='list-inline-item small'>
-              Version {LIB_VERSION}
-            </li>
-            <li class='list-inline-item'>
-              <a href="" target="_blank" class='link-dark icon-link'><AiFillGithub /></a>
-            </li>
-
-          </ul>
+          <a href={APP_REPO} target="_blank" class='link-dark icon-link'><AiFillGithub /></a>
         </Nav>
       </Container>
     </Navbar>
