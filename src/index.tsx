@@ -1,5 +1,6 @@
 /* @refresh reload */
-import 'windi.css';
+import 'bootswatch/dist/zephyr/bootstrap.css'
+import './custom.css'
 import { render } from 'solid-js/web';
 
 import App from './App';
