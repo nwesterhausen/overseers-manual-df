@@ -7,6 +7,7 @@ import Listing from './components/Listing';
 import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH, LAST_SAVE } from './settings';
 import { readDir } from '@tauri-apps/api/fs';
 import { getVersion } from '@tauri-apps/api/app';
+import { invoke } from '@tauri-apps/api/tauri';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual"
@@ -61,7 +62,7 @@ const App: Component = () => {
   // Signal to open the directory open dialog, change to true to open it
   const [doManualFolderSelect, setManualFolderSelect] = createSignal(false);
   // This resource calls the Tauri API to open a file dialog
-  const [manuallySpecifiedPath, { mutate, refetch }] = createResource(doManualFolderSelect, performTauriOpenDiaglog)
+  const [manuallySpecifiedPath] = createResource(doManualFolderSelect, performTauriOpenDiaglog)
   // Since we are splitting (and verifying) the path, we use a memo which reacts if either a file is dropped or if the
   // resource is updated
   const saveFolderPath = createMemo(() => getSavePathFromWorldDat(dragAndDropPath(), manuallySpecifiedPath()));
@@ -90,12 +91,19 @@ const App: Component = () => {
         .catch(console.error);
     }
   })
+  // Signal for loading raws
+  const [loadRaws, setLoadRaws] = createSignal(false);
+  // Resource for raws
+  const [jsonRawsResource] = createResource(loadRaws, parseRawsInSave, {
+    initialValue: []
+  });
   // When we update the currently selected save, we want to save it so we remember next time the app opens
   // Also update the title depending on the current save or app version changing
   createEffect(() => {
     if (currentSave() !== "") {
       appWindow.setTitle(`${APP_NAME} ${appVersion()} - ${currentSave()}`)
       saveToStore(LAST_SAVE, currentSave());
+      setLoadRaws(true);
     } else {
       appWindow.setTitle(`${APP_NAME} ${appVersion()}`);
     }
@@ -107,7 +115,7 @@ const App: Component = () => {
    * encounters an error.
    */
   async function performTauriOpenDiaglog(): Promise<string> {
-    setManualFolderSelect(false);
+    // setManualFolderSelect(false);
     try {
       let folderPath = await tauriOpen(openDialogOptions);
       if (Array.isArray(folderPath)) {
@@ -118,6 +126,31 @@ const App: Component = () => {
       console.error(error);
       return "";
     }
+  }
+
+  /**
+   * 
+   */
+  async function parseRawsInSave(): Promise<any[]> {
+    // setLoadRaws(false);
+    let dir = [...saveFolderPath(), currentSave(), "raw"].join("/");
+    console.log(`Sending ${dir} to be parsed.`);
+    let jsonStr = await invoke("parse_raws_at_path", {
+      path: dir
+    })
+    if (typeof jsonStr !== 'string') {
+      console.debug(jsonStr);
+      console.error("Did not get 'string' back");
+      return [];
+    }
+    let result = JSON.parse(jsonStr);
+    if (Array.isArray(result)) {
+      console.log("raws parsed",result.length);
+      return result;
+    }
+    console.debug(result);
+    console.error("Result was not an array");
+    return [];
   }
 
   setTimeout(() => {
@@ -191,13 +224,13 @@ const App: Component = () => {
 
         <Tabs defaultActiveKey="all" class="mb-3">
           <Tab eventKey="all" title="All">
-            <Listing />
+            <Listing data={jsonRawsResource()} />
           </Tab>
           <Tab eventKey="bestiary" title="Bestiary">
-            <Listing />
+            <Listing data={[]}/>
           </Tab>
           <Tab eventKey="materials" title="Materials">
-            <Listing />
+            <Listing data={[]} />
           </Tab>
         </Tabs></>
       }
