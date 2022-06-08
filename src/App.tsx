@@ -328,20 +328,15 @@ const App: Component = () => {
         ) : (
           <>
             {searchBarHtml()}
-
-            <Tabs defaultActiveKey="all" class="my-3">
-              <Tab eventKey="all" title="All">
+            <Tabs defaultActiveKey="bestiary" class="my-3">
+              {/* A bestiary (from bestiarum vocabulum) is a compendium of beasts. */}
+              <Tab eventKey="bestiary" title="Bestiary">
                 <Listing
                   data={jsonRawsResource()}
                   searchString={searchString()}
                 />
               </Tab>
-              <Tab eventKey="bestiary" title="Bestiary">
-                <Listing data={[]} searchString={searchString()} />
-              </Tab>
-              <Tab eventKey="materials" title="Materials">
-                <Listing data={[]} searchString={searchString()} />
-              </Tab>
+              <Tab disabled title="More to come in the future!"></Tab>
             </Tabs>
           </>
         )}
