@@ -8,6 +8,11 @@ const DATA_VERSION = 'dataVersion';
 export const SAVES_PATH = 'dfSavesPath';
 export const LAST_SAVE = 'lastSaveUsed';
 
+const ValidKeys = [DATA_VERSION, SAVES_PATH, LAST_SAVE];
+
+/**
+ * Initializes the store. This creates any missing values after checking that the `DATA_VERSION` matches our current version.
+ */
 export async function init() {
   const keys = await store.keys();
   console.log(keys);
@@ -32,13 +37,35 @@ export async function init() {
   }
 }
 
+/**
+ * Function to store a value in the settings.json file.
+ *
+ * This function does nothing if the key is not considered valid.
+ *
+ * @param key - The key to store the data under.
+ * @param value - The data to be stored
+ */
 export async function set(key: string, value: string) {
+  if (ValidKeys.indexOf(key) === -1) {
+    return;
+  }
   console.log(`Set ${key} to ${value} in store`);
   await store.set(key, value);
   await store.save();
 }
 
+/**
+ * Returns the value stored under a specified key.
+ *
+ * If the key is invalid, it returns an empty string.
+ *
+ * @param key - The key to retreive data from.
+ * @returns The value stored under that key
+ */
 export async function get(key: string): Promise<string> {
+  if (ValidKeys.indexOf(key) === -1) {
+    return '';
+  }
   console.log(`Retrieve ${key} from store`);
   return await store.get<string>(key);
 }
