@@ -1,4 +1,4 @@
-import { Raw } from "./Raw";
+import { Raw } from './Raw';
 
 export type Creature = {
   parent_raw: string;

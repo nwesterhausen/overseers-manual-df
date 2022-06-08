@@ -1,39 +1,14 @@
-import {
-  Container,
-  Navbar,
-  Nav,
-  NavDropdown,
-  Tabs,
-  Tab,
-  Form,
-  Alert,
-  Button,
-  Spinner,
-  Stack,
-} from "solid-bootstrap";
-import { listen } from "@tauri-apps/api/event";
-import { debounce } from "@solid-primitives/scheduled";
-import { open as tauriOpen, OpenDialogOptions } from "@tauri-apps/api/dialog";
-import { appWindow } from "@tauri-apps/api/window";
-import {
-  Component,
-  createEffect,
-  createMemo,
-  createResource,
-  createSignal,
-  For,
-} from "solid-js";
-import Listing from "./components/Listing";
-import {
-  init as initStore,
-  get as getFromStore,
-  set as saveToStore,
-  SAVES_PATH,
-  LAST_SAVE,
-} from "./settings";
-import { readDir } from "@tauri-apps/api/fs";
-import { getVersion } from "@tauri-apps/api/app";
-import { invoke } from "@tauri-apps/api/tauri";
+import { Container, Navbar, Nav, NavDropdown, Tabs, Tab, Form, Alert, Button, Spinner, Stack } from 'solid-bootstrap';
+import { listen } from '@tauri-apps/api/event';
+import { debounce } from '@solid-primitives/scheduled';
+import { open as tauriOpen, OpenDialogOptions } from '@tauri-apps/api/dialog';
+import { appWindow } from '@tauri-apps/api/window';
+import { Component, createEffect, createMemo, createResource, createSignal, For } from 'solid-js';
+import Listing from './components/Listing';
+import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH, LAST_SAVE } from './settings';
+import { readDir } from '@tauri-apps/api/fs';
+import { getVersion } from '@tauri-apps/api/app';
+import { invoke } from '@tauri-apps/api/tauri';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -41,16 +16,16 @@ const APP_NAME = "Overseer's Reference Manual";
 // const APP_REPO = "https://github.com/nwesterhausen/overseers-manual-df"
 
 // Statuses for the parsing status
-const STS_PARSING = "Parsing",
-  STS_LOADING = "Loading",
-  STS_IDLE = "Idle";
+const STS_PARSING = 'Parsing',
+  STS_LOADING = 'Loading',
+  STS_IDLE = 'Idle';
 
 /**
  * Dialog options for the select directory window
  */
 const openDialogOptions: OpenDialogOptions = {
   directory: true,
-  title: "Select your current DF Save Folder (e.g. ...DF/data/saves)",
+  title: 'Select your current DF Save Folder (e.g. ...DF/data/saves)',
 };
 
 /**
@@ -65,15 +40,15 @@ const openDialogOptions: OpenDialogOptions = {
  */
 function getSavePathFromWorldDat(dadpath: string, manpath: string): string[] {
   let targetPath = dadpath;
-  if (manpath && manpath !== "") {
+  if (manpath && manpath !== '') {
     targetPath = manpath;
   }
-  let pathDelimation = "/";
-  if (targetPath.indexOf("\\") !== -1) {
-    pathDelimation = "\\";
+  let pathDelimation = '/';
+  if (targetPath.indexOf('\\') !== -1) {
+    pathDelimation = '\\';
   }
   let pathArr = targetPath.split(pathDelimation);
-  while (pathArr[pathArr.length - 1] !== "save") {
+  while (pathArr[pathArr.length - 1] !== 'save') {
     pathArr = pathArr.slice(0, -1);
     if (pathArr.length === 0) {
       return [];
@@ -88,35 +63,28 @@ const App: Component = () => {
     return await getVersion();
   });
   // Path to the dropped file location
-  const [dragAndDropPath, setDragAndDropPath] = createSignal("");
+  const [dragAndDropPath, setDragAndDropPath] = createSignal('');
   // Signal to open the directory open dialog, change to true to open it
   const [doManualFolderSelect, setManualFolderSelect] = createSignal(false);
   // This resource calls the Tauri API to open a file dialog
-  const [manuallySpecifiedPath] = createResource(
-    doManualFolderSelect,
-    performTauriOpenDiaglog
-  );
+  const [manuallySpecifiedPath] = createResource(doManualFolderSelect, performTauriOpenDiaglog);
   // Since we are splitting (and verifying) the path, we use a memo which reacts if either a file is dropped or if the
   // resource is updated
-  const saveFolderPath = createMemo(() =>
-    getSavePathFromWorldDat(dragAndDropPath(), manuallySpecifiedPath())
-  );
+  const saveFolderPath = createMemo(() => getSavePathFromWorldDat(dragAndDropPath(), manuallySpecifiedPath()));
   // Based on the memo changing, we update the save folder path (and save it to our settings storage)
   createEffect(() => {
     if (saveFolderPath().length) {
-      saveToStore(SAVES_PATH, saveFolderPath().join("/")); // Decided to deliminate with `/` in the settings file
+      saveToStore(SAVES_PATH, saveFolderPath().join('/')); // Decided to deliminate with `/` in the settings file
     }
   });
   // List of possible save folders (each can have their own raws)
-  const [saveDirectoryOptions, setSaveDirectoryOptions] = createSignal<
-    string[]
-  >([]);
+  const [saveDirectoryOptions, setSaveDirectoryOptions] = createSignal<string[]>([]);
   // Currently selected save signal
-  const [currentSave, setCurrentSave] = createSignal<string>("");
+  const [currentSave, setCurrentSave] = createSignal<string>('');
   // When we update the save directory, we need to update the list of possible saves
   createEffect(() => {
     if (saveFolderPath().length) {
-      readDir(saveFolderPath().join("/"))
+      readDir(saveFolderPath().join('/'))
         .then((values) => {
           console.log(values);
           let saveArr = [];
@@ -137,7 +105,7 @@ const App: Component = () => {
   // When we update the currently selected save, we want to save it so we remember next time the app opens
   // Also update the title depending on the current save or app version changing
   createEffect(() => {
-    if (currentSave() !== "") {
+    if (currentSave() !== '') {
       appWindow.setTitle(`${APP_NAME} ${appVersion()} - ${currentSave()}`);
       saveToStore(LAST_SAVE, currentSave());
       setLoadRaws(true);
@@ -146,7 +114,7 @@ const App: Component = () => {
     }
   });
   // Signal for the search filter
-  const [searchString, setSearchString] = createSignal("");
+  const [searchString, setSearchString] = createSignal('');
   // Signal for setting raw parse status
   const [parsingStatus, setParsingStatus] = createSignal(STS_IDLE);
   // Element to show progress
@@ -154,18 +122,14 @@ const App: Component = () => {
     switch (parsingStatus()) {
       case STS_IDLE:
         if (jsonRawsResource().length === 0) {
-          return (
-            <p class="text-center">
-              Please choose a save from the dropdown above.
-            </p>
-          );
+          return <p class='text-center'>Please choose a save from the dropdown above.</p>;
         }
         return (
           <>
             <Form.Control
-              type="search"
-              placeholder="Filter results"
-              aria-label="Search"
+              type='search'
+              placeholder='Filter results'
+              aria-label='Search'
               onInput={debounce((event) => {
                 const targetEl = event.target as HTMLInputElement;
                 setSearchString(targetEl.value);
@@ -175,15 +139,15 @@ const App: Component = () => {
         );
       case STS_LOADING:
         return (
-          <Stack direction="horizontal" gap={3}>
-            <Spinner animation="grow" />
+          <Stack direction='horizontal' gap={3}>
+            <Spinner animation='grow' />
             <span>Loading raws...</span>
           </Stack>
         );
       case STS_PARSING:
         return (
-          <Stack direction="horizontal" gap={3}>
-            <Spinner animation="grow" />
+          <Stack direction='horizontal' gap={3}>
+            <Spinner animation='grow' />
             <span>Parsing raw files...</span>
           </Stack>
         );
@@ -205,7 +169,7 @@ const App: Component = () => {
       return folderPath;
     } catch (error) {
       console.error(error);
-      return "";
+      return '';
     }
   }
 
@@ -214,14 +178,14 @@ const App: Component = () => {
    */
   async function parseRawsInSave(): Promise<any[]> {
     // setLoadRaws(false);
-    let dir = [...saveFolderPath(), currentSave(), "raw"].join("/");
+    let dir = [...saveFolderPath(), currentSave(), 'raw'].join('/');
     console.log(`Sending ${dir} to be parsed.`);
     setParsingStatus(STS_PARSING);
-    let jsonStr = await invoke("parse_raws_at_path", {
+    let jsonStr = await invoke('parse_raws_at_path', {
       path: dir,
     });
     setParsingStatus(STS_LOADING);
-    if (typeof jsonStr !== "string") {
+    if (typeof jsonStr !== 'string') {
       console.debug(jsonStr);
       console.error("Did not get 'string' back");
       setParsingStatus(STS_IDLE);
@@ -229,12 +193,12 @@ const App: Component = () => {
     }
     let result = JSON.parse(jsonStr);
     if (Array.isArray(result)) {
-      console.log("raws parsed", result.length);
+      console.log('raws parsed', result.length);
       setParsingStatus(STS_IDLE);
       return result;
     }
     console.debug(result);
-    console.error("Result was not an array");
+    console.error('Result was not an array');
     setParsingStatus(STS_IDLE);
     return [];
   }
@@ -249,7 +213,7 @@ const App: Component = () => {
       // With the save folder, set it as the drag and drop path, since that's the path we set programmatically
       // and let the effects do the rest.
       .then((val) => {
-        if (val !== "") {
+        if (val !== '') {
           setDragAndDropPath(val);
         }
       })
@@ -257,7 +221,7 @@ const App: Component = () => {
   }, 10);
 
   // Listen for a file being dropped on the window to change the save location.
-  listen("tauri://file-drop", (event) => {
+  listen('tauri://file-drop', (event) => {
     setDragAndDropPath(event.payload[0]);
   });
 
@@ -266,32 +230,21 @@ const App: Component = () => {
       <Navbar>
         <Container>
           <Nav>
-            <NavDropdown title="Save Folder">
-              <NavDropdown.Header>
-                {saveFolderPath().join("/")}
-              </NavDropdown.Header>
+            <NavDropdown title='Save Folder'>
+              <NavDropdown.Header>{saveFolderPath().join('/')}</NavDropdown.Header>
               <NavDropdown.Item
                 onClick={() => {
                   setManualFolderSelect(true);
-                }}
-              >
+                }}>
                 Pick new folder..
               </NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Change Save" id="basic-nav-dropdown">
+            <NavDropdown title='Change Save' id='basic-nav-dropdown'>
               <For
                 each={saveDirectoryOptions()}
-                fallback={
-                  <NavDropdown.Header>
-                    No saves found in directory.
-                  </NavDropdown.Header>
-                }
-              >
+                fallback={<NavDropdown.Header>No saves found in directory.</NavDropdown.Header>}>
                 {(save) => (
-                  <NavDropdown.Item
-                    active={save === currentSave()}
-                    onClick={() => setCurrentSave(save)}
-                  >
+                  <NavDropdown.Item active={save === currentSave()} onClick={() => setCurrentSave(save)}>
                     {save}
                   </NavDropdown.Item>
                 )}
@@ -300,26 +253,22 @@ const App: Component = () => {
           </Nav>
         </Container>
       </Navbar>
-      <Container class="p-2">
+      <Container class='p-2'>
         {saveFolderPath().length == 0 ? (
           <>
-            <Alert variant="warning">
-              <Alert.Heading>
-                Dwarf Fortress save directory path is unset!
-              </Alert.Heading>
+            <Alert variant='warning'>
+              <Alert.Heading>Dwarf Fortress save directory path is unset!</Alert.Heading>
               <p>
-                To set the path to your Dwarf Fortress Save, drag and drop a{" "}
-                <code>world.dat</code> file from any of the saves in your save
-                folder onto this window, or use the button below to pull up a
-                folder selection dialog.
+                To set the path to your Dwarf Fortress Save, drag and drop a <code>world.dat</code> file from any of the
+                saves in your save folder onto this window, or use the button below to pull up a folder selection
+                dialog.
               </p>
-              <Container class="p-3">
+              <Container class='p-3'>
                 <Button
-                  variant="primary"
+                  variant='primary'
                   onClick={() => {
                     setManualFolderSelect(true);
-                  }}
-                >
+                  }}>
                   Set Save Directory
                 </Button>
               </Container>
@@ -328,16 +277,17 @@ const App: Component = () => {
         ) : (
           <>
             {searchBarHtml()}
-            <Tabs defaultActiveKey="bestiary" class="my-3">
-              {/* A bestiary (from bestiarum vocabulum) is a compendium of beasts. */}
-              <Tab eventKey="bestiary" title="Bestiary">
-                <Listing
-                  data={jsonRawsResource()}
-                  searchString={searchString()}
-                />
-              </Tab>
-              <Tab disabled title="More to come in the future!"></Tab>
-            </Tabs>
+            {jsonRawsResource().length === 0 ? (
+              <></>
+            ) : (
+              <Tabs defaultActiveKey='bestiary' class='my-3'>
+                {/* A bestiary (from bestiarum vocabulum) is a compendium of beasts. */}
+                <Tab eventKey='bestiary' title='Bestiary'>
+                  <Listing data={jsonRawsResource()} searchString={searchString()} />
+                </Tab>
+                <Tab disabled title='More to come in the future!'></Tab>
+              </Tabs>
+            )}
           </>
         )}
       </Container>
