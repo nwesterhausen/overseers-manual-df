@@ -1,68 +1,28 @@
-import { Accordion, Tab, Tabs } from 'solid-bootstrap';
+import { Accordion } from 'solid-bootstrap';
 import { Component, createMemo, For } from 'solid-js';
-import { Creature } from '../classes/Creature';
-import { Raw } from '../classes/Raw';
+import { Creature, isCreature } from '../definitions/Creature';
+import { Raw, RawsFirstLetters } from '../definitions/Raw';
+import CreatureListing from './CreatureListing';
 
-const ArrayToAlphabet = (arr: Raw[]) => {
-  return [
-    ...new Set(
-      arr.map((v: Raw) => {
-        const name = v.names[0];
-        if (name.length) {
-          return name.charAt(0);
-        }
-        return '';
-      })
-    ),
-  ].sort();
-};
-
-const eggLayingStatus = (creature: Creature): string => {
-  if (!creature.lays_eggs) {
-    return "Doesn't lay eggs.";
-  }
-  const keys = Object.keys(creature.clutch_size);
-  if (keys.length === 0) {
-    return 'Lays an unknown quantity of eggs.';
-  }
-  let ret = '';
-  for (const k in creature.clutch_size) {
-    ret += `${k} lays ${creature.clutch_size[k].join(' - ')} eggs.`;
-  }
-  return ret;
-};
-
-const maxAgeStatus = (creature: Creature): string => {
-  const keys = Object.keys(creature.max_age);
-  if (keys.length === 0) {
-    return 'Lives indefinitely.';
-  }
-  if (keys.length === 1) {
-    return `Live ${creature.max_age[keys[0]].join(' - ')} years.`;
-  }
-  let ret = '';
-  for (const c in creature.max_age) {
-    ret += `${c} lives ${creature.max_age[c].join(' - ')} years.`;
-  }
-  return ret;
-};
-
-const Listing: Component<{ data: Creature[]; searchString: string }> = (props) => {
-  const listingList = createMemo(() => {
-    return props.data.filter((creature) => {
+const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
+  // Perform the filter on the data we have.
+  const listingList = createMemo((): Raw[] => {
+    return props.data.filter((raw) => {
       return (
         // check if the search string is in the name
-        creature.names.join('*').includes(props.searchString) ||
+        raw.names.join('*').includes(props.searchString) ||
         // check if the search string is in the name
-        creature.description.includes(props.searchString) ||
-        // check if the search string is egg(s) to display all egg_layers
+        raw.description.includes(props.searchString) ||
+        // check if the search string is egg(s) to display all egg_layers (if it is a creature)
         ((props.searchString.toLowerCase() === 'egg' || props.searchString.toLowerCase() === 'eggs') &&
-          creature.lays_eggs)
+          isCreature(raw) &&
+          (raw as Creature).lays_eggs)
       );
     });
   });
+  // The alphabet but only the letters for which we have entries.
   const alphaHeadings = createMemo(() => {
-    return ArrayToAlphabet(listingList() as Raw[]);
+    return RawsFirstLetters(listingList() as Raw[]);
   });
   // const [pages, setPages] = createSignal([]);
   return (
@@ -70,37 +30,10 @@ const Listing: Component<{ data: Creature[]; searchString: string }> = (props) =
       <For each={alphaHeadings()}>
         {(letter) => (
           <li>
-            <strong class='fs-3'>{letter.toUpperCase()}</strong>
+            <strong class='fs-3 listing-letter'>{letter.toUpperCase()}</strong>
             <Accordion flush>
               <For each={listingList().filter((v) => v.names[0].startsWith(letter))} fallback={<div>No items</div>}>
-                {(item) => (
-                  <Accordion.Item eventKey={item.objectId + 'accordian'}>
-                    <Accordion.Header>{item.names[0]}</Accordion.Header>
-                    <Accordion.Body>
-                      <Tabs defaultActiveKey={`${item.objectId}-data`} class='mb-2'>
-                        <Tab eventKey={`${item.objectId}-data`} title='Description'>
-                          <p class='text-muted'>{item.names.join(', ')}</p>
-                          <p>{item.description}</p>
-                          <ul class='list-group list-group-flush'>
-                            <li class='list-group-item'>{maxAgeStatus(item)}</li>
-                            <li class='list-group-item'>{eggLayingStatus(item)}</li>
-                          </ul>
-                        </Tab>
-                        <Tab eventKey={`${item.objectId}-raws`} title='Raws'>
-                          <h5>Identifiers</h5>
-                          <p>
-                            Rawfile: <strong>{item.parent_raw}</strong>
-                          </p>
-                          <p>
-                            ID: <strong>{item.identifier}</strong>
-                          </p>
-                          <h5>Simplified (Parsed) Raw Data</h5>
-                          <pre>{JSON.stringify(item, null, 2)}</pre>
-                        </Tab>
-                      </Tabs>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                )}
+                {(raw) => (isCreature(raw) ? <CreatureListing item={raw as Creature} /> : '')}
               </For>
             </Accordion>
           </li>

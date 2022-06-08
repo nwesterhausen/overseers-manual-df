@@ -50,4 +50,4 @@ Currently the following information is parsed out of the raws for creatures:
 | `based_on`    | `string`                    | The `identifier` of the raw this creature is based_on |
 
 The creature raws are exported from the rust parser in [conversion.rs](/src-tauri/src/parser/conversion.rs). The client
-side type definition is [Creature](/src/classes/Creature.ts).
+side type definition is [Creature](/src/definitions/Creature.ts).

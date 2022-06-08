@@ -9,7 +9,7 @@ import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH,
 import { readDir } from '@tauri-apps/api/fs';
 import { getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/tauri';
-import { Creature } from './classes/Creature';
+import { Creature } from './definitions/Creature';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -35,8 +35,8 @@ const openDialogOptions: OpenDialogOptions = {
  * it splits the path based on `/` unless if finds `\` in the path, then it spits by `\`. After splitting
  * the path, keeps removing indeces at the end of the array until the final index is 'save' (or the array
  * is empty).
- * @param dadpath path from drag-and-dropped file
- * @param manpath path from the open directory dialog
+ * @param dadpath - path from drag-and-dropped file
+ * @param manpath - path from the open directory dialog
  * @returns array of directories leading to the save directory
  */
 function getSavePathFromWorldDat(dadpath: string, manpath: string): string[] {
@@ -197,9 +197,10 @@ const App: Component = () => {
     }
     const result = JSON.parse(jsonStr);
     if (Array.isArray(result)) {
-      console.log('raws parsed', result.length);
+      const sortResult = result.sort((a, b) => (a.names[0] < b.names[0] ? -1 : 1));
+      console.log('raws parsed', sortResult.length);
       setParsingStatus(STS_IDLE);
-      return result;
+      return sortResult;
     }
     console.debug(result);
     console.error('Result was not an array');
@@ -263,9 +264,9 @@ const App: Component = () => {
             <Alert variant='warning'>
               <Alert.Heading>Dwarf Fortress save directory path is unset!</Alert.Heading>
               <p>
-                To set the path to your Dwarf Fortress Save, drag and drop a <code>world.dat</code> file from any of the
-                saves in your save folder onto this window, or use the button below to pull up a folder selection
-                dialog.
+                To set the path to your Dwarf Fortress Save, drag and drop a <code class='text-dark'>world.dat</code>{' '}
+                file from any of the saves in your save folder onto this window, or use the button below to pull up a
+                folder selection dialog.
               </p>
               <Container class='p-3'>
                 <Button
