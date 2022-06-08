@@ -1,34 +1,26 @@
+# Overseer's Reference Manual for Dwarf Fortress
+
+![app icon](src-tauri\icons\128x128.png)
+
+This is a app which provides a searchable interface for the your Dwarf Fortress raw files. It's built using [Tauri](https://tauri.studio), [SolidJS](https://www.solidjs.com/), [Solid-Boostrap](https://solid-libs.github.io/solid-bootstrap), and some [Rust](https://www.rust-lang.org/) code which parses the raws themselves.
+
+![app-screenshot](docs/img/app_inuse.png)
+
 ## Usage
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
+The app saves some data in `...AppData\Roaming\games.nwest.dwarffortress.overseer-manual` (or the equivalent on Linux or MacOS) in a file `settings.json`:
 
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+| Key            | Description                                                 |
+| -------------- | ----------------------------------------------------------- |
+| `lastSaveUsed` | The most recently used save file                            |
+| `dfSavesPath`  | Path to your Dwarf Fortress save directory (from last time) |
 
-```bash
-$ npm install # or pnpm install or yarn install
-```
+When the app is started for the first time, it presents some instructions:
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+![first-launch](docs/img/app_launched.png)
 
-## Available Scripts
+After a save directory is set and deemed valid by the app (i.e. it will be truncated until it has "save" at the end of the path), it will present this window:
 
-In the project directory, you can run:
+![save-set](docs/img/savedir_set.png)
 
-### `npm dev` or `npm start`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-## Deployment
-
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+Then you can simply select a save file listed in the "Change Save" dropdown and it will parse and present data from the raws for searching through.
