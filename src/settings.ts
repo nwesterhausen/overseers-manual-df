@@ -6,7 +6,7 @@ const CURRENT_VERSION = 1;
 
 const DATA_VERSION = "dataVersion";
 export const SAVES_PATH = "dfSavesPath";
-export const LAST_SAVE = "lastSaveUses";
+export const LAST_SAVE = "lastSaveUsed";
 
 export async function init() {
   let keys = await store.keys();
