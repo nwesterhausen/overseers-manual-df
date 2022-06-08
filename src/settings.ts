@@ -9,7 +9,7 @@ export const SAVES_PATH = 'dfSavesPath';
 export const LAST_SAVE = 'lastSaveUsed';
 
 export async function init() {
-  let keys = await store.keys();
+  const keys = await store.keys();
   console.log(keys);
   let resave = false;
   if (keys.indexOf(DATA_VERSION) === -1) {

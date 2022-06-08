@@ -1,0 +1,10 @@
+# Ignore our build folder
+dist
+# Ignore the rust builds
+src-tauri
+# Ignore all others...
+.devcontainer
+.github
+.vscode
+docs
+node_modules

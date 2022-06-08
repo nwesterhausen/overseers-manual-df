@@ -1,5 +1,5 @@
 import { Accordion, Tab, Tabs } from 'solid-bootstrap';
-import { Component, createMemo, createSignal, For } from 'solid-js';
+import { Component, createMemo, For } from 'solid-js';
 import { Creature } from '../classes/Creature';
 import { Raw } from '../classes/Raw';
 
@@ -26,7 +26,7 @@ const eggLayingStatus = (creature: Creature): string => {
     return 'Lays an unknown quantity of eggs.';
   }
   let ret = '';
-  for (let k in creature.clutch_size) {
+  for (const k in creature.clutch_size) {
     ret += `${k} lays ${creature.clutch_size[k].join(' - ')} eggs.`;
   }
   return ret;
@@ -41,7 +41,7 @@ const maxAgeStatus = (creature: Creature): string => {
     return `Live ${creature.max_age[keys[0]].join(' - ')} years.`;
   }
   let ret = '';
-  for (let c in creature.max_age) {
+  for (const c in creature.max_age) {
     ret += `${c} lives ${creature.max_age[c].join(' - ')} years.`;
   }
   return ret;
@@ -73,7 +73,7 @@ const Listing: Component<{ data: Creature[]; searchString: string }> = (props) =
             <strong class='fs-3'>{letter.toUpperCase()}</strong>
             <Accordion flush>
               <For each={listingList().filter((v) => v.names[0].startsWith(letter))} fallback={<div>No items</div>}>
-                {(item, i) => (
+                {(item) => (
                   <Accordion.Item eventKey={item.objectId + 'accordian'}>
                     <Accordion.Header>{item.names[0]}</Accordion.Header>
                     <Accordion.Body>

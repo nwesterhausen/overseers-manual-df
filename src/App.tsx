@@ -9,6 +9,7 @@ import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH,
 import { readDir } from '@tauri-apps/api/fs';
 import { getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/tauri';
+import { Creature } from './classes/Creature';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -87,7 +88,7 @@ const App: Component = () => {
       readDir(saveFolderPath().join('/'))
         .then((values) => {
           console.log(values);
-          let saveArr = [];
+          const saveArr = [];
           values.forEach((fileEntry) => {
             saveArr.push(fileEntry.name);
           });
@@ -162,7 +163,7 @@ const App: Component = () => {
   async function performTauriOpenDiaglog(): Promise<string> {
     // setManualFolderSelect(false);
     try {
-      let folderPath = await tauriOpen(openDialogOptions);
+      const folderPath = await tauriOpen(openDialogOptions);
       if (Array.isArray(folderPath)) {
         return folderPath[0];
       }
@@ -174,14 +175,17 @@ const App: Component = () => {
   }
 
   /**
-   *
+   * This calls the parse function in our rust code and gets the JSON response
+   * back. Currently we only parse creature raws, so this is set to return
+   * creature objects. But in the future we will probably have to use a few different
+   * functions or at least handle them differently.
    */
-  async function parseRawsInSave(): Promise<any[]> {
+  async function parseRawsInSave(): Promise<Creature[]> {
     // setLoadRaws(false);
-    let dir = [...saveFolderPath(), currentSave(), 'raw'].join('/');
+    const dir = [...saveFolderPath(), currentSave(), 'raw'].join('/');
     console.log(`Sending ${dir} to be parsed.`);
     setParsingStatus(STS_PARSING);
-    let jsonStr = await invoke('parse_raws_at_path', {
+    const jsonStr = await invoke('parse_raws_at_path', {
       path: dir,
     });
     setParsingStatus(STS_LOADING);
@@ -191,7 +195,7 @@ const App: Component = () => {
       setParsingStatus(STS_IDLE);
       return [];
     }
-    let result = JSON.parse(jsonStr);
+    const result = JSON.parse(jsonStr);
     if (Array.isArray(result)) {
       console.log('raws parsed', result.length);
       setParsingStatus(STS_IDLE);
