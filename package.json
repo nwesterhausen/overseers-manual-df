@@ -48,7 +48,7 @@
   },
   "release": {
     "branches": [
-      "release"
+      "main"
     ],
     "plugins": [
       [
