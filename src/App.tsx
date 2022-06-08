@@ -6,11 +6,13 @@ import {
   Tabs,
   Tab,
   Form,
-  FormControl,
   Alert,
   Button,
+  Spinner,
+  Stack,
 } from "solid-bootstrap";
 import { listen } from "@tauri-apps/api/event";
+import { debounce } from "@solid-primitives/scheduled";
 import { open as tauriOpen, OpenDialogOptions } from "@tauri-apps/api/dialog";
 import { appWindow } from "@tauri-apps/api/window";
 import {
@@ -37,6 +39,11 @@ import { invoke } from "@tauri-apps/api/tauri";
 const APP_NAME = "Overseer's Reference Manual";
 // App url for github link
 // const APP_REPO = "https://github.com/nwesterhausen/overseers-manual-df"
+
+// Statuses for the parsing status
+const STS_PARSING = "Parsing",
+  STS_LOADING = "Loading",
+  STS_IDLE = "Idle";
 
 /**
  * Dialog options for the select directory window
@@ -138,6 +145,50 @@ const App: Component = () => {
       appWindow.setTitle(`${APP_NAME} ${appVersion()}`);
     }
   });
+  // Signal for the search filter
+  const [searchString, setSearchString] = createSignal("");
+  // Signal for setting raw parse status
+  const [parsingStatus, setParsingStatus] = createSignal(STS_IDLE);
+  // Element to show progress
+  const searchBarHtml = createMemo(() => {
+    switch (parsingStatus()) {
+      case STS_IDLE:
+        if (jsonRawsResource().length === 0) {
+          return (
+            <p class="text-center">
+              Please choose a save from the dropdown above.
+            </p>
+          );
+        }
+        return (
+          <>
+            <Form.Control
+              type="search"
+              placeholder="Filter results"
+              aria-label="Search"
+              onInput={debounce((event) => {
+                const targetEl = event.target as HTMLInputElement;
+                setSearchString(targetEl.value);
+              }, 100)}
+            />
+          </>
+        );
+      case STS_LOADING:
+        return (
+          <Stack direction="horizontal" gap={3}>
+            <Spinner animation="grow" />
+            <span>Loading raws...</span>
+          </Stack>
+        );
+      case STS_PARSING:
+        return (
+          <Stack direction="horizontal" gap={3}>
+            <Spinner animation="grow" />
+            <span>Parsing raw files...</span>
+          </Stack>
+        );
+    }
+  });
 
   /**
    * This opens a directory selection dialog using the settings defined earlier.
@@ -165,21 +216,26 @@ const App: Component = () => {
     // setLoadRaws(false);
     let dir = [...saveFolderPath(), currentSave(), "raw"].join("/");
     console.log(`Sending ${dir} to be parsed.`);
+    setParsingStatus(STS_PARSING);
     let jsonStr = await invoke("parse_raws_at_path", {
       path: dir,
     });
+    setParsingStatus(STS_LOADING);
     if (typeof jsonStr !== "string") {
       console.debug(jsonStr);
       console.error("Did not get 'string' back");
+      setParsingStatus(STS_IDLE);
       return [];
     }
     let result = JSON.parse(jsonStr);
     if (Array.isArray(result)) {
       console.log("raws parsed", result.length);
+      setParsingStatus(STS_IDLE);
       return result;
     }
     console.debug(result);
     console.error("Result was not an array");
+    setParsingStatus(STS_IDLE);
     return [];
   }
 
@@ -271,24 +327,20 @@ const App: Component = () => {
           </>
         ) : (
           <>
-            <Form class="d-flex">
-              <FormControl
-                type="search"
-                placeholder="Filter results"
-                class="me-2"
-                aria-label="Search"
-              />
-            </Form>
+            {searchBarHtml()}
 
-            <Tabs defaultActiveKey="all" class="mb-3">
+            <Tabs defaultActiveKey="all" class="my-3">
               <Tab eventKey="all" title="All">
-                <Listing data={jsonRawsResource()} />
+                <Listing
+                  data={jsonRawsResource()}
+                  searchString={searchString()}
+                />
               </Tab>
               <Tab eventKey="bestiary" title="Bestiary">
-                <Listing data={[]} />
+                <Listing data={[]} searchString={searchString()} />
               </Tab>
               <Tab eventKey="materials" title="Materials">
-                <Listing data={[]} />
+                <Listing data={[]} searchString={searchString()} />
               </Tab>
             </Tabs>
           </>

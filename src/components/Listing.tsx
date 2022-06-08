@@ -47,9 +47,25 @@ const maxAgeStatus = (creature: Creature): string => {
   return ret;
 };
 
-const Listing: Component<{ data: Creature[] }> = (props) => {
+const Listing: Component<{ data: Creature[]; searchString: string }> = (
+  props
+) => {
+  const listingList = createMemo(() => {
+    return props.data.filter((creature) => {
+      return (
+        // check if the search string is in the name
+        creature.names.join("*").includes(props.searchString) ||
+        // check if the search string is in the name
+        creature.description.includes(props.searchString) ||
+        // check if the search string is egg(s) to display all egg_layers
+        ((props.searchString.toLowerCase() === "egg" ||
+          props.searchString.toLowerCase() === "eggs") &&
+          creature.lays_eggs)
+      );
+    });
+  });
   const alphaHeadings = createMemo(() => {
-    return ArrayToAlphabet(props.data as Raw[]);
+    return ArrayToAlphabet(listingList() as Raw[]);
   });
   // const [pages, setPages] = createSignal([]);
   return (
@@ -60,19 +76,21 @@ const Listing: Component<{ data: Creature[] }> = (props) => {
             <strong class="fs-3">{letter.toUpperCase()}</strong>
             <Accordion flush>
               <For
-                each={props.data.filter((v) => v.names[0].startsWith(letter))}
+                each={listingList().filter((v) =>
+                  v.names[0].startsWith(letter)
+                )}
                 fallback={<div>No items</div>}
               >
                 {(item, i) => (
-                  <Accordion.Item eventKey={letter + i()}>
+                  <Accordion.Item eventKey={item.objectId + "accordian"}>
                     <Accordion.Header>{item.names[0]}</Accordion.Header>
                     <Accordion.Body>
                       <Tabs
-                        defaultActiveKey={`${letter}-${i()}-data`}
+                        defaultActiveKey={`${item.objectId}-data`}
                         class="mb-2"
                       >
                         <Tab
-                          eventKey={`${letter}-${i()}-data`}
+                          eventKey={`${item.objectId}-data`}
                           title="Description"
                         >
                           <p class="text-muted">{item.names.join(", ")}</p>
@@ -86,7 +104,7 @@ const Listing: Component<{ data: Creature[] }> = (props) => {
                             </li>
                           </ul>
                         </Tab>
-                        <Tab eventKey={`${letter}-${i()}-raws`} title="Raws">
+                        <Tab eventKey={`${item.objectId}-raws`} title="Raws">
                           <h5>Identifiers</h5>
                           <p>
                             Rawfile: <strong>{item.parent_raw}</strong>
