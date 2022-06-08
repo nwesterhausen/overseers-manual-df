@@ -1,7 +1,13 @@
-import Raw from "./Raw";
+import { Raw } from "./Raw";
 
-class Creature extends Raw {
-    
-}
+export type Creature = {
+  parent_raw: string;
+  max_age: CasteRangeSpecifier;
+  lays_eggs: boolean;
+  clutch_size: CasteRangeSpecifier;
+  based_on?: Creature;
+} & Raw;
 
-export default Creature;
+type CasteRangeSpecifier = {
+  [key: string]: number[];
+};

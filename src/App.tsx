@@ -1,16 +1,40 @@
-import { Container, Navbar, Nav, NavDropdown, Tabs, Tab, Form, FormControl, Alert, Button } from 'solid-bootstrap';
-import { listen } from '@tauri-apps/api/event'
-import { open as tauriOpen, OpenDialogOptions } from '@tauri-apps/api/dialog'
-import { appWindow } from '@tauri-apps/api/window';
-import { Component, createEffect, createMemo, createResource, createSignal, For } from 'solid-js';
-import Listing from './components/Listing';
-import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH, LAST_SAVE } from './settings';
-import { readDir } from '@tauri-apps/api/fs';
-import { getVersion } from '@tauri-apps/api/app';
-import { invoke } from '@tauri-apps/api/tauri';
+import {
+  Container,
+  Navbar,
+  Nav,
+  NavDropdown,
+  Tabs,
+  Tab,
+  Form,
+  FormControl,
+  Alert,
+  Button,
+} from "solid-bootstrap";
+import { listen } from "@tauri-apps/api/event";
+import { open as tauriOpen, OpenDialogOptions } from "@tauri-apps/api/dialog";
+import { appWindow } from "@tauri-apps/api/window";
+import {
+  Component,
+  createEffect,
+  createMemo,
+  createResource,
+  createSignal,
+  For,
+} from "solid-js";
+import Listing from "./components/Listing";
+import {
+  init as initStore,
+  get as getFromStore,
+  set as saveToStore,
+  SAVES_PATH,
+  LAST_SAVE,
+} from "./settings";
+import { readDir } from "@tauri-apps/api/fs";
+import { getVersion } from "@tauri-apps/api/app";
+import { invoke } from "@tauri-apps/api/tauri";
 
 // App name for title
-const APP_NAME = "Overseer's Reference Manual"
+const APP_NAME = "Overseer's Reference Manual";
 // App url for github link
 // const APP_REPO = "https://github.com/nwesterhausen/overseers-manual-df"
 
@@ -19,8 +43,8 @@ const APP_NAME = "Overseer's Reference Manual"
  */
 const openDialogOptions: OpenDialogOptions = {
   directory: true,
-  title: "Select your current DF Save Folder (e.g. ...DF/data/saves)"
-}
+  title: "Select your current DF Save Folder (e.g. ...DF/data/saves)",
+};
 
 /**
  * Helper function to turn the path from a drag and dropped file OR the manually selected save folder
@@ -49,65 +73,71 @@ function getSavePathFromWorldDat(dadpath: string, manpath: string): string[] {
     }
   }
   return pathArr;
-
 }
 
 const App: Component = () => {
   // Tauri provides the app version in a promise, so we use a resource for it
   const [appVersion] = createResource(async () => {
     return await getVersion();
-  })
+  });
   // Path to the dropped file location
   const [dragAndDropPath, setDragAndDropPath] = createSignal("");
   // Signal to open the directory open dialog, change to true to open it
   const [doManualFolderSelect, setManualFolderSelect] = createSignal(false);
   // This resource calls the Tauri API to open a file dialog
-  const [manuallySpecifiedPath] = createResource(doManualFolderSelect, performTauriOpenDiaglog)
+  const [manuallySpecifiedPath] = createResource(
+    doManualFolderSelect,
+    performTauriOpenDiaglog
+  );
   // Since we are splitting (and verifying) the path, we use a memo which reacts if either a file is dropped or if the
   // resource is updated
-  const saveFolderPath = createMemo(() => getSavePathFromWorldDat(dragAndDropPath(), manuallySpecifiedPath()));
+  const saveFolderPath = createMemo(() =>
+    getSavePathFromWorldDat(dragAndDropPath(), manuallySpecifiedPath())
+  );
   // Based on the memo changing, we update the save folder path (and save it to our settings storage)
   createEffect(() => {
     if (saveFolderPath().length) {
       saveToStore(SAVES_PATH, saveFolderPath().join("/")); // Decided to deliminate with `/` in the settings file
     }
-  })
+  });
   // List of possible save folders (each can have their own raws)
-  const [saveDirectoryOptions, setSaveDirectoryOptions] = createSignal<string[]>([]);
+  const [saveDirectoryOptions, setSaveDirectoryOptions] = createSignal<
+    string[]
+  >([]);
   // Currently selected save signal
   const [currentSave, setCurrentSave] = createSignal<string>("");
   // When we update the save directory, we need to update the list of possible saves
   createEffect(() => {
     if (saveFolderPath().length) {
       readDir(saveFolderPath().join("/"))
-        .then(values => {
+        .then((values) => {
           console.log(values);
           let saveArr = [];
-          values.forEach(fileEntry => {
+          values.forEach((fileEntry) => {
             saveArr.push(fileEntry.name);
           });
           setSaveDirectoryOptions(saveArr);
         })
         .catch(console.error);
     }
-  })
+  });
   // Signal for loading raws
   const [loadRaws, setLoadRaws] = createSignal(false);
   // Resource for raws
   const [jsonRawsResource] = createResource(loadRaws, parseRawsInSave, {
-    initialValue: []
+    initialValue: [],
   });
   // When we update the currently selected save, we want to save it so we remember next time the app opens
   // Also update the title depending on the current save or app version changing
   createEffect(() => {
     if (currentSave() !== "") {
-      appWindow.setTitle(`${APP_NAME} ${appVersion()} - ${currentSave()}`)
+      appWindow.setTitle(`${APP_NAME} ${appVersion()} - ${currentSave()}`);
       saveToStore(LAST_SAVE, currentSave());
       setLoadRaws(true);
     } else {
       appWindow.setTitle(`${APP_NAME} ${appVersion()}`);
     }
-  })
+  });
 
   /**
    * This opens a directory selection dialog using the settings defined earlier.
@@ -129,23 +159,23 @@ const App: Component = () => {
   }
 
   /**
-   * 
+   *
    */
   async function parseRawsInSave(): Promise<any[]> {
     // setLoadRaws(false);
     let dir = [...saveFolderPath(), currentSave(), "raw"].join("/");
     console.log(`Sending ${dir} to be parsed.`);
     let jsonStr = await invoke("parse_raws_at_path", {
-      path: dir
-    })
-    if (typeof jsonStr !== 'string') {
+      path: dir,
+    });
+    if (typeof jsonStr !== "string") {
       console.debug(jsonStr);
       console.error("Did not get 'string' back");
       return [];
     }
     let result = JSON.parse(jsonStr);
     if (Array.isArray(result)) {
-      console.log("raws parsed",result.length);
+      console.log("raws parsed", result.length);
       return result;
     }
     console.debug(result);
@@ -162,80 +192,109 @@ const App: Component = () => {
       })
       // With the save folder, set it as the drag and drop path, since that's the path we set programmatically
       // and let the effects do the rest.
-      .then(val => {
+      .then((val) => {
         if (val !== "") {
           setDragAndDropPath(val);
         }
       })
-      .catch(console.error)
+      .catch(console.error);
   }, 10);
 
   // Listen for a file being dropped on the window to change the save location.
   listen("tauri://file-drop", (event) => {
     setDragAndDropPath(event.payload[0]);
-  })
+  });
 
+  return (
+    <>
+      <Navbar>
+        <Container>
+          <Nav>
+            <NavDropdown title="Save Folder">
+              <NavDropdown.Header>
+                {saveFolderPath().join("/")}
+              </NavDropdown.Header>
+              <NavDropdown.Item
+                onClick={() => {
+                  setManualFolderSelect(true);
+                }}
+              >
+                Pick new folder..
+              </NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title="Change Save" id="basic-nav-dropdown">
+              <For
+                each={saveDirectoryOptions()}
+                fallback={
+                  <NavDropdown.Header>
+                    No saves found in directory.
+                  </NavDropdown.Header>
+                }
+              >
+                {(save) => (
+                  <NavDropdown.Item
+                    active={save === currentSave()}
+                    onClick={() => setCurrentSave(save)}
+                  >
+                    {save}
+                  </NavDropdown.Item>
+                )}
+              </For>
+            </NavDropdown>
+          </Nav>
+        </Container>
+      </Navbar>
+      <Container class="p-2">
+        {saveFolderPath().length == 0 ? (
+          <>
+            <Alert variant="warning">
+              <Alert.Heading>
+                Dwarf Fortress save directory path is unset!
+              </Alert.Heading>
+              <p>
+                To set the path to your Dwarf Fortress Save, drag and drop a{" "}
+                <code>world.dat</code> file from any of the saves in your save
+                folder onto this window, or use the button below to pull up a
+                folder selection dialog.
+              </p>
+              <Container class="p-3">
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    setManualFolderSelect(true);
+                  }}
+                >
+                  Set Save Directory
+                </Button>
+              </Container>
+            </Alert>
+          </>
+        ) : (
+          <>
+            <Form class="d-flex">
+              <FormControl
+                type="search"
+                placeholder="Filter results"
+                class="me-2"
+                aria-label="Search"
+              />
+            </Form>
 
-  return (<>
-    <Navbar>
-      <Container>
-        <Nav>
-          <NavDropdown title="Save Folder">
-            <NavDropdown.Header >{saveFolderPath().join("/")}</NavDropdown.Header>
-            <NavDropdown.Item onClick={() => {
-              setManualFolderSelect(true);
-            }}>Pick new folder..</NavDropdown.Item>
-          </NavDropdown>
-          <NavDropdown title="Change Save" id="basic-nav-dropdown" >
-            <For each={saveDirectoryOptions()} fallback={<NavDropdown.Header>No saves found in directory.</NavDropdown.Header>}>
-              {(save) =>
-                <NavDropdown.Item active={save === currentSave()} onClick={() => setCurrentSave(save)}>{save}</NavDropdown.Item>
-              }
-            </For>
-          </NavDropdown>
-        </Nav>
+            <Tabs defaultActiveKey="all" class="mb-3">
+              <Tab eventKey="all" title="All">
+                <Listing data={jsonRawsResource()} />
+              </Tab>
+              <Tab eventKey="bestiary" title="Bestiary">
+                <Listing data={[]} />
+              </Tab>
+              <Tab eventKey="materials" title="Materials">
+                <Listing data={[]} />
+              </Tab>
+            </Tabs>
+          </>
+        )}
       </Container>
-    </Navbar>
-    <Container class='p-2'>
-      {saveFolderPath().length == 0 ? <>
-        <Alert variant="warning">
-          <Alert.Heading>Dwarf Fortress save directory path is unset!</Alert.Heading>
-          <p>
-            To set the path to your Dwarf Fortress Save, drag and drop a <code>world.dat</code> file from
-            any of the saves in your save folder onto this window, or use the button below to pull up a folder
-            selection dialog.
-          </p>
-          <Container class='p-3'>
-            <Button variant="primary" onClick={() => {
-              setManualFolderSelect(true);
-            }}>Set Save Directory</Button>
-          </Container>
-        </Alert>
-      </> : <>
-        <Form class="d-flex">
-          <FormControl
-            type="search"
-            placeholder="Filter results"
-            class="me-2"
-            aria-label="Search"
-
-          />
-        </Form>
-
-        <Tabs defaultActiveKey="all" class="mb-3">
-          <Tab eventKey="all" title="All">
-            <Listing data={jsonRawsResource()} />
-          </Tab>
-          <Tab eventKey="bestiary" title="Bestiary">
-            <Listing data={[]}/>
-          </Tab>
-          <Tab eventKey="materials" title="Materials">
-            <Listing data={[]} />
-          </Tab>
-        </Tabs></>
-      }
-    </Container>
-  </>
+    </>
   );
 };
 
