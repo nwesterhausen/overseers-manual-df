@@ -1,6 +1,6 @@
 {
   "name": "overseers-manual-df",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tauri app to provide Dwarf Fortress players with personalized raws-accurate references.",
   "scripts": {
     "dev": "vite",
@@ -22,6 +22,7 @@
     "@typescript-eslint/parser": "^5.27.1",
     "bootswatch": "^5.1.3",
     "eslint": "^8.17.0",
+    "eslint-plugin-tsdoc": "^0.2.16",
     "solid-bootstrap": "^1.0.8",
     "solidjs-icons": "^1.0.11",
     "typescript": "^4.6.4",
