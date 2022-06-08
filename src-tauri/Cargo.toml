@@ -1,6 +1,6 @@
 [package]
 name = "overseers-manual-tauriapp"
-version = "0.0.1"
+version = "0.1.0"
 description = "A Tauri App to analyze your Dwarf Fortress raw files and present a searchabled reference"
 authors = ["Nicholas Westerhausen"]
 license = "MIT"
