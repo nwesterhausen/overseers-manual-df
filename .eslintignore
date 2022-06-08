@@ -8,3 +8,5 @@ src-tauri
 .vscode
 docs
 node_modules
+# Ignore config files
+.eslintrc.cjs
