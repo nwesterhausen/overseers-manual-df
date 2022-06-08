@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "af": "prettier --write src README.md index.html"
   },
   "repository": {
     "type": "git",
@@ -27,5 +28,12 @@
     "@tauri-apps/api": "1.0.0-rc.6",
     "solid-js": "^1.4.2",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#dev"
+  },
+  "prettier": {
+    "bracketSameLine": true,
+    "jsxSingleQuote": true,
+    "printWidth": 120,
+    "proseWrap": "always",
+    "singleQuote": true
   }
 }
