@@ -6,6 +6,7 @@ export type Creature = {
   clutch_size: CasteRangeSpecifier;
   based_on?: Creature;
   biomes: string[];
+  cluster_range: number[];
 } & Raw;
 
 /**
@@ -58,4 +59,24 @@ export const LifeExpectancyStatus = (creature: Creature): string => {
     ret += `${c} lives ${creature.max_age[c].join(' - ')} years.`;
   }
   return ret;
+};
+
+/**
+ * Returns a short description of the creatures spawning patterns.
+ *
+ * @param creature - Creature to get the spawning group size of
+ * @returns Text to describe the spawning patterns
+ */
+export const ClusterSizeStatus = (creature: Creature): string => {
+  const [min, max] = creature.cluster_range;
+  if (min === max) {
+    if (max === 0) {
+      return 'They do not normally appear.';
+    }
+    if (max === 1) {
+      return 'They always appear alone.';
+    }
+    return `They always appear in groups of ${min}`;
+  }
+  return `They appear in groups of ${min} to ${max} individuals.`;
 };
