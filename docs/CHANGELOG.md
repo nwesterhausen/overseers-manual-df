@@ -1,3 +1,10 @@
+## [0.3.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.3.0...v0.3.1) (2022-06-09)
+
+
+### Bug Fixes
+
+* :bug: remove invalid raw files from JSON ([4cbed8a](https://github.com/nwesterhausen/overseers-manual-df/commit/4cbed8a76f459ba03e3ab1c2528d03d1192c4cd8))
+
 ## [0.3.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.2.3...v0.3.0) (2022-06-09)
 
 
