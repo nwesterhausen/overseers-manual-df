@@ -344,7 +344,7 @@ const App: Component = () => {
         ) : (
           <>
             {searchBarHtml()}
-            {jsonRawsResource().length === 0 ? (
+            {jsonRawsResource().length === 0 || parsingStatus() !== STS_IDLE ? (
               <></>
             ) : (
               <Tabs defaultActiveKey='bestiary' class='my-3'>
