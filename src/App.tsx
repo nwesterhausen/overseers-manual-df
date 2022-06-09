@@ -10,6 +10,7 @@ import { readDir } from '@tauri-apps/api/fs';
 import { getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/tauri';
 import { Creature } from './definitions/Creature';
+import ScrollToTopBtn from './components/ScrollToTopBtn';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -296,6 +297,7 @@ const App: Component = () => {
           </>
         )}
       </Container>
+      <ScrollToTopBtn />
     </>
   );
 };
