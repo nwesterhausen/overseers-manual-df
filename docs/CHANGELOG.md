@@ -1,3 +1,11 @@
+## [0.2.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.1.7...v0.2.0) (2022-06-09)
+
+
+### Features
+
+* :sparkles: add scroll to top ([300404c](https://github.com/nwesterhausen/overseers-manual-df/commit/300404c06e12f30dac38116319a381a279deb60d))
+* :sparkles: links to headings ([92d279b](https://github.com/nwesterhausen/overseers-manual-df/commit/92d279ba14ed241fe11f4c347d3db05a418b9522))
+
 ## [0.1.7](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.1.6...v0.1.7) (2022-06-09)
 
 
