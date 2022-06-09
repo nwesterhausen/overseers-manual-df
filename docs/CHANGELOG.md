@@ -1,3 +1,26 @@
+## [0.4.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.3.1...v0.4.0) (2022-06-09)
+
+
+### Features
+
+* :sparkles: display creature names nicer ([14bb000](https://github.com/nwesterhausen/overseers-manual-df/commit/14bb0008bb09c084ef0bfe011f7e974db2c5bf32))
+* :sparkles: double badge component ([033dfc9](https://github.com/nwesterhausen/overseers-manual-df/commit/033dfc9b85ac85c09fb4b42793699d8de414b329))
+* :sparkles: show egg value in badge ([1fd954e](https://github.com/nwesterhausen/overseers-manual-df/commit/1fd954e480f9181c954b522580b3619ed7ac1027))
+
+
+### Bug Fixes
+
+* :bug: provide searchString for all raws ([cbfa403](https://github.com/nwesterhausen/overseers-manual-df/commit/cbfa4033229a9e35c1fcaec359e67b6790a6dfae))
+* :fire: remove unused function ([117ff18](https://github.com/nwesterhausen/overseers-manual-df/commit/117ff183eebf3a5a161cb233f3765aed328fc630))
+* :lipstick: hide previous listing if parsing ([85e2a00](https://github.com/nwesterhausen/overseers-manual-df/commit/85e2a00f884333798b87025f5895f3709135cf7c))
+
+
+### Performance Improvements
+
+* :zap: don't send 0s for grown_at ([304f6b6](https://github.com/nwesterhausen/overseers-manual-df/commit/304f6b63e75489e5ec6588529a8aa783a2c92d46))
+* :zap: don't send empty arrays ([e2b7c99](https://github.com/nwesterhausen/overseers-manual-df/commit/e2b7c9910102badb39554c644e39abd19c7277c1))
+* :zap: send only one name as name ([f0329af](https://github.com/nwesterhausen/overseers-manual-df/commit/f0329af31afff224de086086264c987c09a537e7))
+
 ## [0.3.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.3.0...v0.3.1) (2022-06-09)
 
 
