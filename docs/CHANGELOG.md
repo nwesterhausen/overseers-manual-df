@@ -1,3 +1,10 @@
+## [0.1.6](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.1.5...v0.1.6) (2022-06-09)
+
+
+### Bug Fixes
+
+* :construction: re-arrange plugin order ([662f3c9](https://github.com/nwesterhausen/overseers-manual-df/commit/662f3c9d546b9c612a399fb1a35761d85a5674ea))
+
 ## [0.1.5](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.1.4...v0.1.5) (2022-06-09)
 
 
