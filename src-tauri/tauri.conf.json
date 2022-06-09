@@ -66,7 +66,12 @@
 			"csp": null
 		},
 		"updater": {
-			"active": false
+			"active": true,
+			"dialog": true,
+			"endpoints": [
+				"https://tauri-update-server.nwest.workers.dev/v1/{{target}}/{{arch}}/{{current_version}}"
+			],
+			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEE2QjA3NUFBMzhGNEVFNTkKUldSWjd2UTRxbld3cHVxZzh5OTBJNDE3bU5pT3pneGtpUjVjVXhMTmZ4NDZmaHVHQ0srK3E2QzQK"
 		},
 		"windows": [{
 			"fullscreen": false,
