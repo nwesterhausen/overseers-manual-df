@@ -306,27 +306,37 @@ impl DFCreature {
     pub fn get_names_by_caste(&self) -> HashMap<String, Vec<String>> {
         let mut names_map: HashMap<String, Vec<String>> = HashMap::new();
         names_map.insert("SPECIES".to_string(), Vec::from(self.name.to_string_vec()));
-        names_map.insert(
-            "baby_SPECIES".to_string(),
-            Vec::from(self.general_baby_name.to_string_vec()),
-        );
-        names_map.insert(
-            "child_SPECIES".to_string(),
-            Vec::from(self.general_child_name.to_string_vec()),
-        );
+        if !self.general_baby_name.to_string_vec()[0].is_empty() {
+            names_map.insert(
+                "baby_SPECIES".to_string(),
+                Vec::from(self.general_baby_name.to_string_vec()),
+            );
+        }
+        if !self.general_child_name.to_string_vec()[0].is_empty() {
+            names_map.insert(
+                "child_SPECIES".to_string(),
+                Vec::from(self.general_child_name.to_string_vec()),
+            );
+        }
         for self_caste in &self.castes {
-            names_map.insert(
-                format!("baby_{}", self_caste.name),
-                Vec::from(self_caste.baby_name.to_string_vec()),
-            );
-            names_map.insert(
-                format!("child_{}", self_caste.name),
-                Vec::from(self_caste.child_name.to_string_vec()),
-            );
-            names_map.insert(
-                format!("{}", self_caste.name),
-                Vec::from(self_caste.caste_name.to_string_vec()),
-            );
+            if !self_caste.baby_name.to_string_vec()[0].is_empty() {
+                names_map.insert(
+                    format!("baby_{}", self_caste.name),
+                    Vec::from(self_caste.baby_name.to_string_vec()),
+                );
+            }
+            if !self_caste.child_name.to_string_vec()[0].is_empty() {
+                names_map.insert(
+                    format!("child_{}", self_caste.name),
+                    Vec::from(self_caste.child_name.to_string_vec()),
+                );
+            }
+            if !self_caste.caste_name.to_string_vec()[0].is_empty() {
+                names_map.insert(
+                    format!("{}", self_caste.name),
+                    Vec::from(self_caste.caste_name.to_string_vec()),
+                );
+            }
         }
         names_map
     }
