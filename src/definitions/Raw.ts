@@ -10,14 +10,6 @@ export type Raw = {
 };
 
 /**
- * Represent a "hash-map" where a range of numbers is listed under a key
- * describing the caste.
- */
-export type CasteRangeSpecifier = {
-  [key: string]: number[];
-};
-
-/**
  * Returns an array of all the starting letters of the parsed raws objects.
  *
  * This uses the first name in the raw object `names` array.

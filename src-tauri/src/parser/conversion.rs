@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use super::raws::creature::{DFCreature, DFBodySize};
+use super::raws::creature::{DFBodySize, DFCreature};
 
 // Creature Object for Web Consumption
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -20,6 +20,7 @@ pub struct WebCreature {
     biomes: Vec<String>,
     cluster_range: [u16; 2],
     body_size: HashMap<String, Vec<DFBodySize>>,
+    grown_at: HashMap<String, u32>,
 }
 
 impl WebCreature {
@@ -37,6 +38,7 @@ impl WebCreature {
             biomes: Vec::clone(&creature.biomes),
             cluster_range: creature.cluster_number,
             body_size: creature.get_body_sizes(),
+            grown_at: creature.get_grown_at_ages(),
         }
     }
 }
