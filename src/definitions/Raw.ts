@@ -7,6 +7,7 @@ export type Raw = {
   name: string;
   description: string;
   parent_raw: string;
+  searchString?: string;
 };
 
 /**

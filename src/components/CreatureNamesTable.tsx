@@ -1,7 +1,7 @@
 import { Table } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
-import { CasteRange, CleanName } from '../definitions/Creature';
-import { toTitleCase } from '../definitions/Utils';
+import { CasteRange } from '../definitions/Creature';
+import { toTitleCase, CleanName } from '../definitions/Utils';
 
 const CondenseNames = (names: CasteRange<string[]>): CasteRange<string[]> => {
   const condensed: CasteRange<string[]> = {};
