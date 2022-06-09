@@ -10,14 +10,8 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
   const listingList = createMemo((): Raw[] => {
     return props.data.filter((raw) => {
       return (
-        // check if the search string is in the name
-        raw.name.includes(props.searchString) ||
-        // check if the search string is in the name
-        raw.description.includes(props.searchString) ||
-        // check if the search string is egg(s) to display all egg_layers (if it is a creature)
-        ((props.searchString.toLowerCase() === 'egg' || props.searchString.toLowerCase() === 'eggs') &&
-          isCreature(raw) &&
-          (raw as Creature).lays_eggs)
+        // Filter the object based on the searchableString value
+        raw.searchString && raw.searchString.indexOf(props.searchString) !== -1
       );
     });
   });

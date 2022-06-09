@@ -165,40 +165,27 @@ export const GrownAtStatus = (grown_data: CasteRange<number>): string => {
 };
 
 /**
- * Returns a condensed string representing the array of names.
+ * Returns the first-encountered egg size in the caste mapping for egg sizes.
  *
- * @param names - Names in an array
- * @returns A string with names condensed as much as possible
+ * @remarks This should not just pick the first one and return, it should smartly provide answers by caste.
+ * @param sizes - Caste mapping of the egg size
+ * @returns The first encountered egg size
  */
-export const CleanName = (names: string[]): string => {
-  if (names.length < 2) {
-    return [...new Set(names)].filter((n) => n.length > 0).join(', ');
-  }
-  const singular = names[0];
-  const plural = names[1];
-  if (singular === plural || plural === '') {
-    return `${singular}`;
-  }
-  if (plural.startsWith(singular)) {
-    return `${singular}(${plural.slice(singular.length)})`;
-  }
-  if (plural.endsWith('men')) {
-    if (plural.endsWith('women')) {
-      return `${singular}/women`;
-    }
-    return `${singular}/men`;
-  }
-  return `${singular}, ${plural}`;
-};
-
 export const CondesedEggSize = (sizes: CasteRange<number>): number => {
   const castes = Object.keys(sizes);
-  if (castes.length === 1) {
+  if (castes.length >= 1) {
     return sizes[castes[0]];
   }
   return 0;
 };
 
+/**
+ * Returns the first-encountered clutch range as an average.
+ *
+ * @remarks This should not just pick the first one and return, it should smartly provide answers by caste.
+ * @param clutch_size - Caste mapping of the clutch size
+ * @returns Average clutch size for first encountered clutch range
+ */
 export const AverageClutchSize = (clutch_size: CasteRange<number[]>): number => {
   const castes = Object.keys(clutch_size);
   if (castes.length === 1) {
