@@ -1,5 +1,8 @@
 name: 'Publish Release'
-on: release
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   publish-tauri:
