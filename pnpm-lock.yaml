@@ -4,6 +4,7 @@ specifiers:
   '@semantic-release/changelog': ^6.0.1
   '@semantic-release/commit-analyzer': ^9.0.2
   '@semantic-release/git': ^10.0.1
+  '@semantic-release/npm': ^9.0.1
   '@solid-primitives/scheduled': ^1.0.0
   '@tauri-apps/api': 1.0.0-rc.6
   '@tauri-apps/cli': 1.0.0-rc.13
@@ -31,6 +32,7 @@ devDependencies:
   '@semantic-release/changelog': 6.0.1_semantic-release@19.0.2
   '@semantic-release/commit-analyzer': 9.0.2_semantic-release@19.0.2
   '@semantic-release/git': 10.0.1_semantic-release@19.0.2
+  '@semantic-release/npm': 9.0.1_semantic-release@19.0.2
   '@solid-primitives/scheduled': 1.0.0_solid-js@1.4.2
   '@tauri-apps/cli': 1.0.0-rc.13
   '@typescript-eslint/eslint-plugin': 5.27.1_bnfefdnvqpcyokeggdz5sotnli
