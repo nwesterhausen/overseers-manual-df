@@ -2,7 +2,9 @@ import { Accordion, Tabs, Tab, Table } from 'solid-bootstrap';
 import { Component } from 'solid-js';
 import { ClusterSizeStatus, Creature, GrownAtStatus } from '../definitions/Creature';
 import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
+import { toTitleCase } from '../definitions/Utils';
 import CreatureBodySizeTable from './CreatureBodySizeTable';
+import CreatureNamesTable from './CreatureNamesTable';
 import RawDetailsTab from './RawDetailsTab';
 import RawJsonTab from './RawJsonTab';
 
@@ -24,7 +26,10 @@ const CreatureListing: Component<{ item: Creature }> = (props) => {
   return (
     <Accordion.Item eventKey={props.item.objectId + 'accordian'}>
       <Accordion.Header class='overflow-hidden text-nowrap'>
-        {props.item.names[0]} ({props.item.names.slice(1).join(', ')})
+        {props.item.names_map.SPECIES[0]
+          .split(' ')
+          .map((v) => toTitleCase(v))
+          .join(' ')}
       </Accordion.Header>
       <Accordion.Body class='p-0 pt-1'>
         <Tabs defaultActiveKey={`${props.item.objectId}-data`} class='mb-2'>
@@ -34,7 +39,9 @@ const CreatureListing: Component<{ item: Creature }> = (props) => {
               <tbody>
                 <tr>
                   <th>Known names:</th>
-                  <td>{props.item.names.join(', ')}</td>
+                  <td>
+                    <CreatureNamesTable names={props.item.names_map} />
+                  </td>
                 </tr>
                 <tr>
                   <th>Life Expectancy</th>

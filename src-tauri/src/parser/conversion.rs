@@ -12,6 +12,7 @@ pub struct WebCreature {
     #[serde(rename = "objectId")]
     object_id: String,
     names: Vec<String>,
+    names_map: HashMap<String, Vec<String>>,
     description: String,
     max_age: HashMap<String, [u16; 2]>,
     clutch_size: HashMap<String, [u16; 2]>,
@@ -39,6 +40,7 @@ impl WebCreature {
             cluster_range: creature.cluster_number,
             body_size: creature.get_body_sizes(),
             grown_at: creature.get_grown_at_ages(),
+            names_map: creature.get_names_by_caste(),
         }
     }
 }
