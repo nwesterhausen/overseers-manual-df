@@ -1,4 +1,17 @@
-import { Container, Navbar, Nav, NavDropdown, Tabs, Tab, Form, Alert, Button, Spinner, Stack } from 'solid-bootstrap';
+import {
+  Container,
+  Navbar,
+  Nav,
+  NavDropdown,
+  Tabs,
+  Tab,
+  Form,
+  Alert,
+  Button,
+  Spinner,
+  Stack,
+  ButtonGroup,
+} from 'solid-bootstrap';
 import { listen } from '@tauri-apps/api/event';
 import { debounce } from '@solid-primitives/scheduled';
 import { open as tauriOpen, OpenDialogOptions } from '@tauri-apps/api/dialog';
@@ -20,7 +33,8 @@ const APP_NAME = "Overseer's Reference Manual";
 // Statuses for the parsing status
 const STS_PARSING = 'Parsing',
   STS_LOADING = 'Loading',
-  STS_IDLE = 'Idle';
+  STS_IDLE = 'Idle',
+  STS_EMPTY = 'Idle/No Raws';
 
 /**
  * Dialog options for the select directory window
@@ -96,6 +110,8 @@ const App: Component = () => {
           setSaveDirectoryOptions(saveArr);
         })
         .catch(console.error);
+    } else {
+      setManualFolderSelect(false);
     }
   });
   // Signal for loading raws
@@ -124,7 +140,22 @@ const App: Component = () => {
     switch (parsingStatus()) {
       case STS_IDLE:
         if (jsonRawsResource().length === 0) {
-          return <p class='text-center'>Please choose a save from the dropdown above.</p>;
+          return (
+            <>
+              <p class='text-center'>Please choose a save to load raws from:</p>
+              <Container class='justify-content-center d-flex'>
+                <ButtonGroup vertical>
+                  <For each={saveDirectoryOptions()}>
+                    {(dir) => (
+                      <Button onClick={() => setCurrentSave(dir)} variant='outline-info'>
+                        {dir}
+                      </Button>
+                    )}
+                  </For>
+                </ButtonGroup>
+              </Container>
+            </>
+          );
         }
         return (
           <>
@@ -141,17 +172,23 @@ const App: Component = () => {
         );
       case STS_LOADING:
         return (
-          <Stack direction='horizontal' gap={3}>
+          <Stack class='justify-content-center d-flex' direction='horizontal' gap={3}>
             <Spinner animation='grow' />
             <span>Loading raws...</span>
           </Stack>
         );
       case STS_PARSING:
         return (
-          <Stack direction='horizontal' gap={3}>
+          <Stack class='justify-content-center d-flex' direction='horizontal' gap={3}>
             <Spinner animation='grow' />
             <span>Parsing raw files...</span>
           </Stack>
+        );
+      case STS_EMPTY:
+        return (
+          <p class='text-center'>
+            No raws found in <strong>{currentSave()}</strong>
+          </p>
         );
     }
   });
@@ -194,18 +231,27 @@ const App: Component = () => {
       console.debug(jsonStr);
       console.error("Did not get 'string' back");
       setParsingStatus(STS_IDLE);
+      setLoadRaws(false);
       return [];
     }
     const result = JSON.parse(jsonStr);
     if (Array.isArray(result)) {
       const sortResult = result.sort((a, b) => (a.names[0] < b.names[0] ? -1 : 1));
       console.log('raws parsed', sortResult.length);
-      setParsingStatus(STS_IDLE);
+      if (sortResult.length === 0) {
+        setParsingStatus(STS_EMPTY);
+      } else {
+        setParsingStatus(STS_IDLE);
+      }
+      setTimeout(() => {
+        setLoadRaws(false);
+      }, 50);
       return sortResult;
     }
     console.debug(result);
     console.error('Result was not an array');
     setParsingStatus(STS_IDLE);
+    setLoadRaws(false);
     return [];
   }
 
