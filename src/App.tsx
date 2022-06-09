@@ -25,6 +25,7 @@ import { invoke } from '@tauri-apps/api/tauri';
 import { Creature } from './definitions/Creature';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import { FilterInvalidRaws } from './definitions/Raw';
+import { SearchableNames } from './definitions/Utils';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -251,9 +252,13 @@ const App: Component = () => {
     }
     const result = JSON.parse(jsonStr);
     if (Array.isArray(result)) {
-      const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.names[0] < b.names[0] ? -1 : 1));
-      console.log('raws parsed', sortResult.length);
-      if (sortResult.length === 0) {
+      const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.name < b.name ? -1 : 1));
+      const searchableResult = sortResult.map((v: Creature) => {
+        v.searchString = [SearchableNames(v.names_map), v.lays_eggs ? 'eggs' : '', v.description].join(' ');
+        return v;
+      });
+      console.log('raws parsed', searchableResult.length);
+      if (searchableResult.length === 0) {
         setParsingStatus(STS_EMPTY);
       } else {
         setParsingStatus(STS_IDLE);
@@ -261,7 +266,7 @@ const App: Component = () => {
       setTimeout(() => {
         setLoadRaws(false);
       }, 50);
-      return sortResult;
+      return searchableResult;
     }
     console.debug(result);
     console.error('Result was not an array');
@@ -344,7 +349,7 @@ const App: Component = () => {
         ) : (
           <>
             {searchBarHtml()}
-            {jsonRawsResource().length === 0 ? (
+            {jsonRawsResource().length === 0 || parsingStatus() !== STS_IDLE ? (
               <></>
             ) : (
               <Tabs defaultActiveKey='bestiary' class='my-3'>
