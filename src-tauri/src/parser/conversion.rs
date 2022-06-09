@@ -22,6 +22,7 @@ pub struct WebCreature {
     cluster_range: [u16; 2],
     body_size: HashMap<String, Vec<DFBodySize>>,
     grown_at: HashMap<String, u32>,
+    egg_sizes: HashMap<String, u32>,
 }
 
 impl WebCreature {
@@ -41,6 +42,7 @@ impl WebCreature {
             body_size: creature.get_body_sizes(),
             grown_at: creature.get_grown_at_ages(),
             names_map: creature.get_names_by_caste(),
+            egg_sizes: creature.get_egg_sizes(),
         }
     }
 }

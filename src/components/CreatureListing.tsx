@@ -1,12 +1,13 @@
-import { Accordion, Tabs, Tab, Table } from 'solid-bootstrap';
+import { Accordion, Tabs, Tab, Table, Stack } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { ClusterSizeStatus, Creature, GrownAtStatus } from '../definitions/Creature';
+import { ClusterSizeStatus, CondesedEggSize, Creature, GrownAtStatus } from '../definitions/Creature';
 import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
 import { toTitleCase } from '../definitions/Utils';
 import CreatureBodySizeTable from './CreatureBodySizeTable';
 import CreatureNamesTable from './CreatureNamesTable';
 import RawDetailsTab from './RawDetailsTab';
 import RawJsonTab from './RawJsonTab';
+import TwoPartBadge from './TwoPartBadge';
 
 /**
  * Given a Creature, returns a listing entry for it.
@@ -30,6 +31,13 @@ const CreatureListing: Component<{ item: Creature }> = (props) => {
           .split(' ')
           .map((v) => toTitleCase(v))
           .join(' ')}
+        <Stack class='d-flex justify-content-end w-100 me-3' direction='horizontal' gap={1}>
+          {props.item.lays_eggs ? (
+            <TwoPartBadge bg='success' name='Egg-layer' value={'' + CondesedEggSize(props.item.egg_sizes)} />
+          ) : (
+            <></>
+          )}
+        </Stack>
       </Accordion.Header>
       <Accordion.Body class='p-0 pt-1'>
         <Tabs defaultActiveKey={`${props.item.objectId}-data`} class='mb-2'>
