@@ -1,6 +1,6 @@
 import { Accordion, Tabs, Tab, Table } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { Creature } from '../definitions/Creature';
+import { ClusterSizeStatus, Creature } from '../definitions/Creature';
 import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
 import RawDetailsTab from './RawDetailsTab';
 import RawJsonTab from './RawJsonTab';
@@ -45,7 +45,11 @@ const CreatureListing: Component<{ item: Creature }> = (props) => {
                 </tr>
                 <tr>
                   <th>Home Biomes</th>
-                  <td>{props.item.biomes.join(', ')}</td>
+                  <td>{props.item.biomes.length ? props.item.biomes.join(', ') : 'No natural biomes.'}</td>
+                </tr>
+                <tr>
+                  <th>Group Size</th>
+                  <td>{ClusterSizeStatus(props.item)}</td>
                 </tr>
               </tbody>
             </Table>

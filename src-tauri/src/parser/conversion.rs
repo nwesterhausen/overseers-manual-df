@@ -18,6 +18,7 @@ pub struct WebCreature {
     lays_eggs: bool,
     based_on: String,
     biomes: Vec<String>,
+    cluster_range: [u16; 2],
 }
 
 impl WebCreature {
@@ -33,6 +34,7 @@ impl WebCreature {
             lays_eggs: creature.lays_eggs(),
             based_on: creature.copy_tags_from.join(""),
             biomes: creature.biomes,
+            cluster_range: creature.cluster_number,
         }
     }
 }
