@@ -378,7 +378,9 @@ impl DFCreature {
     pub fn get_grown_at_ages(&self) -> HashMap<String, u32> {
         let mut grown_at_ages: HashMap<String, u32> = HashMap::new();
         for self_caste in &self.castes {
-            grown_at_ages.insert(String::from(&self_caste.name), self_caste.child);
+            if self_caste.child != 0 {
+                grown_at_ages.insert(String::from(&self_caste.name), self_caste.child);
+            }
         }
         grown_at_ages
     }
