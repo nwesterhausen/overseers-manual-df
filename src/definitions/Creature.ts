@@ -1,4 +1,5 @@
 import { Raw } from './Raw';
+import { SimplifyVolume } from './Utils';
 
 export type BodySizeRange = {
   years: number;
@@ -62,7 +63,7 @@ export const EggLayingStatus = (creature: Creature): string => {
   const keys = Object.keys(creature.clutch_size);
   if (keys.length === 0) {
     if (size > 0) {
-      return `Lays an unknown quantity of eggs with volume ${size}cm³.`;
+      return `Lays an unknown quantity of eggs with volume ${SimplifyVolume(size)}.`;
     }
     return 'Lays an unknown quantity of eggs.';
   }
@@ -70,7 +71,9 @@ export const EggLayingStatus = (creature: Creature): string => {
   for (const k in creature.clutch_size) {
     if (size > 0) {
       ret.push(
-        `${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutch_size[k].join(' - ')} eggs with volume ${size}cm³.`
+        `${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutch_size[k].join(
+          ' - '
+        )} eggs with volume ${SimplifyVolume(size)}.`
       );
     } else {
       ret.push(`${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutch_size[k].join(' - ')} eggs.`);
@@ -129,15 +132,15 @@ export const ClusterSizeStatus = (creature: Creature): string => {
 export const BodySizeStatus = (size: BodySizeRange): string => {
   if (size.years === 0) {
     if (size.days === 0) {
-      return `${size.size_cm3} cm³ at birth`;
+      return `${SimplifyVolume(size.size_cm3)} at birth`;
     } else {
-      return `${size.size_cm3} cm³ at ${size.days} days;`;
+      return `${SimplifyVolume(size.size_cm3)} at ${size.days} days;`;
     }
   }
   if (size.days === 0) {
-    return `${size.size_cm3} cm³ at ${size.years} years`;
+    return `${SimplifyVolume(size.size_cm3)} at ${size.years} years`;
   }
-  return `${size.size_cm3} cm³ at ${size.years} years, ${size.days} days`;
+  return `${SimplifyVolume(size.size_cm3)} at ${size.years} years, ${size.days} days`;
 };
 
 /**
