@@ -1,3 +1,11 @@
+## [0.1.7](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.1.6...v0.1.7) (2022-06-09)
+
+
+### Bug Fixes
+
+* :construction_worker: add package.json to assets for git ([cbb7417](https://github.com/nwesterhausen/overseers-manual-df/commit/cbb7417d69d0b84c5dd2da996a104478d98857f9))
+* :construction_worker: trigger build on releases ([822f7ef](https://github.com/nwesterhausen/overseers-manual-df/commit/822f7ef7ef4c6685a83285242b70f0f7540b2beb))
+
 ## [0.1.6](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.1.5...v0.1.6) (2022-06-09)
 
 
