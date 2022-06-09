@@ -10,3 +10,10 @@
 .listing-nav {
   text-decoration: none;
 }
+
+.double-badge span {
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 0.2rem;
+}

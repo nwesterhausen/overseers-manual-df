@@ -289,19 +289,45 @@ impl DFCreature {
     pub fn get_object_id(&self) -> String {
         String::from(&self.object_id)
     }
-    pub fn get_all_names(&self) -> Vec<String> {
-        let mut names: Vec<String> = Vec::new();
-        names.append(&mut self.name.to_string_vec());
-        names.append(&mut self.general_baby_name.to_string_vec());
-        names.append(&mut self.general_child_name.to_string_vec());
-        for self_caste in &self.castes {
-            names.append(&mut self_caste.baby_name.to_string_vec());
-            names.append(&mut self_caste.child_name.to_string_vec());
+    pub fn get_general_name(&self) -> String {
+        self.name.to_string_vec()[0].to_string()
+    }
+    pub fn get_names_by_caste(&self) -> HashMap<String, Vec<String>> {
+        let mut names_map: HashMap<String, Vec<String>> = HashMap::new();
+        names_map.insert("SPECIES".to_string(), Vec::from(self.name.to_string_vec()));
+        if !self.general_baby_name.to_string_vec()[0].is_empty() {
+            names_map.insert(
+                "baby_SPECIES".to_string(),
+                Vec::from(self.general_baby_name.to_string_vec()),
+            );
         }
-        names.retain(|s| s != "");
-        names.sort_unstable();
-        names.dedup();
-        names
+        if !self.general_child_name.to_string_vec()[0].is_empty() {
+            names_map.insert(
+                "child_SPECIES".to_string(),
+                Vec::from(self.general_child_name.to_string_vec()),
+            );
+        }
+        for self_caste in &self.castes {
+            if !self_caste.baby_name.to_string_vec()[0].is_empty() {
+                names_map.insert(
+                    format!("baby_{}", self_caste.name),
+                    Vec::from(self_caste.baby_name.to_string_vec()),
+                );
+            }
+            if !self_caste.child_name.to_string_vec()[0].is_empty() {
+                names_map.insert(
+                    format!("child_{}", self_caste.name),
+                    Vec::from(self_caste.child_name.to_string_vec()),
+                );
+            }
+            if !self_caste.caste_name.to_string_vec()[0].is_empty() {
+                names_map.insert(
+                    format!("{}", self_caste.name),
+                    Vec::from(self_caste.caste_name.to_string_vec()),
+                );
+            }
+        }
+        names_map
     }
     pub fn get_description(&self) -> String {
         let mut descriptions: Vec<String> = Vec::new();
@@ -341,7 +367,9 @@ impl DFCreature {
     pub fn get_grown_at_ages(&self) -> HashMap<String, u32> {
         let mut grown_at_ages: HashMap<String, u32> = HashMap::new();
         for self_caste in &self.castes {
-            grown_at_ages.insert(String::from(&self_caste.name), self_caste.child);
+            if self_caste.child != 0 {
+                grown_at_ages.insert(String::from(&self_caste.name), self_caste.child);
+            }
         }
         grown_at_ages
     }
@@ -352,6 +380,15 @@ impl DFCreature {
             }
         }
         false
+    }
+    pub fn get_egg_sizes(&self) -> HashMap<String, u32> {
+        let mut values: HashMap<String, u32> = HashMap::new();
+        for self_caste in &self.castes {
+            if self_caste.lays_eggs {
+                values.insert(String::from(&self_caste.name), self_caste.egg_size);
+            }
+        }
+        values
     }
 }
 

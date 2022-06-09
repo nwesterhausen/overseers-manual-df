@@ -7,7 +7,7 @@ export type BodySizeRange = {
 };
 
 export type CasteRange<T> = {
-  [key: string]: T;
+  [key in typeof CasteOptions[number]]: T;
 };
 
 export type Creature = {
@@ -19,7 +19,24 @@ export type Creature = {
   cluster_range: number[];
   body_size: CasteRange<BodySizeRange[]>;
   grown_at: CasteRange<number>;
+  names_map: CasteRange<string[]>;
+  egg_sizes: CasteRange<number>;
 } & Raw;
+
+export const CasteOptions = [
+  'SPECIES',
+  'child_SPECIES',
+  'baby_SPECIES',
+  'EVERY',
+  'child_EVERY',
+  'baby_EVERY',
+  'MALE',
+  'child_MALE',
+  'baby_MALE',
+  'FEMALE',
+  'child_FEMALE',
+  'baby_FEMALE',
+];
 
 /**
  * Returns true if the raw is a Creature raw.
@@ -41,15 +58,25 @@ export const EggLayingStatus = (creature: Creature): string => {
   if (!creature.lays_eggs) {
     return "Doesn't lay eggs.";
   }
+  const size = CondesedEggSize(creature.egg_sizes);
   const keys = Object.keys(creature.clutch_size);
   if (keys.length === 0) {
+    if (size > 0) {
+      return `Lays an unknown quantity of eggs with volume ${size}cm³.`;
+    }
     return 'Lays an unknown quantity of eggs.';
   }
-  let ret = '';
+  const ret: string[] = [];
   for (const k in creature.clutch_size) {
-    ret += `${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutch_size[k].join(' - ')} eggs.`;
+    if (size > 0) {
+      ret.push(
+        `${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutch_size[k].join(' - ')} eggs with volume ${size}cm³.`
+      );
+    } else {
+      ret.push(`${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutch_size[k].join(' - ')} eggs.`);
+    }
   }
-  return ret;
+  return ret.join(' ');
 };
 
 /**
@@ -135,4 +162,35 @@ export const GrownAtStatus = (grown_data: CasteRange<number>): string => {
     return sts.join(' ');
   }
   return 'Only appear as adults.';
+};
+
+/**
+ * Returns the first-encountered egg size in the caste mapping for egg sizes.
+ *
+ * @remarks This should not just pick the first one and return, it should smartly provide answers by caste.
+ * @param sizes - Caste mapping of the egg size
+ * @returns The first encountered egg size
+ */
+export const CondesedEggSize = (sizes: CasteRange<number>): number => {
+  const castes = Object.keys(sizes);
+  if (castes.length >= 1) {
+    return sizes[castes[0]];
+  }
+  return 0;
+};
+
+/**
+ * Returns the first-encountered clutch range as an average.
+ *
+ * @remarks This should not just pick the first one and return, it should smartly provide answers by caste.
+ * @param clutch_size - Caste mapping of the clutch size
+ * @returns Average clutch size for first encountered clutch range
+ */
+export const AverageClutchSize = (clutch_size: CasteRange<number[]>): number => {
+  const castes = Object.keys(clutch_size);
+  if (castes.length === 1) {
+    const [min, max] = clutch_size[castes[0]];
+    return Math.floor((min + max) / 2);
+  }
+  return 0;
 };
