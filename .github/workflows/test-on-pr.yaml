@@ -31,3 +31,4 @@ jobs:
       - uses: tauri-apps/tauri-action@94020df623434715bbc0388840f55fe4853af10c
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
