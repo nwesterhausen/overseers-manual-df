@@ -1,3 +1,10 @@
+## [0.1.5](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.1.4...v0.1.5) (2022-06-09)
+
+
+### Bug Fixes
+
+* :construction_worker: update package.json ([fe3b78e](https://github.com/nwesterhausen/overseers-manual-df/commit/fe3b78ef45a0b55dea830c4cf63267585925685d))
+
 ## [0.1.4](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.1.3...v0.1.4) (2022-06-09)
 
 
