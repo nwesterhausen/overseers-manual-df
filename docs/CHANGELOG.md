@@ -1,3 +1,10 @@
+## [0.2.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.2.0...v0.2.1) (2022-06-09)
+
+
+### Bug Fixes
+
+* 🔥 remove ci skip from message ([e9f71f3](https://github.com/nwesterhausen/overseers-manual-df/commit/e9f71f3e646acdfc53a9eb87af0676ae41127380))
+
 ## [0.2.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.1.7...v0.2.0) (2022-06-09)
 
 
