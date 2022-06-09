@@ -43,6 +43,10 @@ const CreatureListing: Component<{ item: Creature }> = (props) => {
                   <th>Egg Laying</th>
                   <td>{EggLayingStatus(props.item)}</td>
                 </tr>
+                <tr>
+                  <th>Home Biomes</th>
+                  <td>{props.item.biomes.join(', ')}</td>
+                </tr>
               </tbody>
             </Table>
           </Tab>
