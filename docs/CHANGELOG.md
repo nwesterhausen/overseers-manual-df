@@ -1,3 +1,10 @@
+## [0.2.3](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.2.2...v0.2.3) (2022-06-09)
+
+
+### Bug Fixes
+
+* :bug: change save or df folder retriggers ([b0f5a62](https://github.com/nwesterhausen/overseers-manual-df/commit/b0f5a62f9e9e2c7a3081a533e5723a46296949b7))
+
 ## [0.2.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.2.1...v0.2.2) (2022-06-09)
 
 
