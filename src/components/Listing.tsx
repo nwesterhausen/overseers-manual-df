@@ -2,6 +2,7 @@ import { Accordion } from 'solid-bootstrap';
 import { Component, createMemo, For } from 'solid-js';
 import { Creature, isCreature } from '../definitions/Creature';
 import { Raw, RawsFirstLetters } from '../definitions/Raw';
+import AlphaLinks from './AlphaLinks';
 import CreatureListing from './CreatureListing';
 
 const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
@@ -25,21 +26,27 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
     return RawsFirstLetters(listingList() as Raw[]);
   });
   // const [pages, setPages] = createSignal([]);
+  const secretid = `list${Math.floor(Math.random() * 100)}`;
   return (
-    <ul class='list-unstyled'>
-      <For each={alphaHeadings()}>
-        {(letter) => (
-          <li>
-            <strong class='fs-3 listing-letter'>{letter.toUpperCase()}</strong>
-            <Accordion flush>
-              <For each={listingList().filter((v) => v.names[0].startsWith(letter))} fallback={<div>No items</div>}>
-                {(raw) => (isCreature(raw) ? <CreatureListing item={raw as Creature} /> : '')}
-              </For>
-            </Accordion>
-          </li>
-        )}
-      </For>
-    </ul>
+    <>
+      <AlphaLinks alphabet={alphaHeadings()} id={secretid} />
+      <ul class='list-unstyled'>
+        <For each={alphaHeadings()}>
+          {(letter) => (
+            <li>
+              <span id={`${secretid}-${letter}`} class='bolder fs-3 listing-letter'>
+                {letter.toUpperCase()}
+              </span>
+              <Accordion flush>
+                <For each={listingList().filter((v) => v.names[0].startsWith(letter))} fallback={<div>No items</div>}>
+                  {(raw) => (isCreature(raw) ? <CreatureListing item={raw as Creature} /> : '')}
+                </For>
+              </Accordion>
+            </li>
+          )}
+        </For>
+      </ul>
+    </>
   );
 };
 
