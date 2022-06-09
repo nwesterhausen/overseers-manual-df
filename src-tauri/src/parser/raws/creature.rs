@@ -289,20 +289,6 @@ impl DFCreature {
     pub fn get_object_id(&self) -> String {
         String::from(&self.object_id)
     }
-    pub fn get_all_names(&self) -> Vec<String> {
-        let mut names: Vec<String> = Vec::new();
-        names.append(&mut self.name.to_string_vec());
-        names.append(&mut self.general_baby_name.to_string_vec());
-        names.append(&mut self.general_child_name.to_string_vec());
-        for self_caste in &self.castes {
-            names.append(&mut self_caste.baby_name.to_string_vec());
-            names.append(&mut self_caste.child_name.to_string_vec());
-            names.append(&mut self_caste.caste_name.to_string_vec());
-        }
-        names.retain(|s| s != "");
-        names.dedup();
-        names
-    }
     pub fn get_general_name(&self) -> String {
         self.name.to_string_vec()[0].to_string()
     }
