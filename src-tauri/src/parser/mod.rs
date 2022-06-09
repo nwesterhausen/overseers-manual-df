@@ -45,7 +45,6 @@ fn turn_vec_into_json_string(v: Vec<raws::creature::DFCreature>) -> String {
 }
 
 fn save_vec_to_json_file(v: Vec<raws::creature::DFCreature>, out_directory: PathBuf) {
-
     // The destination file is out.json inside the out_directory
     let out_filepath = out_directory.join("out.json");
     let out_file =
