@@ -392,6 +392,15 @@ impl DFCreature {
         }
         false
     }
+    pub fn get_egg_sizes(&self) -> HashMap<String, u32> {
+        let mut values: HashMap<String, u32> = HashMap::new();
+        for self_caste in &self.castes {
+            if self_caste.lays_eggs {
+                values.insert(String::from(&self_caste.name), self_caste.egg_size);
+            }
+        }
+        values
+    }
 }
 
 impl DFCreatureCaste {

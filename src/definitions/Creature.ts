@@ -20,6 +20,7 @@ export type Creature = {
   body_size: CasteRange<BodySizeRange[]>;
   grown_at: CasteRange<number>;
   names_map: CasteRange<string[]>;
+  egg_sizes: CasteRange<number>;
 } & Raw;
 
 export const CasteOptions = [
@@ -57,15 +58,25 @@ export const EggLayingStatus = (creature: Creature): string => {
   if (!creature.lays_eggs) {
     return "Doesn't lay eggs.";
   }
+  const size = CondesedEggSize(creature.egg_sizes);
   const keys = Object.keys(creature.clutch_size);
   if (keys.length === 0) {
+    if (size > 0) {
+      return `Lays an unknown quantity of eggs with volume ${size}cm³.`;
+    }
     return 'Lays an unknown quantity of eggs.';
   }
-  let ret = '';
+  const ret: string[] = [];
   for (const k in creature.clutch_size) {
-    ret += `${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutch_size[k].join(' - ')} eggs.`;
+    if (size > 0) {
+      ret.push(
+        `${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutch_size[k].join(' - ')} eggs with volume ${size}cm³.`
+      );
+    } else {
+      ret.push(`${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutch_size[k].join(' - ')} eggs.`);
+    }
   }
-  return ret;
+  return ret.join(' ');
 };
 
 /**
@@ -153,6 +164,12 @@ export const GrownAtStatus = (grown_data: CasteRange<number>): string => {
   return 'Only appear as adults.';
 };
 
+/**
+ * Returns a condensed string representing the array of names.
+ *
+ * @param names - Names in an array
+ * @returns A string with names condensed as much as possible
+ */
 export const CleanName = (names: string[]): string => {
   if (names.length < 2) {
     return [...new Set(names)].filter((n) => n.length > 0).join(', ');
@@ -172,4 +189,21 @@ export const CleanName = (names: string[]): string => {
     return `${singular}/men`;
   }
   return `${singular}, ${plural}`;
+};
+
+export const CondesedEggSize = (sizes: CasteRange<number>): number => {
+  const castes = Object.keys(sizes);
+  if (castes.length === 1) {
+    return sizes[castes[0]];
+  }
+  return 0;
+};
+
+export const AverageClutchSize = (clutch_size: CasteRange<number[]>): number => {
+  const castes = Object.keys(clutch_size);
+  if (castes.length === 1) {
+    const [min, max] = clutch_size[castes[0]];
+    return Math.floor((min + max) / 2);
+  }
+  return 0;
 };
