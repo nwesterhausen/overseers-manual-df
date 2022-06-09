@@ -24,6 +24,7 @@ import { getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/tauri';
 import { Creature } from './definitions/Creature';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
+import { FilterInvalidRaws } from './definitions/Raw';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -250,7 +251,7 @@ const App: Component = () => {
     }
     const result = JSON.parse(jsonStr);
     if (Array.isArray(result)) {
-      const sortResult = result.sort((a, b) => (a.names[0] < b.names[0] ? -1 : 1));
+      const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.names[0] < b.names[0] ? -1 : 1));
       console.log('raws parsed', sortResult.length);
       if (sortResult.length === 0) {
         setParsingStatus(STS_EMPTY);

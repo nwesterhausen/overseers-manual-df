@@ -10,6 +10,20 @@ export type Raw = {
 };
 
 /**
+ * Array.prototype.filter function to only allow valid Raw objects.
+ *
+ * @param r - Element of the array
+ * @returns True if the element is valid Raw
+ */
+export const FilterInvalidRaws = (r: Raw): boolean => {
+  if (r.names.length === 0) {
+    console.warn(`Invalid raw: ${r.identifier} ${r.objectId}`);
+    return false;
+  }
+  return true;
+};
+
+/**
  * Returns an array of all the starting letters of the parsed raws objects.
  *
  * This uses the first name in the raw object `names` array.
@@ -22,8 +36,8 @@ export const RawsFirstLetters = (arr: Raw[]): string[] => {
     ...new Set(
       arr.map((v: Raw) => {
         const name = v.names[0];
-        if (name.length) {
-          return name.charAt(0);
+        if (name && name.length) {
+          return name.charAt(0).toLowerCase();
         }
         return '';
       })
