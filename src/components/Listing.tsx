@@ -11,7 +11,7 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
     return props.data.filter((raw) => {
       return (
         // check if the search string is in the name
-        raw.names.join('*').includes(props.searchString) ||
+        raw.name.includes(props.searchString) ||
         // check if the search string is in the name
         raw.description.includes(props.searchString) ||
         // check if the search string is egg(s) to display all egg_layers (if it is a creature)
@@ -39,7 +39,7 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
               </span>
               <Accordion flush>
                 <For
-                  each={listingList().filter((v) => v.names[0].toLowerCase().startsWith(letter))}
+                  each={listingList().filter((v) => v.name.toLowerCase().startsWith(letter))}
                   fallback={<div>No items</div>}>
                   {(raw) => (isCreature(raw) ? <CreatureListing item={raw as Creature} /> : '')}
                 </For>

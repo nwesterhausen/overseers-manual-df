@@ -251,7 +251,7 @@ const App: Component = () => {
     }
     const result = JSON.parse(jsonStr);
     if (Array.isArray(result)) {
-      const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.names[0] < b.names[0] ? -1 : 1));
+      const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.name < b.name ? -1 : 1));
       console.log('raws parsed', sortResult.length);
       if (sortResult.length === 0) {
         setParsingStatus(STS_EMPTY);

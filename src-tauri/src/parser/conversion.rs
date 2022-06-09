@@ -11,7 +11,7 @@ pub struct WebCreature {
     parent_raw: String,
     #[serde(rename = "objectId")]
     object_id: String,
-    names: Vec<String>,
+    name: String,
     names_map: HashMap<String, Vec<String>>,
     description: String,
     max_age: HashMap<String, [u16; 2]>,
@@ -31,7 +31,7 @@ impl WebCreature {
             identifier: creature.get_identifier(),
             parent_raw: creature.get_parent_raw(),
             object_id: creature.get_object_id(),
-            names: creature.get_all_names(),
+            name: creature.get_general_name(),
             description: creature.get_description(),
             max_age: creature.get_max_ages(),
             clutch_size: creature.get_clutch_sizes(),
