@@ -1,5 +1,15 @@
 import { Raw, CasteRangeSpecifier } from './Raw';
 
+export type BodySizeRange = {
+  years: number;
+  days: number;
+  size_cm3: number;
+};
+
+export type CasteBodySizeRange = {
+  [key: string]: BodySizeRange[];
+};
+
 export type Creature = {
   max_age: CasteRangeSpecifier;
   lays_eggs: boolean;
@@ -7,6 +17,7 @@ export type Creature = {
   based_on?: Creature;
   biomes: string[];
   cluster_range: number[];
+  body_size: CasteBodySizeRange;
 } & Raw;
 
 /**
@@ -35,7 +46,7 @@ export const EggLayingStatus = (creature: Creature): string => {
   }
   let ret = '';
   for (const k in creature.clutch_size) {
-    ret += `${k} lays ${creature.clutch_size[k].join(' - ')} eggs.`;
+    ret += `${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutch_size[k].join(' - ')} eggs.`;
   }
   return ret;
 };
@@ -79,4 +90,24 @@ export const ClusterSizeStatus = (creature: Creature): string => {
     return `They always appear in groups of ${min}`;
   }
   return `They appear in groups of ${min} to ${max} individuals.`;
+};
+
+/**
+ * Returns a short text description of a BodySizeRange.
+ *
+ * @param size - The body size range to turn into a string
+ * @returns Text to describe the body size range value
+ */
+export const BodySizeStatus = (size: BodySizeRange): string => {
+  if (size.years === 0) {
+    if (size.days === 0) {
+      return `${size.size_cm3} cm³ at birth`;
+    } else {
+      return `${size.size_cm3} cm³ at ${size.days} days;`;
+    }
+  }
+  if (size.days === 0) {
+    return `${size.size_cm3} cm³ at ${size.years} years`;
+  }
+  return `${size.size_cm3} cm³ at ${size.years} years, ${size.days} days`;
 };
