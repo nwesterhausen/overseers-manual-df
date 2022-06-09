@@ -186,9 +186,23 @@ const App: Component = () => {
         );
       case STS_EMPTY:
         return (
-          <p class='text-center'>
-            No raws found in <strong>{currentSave()}</strong>
-          </p>
+          <>
+            <p class='text-center'>
+              No raws found in <strong>{currentSave()}</strong>
+            </p>
+            <p class='text-center'>Please choose a save to load raws from:</p>
+            <Container class='justify-content-center d-flex'>
+              <ButtonGroup vertical>
+                <For each={saveDirectoryOptions()}>
+                  {(dir) => (
+                    <Button onClick={() => setCurrentSave(dir)} variant='outline-info'>
+                      {dir}
+                    </Button>
+                  )}
+                </For>
+              </ButtonGroup>
+            </Container>
+          </>
         );
     }
   });

@@ -1,7 +1,8 @@
 import { Accordion, Tabs, Tab, Table } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { Creature } from '../definitions/Creature';
+import { ClusterSizeStatus, Creature, GrownAtStatus } from '../definitions/Creature';
 import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
+import CreatureBodySizeTable from './CreatureBodySizeTable';
 import RawDetailsTab from './RawDetailsTab';
 import RawJsonTab from './RawJsonTab';
 
@@ -29,7 +30,7 @@ const CreatureListing: Component<{ item: Creature }> = (props) => {
         <Tabs defaultActiveKey={`${props.item.objectId}-data`} class='mb-2'>
           <Tab eventKey={`${props.item.objectId}-data`} title='Description'>
             <p>{props.item.description}</p>
-            <Table size='sm'>
+            <Table>
               <tbody>
                 <tr>
                   <th>Known names:</th>
@@ -42,6 +43,21 @@ const CreatureListing: Component<{ item: Creature }> = (props) => {
                 <tr>
                   <th>Egg Laying</th>
                   <td>{EggLayingStatus(props.item)}</td>
+                </tr>
+                <tr>
+                  <th>Home Biomes</th>
+                  <td>{props.item.biomes.length ? props.item.biomes.join(', ') : 'No natural biomes.'}</td>
+                </tr>
+                <tr>
+                  <th>Group Numbers</th>
+                  <td>{ClusterSizeStatus(props.item)}</td>
+                </tr>
+                <tr>
+                  <th>Growth and Size</th>
+                  <td>
+                    <CreatureBodySizeTable bodysize={props.item.body_size} />
+                    <span>{GrownAtStatus(props.item.grown_at)}</span>
+                  </td>
                 </tr>
               </tbody>
             </Table>

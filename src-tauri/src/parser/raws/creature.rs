@@ -330,6 +330,21 @@ impl DFCreature {
         }
         clutch_sizes
     }
+    pub fn get_body_sizes(&self) -> HashMap<String, Vec<DFBodySize>> {
+        let mut body_sizes: HashMap<String, Vec<DFBodySize>> = HashMap::new();
+        for self_caste in &self.castes {
+            let caste_body_sizes = Vec::clone(&self_caste.body_size);
+            body_sizes.insert(String::from(&self_caste.name), caste_body_sizes);
+        }
+        body_sizes
+    }
+    pub fn get_grown_at_ages(&self) -> HashMap<String, u32> {
+        let mut grown_at_ages: HashMap<String, u32> = HashMap::new();
+        for self_caste in &self.castes {
+            grown_at_ages.insert(String::from(&self_caste.name), self_caste.child);
+        }
+        grown_at_ages
+    }
     pub fn lays_eggs(&self) -> bool {
         for self_caste in &self.castes {
             if self_caste.lays_eggs {
