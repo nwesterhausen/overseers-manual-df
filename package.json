@@ -59,12 +59,6 @@
         }
       ],
       [
-        "@semantic-release/npm",
-        {
-          "npmPublish": false
-        }
-      ],
-      [
         "@semantic-release/release-notes-generator",
         {
           "preset": "conventionalcommits"
@@ -74,6 +68,12 @@
         "@semantic-release/changelog",
         {
           "changelogFile": "docs/CHANGELOG.md"
+        }
+      ],
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
         }
       ],
       [
