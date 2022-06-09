@@ -20,7 +20,7 @@ fn parse_directory(raws_directory: String) -> Vec<raws::creature::DFCreature> {
     let mut creatures: Vec<raws::creature::DFCreature> = Vec::new();
 
     // Read all the files in the directory, selectively parse the .txt files
-    for entry in WalkDir::new(raws_directory)
+    for entry in WalkDir::new(&raws_directory)
         .into_iter()
         .filter_map(|e| e.ok())
     {
@@ -32,7 +32,11 @@ fn parse_directory(raws_directory: String) -> Vec<raws::creature::DFCreature> {
             creatures.append(&mut reader::parse_file(entry_path))
         }
     }
-
+    println!(
+        "{} creatures parsed from directory {}",
+        creatures.len(),
+        &raws_directory
+    );
     creatures
 }
 
@@ -40,7 +44,7 @@ fn turn_vec_into_json_string(v: Vec<raws::creature::DFCreature>) -> String {
     let mut owned_string: String = "[".to_owned();
     owned_string.push_str(stringify_raw_vec(v).join(",").as_str());
     owned_string.push_str("]");
-
+    println!("JSON String is {} characters", owned_string.len());
     owned_string
 }
 
