@@ -5,6 +5,7 @@ export type Creature = {
   lays_eggs: boolean;
   clutch_size: CasteRangeSpecifier;
   based_on?: Creature;
+  biomes: string[];
 } & Raw;
 
 /**

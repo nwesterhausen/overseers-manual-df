@@ -17,6 +17,7 @@ pub struct WebCreature {
     clutch_size: HashMap<String, [u16; 2]>,
     lays_eggs: bool,
     based_on: String,
+    biomes: Vec<String>,
 }
 
 impl WebCreature {
@@ -31,6 +32,7 @@ impl WebCreature {
             clutch_size: creature.get_clutch_sizes(),
             lays_eggs: creature.lays_eggs(),
             based_on: creature.copy_tags_from.join(""),
+            biomes: creature.biomes,
         }
     }
 }
