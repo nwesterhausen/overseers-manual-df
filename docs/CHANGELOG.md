@@ -1,3 +1,10 @@
+## [0.1.4](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.1.3...v0.1.4) (2022-06-09)
+
+
+### Bug Fixes
+
+* :construction_worker: remove unneeded dependency ([d8b454d](https://github.com/nwesterhausen/overseers-manual-df/commit/d8b454d65981fb13586c3a2bd07588b10912b28d))
+
 ## [0.1.3](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.1.2...v0.1.3) (2022-06-09)
 
 
