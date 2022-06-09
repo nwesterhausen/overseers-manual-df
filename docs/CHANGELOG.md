@@ -1,3 +1,14 @@
+## [0.3.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.2.3...v0.3.0) (2022-06-09)
+
+
+### Features
+
+* :sparkles: add creature biome data ([e09ad42](https://github.com/nwesterhausen/overseers-manual-df/commit/e09ad421803398f6e91c7242342c1f84649b2617))
+* :sparkles: add creature body size / growth details ([b7d628c](https://github.com/nwesterhausen/overseers-manual-df/commit/b7d628c82dca5f3f931e070393cc390898c829fb))
+* :sparkles: add creature spawning group size info ([93103bf](https://github.com/nwesterhausen/overseers-manual-df/commit/93103bf79ca7d3f831816ddc1d89b41879dfab17))
+* :sparkles: data on creatures reaching adulthood ([e397af5](https://github.com/nwesterhausen/overseers-manual-df/commit/e397af5ac6fe47a6360b4a9b40baa250e229023e))
+* :sparkles: show save choice buttons when chosen save is empty ([517b6d7](https://github.com/nwesterhausen/overseers-manual-df/commit/517b6d75e314c7c37f21172f31f54a703880f5e5))
+
 ## [0.2.3](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.2.2...v0.2.3) (2022-06-09)
 
 
