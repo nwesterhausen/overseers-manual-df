@@ -1,5 +1,10 @@
 # Overseer's Reference Manual for Dwarf Fortress
 
+[![release badge](https://img.shields.io/github/v/release/nwesterhausen/overseers-manual-df?style=plastic)](https://github.com/nwesterhausen/overseers-manual-df/releases/tag/latest)
+[![semantic-release: angular](https://img.shields.io/badge/semantic--release-conventionalcommits-e10079?logo=semantic-release&style=plastic)](https://github.com/semantic-release/semantic-release)
+![last commit](https://img.shields.io/github/last-commit/nwesterhausen/overseers-manual-df?style=plastic)
+[![supports df 47.05](https://img.shields.io/badge/Supports%20Dwarf%20Fortress-0.47.05-%235E3E0D?style=plastic)](https://bay12games.com/dwarves/)
+
 ![app icon](src-tauri/icons/128x128.png)
 
 This is a app which provides a searchable interface for the your Dwarf Fortress raw files. It's built using
