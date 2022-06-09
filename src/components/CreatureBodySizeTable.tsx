@@ -1,9 +1,15 @@
 import { Stack, Table } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
-import { BodySizeStatus, CasteBodySizeRange } from '../definitions/Creature';
+import { BodySizeRange, BodySizeStatus, CasteRange } from '../definitions/Creature';
 
-const CreatureBodySizeTable: Component<{ bodysize: CasteBodySizeRange }> = (props) => {
+const CreatureBodySizeTable: Component<{ bodysize: CasteRange<BodySizeRange[]> }> = (props) => {
   const castes = Object.keys(props.bodysize);
+  const totalLength = Object.values(props.bodysize).reduce((a, b) => {
+    return a + b.length;
+  }, 0);
+  if (totalLength === 0) {
+    return <></>;
+  }
   return (
     <Table size='sm' borderless>
       <tbody>

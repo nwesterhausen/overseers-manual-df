@@ -338,6 +338,13 @@ impl DFCreature {
         }
         body_sizes
     }
+    pub fn get_grown_at_ages(&self) -> HashMap<String, u32> {
+        let mut grown_at_ages: HashMap<String, u32> = HashMap::new();
+        for self_caste in &self.castes {
+            grown_at_ages.insert(String::from(&self_caste.name), self_caste.child);
+        }
+        grown_at_ages
+    }
     pub fn lays_eggs(&self) -> bool {
         for self_caste in &self.castes {
             if self_caste.lays_eggs {

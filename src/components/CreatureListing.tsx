@@ -1,6 +1,6 @@
 import { Accordion, Tabs, Tab, Table } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { ClusterSizeStatus, Creature } from '../definitions/Creature';
+import { ClusterSizeStatus, Creature, GrownAtStatus } from '../definitions/Creature';
 import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
 import CreatureBodySizeTable from './CreatureBodySizeTable';
 import RawDetailsTab from './RawDetailsTab';
@@ -56,6 +56,7 @@ const CreatureListing: Component<{ item: Creature }> = (props) => {
                   <th>Growth and Size</th>
                   <td>
                     <CreatureBodySizeTable bodysize={props.item.body_size} />
+                    <span>{GrownAtStatus(props.item.grown_at)}</span>
                   </td>
                 </tr>
               </tbody>

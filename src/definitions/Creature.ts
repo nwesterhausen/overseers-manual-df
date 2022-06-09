@@ -1,4 +1,4 @@
-import { Raw, CasteRangeSpecifier } from './Raw';
+import { Raw } from './Raw';
 
 export type BodySizeRange = {
   years: number;
@@ -6,18 +6,19 @@ export type BodySizeRange = {
   size_cm3: number;
 };
 
-export type CasteBodySizeRange = {
-  [key: string]: BodySizeRange[];
+export type CasteRange<T> = {
+  [key: string]: T;
 };
 
 export type Creature = {
-  max_age: CasteRangeSpecifier;
+  max_age: CasteRange<number[]>;
   lays_eggs: boolean;
-  clutch_size: CasteRangeSpecifier;
+  clutch_size: CasteRange<number[]>;
   based_on?: Creature;
   biomes: string[];
   cluster_range: number[];
-  body_size: CasteBodySizeRange;
+  body_size: CasteRange<BodySizeRange[]>;
+  grown_at: CasteRange<number>;
 } & Raw;
 
 /**
@@ -110,4 +111,28 @@ export const BodySizeStatus = (size: BodySizeRange): string => {
     return `${size.size_cm3} cm³ at ${size.years} years`;
   }
   return `${size.size_cm3} cm³ at ${size.years} years, ${size.days} days`;
+};
+
+/**
+ * Returns a short text description of when the creature reaches adulthood.
+ *
+ * @param grown_data - Age for each caste to reach adulthood as CasteRange
+ * @returns Text to describe how the creature reaches adulthood
+ */
+export const GrownAtStatus = (grown_data: CasteRange<number>): string => {
+  const castes = Object.keys(grown_data);
+  const sts: string[] = [];
+  for (const caste of castes) {
+    if (grown_data[caste] > 0) {
+      if (caste === 'EVERY') {
+        sts.push(`They reach adulthood at ${grown_data[caste]} years.`);
+      } else {
+        sts.push(`${caste[0]}${caste.slice(1).toLowerCase()}s reach adulthood at ${grown_data[caste]} years.`);
+      }
+    }
+  }
+  if (sts.length) {
+    return sts.join(' ');
+  }
+  return 'Only appear as adults.';
 };
