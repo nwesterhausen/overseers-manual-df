@@ -38,7 +38,9 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
                 {letter.toUpperCase()}
               </span>
               <Accordion flush>
-                <For each={listingList().filter((v) => v.names[0].startsWith(letter))} fallback={<div>No items</div>}>
+                <For
+                  each={listingList().filter((v) => v.names[0].toLowerCase().startsWith(letter))}
+                  fallback={<div>No items</div>}>
                   {(raw) => (isCreature(raw) ? <CreatureListing item={raw as Creature} /> : '')}
                 </For>
               </Accordion>
