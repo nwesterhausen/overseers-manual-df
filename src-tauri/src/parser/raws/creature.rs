@@ -303,6 +303,9 @@ impl DFCreature {
         names.dedup();
         names
     }
+    pub fn get_general_name(&self) -> String {
+        self.name.to_string_vec()[0].to_string()
+    }
     pub fn get_names_by_caste(&self) -> HashMap<String, Vec<String>> {
         let mut names_map: HashMap<String, Vec<String>> = HashMap::new();
         names_map.insert("SPECIES".to_string(), Vec::from(self.name.to_string_vec()));
