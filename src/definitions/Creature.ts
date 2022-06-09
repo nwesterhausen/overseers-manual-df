@@ -7,7 +7,7 @@ export type BodySizeRange = {
 };
 
 export type CasteRange<T> = {
-  [key: string]: T;
+  [key in typeof CasteOptions[number]]: T;
 };
 
 export type Creature = {
@@ -19,7 +19,23 @@ export type Creature = {
   cluster_range: number[];
   body_size: CasteRange<BodySizeRange[]>;
   grown_at: CasteRange<number>;
+  names_map: CasteRange<string[]>;
 } & Raw;
+
+export const CasteOptions = [
+  'SPECIES',
+  'child_SPECIES',
+  'baby_SPECIES',
+  'EVERY',
+  'child_EVERY',
+  'baby_EVERY',
+  'MALE',
+  'child_MALE',
+  'baby_MALE',
+  'FEMALE',
+  'child_FEMALE',
+  'baby_FEMALE',
+];
 
 /**
  * Returns true if the raw is a Creature raw.
@@ -135,4 +151,25 @@ export const GrownAtStatus = (grown_data: CasteRange<number>): string => {
     return sts.join(' ');
   }
   return 'Only appear as adults.';
+};
+
+export const CleanName = (names: string[]): string => {
+  if (names.length < 2) {
+    return [...new Set(names)].filter((n) => n.length > 0).join(', ');
+  }
+  const singular = names[0];
+  const plural = names[1];
+  if (singular === plural || plural === '') {
+    return `${singular}`;
+  }
+  if (plural.startsWith(singular)) {
+    return `${singular}(${plural.slice(singular.length)})`;
+  }
+  if (plural.endsWith('men')) {
+    if (plural.endsWith('women')) {
+      return `${singular}/women`;
+    }
+    return `${singular}/men`;
+  }
+  return `${singular}, ${plural}`;
 };
