@@ -625,6 +625,6 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
         }
         RawObjectKind::None => (),
     }
-    // println!("{} creatures defined in {}", creatures, &raw_filename);
+    //println!("{} creatures defined in {}", results.len(), &raw_filename);
     results
 }
