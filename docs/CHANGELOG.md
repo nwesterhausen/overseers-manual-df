@@ -1,3 +1,10 @@
+## [0.2.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.2.1...v0.2.2) (2022-06-09)
+
+
+### Bug Fixes
+
+* 🐛 trigger on release or manually ([894d9fd](https://github.com/nwesterhausen/overseers-manual-df/commit/894d9fd61bbcee6dcb256d3e1318798423a4568c))
+
 ## [0.2.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.2.0...v0.2.1) (2022-06-09)
 
 
