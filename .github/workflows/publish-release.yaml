@@ -12,7 +12,6 @@ jobs:
       fail-fast: false
       matrix:
         platform: [macos-latest, ubuntu-latest, windows-latest]
-    needs: semantic-release
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
