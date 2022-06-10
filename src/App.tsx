@@ -1,17 +1,4 @@
-import {
-  Container,
-  Navbar,
-  Nav,
-  NavDropdown,
-  Tabs,
-  Tab,
-  Form,
-  Alert,
-  Button,
-  Spinner,
-  Stack,
-  ButtonGroup,
-} from 'solid-bootstrap';
+import { Container, Navbar, Nav, NavDropdown, Tabs, Tab, Form, Button, Spinner, Stack } from 'solid-bootstrap';
 import { listen } from '@tauri-apps/api/event';
 import { debounce } from '@solid-primitives/scheduled';
 import { open as tauriOpen, OpenDialogOptions } from '@tauri-apps/api/dialog';
@@ -22,7 +9,7 @@ import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH,
 import { readDir } from '@tauri-apps/api/fs';
 import { getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/tauri';
-import { Creature } from './definitions/Creature';
+import { AssignBasedOn, Creature } from './definitions/Creature';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import { FilterInvalidRaws } from './definitions/Raw';
 import { SearchableNames } from './definitions/Utils';
@@ -145,16 +132,16 @@ const App: Component = () => {
           return (
             <>
               <p class='text-center'>Please choose a save to load raws from:</p>
-              <Container class='justify-content-center d-flex'>
-                <ButtonGroup vertical>
+              <Container class='justify-content-center d-flex mx-auto w-50'>
+                <Stack gap={1}>
                   <For each={saveDirectoryOptions()}>
                     {(dir) => (
-                      <Button onClick={() => setCurrentSave(dir)} variant='outline-info'>
+                      <Button onClick={() => setCurrentSave(dir)} variant='outline-secondary'>
                         {dir}
                       </Button>
                     )}
                   </For>
-                </ButtonGroup>
+                </Stack>
               </Container>
             </>
           );
@@ -193,16 +180,16 @@ const App: Component = () => {
               No raws found in <strong>{currentSave()}</strong>
             </p>
             <p class='text-center'>Please choose a save to load raws from:</p>
-            <Container class='justify-content-center d-flex'>
-              <ButtonGroup vertical>
+            <Container class='justify-content-center d-flex mx-auto w-50'>
+              <Stack gap={1}>
                 <For each={saveDirectoryOptions()}>
                   {(dir) => (
-                    <Button onClick={() => setCurrentSave(dir)} variant='outline-info'>
+                    <Button onClick={() => setCurrentSave(dir)} variant='outline-secondary'>
                       {dir}
                     </Button>
                   )}
                 </For>
-              </ButtonGroup>
+              </Stack>
             </Container>
           </>
         );
@@ -253,7 +240,17 @@ const App: Component = () => {
     const result = JSON.parse(jsonStr);
     if (Array.isArray(result)) {
       const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.name < b.name ? -1 : 1));
-      const searchableResult = sortResult.map((v: Creature) => {
+      const mergedResult = sortResult.map((val: Creature, i, a: Creature[]) => {
+        if (val.based_on && val.based_on.length) {
+          const matches = a.filter((c) => c.objectId === val.based_on);
+          if (matches.length === 1) {
+            return AssignBasedOn(val, matches[0]);
+          }
+          console.warn(`${matches.length} matches for ${val.based_on}`);
+        }
+        return val;
+      });
+      const searchableResult = mergedResult.map((v: Creature) => {
         v.searchString = [SearchableNames(v.names_map), v.lays_eggs ? 'eggs' : '', v.description].join(' ');
         return v;
       });
@@ -299,7 +296,7 @@ const App: Component = () => {
 
   return (
     <>
-      <Navbar>
+      <Navbar variant='dark'>
         <Container>
           <Nav>
             <NavDropdown title='Save Folder'>
@@ -328,23 +325,23 @@ const App: Component = () => {
       <Container class='p-2'>
         {saveFolderPath().length == 0 ? (
           <>
-            <Alert variant='warning'>
-              <Alert.Heading>Dwarf Fortress save directory path is unset!</Alert.Heading>
+            <Stack gap={2}>
+              <h2>Dwarf Fortress save directory path is unset!</h2>
               <p>
-                To set the path to your Dwarf Fortress Save, drag and drop a <code class='text-dark'>world.dat</code>{' '}
-                file from any of the saves in your save folder onto this window, or use the button below to pull up a
-                folder selection dialog.
+                To set the path to your Dwarf Fortress Save, drag and drop a <code>world.dat</code> file from any of the
+                saves in your save folder onto this window, or use the button below to pull up a folder selection
+                dialog.
               </p>
               <Container class='p-3'>
                 <Button
-                  variant='primary'
+                  variant='secondary'
                   onClick={() => {
                     setManualFolderSelect(true);
                   }}>
                   Set Save Directory
                 </Button>
               </Container>
-            </Alert>
+            </Stack>
           </>
         ) : (
           <>
