@@ -14,7 +14,7 @@ const ScrollToTopBtn: Component = () => {
     return () => window.removeEventListener('scroll', listenToScroll);
   });
   return (
-    <div class='position-fixed bottom-0 end-0 me-1 mb-1'>
+    <div class='position-fixed top-0 end-0 me-1 mt-1'>
       {isVisible() ? (
         <OverlayTrigger placement='left' overlay={<Tooltip id='scrolltop-tooltip'>Scroll to Top</Tooltip>}>
           <Button
