@@ -42,11 +42,11 @@ const CreatureListing: Component<{ item: Creature }> = (props) => {
       <Accordion.Body class='p-0 pt-1'>
         <Tabs defaultActiveKey={`${props.item.objectId}-data`} class='mb-2'>
           <Tab eventKey={`${props.item.objectId}-data`} title='Description'>
-            <p>{props.item.description}</p>
+            <p class='px-3 pt-3'>{props.item.description}</p>
             <Table>
               <tbody>
                 <tr>
-                  <th>Known names:</th>
+                  <th>Names</th>
                   <td>
                     <CreatureNamesTable names={props.item.names_map} />
                   </td>
@@ -60,15 +60,15 @@ const CreatureListing: Component<{ item: Creature }> = (props) => {
                   <td>{EggLayingStatus(props.item)}</td>
                 </tr>
                 <tr>
-                  <th>Home Biomes</th>
+                  <th>Found In</th>
                   <td>{props.item.biomes.length ? props.item.biomes.join(', ') : 'No natural biomes.'}</td>
                 </tr>
                 <tr>
-                  <th>Group Numbers</th>
+                  <th>Group Size</th>
                   <td>{ClusterSizeStatus(props.item)}</td>
                 </tr>
                 <tr>
-                  <th>Growth and Size</th>
+                  <th>Growth Patterns</th>
                   <td>
                     <CreatureBodySizeTable bodysize={props.item.body_size} />
                     <span>{GrownAtStatus(props.item.grown_at)}</span>

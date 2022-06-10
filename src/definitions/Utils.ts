@@ -1,5 +1,34 @@
 import { CasteRange } from './Creature';
 
+export const M3_to_CM3 = 1000000;
+
+/**
+ * Returns volume in cubic meters when given cubic centimeters
+ *
+ * @param cm3 - Volume in cubic centimeter
+ * @returns Volume in cubic meter
+ */
+export const ConvertCm3ToM3 = (cm3: number): number => {
+  return cm3 / M3_to_CM3;
+};
+
+/**
+ * Returns a string describing the volume.
+ *
+ * @param volume_cm3 - Volume in cubic centimeter
+ * @returns String describing the volume (w/ unit)
+ */
+export const SimplifyVolume = (volume_cm3: number): string => {
+  // if (volume_cm3 >= 0.5 * M3_to_CM3) {
+  //     let value = ConvertCm3ToM3(volume_cm3).toFixed(3)
+  //     while(value.endsWith('0') || value.endsWith('.')) {
+  //       value = value.slice(0,-1);
+  //     }
+  //     return `${value} m³`
+  // }
+  return `${volume_cm3.toLocaleString()} cm³`;
+};
+
 /**
  * Returns the given string with the first letter capitalized and ther rest lower cased.
  *
@@ -23,7 +52,15 @@ export const SearchableNames = (names: CasteRange<string[]> | string[]): string 
   if (Array.isArray(names)) {
     return names.join(' ');
   }
-  return [...new Set(Object.values(names))].join(' ');
+  let flatNames = [];
+  for (const k of Object.keys(names)) {
+    for (const name of names[k]) {
+      flatNames = flatNames.concat(name.split(' '));
+    }
+  }
+  flatNames = flatNames.sort();
+  const uniqueNames = [...new Set(flatNames)];
+  return uniqueNames.join(' ');
 };
 
 /**
