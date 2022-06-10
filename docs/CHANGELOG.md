@@ -1,3 +1,19 @@
+## [0.5.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.4.1...v0.5.0) (2022-06-10)
+
+
+### Features
+
+* ✨ badges for flier, intelligent and gnawer ([2015174](https://github.com/nwesterhausen/overseers-manual-df/commit/201517497270563ed065a1e9f2889f84979a235f))
+* ✨ display creature activity and trainability ([ce94d78](https://github.com/nwesterhausen/overseers-manual-df/commit/ce94d78287cec536e84c214111fa456527428c22))
+* ✨ display creature classes ([f9e9976](https://github.com/nwesterhausen/overseers-manual-df/commit/f9e997630e067b39cfcd62080940b85383367dbe))
+* ✨ send more data about creatures to frontend ([d396fa7](https://github.com/nwesterhausen/overseers-manual-df/commit/d396fa79080fb46ea355a93aa43c80c235ece339))
+
+
+### Bug Fixes
+
+* ⚡️ don't send extra names ([a68e1d2](https://github.com/nwesterhausen/overseers-manual-df/commit/a68e1d2c3493ad831508d65df19d8db6f6937b22))
+* 💄 remove margins on name table ([1281111](https://github.com/nwesterhausen/overseers-manual-df/commit/128111183762d6d8c2129a92d0ba56b5575aacd7))
+
 ## [0.4.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.4.0...v0.4.1) (2022-06-10)
 
 
