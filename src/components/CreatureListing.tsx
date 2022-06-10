@@ -1,6 +1,13 @@
 import { Accordion, Tabs, Tab, Table, Stack } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { ClusterSizeStatus, CondesedEggSize, Creature, GrownAtStatus, TrainableStatus } from '../definitions/Creature';
+import {
+  ClusterSizeStatus,
+  CondesedEggSize,
+  Creature,
+  GrownAtStatus,
+  PetValueStatus,
+  TrainableStatus,
+} from '../definitions/Creature';
 import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
 import { toTitleCase } from '../definitions/Utils';
 import CreatureActivityDisplay from './CreatureActivityDisplay';
@@ -34,13 +41,18 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
           .join(' ')}
         <Stack class='d-flex justify-content-end w-100 me-3' direction='horizontal' gap={1}>
           {props.creature.lays_eggs ? (
-            <TwoPartBadge bg='success' name='Egg-layer' value={'' + CondesedEggSize(props.creature.egg_sizes)} />
+            <TwoPartBadge bg='primary' name='Egg-layer' value={'' + CondesedEggSize(props.creature.egg_sizes)} />
           ) : (
             <></>
           )}
-          {props.creature.flier.EVERY ? <TwoPartBadge bg='info' name='Flier' value={''} /> : <></>}
+          {props.creature.flier.EVERY ? <TwoPartBadge bg='primary' name='Flier' value={''} /> : <></>}
           {props.creature.intelligent.EVERY ? <TwoPartBadge bg='primary' name='Intelligent' value={''} /> : <></>}
-          {props.creature.gnawer.EVERY ? <TwoPartBadge bg='warning' name='Gnawer' value={''} /> : <></>}
+          {props.creature.gnawer.EVERY ? <TwoPartBadge bg='primary' name='Gnawer' value={''} /> : <></>}
+          {props.creature.pet_value.EVERY > 0 ? (
+            <TwoPartBadge bg='primary' name='Value' value={`${props.creature.pet_value.EVERY}`} />
+          ) : (
+            <></>
+          )}
         </Stack>
       </Accordion.Header>
       <Accordion.Body class='p-0 pt-1'>
@@ -95,6 +107,10 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
                       ? props.creature.creature_class.EVERY.map((v) => toTitleCase(v.replaceAll('_', ' '))).join(', ')
                       : 'None'}
                   </td>
+                </tr>
+                <tr>
+                  <th>Pet Value</th>
+                  <td>{PetValueStatus(props.creature)}</td>
                 </tr>
               </tbody>
             </Table>

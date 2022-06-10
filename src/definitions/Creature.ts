@@ -1,5 +1,5 @@
 import { Raw } from './Raw';
-import { SimplifyVolume } from './Utils';
+import { SimplifyVolume, toTitleCase } from './Utils';
 
 export type BodySizeRange = {
   years: number;
@@ -104,11 +104,11 @@ export const LifeExpectancyStatus = (creature: Creature): string => {
   if (keys.length === 1) {
     return `Live ${creature.max_age[keys[0]].join(' - ')} years.`;
   }
-  let ret = '';
+  const ret: string[] = [];
   for (const c in creature.max_age) {
-    ret += `${c} lives ${creature.max_age[c].join(' - ')} years.`;
+    ret.push(`${c} lives ${creature.max_age[c].join(' - ')} years.`);
   }
-  return ret;
+  return ret.join(' ');
 };
 
 /**
@@ -394,4 +394,25 @@ const DEFAULT_CREATURE: Creature = {
     SPECIES: [],
     EVERY: [],
   },
+};
+
+/**
+ * Returns a short description of the creature's pet value.
+ *
+ * @param creature - Creature to get the pet value for.
+ * @returns Text to describe the pet value of the creature.
+ */
+export const PetValueStatus = (creature: Creature): string => {
+  const ret: string[] = [];
+  for (const c in creature.pet_value) {
+    if (c === 'EVERY' || c === 'SPECIES') {
+      ret.push(`Worth ${creature.pet_value.EVERY} as a pet.`);
+    } else {
+      ret.push(`${toTitleCase(c)}s worth ${creature.pet_value[c]} as a pet.`);
+    }
+  }
+  if (ret.length === 0) {
+    return 'No pet value.';
+  }
+  return ret.join(' ');
 };
