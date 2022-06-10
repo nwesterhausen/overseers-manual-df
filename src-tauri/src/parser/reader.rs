@@ -359,6 +359,12 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                     caste_temp.bone_carnivore = true;
                     caste_temp.carnivore = true;
                 }
+                "CAN_LEARN" => {
+                    caste_temp.can_learn = true;
+                }
+                "CAN_SPEAK" => {
+                    caste_temp.can_speak = true;
+                }
                 "CARNIVORE" => {
                     caste_temp.carnivore = true;
                 }
