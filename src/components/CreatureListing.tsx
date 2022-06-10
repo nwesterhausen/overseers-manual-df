@@ -24,72 +24,75 @@ import TwoPartBadge from './TwoPartBadge';
  * @param props - Contains the creature to render details for.
  * @returns Component of creature data for a listing.
  */
-const CreatureListing: Component<{ item: Creature }> = (props) => {
+const CreatureListing: Component<{ creature: Creature }> = (props) => {
   return (
-    <Accordion.Item eventKey={props.item.objectId + 'accordian'}>
+    <Accordion.Item eventKey={props.creature.objectId + 'accordian'}>
       <Accordion.Header class='overflow-hidden text-nowrap'>
-        {props.item.names_map.SPECIES[0]
+        {props.creature.names_map.SPECIES[0]
           .split(' ')
           .map((v) => toTitleCase(v))
           .join(' ')}
         <Stack class='d-flex justify-content-end w-100 me-3' direction='horizontal' gap={1}>
-          {props.item.lays_eggs ? (
-            <TwoPartBadge bg='success' name='Egg-layer' value={'' + CondesedEggSize(props.item.egg_sizes)} />
+          {props.creature.lays_eggs ? (
+            <TwoPartBadge bg='success' name='Egg-layer' value={'' + CondesedEggSize(props.creature.egg_sizes)} />
           ) : (
             <></>
           )}
+          {props.creature.flier.EVERY ? <TwoPartBadge bg='info' name='Flier' value={''} /> : <></>}
+          {props.creature.intelligent.EVERY ? <TwoPartBadge bg='primary' name='Intelligent' value={''} /> : <></>}
+          {props.creature.gnawer.EVERY ? <TwoPartBadge bg='warning' name='Gnawer' value={''} /> : <></>}
         </Stack>
       </Accordion.Header>
       <Accordion.Body class='p-0 pt-1'>
-        <Tabs defaultActiveKey={`${props.item.objectId}-data`} class='mb-2'>
-          <Tab eventKey={`${props.item.objectId}-data`} title='Description'>
-            <p class='px-3 pt-3'>{props.item.description}</p>
+        <Tabs defaultActiveKey={`${props.creature.objectId}-data`} class='mb-2'>
+          <Tab eventKey={`${props.creature.objectId}-data`} title='Description'>
+            <p class='px-3 pt-3'>{props.creature.description}</p>
             <Table>
               <tbody>
                 <tr>
                   <th>Names</th>
                   <td>
-                    <CreatureNamesTable names={props.item.names_map} />
+                    <CreatureNamesTable names={props.creature.names_map} />
                   </td>
                 </tr>
                 <tr>
                   <th>Life Expectancy</th>
-                  <td>{LifeExpectancyStatus(props.item)}</td>
+                  <td>{LifeExpectancyStatus(props.creature)}</td>
                 </tr>
                 <tr>
                   <th>Egg Laying</th>
-                  <td>{EggLayingStatus(props.item)}</td>
+                  <td>{EggLayingStatus(props.creature)}</td>
                 </tr>
                 <tr>
                   <th>Found In</th>
-                  <td>{props.item.biomes.length ? props.item.biomes.join(', ') : 'No natural biomes.'}</td>
+                  <td>{props.creature.biomes.length ? props.creature.biomes.join(', ') : 'No natural biomes.'}</td>
                 </tr>
                 <tr>
                   <th>Group Size</th>
-                  <td>{ClusterSizeStatus(props.item)}</td>
+                  <td>{ClusterSizeStatus(props.creature)}</td>
                 </tr>
                 <tr>
                   <th>Growth Patterns</th>
                   <td>
-                    <CreatureBodySizeTable bodysize={props.item.body_size} />
-                    <span>{GrownAtStatus(props.item.grown_at)}</span>
+                    <CreatureBodySizeTable bodysize={props.creature.body_size} />
+                    <span>{GrownAtStatus(props.creature.grown_at)}</span>
                   </td>
                 </tr>
                 <tr>
                   <th>Activity</th>
                   <td>
-                    <CreatureActivityDisplay creature={props.item} />
+                    <CreatureActivityDisplay creature={props.creature} />
                   </td>
                 </tr>
                 <tr>
                   <th>Trainable</th>
-                  <td>{TrainableStatus(props.item.trainable.EVERY)}</td>
+                  <td>{TrainableStatus(props.creature.trainable.EVERY)}</td>
                 </tr>
               </tbody>
             </Table>
           </Tab>
-          <RawDetailsTab item={props.item} />
-          <RawJsonTab item={props.item} />
+          <RawDetailsTab item={props.creature} />
+          <RawJsonTab item={props.creature} />
         </Tabs>
       </Accordion.Body>
     </Accordion.Item>
