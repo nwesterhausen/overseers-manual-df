@@ -22,7 +22,7 @@ import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH,
 import { readDir } from '@tauri-apps/api/fs';
 import { getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/tauri';
-import { Creature } from './definitions/Creature';
+import { AssignBasedOn, Creature } from './definitions/Creature';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import { FilterInvalidRaws } from './definitions/Raw';
 import { SearchableNames } from './definitions/Utils';
@@ -253,7 +253,17 @@ const App: Component = () => {
     const result = JSON.parse(jsonStr);
     if (Array.isArray(result)) {
       const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.name < b.name ? -1 : 1));
-      const searchableResult = sortResult.map((v: Creature) => {
+      const mergedResult = sortResult.map((val: Creature, i, a: Creature[]) => {
+        if (val.based_on && val.based_on.length) {
+          const matches = a.filter((c) => c.objectId === val.based_on);
+          if (matches.length === 1) {
+            return AssignBasedOn(val, matches[0]);
+          }
+          console.warn(`${matches.length} matches for ${val.based_on}`);
+        }
+        return val;
+      });
+      const searchableResult = mergedResult.map((v: Creature) => {
         v.searchString = [SearchableNames(v.names_map), v.lays_eggs ? 'eggs' : '', v.description].join(' ');
         return v;
       });
