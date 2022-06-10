@@ -1,8 +1,9 @@
 import { Accordion, Tabs, Tab, Table, Stack } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { ClusterSizeStatus, CondesedEggSize, Creature, GrownAtStatus } from '../definitions/Creature';
+import { ClusterSizeStatus, CondesedEggSize, Creature, GrownAtStatus, TrainableStatus } from '../definitions/Creature';
 import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
 import { toTitleCase } from '../definitions/Utils';
+import CreatureActivityDisplay from './CreatureActivityDisplay';
 import CreatureBodySizeTable from './CreatureBodySizeTable';
 import CreatureNamesTable from './CreatureNamesTable';
 import RawDetailsTab from './RawDetailsTab';
@@ -73,6 +74,16 @@ const CreatureListing: Component<{ item: Creature }> = (props) => {
                     <CreatureBodySizeTable bodysize={props.item.body_size} />
                     <span>{GrownAtStatus(props.item.grown_at)}</span>
                   </td>
+                </tr>
+                <tr>
+                  <th>Activity</th>
+                  <td>
+                    <CreatureActivityDisplay creature={props.item} />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Trainable</th>
+                  <td>{TrainableStatus(props.item.trainable.EVERY)}</td>
                 </tr>
               </tbody>
             </Table>
