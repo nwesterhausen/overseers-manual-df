@@ -38,7 +38,7 @@ const CondenseNames = (names: CasteRange<string[]>): CasteRange<string[]> => {
 const CreatureNamesTable: Component<{ names: CasteRange<string[]> }> = (props) => {
   const names = CondenseNames(props.names);
   return (
-    <Table size='sm' borderless>
+    <Table class='m-0 p-0' size='sm' borderless>
       <tbody>
         <For each={Object.keys(names)} fallback={<p>No name data.</p>}>
           {(caste) =>
