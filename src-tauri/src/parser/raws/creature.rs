@@ -70,6 +70,8 @@ pub struct DFCreatureCaste {
     pub at_peace_with_wildlife: bool,
     pub benign: bool,
     pub bone_carnivore: bool,
+    pub can_learn: bool,
+    pub can_speak: bool,
     pub carnivore: bool,
     pub common_domestic: bool,
     pub cookable_live: bool,
@@ -399,14 +401,23 @@ impl DFCreature {
         }
         pet_values
     }
-    pub fn get_intelligent(&self) -> HashMap<String, bool> {
-        let mut intelligent: HashMap<String, bool> = HashMap::new();
+    pub fn get_intelligence(&self) -> HashMap<String, [bool; 2]> {
+        let mut intelligence: HashMap<String, [bool; 2]> = HashMap::new();
         for self_caste in &self.castes {
-            if self_caste.intelligent || self_caste.name.eq("EVERY") {
-                intelligent.insert(String::from(&self_caste.name), self_caste.intelligent);
+            if self_caste.intelligent {
+                intelligence.insert(String::from(&self_caste.name), [true, true]);
+            }
+            if self_caste.can_learn || self_caste.can_speak {
+                intelligence.insert(
+                    String::from(&self_caste.name),
+                    [self_caste.can_learn, self_caste.can_speak],
+                );
             }
         }
-        intelligent
+        if intelligence.is_empty() {
+            intelligence.insert(String::from("EVERY"), [false, false]);
+        }
+        intelligence
     }
     pub fn get_gnawer(&self) -> HashMap<String, bool> {
         let mut gnawer: HashMap<String, bool> = HashMap::new();
@@ -481,6 +492,8 @@ impl DFCreatureCaste {
             at_peace_with_wildlife: false,
             benign: false,
             bone_carnivore: false,
+            can_learn: false,
+            can_speak: false,
             carnivore: false,
             common_domestic: false,
             cookable_live: false,

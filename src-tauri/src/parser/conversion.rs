@@ -24,13 +24,15 @@ pub struct WebCreature {
     grown_at: HashMap<String, u32>,
     egg_sizes: HashMap<String, u32>,
     pet_value: HashMap<String, u16>,
-    intelligent: HashMap<String, bool>,
+    intelligence: HashMap<String, [bool; 2]>,
     flier: HashMap<String, bool>,
     gnawer: HashMap<String, bool>,
     trainable: HashMap<String, u8>,
     active_time: HashMap<String, u8>,
     inactive_season: HashMap<String, u8>,
     creature_class: HashMap<String, Vec<String>>,
+    local_pops_controllable: bool,
+    local_pops_produce_heros: bool,
 }
 
 impl WebCreature {
@@ -52,13 +54,15 @@ impl WebCreature {
             names_map: creature.get_names_by_caste(),
             egg_sizes: creature.get_egg_sizes(),
             pet_value: creature.get_pet_value(),
-            intelligent: creature.get_intelligent(),
+            intelligence: creature.get_intelligence(),
             flier: creature.get_flier(),
             gnawer: creature.get_gnawer(),
             trainable: creature.get_trainable(),
             active_time: creature.get_active_time(),
             inactive_season: creature.get_inactive_season(),
             creature_class: creature.get_creature_class(),
+            local_pops_controllable: creature.local_pops_controllable,
+            local_pops_produce_heros: creature.local_pops_produce_heroes,
         }
     }
 }

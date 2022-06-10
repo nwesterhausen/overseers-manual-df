@@ -46,13 +46,22 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
             <></>
           )}
           {props.creature.flier.EVERY ? <TwoPartBadge bg='primary' name='Flier' value={''} /> : <></>}
-          {props.creature.intelligent.EVERY ? <TwoPartBadge bg='primary' name='Intelligent' value={''} /> : <></>}
+          {props.creature.intelligence.EVERY[0] && props.creature.intelligence.EVERY[1] ? (
+            <TwoPartBadge bg='primary' name='Intelligent' value={''} />
+          ) : (
+            <>
+              {props.creature.intelligence.EVERY[0] ? <TwoPartBadge bg='primary' name='Learns' value={''} /> : <></>}
+              {props.creature.intelligence.EVERY[1] ? <TwoPartBadge bg='primary' name='Speaks' value={''} /> : <></>}
+            </>
+          )}
           {props.creature.gnawer.EVERY ? <TwoPartBadge bg='primary' name='Gnawer' value={''} /> : <></>}
           {props.creature.pet_value.EVERY > 0 ? (
             <TwoPartBadge bg='primary' name='Pet Value' value={`${props.creature.pet_value.EVERY}`} />
           ) : (
             <></>
           )}
+          {props.creature.local_pops_controllable ? <TwoPartBadge bg='primary' name='Playable' value={''} /> : <></>}
+          {props.creature.local_pops_produce_heroes ? <TwoPartBadge bg='primary' name='Civilized' value={''} /> : <></>}
         </Stack>
       </Accordion.Header>
       <Accordion.Body class='p-0 pt-1'>
