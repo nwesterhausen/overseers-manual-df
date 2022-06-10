@@ -1,5 +1,5 @@
 import { Raw } from './Raw';
-import { SimplifyVolume, toTitleCase } from './Utils';
+import { SearchableNames, SimplifyVolume, toTitleCase } from './Utils';
 
 export type BodySizeRange = {
   years: number;
@@ -23,13 +23,15 @@ export type Creature = {
   names_map: CasteRange<string[]>;
   egg_sizes: CasteRange<number>;
   pet_value: CasteRange<number>;
-  intelligent: CasteRange<boolean>;
+  intelligence: CasteRange<boolean[]>;
   flier: CasteRange<boolean>;
   gnawer: CasteRange<boolean>;
   trainable: CasteRange<number>;
   active_time: CasteRange<number>;
   inactive_season: CasteRange<number>;
   creature_class: CasteRange<string[]>;
+  local_pops_controllable: boolean;
+  local_pops_produce_heroes: boolean;
 } & Raw;
 
 export const CasteOptions = [
@@ -371,8 +373,8 @@ const DEFAULT_CREATURE: Creature = {
   grown_at: {} as CasteRange<number>,
   egg_sizes: {} as CasteRange<number>,
   pet_value: {} as CasteRange<number>,
-  intelligent: {
-    EVERY: false,
+  intelligence: {
+    EVERY: [false, false],
   },
   flier: {
     EVERY: false,
@@ -394,6 +396,8 @@ const DEFAULT_CREATURE: Creature = {
     SPECIES: [],
     EVERY: [],
   },
+  local_pops_controllable: false,
+  local_pops_produce_heroes: false,
 };
 
 /**
@@ -415,4 +419,22 @@ export const PetValueStatus = (creature: Creature): string => {
     return 'No pet value.';
   }
   return ret.join(' ');
+};
+
+export const GenerateSearchString = (creature: Creature): string => {
+  return [
+    SearchableNames(creature.names_map),
+    creature.lays_eggs ? `eggs ${CondesedEggSize(creature.egg_sizes)}` : '',
+    creature.description,
+    creature.flier ? 'flier' : '',
+    creature.local_pops_controllable ? 'playable' : '',
+    creature.local_pops_controllable ? 'civillized' : '',
+    creature.intelligence.EVERY[0] && creature.intelligence.EVERY[1] ? 'intelligent' : '',
+    creature.intelligence.EVERY[0] ? 'learns' : '',
+    creature.intelligence.EVERY[1] ? 'speaks' : '',
+    creature.gnawer ? 'gnawer' : '',
+    creature.pet_value ? `pet value ${creature.pet_value}` : '',
+  ]
+    .join(' ')
+    .replaceAll('  ', ' ');
 };

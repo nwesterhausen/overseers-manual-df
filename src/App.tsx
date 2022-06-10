@@ -9,10 +9,9 @@ import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH,
 import { readDir } from '@tauri-apps/api/fs';
 import { getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/tauri';
-import { AssignBasedOn, Creature } from './definitions/Creature';
+import { AssignBasedOn, Creature, GenerateSearchString } from './definitions/Creature';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import { FilterInvalidRaws } from './definitions/Raw';
-import { SearchableNames } from './definitions/Utils';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -251,7 +250,7 @@ const App: Component = () => {
         return val;
       });
       const searchableResult = mergedResult.map((v: Creature) => {
-        v.searchString = [SearchableNames(v.names_map), v.lays_eggs ? 'eggs' : '', v.description].join(' ');
+        v.searchString = GenerateSearchString(v);
         return v;
       });
       console.log('raws parsed', searchableResult.length);
