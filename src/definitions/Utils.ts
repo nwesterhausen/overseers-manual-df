@@ -52,7 +52,15 @@ export const SearchableNames = (names: CasteRange<string[]> | string[]): string 
   if (Array.isArray(names)) {
     return names.join(' ');
   }
-  return [...new Set(Object.values(names))].join(' ');
+  let flatNames = [];
+  for (const k of Object.keys(names)) {
+    for (const name of names[k]) {
+      flatNames = flatNames.concat(name.split(' '));
+    }
+  }
+  flatNames = flatNames.sort();
+  const uniqueNames = [...new Set(flatNames)];
+  return uniqueNames.join(' ');
 };
 
 /**
