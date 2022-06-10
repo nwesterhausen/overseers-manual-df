@@ -22,6 +22,14 @@ export type Creature = {
   grown_at: CasteRange<number>;
   names_map: CasteRange<string[]>;
   egg_sizes: CasteRange<number>;
+  pet_value: CasteRange<number>;
+  intelligent: CasteRange<boolean>;
+  flier: CasteRange<boolean>;
+  gnawer: CasteRange<boolean>;
+  trainable: CasteRange<number>;
+  active_time: CasteRange<number>;
+  inactive_season: CasteRange<number>;
+  creature_class: CasteRange<string[]>;
 } & Raw;
 
 export const CasteOptions = [
@@ -197,3 +205,119 @@ export const AverageClutchSize = (clutch_size: CasteRange<number[]>): number => 
   }
   return 0;
 };
+
+/**
+ * Returns a string describing the active time represented by the bitmask.
+ *
+ *
+ * active time:
+ *      diurnal & nocturnal & crepuscular & matutinal & vespertine = 31
+ *
+ * @param activeTimeBitmask - The 8-bit bitmask for active time
+ * @returns String describing the caste's active time
+ */
+export const ActiveTimeStatus = (activeTimeBitmask: number): string => {
+  const strarr: string[] = [];
+  // Bitmask math/tests
+  if (activeTimeBitmask & ACTIVE_DIURNAL) {
+    strarr.push('during the day');
+  }
+  if (activeTimeBitmask & ACTIVE_NOCTURNAL) {
+    strarr.push('during the night');
+  }
+  if (activeTimeBitmask & ACTIVE_CREPUSCULAR) {
+    strarr.push('at twilight');
+  }
+  if (activeTimeBitmask & ACTIVE_MATUTINAL) {
+    strarr.push('at dawn');
+  }
+  if (activeTimeBitmask & ACTIVE_VESPERTINE) {
+    strarr.push('at evening');
+  }
+
+  switch (strarr.length) {
+    case 0:
+      return 'No known active time-of-day.';
+    case 1:
+      return `Active ${strarr[0]}.`;
+    case 2:
+      return `Active ${strarr.join(' and ')}.`;
+    default:
+      return `Active ${strarr.slice(0, -1).join(', ')}, and ${strarr.slice(-1)}.`;
+  }
+};
+const ACTIVE_DIURNAL = 1, // 0000 0001
+  ACTIVE_NOCTURNAL = 2, // 0000 0010
+  ACTIVE_CREPUSCULAR = 4, // 0000 0100
+  ACTIVE_MATUTINAL = 8, // 0000 1000
+  ACTIVE_VESPERTINE = 16; // 0001 0000
+
+/**
+ * Returns a string describing the active seasons represented by the bitmask.
+ *
+ *
+ * "no" season (creature does not appear):
+ *      NO_SPRING & NO_SUMMER & NO_AUTUMN & NO_WINTER = 15
+ *
+ * @param noSeasonBitmask - The 8-bit bitmask for active time
+ * @returns String describing the caste's active seasons
+ */
+export const NoSeasonStatus = (noSeasonBitmask: number): string => {
+  const strarr: string[] = [];
+  // Bitmask math/tests
+  if (!(noSeasonBitmask & NO_SPRING)) {
+    strarr.push('spring');
+  }
+  if (!(noSeasonBitmask & NO_SUMMER)) {
+    strarr.push('summer');
+  }
+  if (!(noSeasonBitmask & NO_FALL)) {
+    strarr.push('autumn');
+  }
+  if (!(noSeasonBitmask & NO_WINTER)) {
+    strarr.push('winter');
+  }
+
+  switch (strarr.length) {
+    case 0:
+      return 'No known active seaons.';
+    case 1:
+      return `Active during ${strarr[0]}.`;
+    case 2:
+      return `Active during ${strarr.join(' and ')}.`;
+    default:
+      return `Active during ${strarr.slice(0, -1).join(', ')}, and ${strarr.slice(-1)}.`;
+  }
+};
+const NO_SPRING = 1, // 0001
+  NO_SUMMER = 2, // 0010
+  NO_FALL = 4, // 0100
+  NO_WINTER = 8; // 1000
+
+/**
+ * Returns a string describing the trainability represented by the bitmask.
+ *
+ *
+ * trainable:
+ *      war & hunting = 3
+ *
+ * @param trainableBitmask - The 8-bit bitmask for trainable
+ * @returns String describing the caste's trainability
+ */
+export const TrainableStatus = (trainableBitmask: number): string => {
+  const strarr: string[] = [];
+  // Bitmask math/tests
+  if (trainableBitmask & TRAINABLE_HUNTING) {
+    strarr.push('hunting');
+  }
+  if (trainableBitmask & TRAINABLE_WAR) {
+    strarr.push('war');
+  }
+
+  if (strarr.length) {
+    return `Trainable for ${strarr.join(' and ')}.`;
+  }
+  return 'Not trainable.';
+};
+const TRAINABLE_HUNTING = 1, // 0001
+  TRAINABLE_WAR = 2; // 0010

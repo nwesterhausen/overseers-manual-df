@@ -26,6 +26,9 @@ impl Name {
         }
     }
     pub fn to_string_vec(&self) -> Vec<String> {
+        if self.singular.eq(&self.adjective) {
+            return vec![String::from(&self.singular), String::from(&self.plural)];
+        }
         vec![
             String::from(&self.singular),
             String::from(&self.plural),

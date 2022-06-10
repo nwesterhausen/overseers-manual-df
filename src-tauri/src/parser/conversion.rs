@@ -23,6 +23,14 @@ pub struct WebCreature {
     body_size: HashMap<String, Vec<DFBodySize>>,
     grown_at: HashMap<String, u32>,
     egg_sizes: HashMap<String, u32>,
+    pet_value: HashMap<String, u16>,
+    intelligent: HashMap<String, bool>,
+    flier: HashMap<String, bool>,
+    gnawer: HashMap<String, bool>,
+    trainable: HashMap<String, u8>,
+    active_time: HashMap<String, u8>,
+    inactive_season: HashMap<String, u8>,
+    creature_class: HashMap<String, Vec<String>>,
 }
 
 impl WebCreature {
@@ -43,6 +51,14 @@ impl WebCreature {
             grown_at: creature.get_grown_at_ages(),
             names_map: creature.get_names_by_caste(),
             egg_sizes: creature.get_egg_sizes(),
+            pet_value: creature.get_pet_value(),
+            intelligent: creature.get_intelligent(),
+            flier: creature.get_flier(),
+            gnawer: creature.get_gnawer(),
+            trainable: creature.get_trainable(),
+            active_time: creature.get_active_time(),
+            inactive_season: creature.get_inactive_season(),
+            creature_class: creature.get_creature_class(),
         }
     }
 }
