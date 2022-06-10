@@ -1,5 +1,7 @@
 /* @refresh reload */
-import 'bootswatch/dist/sandstone/bootstrap.css';
+// import 'bootstrap/dist/css/bootstrap.css';
+import 'bootswatch/dist/solar/bootstrap.css';
+// import 'bootswatch/dist/sandstone/bootstrap.css';
 import './custom.css';
 import { render } from 'solid-js/web';
 
