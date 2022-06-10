@@ -45,7 +45,8 @@
 				"icons/icon.ico"
 			],
 			"identifier": "games.nwest.dwarffortress.overseer-manual",
-			"longDescription": "",
+			"shortDescription": "Overseer's Reference Manual for Dwarf Fortress",
+			"longDescription": "A utility to make it easier to get details about the creatures and other things represented in raws for your Dwarf Fortress saves.",
 			"macOS": {
 				"entitlements": null,
 				"exceptionDomain": "",
@@ -54,7 +55,6 @@
 				"signingIdentity": null
 			},
 			"resources": [],
-			"shortDescription": "",
 			"targets": "all",
 			"windows": {
 				"certificateThumbprint": null,
@@ -73,12 +73,14 @@
 			],
 			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEE2QjA3NUFBMzhGNEVFNTkKUldSWjd2UTRxbld3cHVxZzh5OTBJNDE3bU5pT3pneGtpUjVjVXhMTmZ4NDZmaHVHQ0srK3E2QzQK"
 		},
-		"windows": [{
-			"fullscreen": false,
-			"height": 600,
-			"resizable": true,
-			"title": "Overseer's Reference Manual for Dwarf Fortress",
-			"width": 800
-		}]
+		"windows": [
+			{
+				"fullscreen": false,
+				"height": 600,
+				"resizable": true,
+				"title": "Overseer's Reference Manual for Dwarf Fortress",
+				"width": 800
+			}
+		]
 	}
 }
