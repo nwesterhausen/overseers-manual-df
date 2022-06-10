@@ -35,7 +35,7 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
                 <For
                   each={listingList().filter((v) => v.name.toLowerCase().startsWith(letter))}
                   fallback={<div>No items</div>}>
-                  {(raw) => (isCreature(raw) ? <CreatureListing item={raw as Creature} /> : '')}
+                  {(raw) => (isCreature(raw) ? <CreatureListing creature={raw as Creature} /> : '')}
                 </For>
               </Accordion>
             </li>
