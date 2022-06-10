@@ -1,3 +1,11 @@
+## [0.4.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.4.0...v0.4.1) (2022-06-10)
+
+
+### Bug Fixes
+
+* :lipstick: padding around description paragraph ([2109f46](https://github.com/nwesterhausen/overseers-manual-df/commit/2109f465b1f9cd9155aa83a584fcf72aac727065))
+* :zap: fixes [#14](https://github.com/nwesterhausen/overseers-manual-df/issues/14) ([772fbb6](https://github.com/nwesterhausen/overseers-manual-df/commit/772fbb6c7226dad14981a721f274e6d323f95ca8))
+
 ## [0.4.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.3.1...v0.4.0) (2022-06-09)
 
 
