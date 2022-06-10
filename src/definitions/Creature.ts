@@ -422,19 +422,20 @@ export const PetValueStatus = (creature: Creature): string => {
 };
 
 export const GenerateSearchString = (creature: Creature): string => {
-  return [
+  const searchableTerms = [
     SearchableNames(creature.names_map),
     creature.lays_eggs ? `eggs ${CondesedEggSize(creature.egg_sizes)}` : '',
     creature.description,
     creature.flier ? 'flier' : '',
     creature.local_pops_controllable ? 'playable' : '',
     creature.local_pops_controllable ? 'civillized' : '',
-    creature.intelligence.EVERY[0] && creature.intelligence.EVERY[1] ? 'intelligent' : '',
-    creature.intelligence.EVERY[0] ? 'learns' : '',
-    creature.intelligence.EVERY[1] ? 'speaks' : '',
     creature.gnawer ? 'gnawer' : '',
     creature.pet_value ? `pet value ${creature.pet_value}` : '',
-  ]
-    .join(' ')
-    .replaceAll('  ', ' ');
+  ];
+  if (creature.intelligence.EVERY) {
+    searchableTerms.push(creature.intelligence.EVERY[0] && creature.intelligence.EVERY[1] ? 'intelligent' : '');
+    searchableTerms.push(creature.intelligence.EVERY[0] ? 'learns' : '');
+    searchableTerms.push(creature.intelligence.EVERY[1] ? 'speaks' : '');
+  }
+  return searchableTerms.join(' ').replaceAll('  ', ' ');
 };
