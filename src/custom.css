@@ -15,10 +15,35 @@
   font-size: 0.8rem;
   font-weight: bold;
   margin: 0;
-  padding: 0.2rem;
+  padding: 0.23rem;
 }
 
 .accordion-button:not(.collapsed) {
   background-color: #a9bdbd;
   color: #073642;
+}
+
+/* Custom Scrollbar */
+/* width */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #002b36;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #839496;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #495057;
+}
+
+#root {
+  width: calc(100vw - 00.5rem);
 }
