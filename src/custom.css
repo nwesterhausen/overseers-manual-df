@@ -17,3 +17,8 @@
   margin: 0;
   padding: 0.2rem;
 }
+
+.accordion-button:not(.collapsed) {
+  background-color: #a9bdbd;
+  color: #073642;
+}
