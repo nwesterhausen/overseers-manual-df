@@ -41,7 +41,7 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
           .join(' ')}
         <Stack class='d-flex justify-content-end w-100 me-3' direction='horizontal' gap={1}>
           {props.creature.lays_eggs ? (
-            <TwoPartBadge bg='primary' name='Egg-layer' value={'' + CondesedEggSize(props.creature.egg_sizes)} />
+            <TwoPartBadge bg='primary' name='Egg Size' value={'' + CondesedEggSize(props.creature.egg_sizes)} />
           ) : (
             <></>
           )}
@@ -49,7 +49,7 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
           {props.creature.intelligent.EVERY ? <TwoPartBadge bg='primary' name='Intelligent' value={''} /> : <></>}
           {props.creature.gnawer.EVERY ? <TwoPartBadge bg='primary' name='Gnawer' value={''} /> : <></>}
           {props.creature.pet_value.EVERY > 0 ? (
-            <TwoPartBadge bg='primary' name='Value' value={`${props.creature.pet_value.EVERY}`} />
+            <TwoPartBadge bg='primary' name='Pet Value' value={`${props.creature.pet_value.EVERY}`} />
           ) : (
             <></>
           )}
