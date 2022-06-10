@@ -88,6 +88,14 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
                   <th>Trainable</th>
                   <td>{TrainableStatus(props.creature.trainable.EVERY)}</td>
                 </tr>
+                <tr>
+                  <th>Defining Classes</th>
+                  <td>
+                    {props.creature.creature_class.EVERY
+                      ? props.creature.creature_class.EVERY.map((v) => toTitleCase(v.replaceAll('_', ' '))).join(', ')
+                      : 'None'}
+                  </td>
+                </tr>
               </tbody>
             </Table>
           </Tab>
