@@ -1,3 +1,17 @@
+## [0.6.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.5.0...v0.6.0) (2022-06-10)
+
+
+### Features
+
+* ✨ display pet value ([09ae63a](https://github.com/nwesterhausen/overseers-manual-df/commit/09ae63a53370adf6fb5a9c6809d7591609149bc0))
+* ✨ use creature's based_on to complete them ([3bb2208](https://github.com/nwesterhausen/overseers-manual-df/commit/3bb220870de324c0f0dbcbfa8ab0917fdfd8d6d9))
+* 💄 change to a darker theme ([e385529](https://github.com/nwesterhausen/overseers-manual-df/commit/e3855293243778fb437839f5b8926f5760a6214a))
+
+
+### Bug Fixes
+
+* 💄 scroll to top button should be on top right ([a36e268](https://github.com/nwesterhausen/overseers-manual-df/commit/a36e268980b8f224582aee7856ba8131452d84d7))
+
 ## [0.5.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.4.1...v0.5.0) (2022-06-10)
 
 
