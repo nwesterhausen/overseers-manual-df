@@ -22,6 +22,14 @@ export type Creature = {
   grown_at: CasteRange<number>;
   names_map: CasteRange<string[]>;
   egg_sizes: CasteRange<number>;
+  pet_value: CasteRange<number>,
+  intelligent: CasteRange<boolean>,
+  flier: CasteRange<boolean>,
+  gnawer: CasteRange<boolean>,
+  trainable: CasteRange<number>,
+  active_time: CasteRange<number>,
+  inactive_season: CasteRange<number>,
+  creature_class: CasteRange<string[]>,
 } & Raw;
 
 export const CasteOptions = [
