@@ -15,7 +15,7 @@ export type Creature = {
   max_age: CasteRange<number[]>;
   lays_eggs: boolean;
   clutch_size: CasteRange<number[]>;
-  based_on?: Creature;
+  based_on?: string;
   biomes: string[];
   cluster_range: number[];
   body_size: CasteRange<BodySizeRange[]>;
@@ -246,6 +246,7 @@ export const ActiveTimeStatus = (activeTimeBitmask: number): string => {
       return `Active ${strarr.slice(0, -1).join(', ')}, and ${strarr.slice(-1)}.`;
   }
 };
+
 const ACTIVE_DIURNAL = 1, // 0000 0001
   ACTIVE_NOCTURNAL = 2, // 0000 0010
   ACTIVE_CREPUSCULAR = 4, // 0000 0100
@@ -289,6 +290,7 @@ export const NoSeasonStatus = (noSeasonBitmask: number): string => {
       return `Active during ${strarr.slice(0, -1).join(', ')}, and ${strarr.slice(-1)}.`;
   }
 };
+
 const NO_SPRING = 1, // 0001
   NO_SUMMER = 2, // 0010
   NO_FALL = 4, // 0100
@@ -319,5 +321,77 @@ export const TrainableStatus = (trainableBitmask: number): string => {
   }
   return 'Not trainable.';
 };
+
 const TRAINABLE_HUNTING = 1, // 0001
   TRAINABLE_WAR = 2; // 0010
+
+/**
+ * Returns a creature which has its missing values completed from the based on creature.
+ *
+ * @param creature - creature which has the 'based_on' token set
+ * @param basedOn - creature that is basis for the other
+ * @returns A modified creature with any missing values filled in from the based on creature
+ */
+export const AssignBasedOn = (creature: Creature, basedOn: Creature): Creature => {
+  // Special cases handled here before we go through any other keys that might be "default"
+  if (
+    creature.creature_class.EVERY &&
+    creature.creature_class.EVERY.length > 1 &&
+    basedOn.creature_class.EVERY.length > 1
+  ) {
+    creature.creature_class.EVERY = [...new Set(creature.creature_class.EVERY.concat(basedOn.creature_class.EVERY))];
+  }
+
+  // Go through all keys and assign if they are empty or defaults
+  for (const key of Object.keys(DEFAULT_CREATURE)) {
+    if (JSON.stringify(creature[key]) === JSON.stringify(DEFAULT_CREATURE[key])) {
+      //  && (JSON.stringify(basedOn[key]) !== JSON.stringify(DEFAULT_CREATURE[key]))) {
+      console.debug(`${key} being assigned for ${creature.identifier} from ${basedOn.identifier}`);
+      creature[key] = basedOn[key];
+    }
+  }
+
+  return creature;
+};
+
+const DEFAULT_CREATURE: Creature = {
+  objectId: '',
+  identifier: '',
+  name: '',
+  description: '',
+  parent_raw: '',
+  max_age: {} as CasteRange<number[]>,
+  lays_eggs: false,
+  clutch_size: {} as CasteRange<number[]>,
+  biomes: [],
+  cluster_range: [],
+  body_size: {
+    EVERY: [],
+  },
+  grown_at: {} as CasteRange<number>,
+  egg_sizes: {} as CasteRange<number>,
+  pet_value: {} as CasteRange<number>,
+  intelligent: {
+    EVERY: false,
+  },
+  flier: {
+    EVERY: false,
+  },
+  gnawer: {
+    EVERY: false,
+  },
+  trainable: {
+    EVERY: 0,
+  },
+  active_time: {
+    EVERY: 0,
+  },
+  inactive_season: {
+    EVERY: 0,
+  },
+  creature_class: {},
+  names_map: {
+    SPECIES: [],
+    EVERY: [],
+  },
+};
