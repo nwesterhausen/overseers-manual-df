@@ -154,7 +154,7 @@ const App: Component = () => {
               aria-label='Search'
               onInput={debounce((event) => {
                 const targetEl = event.target as HTMLInputElement;
-                setSearchString(targetEl.value);
+                setSearchString(targetEl.value.toLowerCase());
               }, 100)}
             />
           </>
