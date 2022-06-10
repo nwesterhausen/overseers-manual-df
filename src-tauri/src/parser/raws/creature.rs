@@ -390,6 +390,81 @@ impl DFCreature {
         }
         values
     }
+    pub fn get_pet_value(&self) -> HashMap<String, u16> {
+        let mut pet_values: HashMap<String, u16> = HashMap::new();
+        for self_caste in &self.castes {
+            if self_caste.pet_value > 0 {
+                pet_values.insert(String::from(&self_caste.name), self_caste.pet_value);
+            }
+        }
+        pet_values
+    }
+    pub fn get_intelligent(&self) -> HashMap<String, bool> {
+        let mut intelligent: HashMap<String, bool> = HashMap::new();
+        for self_caste in &self.castes {
+            if self_caste.intelligent || self_caste.name.eq("EVERY") {
+                intelligent.insert(String::from(&self_caste.name), self_caste.intelligent);
+            }
+        }
+        intelligent
+    }
+    pub fn get_gnawer(&self) -> HashMap<String, bool> {
+        let mut gnawer: HashMap<String, bool> = HashMap::new();
+        for self_caste in &self.castes {
+            if self_caste.gnawer || self_caste.name.eq("EVERY") {
+                gnawer.insert(String::from(&self_caste.name), self_caste.gnawer);
+            }
+        }
+        gnawer
+    }
+    pub fn get_flier(&self) -> HashMap<String, bool> {
+        let mut flier: HashMap<String, bool> = HashMap::new();
+        for self_caste in &self.castes {
+            if self_caste.flier || self_caste.name.eq("EVERY") {
+                flier.insert(String::from(&self_caste.name), self_caste.flier);
+            }
+        }
+        flier
+    }
+    pub fn get_trainable(&self) -> HashMap<String, u8> {
+        let mut trainable: HashMap<String, u8> = HashMap::new();
+        for self_caste in &self.castes {
+            if self_caste.trainable > 0 || self_caste.name.eq("EVERY") {
+                trainable.insert(String::from(&self_caste.name), self_caste.trainable);
+            }
+        }
+        trainable
+    }
+    pub fn get_active_time(&self) -> HashMap<String, u8> {
+        let mut active_time: HashMap<String, u8> = HashMap::new();
+        for self_caste in &self.castes {
+            if self_caste.active_time > 0 || self_caste.name.eq("EVERY") {
+                active_time.insert(String::from(&self_caste.name), self_caste.active_time);
+            }
+        }
+        active_time
+    }
+    pub fn get_inactive_season(&self) -> HashMap<String, u8> {
+        let mut no_season: HashMap<String, u8> = HashMap::new();
+        for self_caste in &self.castes {
+            if self_caste.no_season > 0 || self_caste.name.eq("EVERY") {
+                no_season.insert(String::from(&self_caste.name), self_caste.no_season);
+            }
+        }
+        no_season
+    }
+    pub fn get_creature_class(&self) -> HashMap<String, Vec<String>> {
+        let mut creature_class: HashMap<String, Vec<String>> = HashMap::new();
+        for self_caste in &self.castes {
+            if self_caste.creature_class.len() > 0 {
+                creature_class.insert(
+                    String::from(&self_caste.name),
+                    Vec::clone(&self_caste.creature_class),
+                );
+            }
+        }
+        creature_class
+    }
 }
 
 impl DFCreatureCaste {
