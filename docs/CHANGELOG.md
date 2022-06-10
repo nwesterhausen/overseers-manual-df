@@ -1,3 +1,18 @@
+## [0.7.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.6.0...v0.7.0) (2022-06-10)
+
+
+### Features
+
+* ✨ display intelligence and playable details ([5b87d80](https://github.com/nwesterhausen/overseers-manual-df/commit/5b87d80eecc2afc2a4a0d805cd1284a2002e3444))
+
+
+### Bug Fixes
+
+* 🐛 search string should be case insensitive ([4858050](https://github.com/nwesterhausen/overseers-manual-df/commit/48580501b6c1465e91b323226400d89ac835a10f))
+* 💄 prevent "page jitter" when scrollbar is needed ([5acceae](https://github.com/nwesterhausen/overseers-manual-df/commit/5acceae5691753eab95649c91d80068d795658db))
+* 💄 vanilla scrollbar too bright compared to dark theme ([ee7ec61](https://github.com/nwesterhausen/overseers-manual-df/commit/ee7ec61a503c6700d132c206b58b287e6a442052))
+* 💬 badge text should be explicit ([4293d34](https://github.com/nwesterhausen/overseers-manual-df/commit/4293d34966c4b2f5e38452fa0a2390770d1ed303))
+
 ## [0.6.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.5.0...v0.6.0) (2022-06-10)
 
 
