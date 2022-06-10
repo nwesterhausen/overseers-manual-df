@@ -43,3 +43,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #495057;
 }
+
+#root {
+  width: calc(100vw - 00.5rem);
+}
