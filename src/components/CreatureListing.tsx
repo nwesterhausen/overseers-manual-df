@@ -46,12 +46,22 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
             <></>
           )}
           {props.creature.flier.EVERY ? <TwoPartBadge bg='primary' name='Flier' value={''} /> : <></>}
-          {props.creature.intelligence.EVERY[0] && props.creature.intelligence.EVERY[1] ? (
+          {props.creature.intelligence.EVERY &&
+          props.creature.intelligence.EVERY[0] &&
+          props.creature.intelligence.EVERY[1] ? (
             <TwoPartBadge bg='primary' name='Intelligent' value={''} />
           ) : (
             <>
-              {props.creature.intelligence.EVERY[0] ? <TwoPartBadge bg='primary' name='Learns' value={''} /> : <></>}
-              {props.creature.intelligence.EVERY[1] ? <TwoPartBadge bg='primary' name='Speaks' value={''} /> : <></>}
+              {props.creature.intelligence.EVERY && props.creature.intelligence.EVERY[0] ? (
+                <TwoPartBadge bg='primary' name='Learns' value={''} />
+              ) : (
+                <></>
+              )}
+              {props.creature.intelligence.EVERY && props.creature.intelligence.EVERY[1] ? (
+                <TwoPartBadge bg='primary' name='Speaks' value={''} />
+              ) : (
+                <></>
+              )}
             </>
           )}
           {props.creature.gnawer.EVERY ? <TwoPartBadge bg='primary' name='Gnawer' value={''} /> : <></>}
