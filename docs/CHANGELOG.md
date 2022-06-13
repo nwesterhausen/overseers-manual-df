@@ -1,3 +1,10 @@
+## [0.7.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.7.0...v0.7.1) (2022-06-10)
+
+
+### Bug Fixes
+
+* 🐛 temporarily fix issues parsing intelligence keys ([75dc582](https://github.com/nwesterhausen/overseers-manual-df/commit/75dc582d968f2130cc02dc1b00023c299c95eb54))
+
 ## [0.7.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.6.0...v0.7.0) (2022-06-10)
 
 
