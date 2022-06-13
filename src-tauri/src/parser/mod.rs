@@ -29,7 +29,11 @@ fn parse_directory(raws_directory: String) -> Vec<raws::creature::DFCreature> {
         if f_name.ends_with(".txt") {
             let entry_path = entry.path().to_string_lossy().to_string();
             // println!("parsing {}", &entry_path);
-            creatures.append(&mut reader::parse_file(entry_path))
+            let x = &mut reader::parse_file(entry_path);
+            match x {
+                Ok(x) => creatures.append(x),
+                Err(e) => println!("Failed to parse {}, {}",f_name, e),
+            }
         }
     }
     println!(

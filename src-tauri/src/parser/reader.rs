@@ -2,7 +2,7 @@ use encoding_rs_io::DecodeReaderBytesBuilder;
 use regex::Regex;
 use slug::slugify;
 use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::io::{BufRead, BufReader, Error};
 
 use super::raws::{biomes, creature, names};
 
@@ -11,15 +11,19 @@ enum RawObjectKind {
     None,
 }
 
-pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
-    let re = Regex::new(r"(\[(?P<key>[^\[:]+):?(?P<value>[^\]\[]*)])").unwrap();
+
+/**!  Regex which matches the bracket structure of raw files. */
+static TOKEN_RE_STR: &str = r"(\[(?P<key>[^\[:]+):?(?P<value>[^\]\[]*)])";
+
+pub async fn parse_file(input_path: String) -> Result<Vec<creature::DFCreature>, Error> {
+    let token_re = Regex::new(TOKEN_RE_STR).unwrap();
+    // Currently DF Raws are in ASCII (DF2014)
     let enc = encoding_rs::Encoding::for_label("latin1".as_bytes());
 
-    let file = File::open(&input_path).unwrap();
+    let file = File::open(&input_path)?;
     let decoding_reader = DecodeReaderBytesBuilder::new().encoding(enc).build(file);
     let reader = BufReader::new(decoding_reader);
 
-    // let mut creatures = 0;
     let mut raw_filename = String::new();
     let mut current_object = RawObjectKind::None;
     let mut started = false;
@@ -39,7 +43,7 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
             raw_filename = String::from(&line);
             continue;
         }
-        for cap in re.captures_iter(&line) {
+        for cap in token_re.captures_iter(&line) {
             // println!("Key: {} Value: {}", &cap[2], &cap[3])
             match &cap[2] {
                 "OBJECT" => match &cap[3] {
@@ -49,7 +53,7 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                     }
                     &_ => {
                         println!("No support right now for OBJECT:{}", &cap[3]);
-                        return results;
+                        return Ok(results);
                         // current_object = RawObjectKind::None;
                     }
                 },
@@ -632,5 +636,5 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
         RawObjectKind::None => (),
     }
     //println!("{} creatures defined in {}", results.len(), &raw_filename);
-    results
+    Ok(results)
 }

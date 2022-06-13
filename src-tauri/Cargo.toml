@@ -22,6 +22,7 @@ encoding_rs = "0.8"
 encoding_rs_io = "0.1"
 regex = "1.5"
 slug = "0.1"
+tokio = {version = "1", features = ["full"]}
 walkdir = "2"
 
 [dependencies.tauri-plugin-store]
