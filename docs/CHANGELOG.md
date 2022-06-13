@@ -1,3 +1,10 @@
+## [0.7.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.7.1...v0.7.2) (2022-06-13)
+
+
+### Bug Fixes
+
+* ⚡️ hide elements outside of viewport ([0984ee5](https://github.com/nwesterhausen/overseers-manual-df/commit/0984ee51e2215374930da785cd369af5f823cc54))
+
 ## [0.7.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.7.0...v0.7.1) (2022-06-10)
 
 
