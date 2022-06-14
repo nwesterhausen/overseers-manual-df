@@ -20,6 +20,7 @@
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/npm": "^9.0.1",
+    "@solid-primitives/context": "^0.1.0",
     "@solid-primitives/scheduled": "^1.0.0",
     "@tauri-apps/cli": "1.0.0-rc.13",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
