@@ -8,12 +8,15 @@ import { render } from 'solid-js/web';
 import App from './App';
 import { DirectoryProvider } from './components/DirectoryProvider';
 import { RawsProvider } from './components/RawsProvider';
+import { SearchProvider } from './components/SearchProvider';
 
 render(
   () => (
     <DirectoryProvider>
       <RawsProvider>
-        <App />
+        <SearchProvider>
+          <App />
+        </SearchProvider>
       </RawsProvider>
     </DirectoryProvider>
   ),

@@ -1,13 +1,14 @@
-import { Container, Navbar, Nav, NavDropdown, Tabs, Tab, Form, Button, Spinner, Stack } from 'solid-bootstrap';
-import { debounce } from '@solid-primitives/scheduled';
+import { Container, Navbar, Nav, NavDropdown, Tabs, Tab, Button, Stack } from 'solid-bootstrap';
 import { appWindow } from '@tauri-apps/api/window';
-import { Component, createEffect, createMemo, createResource, createSignal, For } from 'solid-js';
+import { Component, createEffect, createResource, For } from 'solid-js';
 import Listing from './components/Listing';
 import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH, LAST_SAVE } from './settings';
 import { getVersion } from '@tauri-apps/api/app';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import { useDirectoryProvider } from './components/DirectoryProvider';
-import { STS_EMPTY, STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from './components/RawsProvider';
+import { STS_IDLE, useRawsProvider } from './components/RawsProvider';
+import { useSearchProvider } from './components/SearchProvider';
+import SearchBox from './components/SearchBox';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -17,6 +18,7 @@ const APP_NAME = "Overseer's Reference Manual";
 const App: Component = () => {
   const directoryContext = useDirectoryProvider();
   const rawsContext = useRawsProvider();
+  const searchContext = useSearchProvider();
   // Tauri provides the app version in a promise, so we use a resource for it
   const [appVersion] = createResource(async () => {
     return await getVersion();
@@ -30,78 +32,6 @@ const App: Component = () => {
       rawsContext.setLoadRaws(true);
     } else {
       appWindow.setTitle(`${APP_NAME} ${appVersion()}`);
-    }
-  });
-  // Signal for the search filter
-  const [searchString, setSearchString] = createSignal('');
-  const searchBarHtml = createMemo(() => {
-    switch (rawsContext.parsingStatus()) {
-      case STS_IDLE:
-        if (rawsContext.jsonRawsResource().length === 0) {
-          return (
-            <>
-              <p class='text-center'>Please choose a save to load raws from:</p>
-              <Container class='justify-content-center d-flex mx-auto w-50'>
-                <Stack gap={1}>
-                  <For each={directoryContext.saveDirectoryOptions()}>
-                    {(dir) => (
-                      <Button onClick={() => directoryContext.setCurrentSave(dir)} variant='outline-secondary'>
-                        {dir}
-                      </Button>
-                    )}
-                  </For>
-                </Stack>
-              </Container>
-            </>
-          );
-        }
-        return (
-          <>
-            <Form.Control
-              type='search'
-              placeholder='Filter results'
-              aria-label='Search'
-              onInput={debounce((event) => {
-                const targetEl = event.target as HTMLInputElement;
-                setSearchString(targetEl.value.toLowerCase());
-              }, 100)}
-            />
-          </>
-        );
-      case STS_LOADING:
-        return (
-          <Stack class='justify-content-center d-flex' direction='horizontal' gap={3}>
-            <Spinner animation='grow' />
-            <span>Loading raws...</span>
-          </Stack>
-        );
-      case STS_PARSING:
-        return (
-          <Stack class='justify-content-center d-flex' direction='horizontal' gap={3}>
-            <Spinner animation='grow' />
-            <span>Parsing raw files...</span>
-          </Stack>
-        );
-      case STS_EMPTY:
-        return (
-          <>
-            <p class='text-center'>
-              No raws found in <strong>{directoryContext.currentSave()}</strong>
-            </p>
-            <p class='text-center'>Please choose a save to load raws from:</p>
-            <Container class='justify-content-center d-flex mx-auto w-50'>
-              <Stack gap={1}>
-                <For each={directoryContext.saveDirectoryOptions()}>
-                  {(dir) => (
-                    <Button onClick={() => directoryContext.setCurrentSave(dir)} variant='outline-secondary'>
-                      {dir}
-                    </Button>
-                  )}
-                </For>
-              </Stack>
-            </Container>
-          </>
-        );
     }
   });
 
@@ -175,14 +105,14 @@ const App: Component = () => {
           </>
         ) : (
           <>
-            {searchBarHtml()}
+            <SearchBox />
             {rawsContext.jsonRawsResource().length === 0 || rawsContext.parsingStatus() !== STS_IDLE ? (
               <></>
             ) : (
               <Tabs defaultActiveKey='bestiary' class='my-3'>
                 {/* A bestiary (from bestiarum vocabulum) is a compendium of beasts. */}
                 <Tab eventKey='bestiary' title='Bestiary'>
-                  <Listing data={rawsContext.jsonRawsResource()} searchString={searchString()} />
+                  <Listing data={rawsContext.jsonRawsResource()} searchString={searchContext.searchString()} />
                 </Tab>
                 <Tab disabled title='More to come in the future!'></Tab>
               </Tabs>
