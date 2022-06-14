@@ -6,5 +6,16 @@ import './custom.css';
 import { render } from 'solid-js/web';
 
 import App from './App';
+import { DirectoryProvider } from './components/DirectoryProvider';
+import { RawsProvider } from './components/RawsProvider';
 
-render(() => <App />, document.getElementById('root') as HTMLElement);
+render(
+  () => (
+    <DirectoryProvider>
+      <RawsProvider>
+        <App />
+      </RawsProvider>
+    </DirectoryProvider>
+  ),
+  document.getElementById('root') as HTMLElement
+);
