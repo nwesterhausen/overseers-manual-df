@@ -1,6 +1,6 @@
-import { Container, Navbar, Nav, NavDropdown, Tabs, Tab, Button, Stack } from 'solid-bootstrap';
+import { Container, Tabs, Tab, Button, Stack } from 'solid-bootstrap';
 import { appWindow } from '@tauri-apps/api/window';
-import { Component, createEffect, createResource, For } from 'solid-js';
+import { Component, createEffect, createResource } from 'solid-js';
 import Listing from './components/Listing';
 import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH, LAST_SAVE } from './settings';
 import { getVersion } from '@tauri-apps/api/app';
@@ -9,6 +9,7 @@ import { useDirectoryProvider } from './components/DirectoryProvider';
 import { STS_IDLE, useRawsProvider } from './components/RawsProvider';
 import { useSearchProvider } from './components/SearchProvider';
 import SearchBox from './components/SearchBox';
+import MenuBar from './components/MenuBar';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -54,34 +55,7 @@ const App: Component = () => {
 
   return (
     <>
-      <Navbar variant='dark'>
-        <Container>
-          <Nav>
-            <NavDropdown title='Save Folder'>
-              <NavDropdown.Header>{directoryContext.saveFolderPath().join('/')}</NavDropdown.Header>
-              <NavDropdown.Item
-                onClick={() => {
-                  directoryContext.setManualFolderSelect(true);
-                }}>
-                Pick new folder..
-              </NavDropdown.Item>
-            </NavDropdown>
-            <NavDropdown title='Change Save' id='basic-nav-dropdown'>
-              <For
-                each={directoryContext.saveDirectoryOptions()}
-                fallback={<NavDropdown.Header>No saves found in directory.</NavDropdown.Header>}>
-                {(save) => (
-                  <NavDropdown.Item
-                    active={save === directoryContext.currentSave()}
-                    onClick={() => directoryContext.setCurrentSave(save)}>
-                    {save}
-                  </NavDropdown.Item>
-                )}
-              </For>
-            </NavDropdown>
-          </Nav>
-        </Container>
-      </Navbar>
+      <MenuBar />
       <Container class='p-2'>
         {directoryContext.saveFolderPath().length == 0 ? (
           <>
