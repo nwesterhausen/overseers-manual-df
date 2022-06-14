@@ -1,4 +1,4 @@
-import { Container, Tabs, Tab, Button, Stack } from 'solid-bootstrap';
+import { Container, Tabs, Tab } from 'solid-bootstrap';
 import { appWindow } from '@tauri-apps/api/window';
 import { Component, createEffect, createResource } from 'solid-js';
 import Listing from './components/Listing';
@@ -10,6 +10,7 @@ import { STS_IDLE, useRawsProvider } from './components/RawsProvider';
 import { useSearchProvider } from './components/SearchProvider';
 import SearchBox from './components/SearchBox';
 import MenuBar from './components/MenuBar';
+import DFDirectoryNotSet from './components/DFDirectoryNotSet';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -36,62 +37,37 @@ const App: Component = () => {
     }
   });
 
-  setTimeout(() => {
-    // Setting up the settings storage.
-    initStore()
-      // After its setup, try to get the save directory from the settings
-      .then(() => {
-        return getFromStore(SAVES_PATH);
-      })
-      // With the save folder, set it as the drag and drop path, since that's the path we set programmatically
-      // and let the effects do the rest.
-      .then((val) => {
-        if (val !== '') {
-          directoryContext.setDragAndDropPath(val);
-        }
-      })
-      .catch(console.error);
-  }, 10);
+  // Setting up the settings storage.
+  initStore()
+    // After its setup, try to get the save directory from the settings
+    .then(() => {
+      return getFromStore(SAVES_PATH);
+    })
+    // With the save folder, set it as the drag and drop path, since that's the path we set programmatically
+    // and let the effects do the rest.
+    .then((val) => {
+      if (val !== '') {
+        directoryContext.setDragAndDropPath(val);
+      }
+    })
+    .catch(console.error);
 
   return (
     <>
       <MenuBar />
       <Container class='p-2'>
-        {directoryContext.saveFolderPath().length == 0 ? (
-          <>
-            <Stack gap={2}>
-              <h2>Dwarf Fortress save directory path is unset!</h2>
-              <p>
-                To set the path to your Dwarf Fortress Save, drag and drop a <code>world.dat</code> file from any of the
-                saves in your save folder onto this window, or use the button below to pull up a folder selection
-                dialog.
-              </p>
-              <Container class='p-3'>
-                <Button
-                  variant='secondary'
-                  onClick={() => {
-                    directoryContext.setManualFolderSelect(true);
-                  }}>
-                  Set Save Directory
-                </Button>
-              </Container>
-            </Stack>
-          </>
+        <DFDirectoryNotSet />
+        <SearchBox />
+        {rawsContext.jsonRawsResource().length === 0 || rawsContext.parsingStatus() !== STS_IDLE ? (
+          <></>
         ) : (
-          <>
-            <SearchBox />
-            {rawsContext.jsonRawsResource().length === 0 || rawsContext.parsingStatus() !== STS_IDLE ? (
-              <></>
-            ) : (
-              <Tabs defaultActiveKey='bestiary' class='my-3'>
-                {/* A bestiary (from bestiarum vocabulum) is a compendium of beasts. */}
-                <Tab eventKey='bestiary' title='Bestiary'>
-                  <Listing data={rawsContext.jsonRawsResource()} searchString={searchContext.searchString()} />
-                </Tab>
-                <Tab disabled title='More to come in the future!'></Tab>
-              </Tabs>
-            )}
-          </>
+          <Tabs defaultActiveKey='bestiary' class='my-3'>
+            {/* A bestiary (from bestiarum vocabulum) is a compendium of beasts. */}
+            <Tab eventKey='bestiary' title='Bestiary'>
+              <Listing data={rawsContext.jsonRawsResource()} searchString={searchContext.searchString()} />
+            </Tab>
+            <Tab disabled title='More to come in the future!'></Tab>
+          </Tabs>
         )}
       </Container>
       <ScrollToTopBtn />

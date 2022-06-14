@@ -9,6 +9,9 @@ const SearchBox: Component = () => {
   const rawsContext = useRawsProvider();
   const directoryContext = useDirectoryProvider();
   const searchContext = useSearchProvider();
+  if (directoryContext.saveFolderPath().length == 0) {
+    return <></>;
+  }
   return (
     <Switch>
       <Match when={rawsContext.parsingStatus() === STS_IDLE}>
