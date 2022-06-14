@@ -1,9 +1,9 @@
 import { Container, Form, Button, Spinner, Stack } from 'solid-bootstrap';
 import { Component, For, Match, Switch } from 'solid-js';
 import { debounce } from '@solid-primitives/scheduled';
-import { STS_EMPTY, STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../components/RawsProvider';
-import { useDirectoryProvider } from './DirectoryProvider';
-import { useSearchProvider } from './SearchProvider';
+import { STS_EMPTY, STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../providers/RawsProvider';
+import { useDirectoryProvider } from '../providers/DirectoryProvider';
+import { useSearchProvider } from '../providers/SearchProvider';
 
 const SearchBox: Component = () => {
   const rawsContext = useRawsProvider();
