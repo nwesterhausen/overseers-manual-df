@@ -1,6 +1,6 @@
 import { Container, Nav, Navbar, NavDropdown } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
-import { useDirectoryProvider } from './DirectoryProvider';
+import { useDirectoryProvider } from '../providers/DirectoryProvider';
 
 const MenuBar: Component = () => {
   const directoryContext = useDirectoryProvider();

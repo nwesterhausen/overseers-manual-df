@@ -6,9 +6,9 @@ import './custom.css';
 import { render } from 'solid-js/web';
 
 import App from './App';
-import { DirectoryProvider } from './components/DirectoryProvider';
-import { RawsProvider } from './components/RawsProvider';
-import { SearchProvider } from './components/SearchProvider';
+import { DirectoryProvider } from './providers/DirectoryProvider';
+import { RawsProvider } from './providers/RawsProvider';
+import { SearchProvider } from './providers/SearchProvider';
 
 render(
   () => (

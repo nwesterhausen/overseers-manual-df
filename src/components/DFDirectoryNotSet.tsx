@@ -1,6 +1,6 @@
 import { Button, Container, Stack } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { useDirectoryProvider } from './DirectoryProvider';
+import { useDirectoryProvider } from '../providers/DirectoryProvider';
 
 const DFDirectoryNotSet: Component = () => {
   const directoryContext = useDirectoryProvider();
