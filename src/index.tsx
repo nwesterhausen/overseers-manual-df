@@ -6,5 +6,19 @@ import './custom.css';
 import { render } from 'solid-js/web';
 
 import App from './App';
+import { DirectoryProvider } from './providers/DirectoryProvider';
+import { RawsProvider } from './providers/RawsProvider';
+import { SearchProvider } from './providers/SearchProvider';
 
-render(() => <App />, document.getElementById('root') as HTMLElement);
+render(
+  () => (
+    <DirectoryProvider>
+      <RawsProvider>
+        <SearchProvider>
+          <App />
+        </SearchProvider>
+      </RawsProvider>
+    </DirectoryProvider>
+  ),
+  document.getElementById('root') as HTMLElement
+);
