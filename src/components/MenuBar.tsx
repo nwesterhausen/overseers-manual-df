@@ -11,7 +11,7 @@ const MenuBar: Component = () => {
         <Nav>
           <NavDropdown title='DF Directory'>
             <NavDropdown.Header>
-              {directoryContext.saveFolderPath().length > 0 ? directoryContext.saveFolderPath().join('/') : 'None set'}
+              {directoryContext.dfFolderPath().length > 0 ? directoryContext.dfFolderPath().join('/') : 'None set'}
             </NavDropdown.Header>
             <NavDropdown.Item
               onClick={() => {
