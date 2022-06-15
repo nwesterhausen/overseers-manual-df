@@ -29,7 +29,6 @@ const App: Component = () => {
   createEffect(() => {
     if (directoryContext.currentSave() !== '') {
       appWindow.setTitle(`${APP_NAME} ${appVersion()} - ${directoryContext.currentSave()}`);
-      rawsContext.setLoadRaws(true);
     } else {
       appWindow.setTitle(`${APP_NAME} ${appVersion()}`);
     }
