@@ -29,7 +29,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     if (directoryContext.currentSave() !== '') {
       setLoadRaws(true);
     }
-  })
+  });
 
   /**
    * This calls the parse function in our rust code and gets the JSON response
