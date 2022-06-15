@@ -1,3 +1,18 @@
+## [0.8.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.7.2...v0.8.0) (2022-06-15)
+
+
+### Features
+
+* ✨ show progress bar as we parse the raws ([c3832dc](https://github.com/nwesterhausen/overseers-manual-df/commit/c3832dc6333ed3d0f801bca869c834832e90d414))
+
+
+### Bug Fixes
+
+* ⚡️ initiate raws loading from raws provider ([23c9593](https://github.com/nwesterhausen/overseers-manual-df/commit/23c95930d0dcf2dfdcc8f8434885c578a47566da))
+* ✨ use DF folder instead of save folder ([2953053](https://github.com/nwesterhausen/overseers-manual-df/commit/2953053a4486c2bcef0dc537155b0d419897b28e)), closes [#23](https://github.com/nwesterhausen/overseers-manual-df/issues/23)
+* 💄 speed up when background color is dark ([23ffb5a](https://github.com/nwesterhausen/overseers-manual-df/commit/23ffb5a2ec94581872072319eb738d11928c401b))
+* 💬 display df path instead of save path in menu ([604867b](https://github.com/nwesterhausen/overseers-manual-df/commit/604867b1111a31089cee3236f79cd2bcb402982d))
+
 ## [0.7.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.7.1...v0.7.2) (2022-06-13)
 
 
