@@ -1,13 +1,15 @@
 import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
-import { createEffect, createResource, createSignal } from 'solid-js';
+import { createEffect, createMemo, createResource, createSignal, JSX } from 'solid-js';
 import { AssignBasedOn, Creature, GenerateSearchString } from '../definitions/Creature';
 import { FilterInvalidRaws } from '../definitions/Raw';
 import { useDirectoryProvider } from './DirectoryProvider';
+import { readDir } from '@tauri-apps/api/fs';
+import { ProgressBar } from 'solid-bootstrap';
 
 // Statuses for the parsing status
-export const STS_PARSING = 'Parsing',
-  STS_LOADING = 'Loading',
+export const STS_PARSING = 'Parsing Raws',
+  STS_LOADING = 'Loading Raws',
   STS_IDLE = 'Idle',
   STS_EMPTY = 'Idle/No Raws';
 
@@ -16,12 +18,23 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   // Signal for setting raw parse status
   const [parsingStatus, setParsingStatus] = createSignal(STS_IDLE);
+  const currentStatus = createMemo(() => {
+    console.log(parsingStatus());
+    return parsingStatus();
+  });
 
   // Signal for loading raws
   const [loadRaws, setLoadRaws] = createSignal(false);
   // Resource for raws
   const [jsonRawsResource] = createResource(loadRaws, parseRawsInSave, {
     initialValue: [],
+  });
+
+  // Signal for raw parsing progress
+  const [parsingProgress, setParsingProgress] = createSignal(100);
+  const parsingProgressBar = createMemo((): JSX.Element => {
+    const perc = Math.floor(100 * parsingProgress());
+    return <ProgressBar now={perc} label={`${perc}%`} />;
   });
 
   // React to changing the save directory
@@ -38,40 +51,47 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
    * functions or at least handle them differently.
    */
   async function parseRawsInSave(): Promise<Creature[]> {
-    // setLoadRaws(false);
-    const dir = [...directoryContext.saveFolderPath(), directoryContext.currentSave(), 'raw'].join('/');
-    console.log(`Sending ${dir} to be parsed.`);
+    setParsingProgress(0);
     setParsingStatus(STS_PARSING);
-    const jsonStr = await invoke('parse_raws_at_path', {
-      path: dir,
-    });
-    setParsingStatus(STS_LOADING);
-    if (typeof jsonStr !== 'string') {
-      console.debug(jsonStr);
-      console.error("Did not get 'string' back");
-      setParsingStatus(STS_IDLE);
-      setLoadRaws(false);
-      return [];
-    }
-    const result = JSON.parse(jsonStr);
-    if (Array.isArray(result)) {
-      const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.name < b.name ? -1 : 1));
-      const mergedResult = sortResult.map((val: Creature, i, a: Creature[]) => {
-        if (val.based_on && val.based_on.length) {
-          const matches = a.filter((c) => c.objectId === val.based_on);
-          if (matches.length === 1) {
-            return AssignBasedOn(val, matches[0]);
-          }
-          console.warn(`${matches.length} matches for ${val.based_on}`);
+
+    const dir = [...directoryContext.saveFolderPath(), directoryContext.currentSave(), 'raw'].join('/');
+    const rawFiles = await ReadAllRawFilePaths(dir);
+    console.log(rawFiles.length, 'raw files to parse.');
+    const rawsArr = [];
+
+    for (let i = 0; i < rawFiles.length; i++) {
+      setParsingProgress((i + 1) / rawFiles.length);
+      const v = rawFiles[i];
+      const strRaw = await invoke('parse_raws_in_file', { path: v });
+      if (typeof strRaw === 'string') {
+        const jsonRaw = await JSON.parse(strRaw);
+        if (Array.isArray(jsonRaw)) {
+          rawsArr.push(jsonRaw);
         }
-        return val;
-      });
-      const searchableResult = mergedResult.map((v: Creature) => {
-        v.searchString = GenerateSearchString(v);
-        return v;
-      });
-      console.log('raws parsed', searchableResult.length);
-      if (searchableResult.length === 0) {
+      }
+    }
+
+    setParsingProgress(100);
+    setParsingStatus(STS_LOADING);
+
+    const result = rawsArr.flat();
+
+    if (result.length > 0) {
+      const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.name < b.name ? -1 : 1));
+
+      for (let i = 0; i < sortResult.length; i++) {
+        const val: Creature = sortResult[i];
+        if (val.based_on && val.based_on.length) {
+          const matches = sortResult.filter((c) => c.objectId === val.based_on);
+          if (matches.length === 1) {
+            sortResult[i] = AssignBasedOn(val, matches[0]);
+          } else {
+            console.warn(`${matches.length} matches for ${val.based_on}`);
+          }
+        }
+        sortResult[i].searchString = GenerateSearchString(sortResult[i]);
+      }
+      if (sortResult.length === 0) {
         setParsingStatus(STS_EMPTY);
       } else {
         setParsingStatus(STS_IDLE);
@@ -79,8 +99,9 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       setTimeout(() => {
         setLoadRaws(false);
       }, 50);
-      return searchableResult;
+      return sortResult;
     }
+
     console.debug(result);
     console.error('Result was not an array');
     setParsingStatus(STS_IDLE);
@@ -88,5 +109,24 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     return [];
   }
 
-  return { parsingStatus, jsonRawsResource, setLoadRaws };
+  return { currentStatus, jsonRawsResource, setLoadRaws, parsingProgressBar };
 });
+
+const ReadAllRawFilePaths = async (basepath: string): Promise<string[]> => {
+  const possibleRaws: string[] = [];
+
+  const entries = await readDir(basepath, { recursive: true });
+
+  for (const entry of entries) {
+    console.log(entry);
+    if (entry.children && entry.name === 'objects') {
+      for (const e of entry.children) {
+        if (e.name.endsWith('.txt')) {
+          possibleRaws.push(e.path);
+        }
+      }
+    }
+  }
+
+  return possibleRaws;
+};

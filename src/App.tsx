@@ -40,7 +40,7 @@ const App: Component = () => {
       <Container class='p-2'>
         <DFDirectoryNotSet />
         <SearchBox />
-        {rawsContext.jsonRawsResource().length === 0 || rawsContext.parsingStatus() !== STS_IDLE ? (
+        {rawsContext.jsonRawsResource().length === 0 || rawsContext.currentStatus() !== STS_IDLE ? (
           <></>
         ) : (
           <Tabs defaultActiveKey='bestiary' class='my-3'>
