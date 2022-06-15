@@ -1,6 +1,6 @@
 import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
-import { createResource, createSignal } from 'solid-js';
+import { createEffect, createResource, createSignal } from 'solid-js';
 import { AssignBasedOn, Creature, GenerateSearchString } from '../definitions/Creature';
 import { FilterInvalidRaws } from '../definitions/Raw';
 import { useDirectoryProvider } from './DirectoryProvider';
@@ -23,6 +23,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const [jsonRawsResource] = createResource(loadRaws, parseRawsInSave, {
     initialValue: [],
   });
+
+  // React to changing the save directory
+  createEffect(() => {
+    if (directoryContext.currentSave() !== '') {
+      setLoadRaws(true);
+    }
+  })
 
   /**
    * This calls the parse function in our rust code and gets the JSON response
