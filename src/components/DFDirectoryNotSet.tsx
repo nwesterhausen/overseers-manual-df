@@ -12,8 +12,8 @@ const DFDirectoryNotSet: Component = () => {
           <Stack gap={2}>
             <h2>Dwarf Fortress save directory path is unset!</h2>
             <p>
-              To set the path to your Dwarf Fortress Save, drag and drop a <code>world.dat</code> file from any of the
-              saves in your save folder onto this window, or use the button below to pull up a folder selection dialog.
+              To set the path to your Dwarf Fortress Save, drag and drop the <code>gamelog.txt</code> file from the
+              dwarf fortress directory onto this window, or use the button below to pull up a folder selection dialog.
             </p>
             <Container class='p-3'>
               <Button

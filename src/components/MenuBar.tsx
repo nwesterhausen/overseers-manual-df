@@ -9,8 +9,10 @@ const MenuBar: Component = () => {
     <Navbar variant='dark'>
       <Container>
         <Nav>
-          <NavDropdown title='Save Folder'>
-            <NavDropdown.Header>{directoryContext.saveFolderPath().join('/')}</NavDropdown.Header>
+          <NavDropdown title='DF Directory'>
+            <NavDropdown.Header>
+              {directoryContext.saveFolderPath().length > 0 ? directoryContext.saveFolderPath().join('/') : 'None set'}
+            </NavDropdown.Header>
             <NavDropdown.Item
               onClick={() => {
                 directoryContext.setManualFolderSelect(true);

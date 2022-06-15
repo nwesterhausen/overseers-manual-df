@@ -2,7 +2,6 @@ import { Container, Tabs, Tab } from 'solid-bootstrap';
 import { appWindow } from '@tauri-apps/api/window';
 import { Component, createEffect, createResource } from 'solid-js';
 import Listing from './components/Listing';
-import { init as initStore, get as getFromStore, set as saveToStore, SAVES_PATH, LAST_SAVE } from './settings';
 import { getVersion } from '@tauri-apps/api/app';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import { useDirectoryProvider } from './providers/DirectoryProvider';
@@ -30,27 +29,11 @@ const App: Component = () => {
   createEffect(() => {
     if (directoryContext.currentSave() !== '') {
       appWindow.setTitle(`${APP_NAME} ${appVersion()} - ${directoryContext.currentSave()}`);
-      saveToStore(LAST_SAVE, directoryContext.currentSave());
       rawsContext.setLoadRaws(true);
     } else {
       appWindow.setTitle(`${APP_NAME} ${appVersion()}`);
     }
   });
-
-  // Setting up the settings storage.
-  initStore()
-    // After its setup, try to get the save directory from the settings
-    .then(() => {
-      return getFromStore(SAVES_PATH);
-    })
-    // With the save folder, set it as the drag and drop path, since that's the path we set programmatically
-    // and let the effects do the rest.
-    .then((val) => {
-      if (val !== '') {
-        directoryContext.setDragAndDropPath(val);
-      }
-    })
-    .catch(console.error);
 
   return (
     <>

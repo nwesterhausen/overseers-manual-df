@@ -3,7 +3,7 @@ import { open as tauriOpen, OpenDialogOptions } from '@tauri-apps/api/dialog';
 import { listen } from '@tauri-apps/api/event';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import { readDir } from '@tauri-apps/api/fs';
-import { set as saveToStore, SAVES_PATH } from '../settings';
+import { init as initStore, get as getFromStore, set as saveToStore, DF_PATH, LAST_SAVE } from '../settings';
 
 /**
  * Dialog options for the select directory window
@@ -23,7 +23,7 @@ const openDialogOptions: OpenDialogOptions = {
  * @param manpath - path from the open directory dialog
  * @returns array of directories leading to the save directory
  */
-function getSavePathFromWorldDat(dadpath: string, manpath: string): string[] {
+function setDFPathFromWorldDat(dadpath: string, manpath: string): string[] {
   let targetPath = dadpath;
   if (manpath && manpath !== '') {
     targetPath = manpath;
@@ -32,13 +32,7 @@ function getSavePathFromWorldDat(dadpath: string, manpath: string): string[] {
   if (targetPath.indexOf('\\') !== -1) {
     pathDelimation = '\\';
   }
-  let pathArr = targetPath.split(pathDelimation);
-  while (pathArr[pathArr.length - 1] !== 'save') {
-    pathArr = pathArr.slice(0, -1);
-    if (pathArr.length === 0) {
-      return [];
-    }
-  }
+  const pathArr = targetPath.split(pathDelimation);
   return pathArr;
 }
 
@@ -70,11 +64,18 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   const [manuallySpecifiedPath] = createResource(doManualFolderSelect, performTauriOpenDiaglog);
   // Since we are splitting (and verifying) the path, we use a memo which reacts if either a file is dropped or if the
   // resource is updated
-  const saveFolderPath = createMemo(() => getSavePathFromWorldDat(dragAndDropPath(), manuallySpecifiedPath()));
+  const dfFolderPath = createMemo((): string[] => setDFPathFromWorldDat(dragAndDropPath(), manuallySpecifiedPath()));
+  // Based on the DF Folder path, we can expose the save direcotry
+  const saveFolderPath = createMemo((): string[] => {
+    if (dfFolderPath().length > 0) {
+      return dfFolderPath().concat('data', 'save');
+    }
+    return [];
+  });
   // Based on the memo changing, we update the save folder path (and save it to our settings storage)
   createEffect(() => {
-    if (saveFolderPath().length) {
-      saveToStore(SAVES_PATH, saveFolderPath().join('/')); // Decided to deliminate with `/` in the settings file
+    if (dfFolderPath().length > 0) {
+      saveToStore(DF_PATH, dfFolderPath().join('/')); // Decided to deliminate with `/` in the settings file
     }
   });
   // List of possible save folders (each can have their own raws)
@@ -83,8 +84,9 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   const [currentSave, setCurrentSave] = createSignal<string>('');
   // When we update the save directory, we need to update the list of possible saves
   createEffect(() => {
-    if (saveFolderPath().length) {
-      readDir(saveFolderPath().join('/'))
+    if (dfFolderPath().join('').length > 0) {
+      const savePath = dfFolderPath().concat('data', 'save').join('/');
+      readDir(savePath)
         .then((values) => {
           console.log(values);
           const saveArr = [];
@@ -93,9 +95,22 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
           });
           setSaveDirectoryOptions(saveArr);
         })
+        .then(() => getFromStore(LAST_SAVE))
+        .then((last_save) => {
+          console.log(`Checking for ${last_save} within valid options.`);
+          if (saveDirectoryOptions().indexOf(last_save) > -1) {
+            setCurrentSave(last_save);
+          }
+        })
         .catch(console.error);
     } else {
       setManualFolderSelect(false);
+    }
+  });
+  // Save the current save to store when it changes
+  createEffect(() => {
+    if (currentSave() !== '') {
+      saveToStore(LAST_SAVE, currentSave());
     }
   });
 
@@ -103,12 +118,30 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   listen('tauri://file-drop', (event) => {
     setDragAndDropPath(event.payload[0]);
   });
+
+  // Setting up the settings storage.
+  initStore()
+    // After its setup, try to get the save directory from the settings
+    .then(() => {
+      return getFromStore(DF_PATH);
+    })
+    // With the save folder, set it as the drag and drop path, since that's the path we set programmatically
+    // and let the effects do the rest.
+    .then((val) => {
+      if (val.length > 0) {
+        console.log('Setting initial value for directory to', val);
+        setDragAndDropPath(val);
+      }
+    })
+    .catch(console.error);
+
   return {
     setManualFolderSelect,
-    saveFolderPath,
+    dfFolderPath,
     currentSave,
     saveDirectoryOptions,
     setCurrentSave,
     setDragAndDropPath,
+    saveFolderPath,
   };
 });
