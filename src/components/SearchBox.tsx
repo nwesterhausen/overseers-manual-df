@@ -14,7 +14,7 @@ const SearchBox: Component = () => {
   }
   return (
     <Switch>
-      <Match when={rawsContext.parsingStatus() === STS_IDLE}>
+      <Match when={rawsContext.currentStatus() === STS_IDLE}>
         {rawsContext.jsonRawsResource().length === 0 ? (
           <>
             <p class='text-center'>Please choose a save to load raws from:</p>
@@ -44,19 +44,19 @@ const SearchBox: Component = () => {
           </>
         )}
       </Match>
-      <Match when={rawsContext.parsingStatus() === STS_LOADING}>
+      <Match when={rawsContext.currentStatus() === STS_LOADING}>
         <Stack class='justify-content-center d-flex' direction='horizontal' gap={3}>
           <Spinner animation='grow' />
           <span>Loading raws...</span>
         </Stack>
       </Match>
-      <Match when={rawsContext.parsingStatus() === STS_PARSING}>
-        <Stack class='justify-content-center d-flex' direction='horizontal' gap={3}>
-          <Spinner animation='grow' />
+      <Match when={rawsContext.currentStatus() === STS_PARSING}>
+        <Stack class='justify-content-center d-flex' gap={3}>
           <span>Parsing raw files...</span>
+          {rawsContext.parsingProgressBar()}
         </Stack>
       </Match>
-      <Match when={rawsContext.parsingStatus() === STS_EMPTY}>
+      <Match when={rawsContext.currentStatus() === STS_EMPTY}>
         <>
           <p class='text-center'>
             No raws found in <strong>{directoryContext.currentSave()}</strong>
