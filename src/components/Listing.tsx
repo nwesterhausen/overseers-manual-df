@@ -8,10 +8,20 @@ import CreatureListing from './CreatureListing';
 const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
   // Perform the filter on the data we have.
   const listingList = createMemo((): Raw[] => {
+    if (props.searchString === '') {
+      return props.data;
+    }
+    const searchTerms = props.searchString.split(' ');
     return props.data.filter((raw) => {
       return (
         // Filter the object based on the searchableString value
-        raw.searchString && raw.searchString.indexOf(props.searchString) !== -1
+        raw.searchString &&
+        searchTerms.filter((v) => {
+          for (const term of raw.searchString) {
+            if (term.indexOf(v) !== -1) return true;
+          }
+          return false;
+        }).length === searchTerms.length
       );
     });
   });

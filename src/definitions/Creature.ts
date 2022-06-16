@@ -421,7 +421,13 @@ export const PetValueStatus = (creature: Creature): string => {
   return ret.join(' ');
 };
 
-export const GenerateSearchString = (creature: Creature): string => {
+/**
+ * Returns an array of search terms that describe the creature.
+ *
+ * @param creature - Creature to create search terms for
+ * @returns An array of strings that can be used to describe the creature
+ */
+export const GenerateSearchString = (creature: Creature): string[] => {
   const searchableTerms = [
     SearchableNames(creature.names_map),
     creature.lays_eggs ? `eggs ${CondesedEggSize(creature.egg_sizes)}` : '',
@@ -437,5 +443,5 @@ export const GenerateSearchString = (creature: Creature): string => {
     searchableTerms.push(creature.intelligence.EVERY[0] ? 'learns' : '');
     searchableTerms.push(creature.intelligence.EVERY[1] ? 'speaks' : '');
   }
-  return searchableTerms.join(' ').replaceAll('  ', ' ');
+  return searchableTerms.join(' ').replaceAll('  ', ' ').split(' ');
 };
