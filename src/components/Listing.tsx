@@ -41,9 +41,7 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
       defaultActiveKey={realizedActiveKey()}
       activeKey={realizedActiveKey()}
       onSelect={(key) => {
-        console.log('selected', key);
         setActiveKey(key);
-        console.log(realizedActiveKey(), selectedLetter());
       }}>
       <AlphaLinks alphabet={alphaHeadings()} id={secretid} />
       {listingList().length > 0 ? (
