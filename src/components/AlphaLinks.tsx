@@ -11,6 +11,13 @@ const AlphaLinks: Component<{ alphabet: string[]; id: string }> = (props) => {
           </Nav.Item>
         )}
       </For>
+      {props.alphabet.length > 0 ? (
+        <Nav.Item>
+          <Nav.Link eventKey={`${props.id}-all`}>{'all'.toUpperCase()}</Nav.Link>
+        </Nav.Item>
+      ) : (
+        <></>
+      )}
     </Nav>
   );
 };

@@ -23,9 +23,12 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
 
   // Filter the active key around
   const [activeKey, setActiveKey] = createSignal(`${secretid}-${alphaHeadings()[0]}`);
+  const selectedLetter = createMemo(() => {
+    return activeKey().split('-')[1];
+  });
   const realizedActiveKey = createMemo(() => {
     const currKey: string = activeKey().split('-')[1];
-    if (alphaHeadings().indexOf(currKey) === -1) {
+    if (alphaHeadings().indexOf(currKey) === -1 && currKey !== 'all') {
       return `${secretid}-${alphaHeadings()[0]}`;
     }
     return activeKey();
@@ -33,29 +36,50 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
 
   return (
     <Tab.Container
-      mountOnEnter={true}
+      mountOnEnter
       id={secretid}
-      defaultActiveKey={`${secretid}-${alphaHeadings()[0]}`}
+      defaultActiveKey={realizedActiveKey()}
       activeKey={realizedActiveKey()}
       onSelect={(key) => {
+        console.log('selected', key);
         setActiveKey(key);
+        console.log(realizedActiveKey(), selectedLetter());
       }}>
       <AlphaLinks alphabet={alphaHeadings()} id={secretid} />
-      <Tab.Content>
-        <For each={alphaHeadings()}>
-          {(letter) => (
-            <Tab.Pane eventKey={`${secretid}-${letter}`}>
-              <Accordion flush>
-                <For
-                  each={listingList().filter((v) => v.name.toLowerCase().startsWith(letter))}
-                  fallback={<div>No items</div>}>
+      {listingList().length > 0 ? (
+        <Tab.Content>
+          <For each={alphaHeadings()}>
+            {(letter) => (
+              <Tab.Pane eventKey={`${secretid}-${letter}`}>
+                <Accordion flush>
+                  {letter === selectedLetter() ? (
+                    <For
+                      each={listingList().filter((v) => v.name.toLowerCase().startsWith(letter))}
+                      fallback={<div>No items</div>}>
+                      {(raw) => (isCreature(raw) ? <CreatureListing creature={raw as Creature} /> : '')}
+                    </For>
+                  ) : (
+                    <></>
+                  )}
+                </Accordion>
+              </Tab.Pane>
+            )}
+          </For>
+          <Tab.Pane eventKey={`${secretid}-all`}>
+            <Accordion flush>
+              {'all' === selectedLetter() ? (
+                <For each={listingList()} fallback={<div>No items</div>}>
                   {(raw) => (isCreature(raw) ? <CreatureListing creature={raw as Creature} /> : '')}
                 </For>
-              </Accordion>
-            </Tab.Pane>
-          )}
-        </For>
-      </Tab.Content>
+              ) : (
+                <></>
+              )}
+            </Accordion>
+          </Tab.Pane>
+        </Tab.Content>
+      ) : (
+        <p class='text-center'>No results matching "{props.searchString}"</p>
+      )}
     </Tab.Container>
   );
 };
