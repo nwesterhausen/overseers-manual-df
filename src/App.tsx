@@ -43,7 +43,13 @@ const App: Component = () => {
         {rawsContext.jsonRawsResource().length === 0 || rawsContext.currentStatus() !== STS_IDLE ? (
           <></>
         ) : (
-          <Tabs defaultActiveKey='bestiary' class='my-3'>
+          <Tabs
+            defaultActiveKey='bestiary'
+            class={`my-3 ${
+              rawsContext.jsonRawsResource().length === 0 || rawsContext.currentStatus() !== STS_IDLE
+                ? 'invisible'
+                : 'visible'
+            }`}>
             {/* A bestiary (from bestiarum vocabulum) is a compendium of beasts. */}
             <Tab eventKey='bestiary' title='Bestiary'>
               <Listing data={rawsContext.jsonRawsResource()} searchString={searchContext.searchString()} />
