@@ -3,12 +3,12 @@
   height: 1.5em;
 }
 
-.listing-letter {
-  padding-left: 1.25rem;
+.letter-nav .nav-item {
+  padding: 0;
+  cursor: pointer;
 }
-
-.listing-nav {
-  text-decoration: none;
+.letter-nav .nav-item .nav-link {
+  padding: 0.5rem;
 }
 
 .double-badge span {

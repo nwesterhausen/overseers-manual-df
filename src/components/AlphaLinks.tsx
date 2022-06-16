@@ -1,17 +1,24 @@
-import { Stack } from 'solid-bootstrap';
+import { Nav } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
 
 const AlphaLinks: Component<{ alphabet: string[]; id: string }> = (props) => {
   return (
-    <Stack direction='horizontal' class='d-flex justify-content-center' gap={3}>
+    <Nav variant='pills' class='d-flex justify-content-center letter-nav'>
       <For each={props.alphabet} fallback={<></>}>
         {(letter) => (
-          <a class='listing-nav' href={`#${props.id}-${letter}`}>
-            {letter.toUpperCase()}
-          </a>
+          <Nav.Item>
+            <Nav.Link eventKey={`${props.id}-${letter}`}>{letter.toUpperCase()}</Nav.Link>
+          </Nav.Item>
         )}
       </For>
-    </Stack>
+      {props.alphabet.length > 0 ? (
+        <Nav.Item>
+          <Nav.Link eventKey={`${props.id}-all`}>{'all'.toUpperCase()}</Nav.Link>
+        </Nav.Item>
+      ) : (
+        <></>
+      )}
+    </Nav>
   );
 };
 
