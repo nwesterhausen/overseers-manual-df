@@ -76,7 +76,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
     const result = rawsArr.flat();
 
-    if (result.length > 0) {
+    if (Array.isArray(result)) {
       const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.name < b.name ? -1 : 1));
 
       for (let i = 0; i < sortResult.length; i++) {
@@ -115,17 +115,20 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 const ReadAllRawFilePaths = async (basepath: string): Promise<string[]> => {
   const possibleRaws: string[] = [];
 
-  const entries = await readDir(basepath, { recursive: true });
-
-  for (const entry of entries) {
-    console.log(entry);
-    if (entry.children && entry.name === 'objects') {
-      for (const e of entry.children) {
-        if (e.name.endsWith('.txt')) {
-          possibleRaws.push(e.path);
+  try {
+    const entries = await readDir(basepath, { recursive: true });
+    for (const entry of entries) {
+      console.log(entry);
+      if (entry.children && entry.name === 'objects') {
+        for (const e of entry.children) {
+          if (e.name.endsWith('.txt')) {
+            possibleRaws.push(e.path);
+          }
         }
       }
     }
+  } catch (err) {
+    console.warn(err);
   }
 
   return possibleRaws;
