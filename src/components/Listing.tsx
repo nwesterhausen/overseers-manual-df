@@ -1,5 +1,5 @@
-import { Accordion } from 'solid-bootstrap';
-import { Component, createMemo, For } from 'solid-js';
+import { Accordion, Tab } from 'solid-bootstrap';
+import { Component, createMemo, createSignal, For } from 'solid-js';
 import { Creature, isCreature } from '../definitions/Creature';
 import { Raw, RawsFirstLetters } from '../definitions/Raw';
 import AlphaLinks from './AlphaLinks';
@@ -8,10 +8,20 @@ import CreatureListing from './CreatureListing';
 const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
   // Perform the filter on the data we have.
   const listingList = createMemo((): Raw[] => {
+    if (props.searchString === '') {
+      return props.data;
+    }
+    const searchTerms = props.searchString.split(' ');
     return props.data.filter((raw) => {
       return (
         // Filter the object based on the searchableString value
-        raw.searchString && raw.searchString.indexOf(props.searchString) !== -1
+        raw.searchString &&
+        searchTerms.filter((v) => {
+          for (const term of raw.searchString) {
+            if (term.indexOf(v) !== -1) return true;
+          }
+          return false;
+        }).length === searchTerms.length
       );
     });
   });
@@ -19,30 +29,66 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
   const alphaHeadings = createMemo(() => {
     return RawsFirstLetters(listingList() as Raw[]);
   });
-  // const [pages, setPages] = createSignal([]);
   const secretid = `list${Math.floor(Math.random() * 100)}`;
+
+  // Filter the active key around
+  const [activeKey, setActiveKey] = createSignal(`${secretid}-${alphaHeadings()[0]}`);
+  const selectedLetter = createMemo(() => {
+    return activeKey().split('-')[1];
+  });
+  const realizedActiveKey = createMemo(() => {
+    const currKey: string = activeKey().split('-')[1];
+    if (alphaHeadings().indexOf(currKey) === -1 && currKey !== 'all') {
+      return `${secretid}-${alphaHeadings()[0]}`;
+    }
+    return activeKey();
+  });
+
   return (
-    <>
+    <Tab.Container
+      mountOnEnter
+      id={secretid}
+      defaultActiveKey={realizedActiveKey()}
+      activeKey={realizedActiveKey()}
+      onSelect={(key) => {
+        setActiveKey(key);
+      }}>
       <AlphaLinks alphabet={alphaHeadings()} id={secretid} />
-      <ul class='list-unstyled'>
-        <For each={alphaHeadings()}>
-          {(letter) => (
-            <li>
-              <span id={`${secretid}-${letter}`} class='bolder fs-3 listing-letter'>
-                {letter.toUpperCase()}
-              </span>
-              <Accordion flush>
-                <For
-                  each={listingList().filter((v) => v.name.toLowerCase().startsWith(letter))}
-                  fallback={<div>No items</div>}>
+      {listingList().length > 0 ? (
+        <Tab.Content>
+          <For each={alphaHeadings()}>
+            {(letter) => (
+              <Tab.Pane eventKey={`${secretid}-${letter}`}>
+                <Accordion flush>
+                  {letter === selectedLetter() ? (
+                    <For
+                      each={listingList().filter((v) => v.name.toLowerCase().startsWith(letter))}
+                      fallback={<div>No items</div>}>
+                      {(raw) => (isCreature(raw) ? <CreatureListing creature={raw as Creature} /> : '')}
+                    </For>
+                  ) : (
+                    <></>
+                  )}
+                </Accordion>
+              </Tab.Pane>
+            )}
+          </For>
+          <Tab.Pane eventKey={`${secretid}-all`}>
+            <Accordion flush>
+              {'all' === selectedLetter() ? (
+                <For each={listingList()} fallback={<div>No items</div>}>
                   {(raw) => (isCreature(raw) ? <CreatureListing creature={raw as Creature} /> : '')}
                 </For>
-              </Accordion>
-            </li>
-          )}
-        </For>
-      </ul>
-    </>
+              ) : (
+                <></>
+              )}
+            </Accordion>
+          </Tab.Pane>
+        </Tab.Content>
+      ) : (
+        <p class='text-center'>No results matching "{props.searchString}"</p>
+      )}
+    </Tab.Container>
   );
 };
 
