@@ -1,3 +1,12 @@
+## [0.9.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.8.1...v0.9.0) (2022-06-16)
+
+
+### Features
+
+* ⚡️ better searches ([ea8c3f8](https://github.com/nwesterhausen/overseers-manual-df/commit/ea8c3f8f61cd12d17f45e541fe16a1b15551230f))
+* ⚡️ speed improvement for listings ([9dcc1b2](https://github.com/nwesterhausen/overseers-manual-df/commit/9dcc1b2c82e7109a4c3ad1c21de50b85eead1d32))
+* 💄 listings are paginated by letter ([906e121](https://github.com/nwesterhausen/overseers-manual-df/commit/906e121bb909af73f43c376ded4b6b4fedeb7207))
+
 ## [0.8.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.8.0...v0.8.1) (2022-06-16)
 
 
