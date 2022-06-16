@@ -1,5 +1,5 @@
-import { Accordion } from 'solid-bootstrap';
-import { Component, createMemo, For } from 'solid-js';
+import { Accordion, Tab } from 'solid-bootstrap';
+import { Component, createMemo, createSignal, For } from 'solid-js';
 import { Creature, isCreature } from '../definitions/Creature';
 import { Raw, RawsFirstLetters } from '../definitions/Raw';
 import AlphaLinks from './AlphaLinks';
@@ -19,18 +19,32 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
   const alphaHeadings = createMemo(() => {
     return RawsFirstLetters(listingList() as Raw[]);
   });
-  // const [pages, setPages] = createSignal([]);
   const secretid = `list${Math.floor(Math.random() * 100)}`;
+
+  // Filter the active key around
+  const [activeKey, setActiveKey] = createSignal(`${secretid}-${alphaHeadings()[0]}`);
+  const realizedActiveKey = createMemo(() => {
+    const currKey: string = activeKey().split('-')[1];
+    if (alphaHeadings().indexOf(currKey) === -1) {
+      return `${secretid}-${alphaHeadings()[0]}`;
+    }
+    return activeKey();
+  });
+
   return (
-    <>
+    <Tab.Container
+      mountOnEnter={true}
+      id={secretid}
+      defaultActiveKey={`${secretid}-${alphaHeadings()[0]}`}
+      activeKey={realizedActiveKey()}
+      onSelect={(key) => {
+        setActiveKey(key);
+      }}>
       <AlphaLinks alphabet={alphaHeadings()} id={secretid} />
-      <ul class='list-unstyled'>
+      <Tab.Content>
         <For each={alphaHeadings()}>
           {(letter) => (
-            <li>
-              <span id={`${secretid}-${letter}`} class='bolder fs-3 listing-letter'>
-                {letter.toUpperCase()}
-              </span>
+            <Tab.Pane eventKey={`${secretid}-${letter}`}>
               <Accordion flush>
                 <For
                   each={listingList().filter((v) => v.name.toLowerCase().startsWith(letter))}
@@ -38,11 +52,11 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
                   {(raw) => (isCreature(raw) ? <CreatureListing creature={raw as Creature} /> : '')}
                 </For>
               </Accordion>
-            </li>
+            </Tab.Pane>
           )}
         </For>
-      </ul>
-    </>
+      </Tab.Content>
+    </Tab.Container>
   );
 };
 

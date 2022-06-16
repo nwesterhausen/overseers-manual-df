@@ -1,5 +1,5 @@
 import { Accordion, Tabs, Tab, Table, Stack } from 'solid-bootstrap';
-import { Component, createEffect, createSignal } from 'solid-js';
+import { Component } from 'solid-js';
 import {
   ClusterSizeStatus,
   CondesedEggSize,
@@ -9,7 +9,7 @@ import {
   TrainableStatus,
 } from '../definitions/Creature';
 import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
-import { isOutOfViewport, toTitleCase } from '../definitions/Utils';
+import { toTitleCase } from '../definitions/Utils';
 import CreatureActivityDisplay from './CreatureActivityDisplay';
 import CreatureBodySizeTable from './CreatureBodySizeTable';
 import CreatureNamesTable from './CreatureNamesTable';
@@ -33,17 +33,9 @@ import TwoPartBadge from './TwoPartBadge';
  */
 const CreatureListing: Component<{ creature: Creature }> = (props) => {
   const listingId = props.creature.objectId + 'accordian';
-  const [isVisible, setIsVisible] = createSignal(false);
-  const listenToScroll = () => {
-    setIsVisible(!isOutOfViewport(document.getElementById(listingId)).all);
-  };
-  createEffect(() => {
-    window.addEventListener('scroll', listenToScroll);
-    listenToScroll();
-    return () => window.removeEventListener('scroll', listenToScroll);
-  });
+
   return (
-    <Accordion.Item id={listingId} eventKey={listingId} class={isVisible() ? '' : 'd-none'}>
+    <Accordion.Item id={listingId} eventKey={listingId}>
       <Accordion.Header class='overflow-hidden text-nowrap'>
         {props.creature.names_map.SPECIES[0]
           .split(' ')
