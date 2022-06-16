@@ -59,7 +59,11 @@
 			"windows": {
 				"certificateThumbprint": null,
 				"digestAlgorithm": "sha256",
-				"timestampUrl": ""
+				"timestampUrl": "",
+				"wix": {
+					"template": "custom.wxs",
+					"enableElevatedUpdateTask": true
+				}
 			}
 		},
 		"security": {
