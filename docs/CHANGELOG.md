@@ -1,3 +1,11 @@
+## [0.8.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.8.0...v0.8.1) (2022-06-16)
+
+
+### Bug Fixes
+
+* ⚡️ make lisiting invisible instead of non-existent ([6949cef](https://github.com/nwesterhausen/overseers-manual-df/commit/6949ceff3e5bf54ea248b398a5517f2002822121))
+* 🐛 show message when no raws are found ([02d56ea](https://github.com/nwesterhausen/overseers-manual-df/commit/02d56eadd296a720f63255e60266ceec611e3f85))
+
 ## [0.8.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.7.2...v0.8.0) (2022-06-15)
 
 
