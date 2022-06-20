@@ -37,11 +37,16 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     return <ProgressBar now={perc} label={`${perc}%`} />;
   });
 
+  // Signal no chose save file
+  createEffect(() => {
+    if (directoryContext.currentSave().length === 0 || directoryContext.directoryPath.length === 0) {
+      setParsingStatus(STS_EMPTY);
+    }
+  });
+
   // React to changing the save directory
   createEffect(() => {
-    if (directoryContext.currentSave() !== '') {
-      setLoadRaws(true);
-    }
+    setLoadRaws(directoryContext.currentSave() !== '');
   });
 
   /**
@@ -112,6 +117,12 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   return { currentStatus, jsonRawsResource, setLoadRaws, parsingProgressBar };
 });
 
+/**
+ * Returns an array of paths for the raw files in a directory
+ *
+ * @param basepath - Directory to find raw files under
+ * @returns array of paths to raw files
+ */
 const ReadAllRawFilePaths = async (basepath: string): Promise<string[]> => {
   const possibleRaws: string[] = [];
 
