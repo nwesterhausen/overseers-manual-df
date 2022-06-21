@@ -1,3 +1,10 @@
+## [0.10.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.9.0...v0.10.0) (2022-06-21)
+
+
+### Features
+
+* ✨ directory can be either Dwarf Fortress or a Save Directory ([34c94d1](https://github.com/nwesterhausen/overseers-manual-df/commit/34c94d15347d6cb1798fd466d9732bba220d979a))
+
 ## [0.9.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.8.1...v0.9.0) (2022-06-16)
 
 
