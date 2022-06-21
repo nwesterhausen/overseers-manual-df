@@ -61,8 +61,7 @@
 				"digestAlgorithm": "sha256",
 				"timestampUrl": "",
 				"wix": {
-					"template": "custom.wxs",
-					"enableElevatedUpdateTask": true
+					"template": "custom.wxs"
 				}
 			}
 		},
