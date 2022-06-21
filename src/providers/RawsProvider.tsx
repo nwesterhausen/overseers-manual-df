@@ -2,10 +2,11 @@ import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
 import { createEffect, createMemo, createResource, createSignal, JSX } from 'solid-js';
 import { AssignBasedOn, Creature, GenerateSearchString } from '../definitions/Creature';
-import { FilterInvalidRaws } from '../definitions/Raw';
+import { FilterInvalidRaws, Raw, RawsFirstLetters } from '../definitions/Raw';
 import { useDirectoryProvider } from './DirectoryProvider';
 import { readDir } from '@tauri-apps/api/fs';
 import { ProgressBar } from 'solid-bootstrap';
+import { useSearchProvider } from './SearchProvider';
 
 // Statuses for the parsing status
 export const STS_PARSING = 'Parsing Raws',
@@ -15,12 +16,14 @@ export const STS_PARSING = 'Parsing Raws',
 
 export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const directoryContext = useDirectoryProvider();
+  const searchContext = useSearchProvider();
 
   // Signal for setting raw parse status
   const [parsingStatus, setParsingStatus] = createSignal(STS_IDLE);
-  const currentStatus = createMemo(() => {
+
+  // Log the effect changes
+  createEffect(() => {
     console.log(parsingStatus());
-    return parsingStatus();
   });
 
   // Signal for loading raws
@@ -28,6 +31,31 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   // Resource for raws
   const [jsonRawsResource] = createResource(loadRaws, parseRawsInSave, {
     initialValue: [],
+  });
+
+  // Raws after filtering by the search
+  const rawsJson = createMemo(() => {
+    if (searchContext.searchString() === '') {
+      return jsonRawsResource();
+    }
+    const searchTerms = searchContext.searchString().split(' ');
+    return jsonRawsResource().filter((raw) => {
+      return (
+        // Filter the object based on the searchableString value
+        raw.searchString &&
+        searchTerms.filter((v) => {
+          for (const term of raw.searchString) {
+            if (term.indexOf(v) !== -1) return true;
+          }
+          return false;
+        }).length === searchTerms.length
+      );
+    });
+  });
+
+  // The alphabet but only the letters for which we have entries.
+  const rawsAlphabet = createMemo((): string[] => {
+    return RawsFirstLetters(rawsJson() as Raw[]);
   });
 
   // Signal for raw parsing progress
@@ -114,7 +142,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     return [];
   }
 
-  return { currentStatus, jsonRawsResource, setLoadRaws, parsingProgressBar };
+  return { currentStatus: parsingStatus, rawsJson, setLoadRaws, parsingProgressBar, rawsAlphabet };
 });
 
 /**
