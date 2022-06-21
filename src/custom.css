@@ -47,3 +47,10 @@
 #root {
   width: calc(100vw - 00.5rem);
 }
+
+/* Fix for dark nav dropdown */
+.dropdown-item.active {
+  color: #073642 !important;
+  background-color: #a9bdbd !important;
+  font-weight: bold;
+}

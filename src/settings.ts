@@ -4,10 +4,11 @@ const store = new Store('settings.json');
 const CURRENT_VERSION = 2;
 
 const DATA_VERSION = 'dataVersion';
-export const DF_PATH = 'dfDirPath';
+export const PATH_STRING = 'dfDirPath';
 export const LAST_SAVE = 'lastSaveUsed';
+export const PATH_TYPE = 'pathType';
 
-const ValidKeys = [DATA_VERSION, DF_PATH, LAST_SAVE];
+const ValidKeys = [DATA_VERSION, PATH_STRING, LAST_SAVE, PATH_TYPE];
 
 /**
  * Initializes the store. This creates any missing values after checking that the `DATA_VERSION` matches our current version.
@@ -22,14 +23,19 @@ export async function init() {
     await store.set(DATA_VERSION, CURRENT_VERSION);
     resave = true;
   }
-  if (keys.indexOf(DF_PATH) === -1) {
-    console.log('Missing', DF_PATH);
-    await store.set(DF_PATH, '');
+  if (keys.indexOf(PATH_STRING) === -1) {
+    console.log('Missing', PATH_STRING);
+    await store.set(PATH_STRING, '');
     resave = true;
   }
   if (keys.indexOf(LAST_SAVE) === -1) {
     console.log('Missing', LAST_SAVE);
     await store.set(LAST_SAVE, '');
+    resave = true;
+  }
+  if (keys.indexOf(PATH_TYPE) === -1) {
+    console.log('Missing', PATH_TYPE);
+    await store.set(PATH_TYPE, '');
     resave = true;
   }
   if (resave) {
@@ -54,6 +60,22 @@ export async function set(key: string, value: string) {
   }
   console.log(`Set ${key} to ${value} in store`);
   await store.set(key, value);
+  await store.save();
+}
+
+/**
+ * Function to clear a stored value in the settings.json file.
+ *
+ * This function does nothing if the key is not considered valid.
+ *
+ * @param key - The key to erase data under.
+ */
+export async function clear(key: string) {
+  if (ValidKeys.indexOf(key) === -1) {
+    return;
+  }
+  console.log(`Erase stored value from ${key} in store`);
+  await store.set(key, '');
   await store.save();
 }
 
