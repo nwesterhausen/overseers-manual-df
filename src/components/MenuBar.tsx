@@ -39,6 +39,7 @@ const MenuBar: Component = () => {
               <NavDropdown.Item
                 onClick={() => {
                   directoryContext.setDirectoryType(DIR_DF);
+                  directoryContext.setCurrentSave('');
                   directoryContext.setManualFolderSelect(true);
                 }}>
                 <Stack direction='horizontal' gap={1}>
@@ -61,6 +62,7 @@ const MenuBar: Component = () => {
               <NavDropdown.Item
                 onClick={() => {
                   directoryContext.setDirectoryType(DIR_SAVE);
+                  directoryContext.setCurrentSave('');
                   directoryContext.setManualFolderSelect(true);
                 }}>
                 <Stack direction='horizontal' gap={1}>

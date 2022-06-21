@@ -13,9 +13,9 @@ import {
   clear,
 } from '../settings';
 
-export const DIR_NONE = Symbol('none'),
-  DIR_DF = Symbol('df'),
-  DIR_SAVE = Symbol('saves');
+export const DIR_NONE = 'none',
+  DIR_DF = 'df',
+  DIR_SAVE = 'saves';
 
 /**
  * Dialog options for the select directory window
@@ -48,7 +48,7 @@ function splitPathAgnostically(path: string): string[] {
 
 export const [DirectoryProvider, useDirectoryProvider] = createContextProvider(() => {
   // Directory type, so we can be flexible
-  const [directoryType, setDirectoryType] = createSignal<symbol>(DIR_NONE);
+  const [directoryType, setDirectoryType] = createSignal<string>(DIR_NONE);
   // Signal to open the directory open dialog, change to true to open it
   const [activateManualDirectorySelection, setManualDirectorySelection] = createSignal(false);
   // Path to the dropped file location
@@ -83,11 +83,11 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   const saveFolderPath = createMemo((): string[] => {
     if (directoryType() === DIR_DF) {
       return directoryPath().concat('data', 'save');
-    }
-    if (directoryType() === DIR_SAVE) {
+    } else if (directoryType() === DIR_SAVE) {
       return directoryPath();
+    } else {
+      return [];
     }
-    return [];
   });
   // Based on the memo changing, we update the save folder path (and save it to our settings storage)
   createEffect(() => {
@@ -105,7 +105,7 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   const [currentSave, setCurrentSave] = createSignal<string>('');
   // If the directory is determined to be "NONE" then we need to clear out any saved directory
   createEffect(() => {
-    if (directoryType() !== DIR_NONE) {
+    if (directoryType() == DIR_NONE) {
       setCurrentSave('');
       setDragAndDropPath([]);
       setManualDirectorySelection(false);
@@ -190,6 +190,8 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   createEffect(() => {
     if (currentSave() !== '') {
       saveToStore(LAST_SAVE, currentSave());
+    } else {
+      clear(LAST_SAVE);
     }
   });
   // Some extra logging
