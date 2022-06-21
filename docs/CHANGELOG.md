@@ -1,3 +1,10 @@
+## [0.10.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.10.0...v0.10.1) (2022-06-21)
+
+
+### Bug Fixes
+
+* ⚡️ improve loading speed ([54ff153](https://github.com/nwesterhausen/overseers-manual-df/commit/54ff1532fc615217260217b2b0b03c730efacc94))
+
 ## [0.10.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.9.0...v0.10.0) (2022-06-21)
 
 
