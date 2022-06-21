@@ -1,19 +1,17 @@
 import { Form, Spinner, Stack } from 'solid-bootstrap';
 import { Component, Match, Switch } from 'solid-js';
 import { debounce } from '@solid-primitives/scheduled';
-import { STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../providers/RawsProvider';
-import { useDirectoryProvider } from '../providers/DirectoryProvider';
+import { STS_EMPTY, STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../providers/RawsProvider';
 import { useSearchProvider } from '../providers/SearchProvider';
 
 const SearchBox: Component = () => {
   const rawsContext = useRawsProvider();
-  const directoryContext = useDirectoryProvider();
   const searchContext = useSearchProvider();
-  if (directoryContext.saveFolderPath().length == 0) {
-    return <></>;
-  }
   return (
     <Switch>
+      <Match when={rawsContext.currentStatus() === STS_EMPTY}>
+        <></>
+      </Match>
       <Match when={rawsContext.currentStatus() === STS_IDLE}>
         <Form.Control
           type='search'

@@ -13,7 +13,7 @@ const DFDirectoryNotSet: Component = () => {
             <h2>No valid path is set!</h2>
             <p>
               To set the path to your Dwarf Fortress game, drag and drop the <code>gamelog.txt</code> file from the
-              dwarf fortress directory onto this window, or use the button below to pull up a folder selection dialog.
+              dwarf fortress directory onto this window, or use a button below to pull up a folder selection dialog.
             </p>
             <Stack class='p-3' direction='horizontal' gap={3}>
               <Button

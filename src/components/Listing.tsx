@@ -1,68 +1,41 @@
 import { Accordion, Tab } from 'solid-bootstrap';
 import { Component, createMemo, createSignal, For } from 'solid-js';
 import { Creature, isCreature } from '../definitions/Creature';
-import { Raw, RawsFirstLetters } from '../definitions/Raw';
+import { useRawsProvider } from '../providers/RawsProvider';
+import { useSearchProvider } from '../providers/SearchProvider';
 import AlphaLinks from './AlphaLinks';
 import CreatureListing from './CreatureListing';
 
-const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
-  // Perform the filter on the data we have.
-  const listingList = createMemo((): Raw[] => {
-    if (props.searchString === '') {
-      return props.data;
-    }
-    const searchTerms = props.searchString.split(' ');
-    return props.data.filter((raw) => {
-      return (
-        // Filter the object based on the searchableString value
-        raw.searchString &&
-        searchTerms.filter((v) => {
-          for (const term of raw.searchString) {
-            if (term.indexOf(v) !== -1) return true;
-          }
-          return false;
-        }).length === searchTerms.length
-      );
-    });
-  });
-  // The alphabet but only the letters for which we have entries.
-  const alphaHeadings = createMemo(() => {
-    return RawsFirstLetters(listingList() as Raw[]);
-  });
+const Listing: Component = () => {
+  const rawsContext = useRawsProvider();
+  const searchContext = useSearchProvider();
+
   const secretid = `list${Math.floor(Math.random() * 100)}`;
 
   // Filter the active key around
-  const [activeKey, setActiveKey] = createSignal(`${secretid}-${alphaHeadings()[0]}`);
+  const [activeKey, setActiveKey] = createSignal(`${secretid}-${rawsContext.rawsAlphabet()[0]}`);
   const selectedLetter = createMemo(() => {
     return activeKey().split('-')[1];
-  });
-  const realizedActiveKey = createMemo(() => {
-    const currKey: string = activeKey().split('-')[1];
-    if (alphaHeadings().indexOf(currKey) === -1 && currKey !== 'all') {
-      return `${secretid}-${alphaHeadings()[0]}`;
-    }
-    return activeKey();
   });
 
   return (
     <Tab.Container
       mountOnEnter
       id={secretid}
-      defaultActiveKey={realizedActiveKey()}
-      activeKey={realizedActiveKey()}
+      defaultActiveKey={secretid + '-' + rawsContext.rawsAlphabet()[0]}
       onSelect={(key) => {
         setActiveKey(key);
       }}>
-      <AlphaLinks alphabet={alphaHeadings()} id={secretid} />
-      {listingList().length > 0 ? (
+      <AlphaLinks id={secretid} />
+      {rawsContext.rawsJson().length > 0 ? (
         <Tab.Content>
-          <For each={alphaHeadings()}>
+          <For each={rawsContext.rawsAlphabet()}>
             {(letter) => (
               <Tab.Pane eventKey={`${secretid}-${letter}`}>
                 <Accordion flush>
                   {letter === selectedLetter() ? (
                     <For
-                      each={listingList().filter((v) => v.name.toLowerCase().startsWith(letter))}
+                      each={rawsContext.rawsJson().filter((v) => v.name.toLowerCase().startsWith(letter))}
                       fallback={<div>No items</div>}>
                       {(raw) => (isCreature(raw) ? <CreatureListing creature={raw as Creature} /> : '')}
                     </For>
@@ -76,7 +49,7 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
           <Tab.Pane eventKey={`${secretid}-all`}>
             <Accordion flush>
               {'all' === selectedLetter() ? (
-                <For each={listingList()} fallback={<div>No items</div>}>
+                <For each={rawsContext.rawsJson()} fallback={<div>No items</div>}>
                   {(raw) => (isCreature(raw) ? <CreatureListing creature={raw as Creature} /> : '')}
                 </For>
               ) : (
@@ -86,7 +59,7 @@ const Listing: Component<{ data: Raw[]; searchString: string }> = (props) => {
           </Tab.Pane>
         </Tab.Content>
       ) : (
-        <p class='text-center'>No results matching "{props.searchString}"</p>
+        <p class='text-center'>No results matching "{searchContext.searchString()}"</p>
       )}
     </Tab.Container>
   );

@@ -12,13 +12,13 @@ import { SearchProvider } from './providers/SearchProvider';
 
 render(
   () => (
-    <DirectoryProvider>
-      <RawsProvider>
-        <SearchProvider>
+    <SearchProvider>
+      <DirectoryProvider>
+        <RawsProvider>
           <App />
-        </SearchProvider>
-      </RawsProvider>
-    </DirectoryProvider>
+        </RawsProvider>
+      </DirectoryProvider>
+    </SearchProvider>
   ),
   document.getElementById('root') as HTMLElement
 );
