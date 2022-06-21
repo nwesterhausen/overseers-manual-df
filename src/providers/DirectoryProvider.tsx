@@ -192,6 +192,10 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
       saveToStore(LAST_SAVE, currentSave());
     }
   });
+  // Some extra logging
+  createEffect(() => {
+    console.debug(`Manual folder selection ${activateManualDirectorySelection() ? 'activated' : 'reset'}`);
+  });
 
   // Listen for a file being dropped on the window to change the save location.
   listen('tauri://file-drop', (event) => {
