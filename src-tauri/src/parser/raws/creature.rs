@@ -383,6 +383,19 @@ impl DFCreature {
         }
         false
     }
+    pub fn breedable(&self) -> bool {
+        let mut has_male = false;
+        let mut has_female = false;
+        for self_caste in &self.castes {
+            if self_caste.name.eq("FEMALE") {
+                has_female = true;
+            }
+            if self_caste.name.eq("MALE") {
+                has_male = true;
+            }
+        }
+        has_female & has_male
+    }
     pub fn get_egg_sizes(&self) -> HashMap<String, u32> {
         let mut values: HashMap<String, u32> = HashMap::new();
         for self_caste in &self.castes {

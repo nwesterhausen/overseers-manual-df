@@ -6,9 +6,10 @@ import {
   Creature,
   GrownAtStatus,
   PetValueStatus,
+  ReproductionStatus,
   TrainableStatus,
+  LifeExpectancyStatus,
 } from '../definitions/Creature';
-import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
 import { toTitleCase } from '../definitions/Utils';
 import CreatureActivityDisplay from './CreatureActivityDisplay';
 import CreatureBodySizeTable from './CreatureBodySizeTable';
@@ -93,8 +94,8 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
                   <td>{LifeExpectancyStatus(props.creature)}</td>
                 </tr>
                 <tr>
-                  <th>Egg Laying</th>
-                  <td>{EggLayingStatus(props.creature)}</td>
+                  <th>Reproduction</th>
+                  <td>{ReproductionStatus(props.creature)}</td>
                 </tr>
                 <tr>
                   <th>Found In</th>

@@ -1,3 +1,4 @@
+import { JSX } from 'solid-js/jsx-runtime';
 import { Raw } from './Raw';
 import { SearchableNames, SimplifyVolume, toTitleCase } from './Utils';
 
@@ -14,6 +15,7 @@ export type CasteRange<T> = {
 export type Creature = {
   max_age: CasteRange<number[]>;
   lays_eggs: boolean;
+  breedable: boolean;
   clutch_size: CasteRange<number[]>;
   based_on?: string;
   biomes: string[];
@@ -364,6 +366,7 @@ const DEFAULT_CREATURE: Creature = {
   parent_raw: '',
   max_age: {} as CasteRange<number[]>,
   lays_eggs: false,
+  breedable: false,
   clutch_size: {} as CasteRange<number[]>,
   biomes: [],
   cluster_range: [],
@@ -445,3 +448,17 @@ export const GenerateSearchString = (creature: Creature): string[] => {
   }
   return searchableTerms.join(' ').replaceAll('  ', ' ').split(' ');
 };
+
+/**
+ *
+ * @param creature
+ */
+export function ReproductionStatus(creature: Creature): string {
+  if (creature.lays_eggs) {
+    return EggLayingStatus(creature);
+  } else if (creature.breedable) {
+    return `live birth`;
+  } else {
+    return 'Only wild reproduction.';
+  }
+}
