@@ -1,3 +1,10 @@
+## [0.10.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.10.1...v0.10.2) (2022-06-21)
+
+
+### Bug Fixes
+
+* 🔥 remove elevated update task ([3106edc](https://github.com/nwesterhausen/overseers-manual-df/commit/3106edcde780828fb676b10af243984194dabbbd))
+
 ## [0.10.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.10.0...v0.10.1) (2022-06-21)
 
 
