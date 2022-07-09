@@ -1,3 +1,10 @@
+## [0.10.3](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.10.2...v0.10.3) (2022-07-09)
+
+
+### Bug Fixes
+
+* ⚡️ replace solidjs-icons with solid-icons ([a209244](https://github.com/nwesterhausen/overseers-manual-df/commit/a209244baae8531ea8b6e0bfda006569199ed30f))
+
 ## [0.10.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.10.1...v0.10.2) (2022-06-21)
 
 
