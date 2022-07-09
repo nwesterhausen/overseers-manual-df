@@ -1,6 +1,6 @@
 import { Button, OverlayTrigger, Tooltip } from 'solid-bootstrap';
 import { Component, createEffect, createSignal } from 'solid-js';
-import { HiChevronDoubleUp } from 'solidjs-icons/hi';
+import { HiSolidChevronDoubleUp } from 'solid-icons/hi';
 
 const ScrollToTopBtn: Component = () => {
   const [isVisible, setIsVisible] = createSignal(false);
@@ -23,7 +23,7 @@ const ScrollToTopBtn: Component = () => {
               window.scrollTo(0, 0);
             }}
             variant='outline-secondary'>
-            <HiChevronDoubleUp />
+            <HiSolidChevronDoubleUp />
           </Button>
         </OverlayTrigger>
       ) : (
