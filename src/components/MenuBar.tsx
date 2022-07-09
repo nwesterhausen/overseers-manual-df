@@ -1,7 +1,7 @@
 import { Container, Nav, Navbar, NavDropdown, OverlayTrigger, Stack, Tooltip } from 'solid-bootstrap';
 import { Component, For, Match, Switch } from 'solid-js';
 import { DIR_DF, DIR_NONE, DIR_SAVE, useDirectoryProvider } from '../providers/DirectoryProvider';
-import { BsFillfolderSymlinkFill } from 'solidjs-icons/bs';
+import { BsFolderSymlinkFill } from 'solid-icons/bs';
 
 const MenuBar: Component = () => {
   const directoryContext = useDirectoryProvider();
@@ -46,7 +46,7 @@ const MenuBar: Component = () => {
                     {directoryContext.directoryPath().length > 0 ? 'Change ' : 'Set '}
                     Dwarf Fortress Directory
                   </span>
-                  <BsFillfolderSymlinkFill />
+                  <BsFolderSymlinkFill />
                 </Stack>
               </NavDropdown.Item>
             </OverlayTrigger>
@@ -65,7 +65,7 @@ const MenuBar: Component = () => {
                 }}>
                 <Stack direction='horizontal' gap={1}>
                   <span class='me-auto'>Choose a save-only location instead</span>
-                  <BsFillfolderSymlinkFill />
+                  <BsFolderSymlinkFill />
                 </Stack>
               </NavDropdown.Item>
             </OverlayTrigger>
