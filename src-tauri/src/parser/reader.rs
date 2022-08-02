@@ -13,7 +13,7 @@ enum RawObjectKind {
 
 pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
     let re = Regex::new(r"(\[(?P<key>[^\[:]+):?(?P<value>[^\]\[]*)])").unwrap();
-    let enc = encoding_rs::Encoding::for_label("latin1".as_bytes());
+    let enc = encoding_rs::Encoding::for_label(b"latin1");
 
     let file = File::open(&input_path).unwrap();
     let decoding_reader = DecodeReaderBytesBuilder::new().encoding(enc).build(file);
@@ -77,11 +77,11 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                     }
                 }
                 "BIOME" => match biomes::BIOMES.get(&cap[3]) {
-                    Some(biome_name) => creature_temp.biomes.push(biome_name.to_string()),
+                    Some(biome_name) => creature_temp.biomes.push((*biome_name).to_string()),
                     None => println!("{} is not in biome dictionary!", &cap[3]),
                 },
                 "BODY_SIZE" => {
-                    let split = cap[3].split(":").collect::<Vec<&str>>();
+                    let split = cap[3].split(':').collect::<Vec<&str>>();
                     match split.len() {
                         3 => caste_temp.body_size.push(creature::DFBodySize::new(
                             split[0].parse().expect("Bad year argument for body size"),
@@ -92,7 +92,7 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                     }
                 }
                 "MILKABLE" => {
-                    let split = cap[3].split(":").collect::<Vec<&str>>();
+                    let split = cap[3].split(':').collect::<Vec<&str>>();
                     match split.len() {
                         3 => {
                             caste_temp.milkable = creature::DFMilkable::new(
@@ -167,7 +167,7 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                     caste_temp.pop_ratio = cap[3].parse().expect("POP_RATIO should be an integer");
                 }
                 "CLUTCH_SIZE" => {
-                    let split = cap[3].split(":").collect::<Vec<&str>>();
+                    let split = cap[3].split(':').collect::<Vec<&str>>();
                     caste_temp.clutch_size[0] = split[0]
                         .parse()
                         .expect("CLUTCH_SIZE min should be an integer");
@@ -176,7 +176,7 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                         .expect("CLUTCH_SIZE max should be an integer");
                 }
                 "LITTERSIZE" => {
-                    let split = cap[3].split(":").collect::<Vec<&str>>();
+                    let split = cap[3].split(':').collect::<Vec<&str>>();
                     caste_temp.litter_size[0] = split[0]
                         .parse()
                         .expect("LITTERSIZE min should be an integer");
@@ -188,7 +188,7 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                     caste_temp.description = String::from(&cap[3]);
                 }
                 "MAXAGE" => {
-                    let split = cap[3].split(":").collect::<Vec<&str>>();
+                    let split = cap[3].split(':').collect::<Vec<&str>>();
                     caste_temp.max_age[0] =
                         split[0].parse().expect("MAXAGE min should be an integer");
                     caste_temp.max_age[1] =
@@ -209,19 +209,19 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                         | creature::ACTIVE_CREPUSCULAR;
                 }
                 "DIURNAL" => {
-                    caste_temp.active_time = caste_temp.active_time | creature::ACTIVE_DIURNAL;
+                    caste_temp.active_time |= creature::ACTIVE_DIURNAL;
                 }
                 "CREPUSCULAR" => {
-                    caste_temp.active_time = caste_temp.active_time | creature::ACTIVE_CREPUSCULAR;
+                    caste_temp.active_time |= creature::ACTIVE_CREPUSCULAR;
                 }
                 "MATUTINAL" => {
-                    caste_temp.active_time = caste_temp.active_time | creature::ACTIVE_MATUTINAL;
+                    caste_temp.active_time |= creature::ACTIVE_MATUTINAL;
                 }
                 "VESPERTINE" => {
-                    caste_temp.active_time = caste_temp.active_time | creature::ACTIVE_VESPERTINE;
+                    caste_temp.active_time |= creature::ACTIVE_VESPERTINE;
                 }
                 "NOCTURNAL" => {
-                    caste_temp.active_time = caste_temp.active_time | creature::ACTIVE_NOCTURNAL;
+                    caste_temp.active_time |= creature::ACTIVE_NOCTURNAL;
                 }
                 "AMBUSHPREDATOR" => {
                     caste_temp.ambush_predator = true;
@@ -230,31 +230,31 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                     caste_temp.amphibious = true;
                 }
                 "CURIOUSBEAST_EATER" => {
-                    caste_temp.curious_beast = caste_temp.curious_beast | creature::CURIOUS_EATER;
+                    caste_temp.curious_beast |= creature::CURIOUS_EATER;
                 }
                 "CURIOUSBEAST_GUZZLER" => {
-                    caste_temp.curious_beast = caste_temp.curious_beast | creature::CURIOUS_GUZZLER;
+                    caste_temp.curious_beast |= creature::CURIOUS_GUZZLER;
                 }
                 "CURIOUSBEAST_ITEM" => {
-                    caste_temp.curious_beast = caste_temp.curious_beast | creature::CURIOUS_ITEM;
+                    caste_temp.curious_beast |= creature::CURIOUS_ITEM;
                 }
                 "NO_SPRING" => {
-                    caste_temp.no_season = caste_temp.no_season | creature::NO_SPRING;
+                    caste_temp.no_season |= creature::NO_SPRING;
                 }
                 "NO_SUMMER" => {
-                    caste_temp.no_season = caste_temp.no_season | creature::NO_SUMMER;
+                    caste_temp.no_season |= creature::NO_SUMMER;
                 }
                 "NO_AUTUMN" => {
-                    caste_temp.no_season = caste_temp.no_season | creature::NO_FALL;
+                    caste_temp.no_season |= creature::NO_FALL;
                 }
                 "NO_WINTER" => {
-                    caste_temp.no_season = caste_temp.no_season | creature::NO_WINTER;
+                    caste_temp.no_season |= creature::NO_WINTER;
                 }
                 "TRAINABLE_HUNTING" => {
-                    caste_temp.trainable = caste_temp.trainable | creature::TRAINABLE_HUNTING;
+                    caste_temp.trainable |= creature::TRAINABLE_HUNTING;
                 }
                 "TRAINABLE_WAR" => {
-                    caste_temp.trainable = caste_temp.trainable | creature::TRAINABLE_WAR;
+                    caste_temp.trainable |= creature::TRAINABLE_WAR;
                 }
                 "TRAINABLE" => {
                     caste_temp.trainable = caste_temp.trainable
@@ -265,7 +265,7 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                     creature_temp.artificial_hiveable = true;
                 }
                 "CLUSTER_NUMBER" => {
-                    let split = cap[3].split(":").collect::<Vec<&str>>();
+                    let split = cap[3].split(':').collect::<Vec<&str>>();
                     creature_temp.cluster_number[0] = split[0]
                         .parse()
                         .expect("CLUSTER_NUMBER min should be an integer");
@@ -274,7 +274,7 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                         .expect("CLUSTER_NUMBER max should be an integer");
                 }
                 "POPULATION_NUMBER" => {
-                    let split = cap[3].split(":").collect::<Vec<&str>>();
+                    let split = cap[3].split(':').collect::<Vec<&str>>();
                     creature_temp.population_number[0] = split[0]
                         .parse()
                         .expect("POPULATION_NUMBER min should be an integer");
