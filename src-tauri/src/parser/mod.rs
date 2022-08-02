@@ -5,6 +5,7 @@ use std::path::Path;
 use walkdir::WalkDir;
 
 mod conversion;
+mod parsing;
 mod raws;
 mod reader;
 

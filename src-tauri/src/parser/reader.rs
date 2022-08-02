@@ -1,43 +1,26 @@
+use super::parsing;
 use super::raws::{biomes, creature, names};
+
 use encoding_rs_io::DecodeReaderBytesBuilder;
+use lazy_static::lazy_static;
 use regex::Regex;
 use slug::slugify;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::num::ParseIntError;
 
-enum RawObjectKind {
+pub enum RawObjectKind {
     Creature,
     None,
 }
 
-fn parse_min_max_range(split: &Vec<&str>) -> Result<[u16; 2], ParseIntError> {
-    let min: u16 = match split[0].parse() {
-        Ok(n) => n,
-        Err(e) => {
-            println!("min_value parsing error\n{:?}", e);
-            return Err(e);
-        }
-    };
-    let max: u16 = match split[1].parse() {
-        Ok(n) => n,
-        Err(e) => {
-            println!("max_value parsing error\n{:?}", e);
-            return Err(e);
-        }
-    };
-    Ok([min, max])
+lazy_static! {
+    static ref RE: Regex = Regex::new(r"(\[(?P<key>[^\[:]+):?(?P<value>[^\]\[]*)])").unwrap();
+    static ref ENC: Option<&'static encoding_rs::Encoding> =
+        encoding_rs::Encoding::for_label(b"latin1");
 }
 
 pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
-    let re = match Regex::new(r"(\[(?P<key>[^\[:]+):?(?P<value>[^\]\[]*)])") {
-        Ok(re) => re,
-        Err(e) => panic!("App is unusable if the regular expression failed!\n{:?}", e),
-    };
-
     let mut results: Vec<creature::DFCreature> = Vec::new();
-
-    let enc = encoding_rs::Encoding::for_label(b"latin1");
 
     let file = match File::open(&input_path) {
         Ok(f) => f,
@@ -47,7 +30,7 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
         }
     };
 
-    let decoding_reader = DecodeReaderBytesBuilder::new().encoding(enc).build(file);
+    let decoding_reader = DecodeReaderBytesBuilder::new().encoding(*ENC).build(file);
     let reader = BufReader::new(decoding_reader);
 
     // let mut creatures = 0;
@@ -74,7 +57,7 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
             raw_filename = String::from(&line);
             continue;
         }
-        for cap in re.captures_iter(&line) {
+        for cap in RE.captures_iter(&line) {
             // println!("Key: {} Value: {}", &cap[2], &cap[3])
             match &cap[2] {
                 "OBJECT" => match &cap[3] {
@@ -119,30 +102,13 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                 "BODY_SIZE" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
                     if split.len() == 3 {
-                        let years: u32 = match split[0].parse() {
-                            Ok(n) => n,
+                        match parsing::parse_body_size(&split) {
+                            Ok(size) => caste_temp.body_size.push(size),
                             Err(e) => {
-                                println!("Unable to parse years from BODY_SIZE\n{:?}", e);
+                                println!("Unable to parse BODYSIZE\n{:?}", e);
                                 break;
                             }
-                        };
-                        let days: u32 = match split[1].parse() {
-                            Ok(n) => n,
-                            Err(e) => {
-                                println!("Unable to parse days from BODY_SIZE\n{:?}", e);
-                                break;
-                            }
-                        };
-                        let size: u32 = match split[2].parse() {
-                            Ok(n) => n,
-                            Err(e) => {
-                                println!("Unable to parse size from BODY_SIZE\n{:?}", e);
-                                break;
-                            }
-                        };
-                        caste_temp
-                            .body_size
-                            .push(creature::DFBodySize::new(years, days, size));
+                        }
                     }
                 }
                 "MILKABLE" => {
@@ -224,7 +190,7 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                 },
                 "CLUTCH_SIZE" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
-                    match parse_min_max_range(&split) {
+                    match parsing::parse_min_max_range(&split) {
                         Ok(range) => {
                             caste_temp.clutch_size[0] = range[0];
                             caste_temp.clutch_size[1] = range[1];
@@ -234,7 +200,7 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                 }
                 "LITTERSIZE" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
-                    match parse_min_max_range(&split) {
+                    match parsing::parse_min_max_range(&split) {
                         Ok(range) => {
                             caste_temp.litter_size[0] = range[0];
                             caste_temp.litter_size[1] = range[1];
@@ -247,7 +213,7 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                 }
                 "MAXAGE" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
-                    match parse_min_max_range(&split) {
+                    match parsing::parse_min_max_range(&split) {
                         Ok(range) => {
                             caste_temp.max_age[0] = range[0];
                             caste_temp.max_age[1] = range[1];
@@ -327,7 +293,7 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                 }
                 "CLUSTER_NUMBER" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
-                    match parse_min_max_range(&split) {
+                    match parsing::parse_min_max_range(&split) {
                         Ok(range) => {
                             creature_temp.cluster_number[0] = range[0];
                             creature_temp.cluster_number[1] = range[1];
@@ -337,7 +303,7 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                 }
                 "POPULATION_NUMBER" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
-                    match parse_min_max_range(&split) {
+                    match parsing::parse_min_max_range(&split) {
                         Ok(range) => {
                             creature_temp.population_number[0] = range[0];
                             creature_temp.population_number[1] = range[1];
