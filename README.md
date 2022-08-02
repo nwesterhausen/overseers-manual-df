@@ -85,9 +85,9 @@ This is just a convenience type for referencing data which is stored at the Cast
 | `'SPECIES'`       | the creature generally                  |
 | `'child_SPECIES'` | children of the creature generally      |
 | `'baby_SPECIES'`  | babies the creature generally           |
-| `'EVERY'`         | every Caste of the creature             |
-| `'child_EVERY'`   | children of every Caste of the creature |
-| `'baby_EVERY'`    | babies of every Caste of the creature   |
+| `'ALL'`         | ALL Caste of the creature             |
+| `'child_ALL'`   | children of ALL Caste of the creature |
+| `'baby_ALL'`    | babies of ALL Caste of the creature   |
 | `'MALE'`          | Male Caste of the creature              |
 | `'child_MALE'`    | Male children Caste of the creature     |
 | `'baby_MALE'`     | Male babies Caste of the creature       |

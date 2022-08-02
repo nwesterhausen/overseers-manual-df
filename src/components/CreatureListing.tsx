@@ -47,28 +47,28 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
           ) : (
             <></>
           )}
-          {props.creature.flier.EVERY ? <TwoPartBadge bg='primary' name='Flier' value={''} /> : <></>}
-          {props.creature.intelligence.EVERY &&
-          props.creature.intelligence.EVERY[0] &&
-          props.creature.intelligence.EVERY[1] ? (
+          {props.creature.flier.ALL ? <TwoPartBadge bg='primary' name='Flier' value={''} /> : <></>}
+          {props.creature.intelligence.ALL &&
+          props.creature.intelligence.ALL[0] &&
+          props.creature.intelligence.ALL[1] ? (
             <TwoPartBadge bg='primary' name='Intelligent' value={''} />
           ) : (
             <>
-              {props.creature.intelligence.EVERY && props.creature.intelligence.EVERY[0] ? (
+              {props.creature.intelligence.ALL && props.creature.intelligence.ALL[0] ? (
                 <TwoPartBadge bg='primary' name='Learns' value={''} />
               ) : (
                 <></>
               )}
-              {props.creature.intelligence.EVERY && props.creature.intelligence.EVERY[1] ? (
+              {props.creature.intelligence.ALL && props.creature.intelligence.ALL[1] ? (
                 <TwoPartBadge bg='primary' name='Speaks' value={''} />
               ) : (
                 <></>
               )}
             </>
           )}
-          {props.creature.gnawer.EVERY ? <TwoPartBadge bg='primary' name='Gnawer' value={''} /> : <></>}
-          {props.creature.pet_value.EVERY > 0 ? (
-            <TwoPartBadge bg='primary' name='Pet Value' value={`${props.creature.pet_value.EVERY}`} />
+          {props.creature.gnawer.ALL ? <TwoPartBadge bg='primary' name='Gnawer' value={''} /> : <></>}
+          {props.creature.pet_value.ALL > 0 ? (
+            <TwoPartBadge bg='primary' name='Pet Value' value={`${props.creature.pet_value.ALL}`} />
           ) : (
             <></>
           )}
@@ -119,13 +119,13 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
                 </tr>
                 <tr>
                   <th>Trainable</th>
-                  <td>{TrainableStatus(props.creature.trainable.EVERY)}</td>
+                  <td>{TrainableStatus(props.creature.trainable.ALL)}</td>
                 </tr>
                 <tr>
                   <th>Defining Classes</th>
                   <td>
-                    {props.creature.creature_class.EVERY
-                      ? props.creature.creature_class.EVERY.map((v) => toTitleCase(v.replaceAll('_', ' '))).join(', ')
+                    {props.creature.creature_class.ALL
+                      ? props.creature.creature_class.ALL.map((v) => toTitleCase(v.replaceAll('_', ' '))).join(', ')
                       : 'None'}
                   </td>
                 </tr>

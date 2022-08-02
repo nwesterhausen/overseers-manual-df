@@ -17,7 +17,7 @@ const CreatureBodySizeTable: Component<{ bodysize: CasteRange<BodySizeRange[]> }
           {(caste) =>
             props.bodysize[caste].length ? (
               <tr>
-                {caste === 'EVERY' ? (
+                {caste === 'ALL' ? (
                   ''
                 ) : (
                   <td>

@@ -7,9 +7,9 @@ const CondenseNames = (names: CasteRange<string[]>): CasteRange<string[]> => {
   const condensed: CasteRange<string[]> = {};
   // First add the species name to condensed
   condensed.SPECIES = names.SPECIES;
-  // For every other option, if it doesn't match and isn't empty, add it
-  if (names.EVERY && names.EVERY.join('') !== names.SPECIES.join('')) {
-    condensed.EVERY = names.EVERY;
+  // For ALL other option, if it doesn't match and isn't empty, add it
+  if (names.ALL && names.ALL.join('') !== names.SPECIES.join('')) {
+    condensed.ALL = names.ALL;
   }
   if (names.MALE && names.MALE.join('') !== names.SPECIES.join('')) {
     condensed.MALE = names.MALE;
@@ -21,8 +21,8 @@ const CondenseNames = (names: CasteRange<string[]>): CasteRange<string[]> => {
   for (const k of [
     'child_SPECIES',
     'baby_SPECIES',
-    'child_EVERY',
-    'baby_EVERY',
+    'child_ALL',
+    'baby_ALL',
     'child_MALE',
     'baby_MALE',
     'child_FEMALE',
@@ -44,7 +44,7 @@ const CreatureNamesTable: Component<{ names: CasteRange<string[]> }> = (props) =
           {(caste) =>
             names[caste] && names[caste].length && names[caste].join('').length ? (
               <tr>
-                {caste === 'EVERY' ? (
+                {caste === 'ALL' ? (
                   <td>General</td>
                 ) : (
                   <td>

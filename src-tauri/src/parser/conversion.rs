@@ -36,7 +36,7 @@ pub struct WebCreature {
 }
 
 impl WebCreature {
-    pub fn from(creature: DFCreature) -> Self {
+    pub fn from(creature: &DFCreature) -> Self {
         Self {
             identifier: creature.get_identifier(),
             parent_raw: creature.get_parent_raw(),

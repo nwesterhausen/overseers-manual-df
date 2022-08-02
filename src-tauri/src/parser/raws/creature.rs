@@ -60,7 +60,7 @@ pub struct DFCreature {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DFCreatureCaste {
     // Identification
-    name: String,
+    pub name: String,
     // Boolean Flags
     pub adopts_owner: bool,
     pub ambush_predator: bool,
@@ -267,9 +267,9 @@ impl DFCreature {
             population_number: [1, 1], //default 1:1
 
             // strings
-            general_baby_name: SingPlurName::new(String::new()),
-            general_child_name: SingPlurName::new(String::new()),
-            name: Name::new(String::new()),
+            general_baby_name: SingPlurName::new(""),
+            general_child_name: SingPlurName::new(""),
+            name: Name::new(""),
 
             // Listicle
             biomes: Vec::new(),
@@ -415,14 +415,14 @@ impl DFCreature {
             }
         }
         if intelligence.is_empty() {
-            intelligence.insert(String::from("EVERY"), [false, false]);
+            intelligence.insert(String::from("ALL"), [false, false]);
         }
         intelligence
     }
     pub fn get_gnawer(&self) -> HashMap<String, bool> {
         let mut gnawer: HashMap<String, bool> = HashMap::new();
         for self_caste in &self.castes {
-            if self_caste.gnawer || self_caste.name.eq("EVERY") {
+            if self_caste.gnawer || self_caste.name.eq("ALL") {
                 gnawer.insert(String::from(&self_caste.name), self_caste.gnawer);
             }
         }
@@ -431,7 +431,7 @@ impl DFCreature {
     pub fn get_flier(&self) -> HashMap<String, bool> {
         let mut flier: HashMap<String, bool> = HashMap::new();
         for self_caste in &self.castes {
-            if self_caste.flier || self_caste.name.eq("EVERY") {
+            if self_caste.flier || self_caste.name.eq("ALL") {
                 flier.insert(String::from(&self_caste.name), self_caste.flier);
             }
         }
@@ -440,7 +440,7 @@ impl DFCreature {
     pub fn get_trainable(&self) -> HashMap<String, u8> {
         let mut trainable: HashMap<String, u8> = HashMap::new();
         for self_caste in &self.castes {
-            if self_caste.trainable > 0 || self_caste.name.eq("EVERY") {
+            if self_caste.trainable > 0 || self_caste.name.eq("ALL") {
                 trainable.insert(String::from(&self_caste.name), self_caste.trainable);
             }
         }
@@ -449,7 +449,7 @@ impl DFCreature {
     pub fn get_active_time(&self) -> HashMap<String, u8> {
         let mut active_time: HashMap<String, u8> = HashMap::new();
         for self_caste in &self.castes {
-            if self_caste.active_time > 0 || self_caste.name.eq("EVERY") {
+            if self_caste.active_time > 0 || self_caste.name.eq("ALL") {
                 active_time.insert(String::from(&self_caste.name), self_caste.active_time);
             }
         }
@@ -458,7 +458,7 @@ impl DFCreature {
     pub fn get_inactive_season(&self) -> HashMap<String, u8> {
         let mut no_season: HashMap<String, u8> = HashMap::new();
         for self_caste in &self.castes {
-            if self_caste.no_season > 0 || self_caste.name.eq("EVERY") {
+            if self_caste.no_season > 0 || self_caste.name.eq("ALL") {
                 no_season.insert(String::from(&self_caste.name), self_caste.no_season);
             }
         }
@@ -602,9 +602,9 @@ impl DFCreatureCaste {
             pop_ratio: 0,
 
             // String Tokens
-            baby_name: SingPlurName::new(String::new()),
-            caste_name: Name::new(String::new()),
-            child_name: SingPlurName::new(String::new()),
+            baby_name: SingPlurName::new(""),
+            caste_name: Name::new(""),
+            child_name: SingPlurName::new(""),
             description: String::new(),
 
             // listicles
@@ -627,7 +627,7 @@ impl DFMilkable {
 }
 
 impl DFBodySize {
-    pub fn new(years: u32, days: u32, size_cm3: u32) -> Self {
+    pub const fn new(years: u32, days: u32, size_cm3: u32) -> Self {
         Self {
             years,
             days,
