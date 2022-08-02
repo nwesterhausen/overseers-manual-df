@@ -296,36 +296,36 @@ impl DFCreature {
     }
     pub fn get_names_by_caste(&self) -> HashMap<String, Vec<String>> {
         let mut names_map: HashMap<String, Vec<String>> = HashMap::new();
-        names_map.insert("SPECIES".to_string(), Vec::from(self.name.to_string_vec()));
+        names_map.insert("SPECIES".to_string(), self.name.to_string_vec());
         if !self.general_baby_name.to_string_vec()[0].is_empty() {
             names_map.insert(
                 "baby_SPECIES".to_string(),
-                Vec::from(self.general_baby_name.to_string_vec()),
+                self.general_baby_name.to_string_vec(),
             );
         }
         if !self.general_child_name.to_string_vec()[0].is_empty() {
             names_map.insert(
                 "child_SPECIES".to_string(),
-                Vec::from(self.general_child_name.to_string_vec()),
+                self.general_child_name.to_string_vec(),
             );
         }
         for self_caste in &self.castes {
             if !self_caste.baby_name.to_string_vec()[0].is_empty() {
                 names_map.insert(
                     format!("baby_{}", self_caste.name),
-                    Vec::from(self_caste.baby_name.to_string_vec()),
+                    self_caste.baby_name.to_string_vec(),
                 );
             }
             if !self_caste.child_name.to_string_vec()[0].is_empty() {
                 names_map.insert(
                     format!("child_{}", self_caste.name),
-                    Vec::from(self_caste.child_name.to_string_vec()),
+                    self_caste.child_name.to_string_vec(),
                 );
             }
             if !self_caste.caste_name.to_string_vec()[0].is_empty() {
                 names_map.insert(
-                    format!("{}", self_caste.name),
-                    Vec::from(self_caste.caste_name.to_string_vec()),
+                    self_caste.name.to_string(),
+                    self_caste.caste_name.to_string_vec(),
                 );
             }
         }
@@ -467,7 +467,7 @@ impl DFCreature {
     pub fn get_creature_class(&self) -> HashMap<String, Vec<String>> {
         let mut creature_class: HashMap<String, Vec<String>> = HashMap::new();
         for self_caste in &self.castes {
-            if self_caste.creature_class.len() > 0 {
+            if !self_caste.creature_class.is_empty() {
                 creature_class.insert(
                     String::from(&self_caste.name),
                     Vec::clone(&self_caste.creature_class),
@@ -621,7 +621,7 @@ impl DFMilkable {
     pub fn new(material: &str, frequency: u32) -> Self {
         Self {
             material: String::from(material),
-            frequency: frequency,
+            frequency,
         }
     }
 }
@@ -629,9 +629,9 @@ impl DFMilkable {
 impl DFBodySize {
     pub fn new(years: u32, days: u32, size_cm3: u32) -> Self {
         Self {
-            years: years,
-            days: days,
-            size_cm3: size_cm3,
+            years,
+            days,
+            size_cm3,
         }
     }
 }

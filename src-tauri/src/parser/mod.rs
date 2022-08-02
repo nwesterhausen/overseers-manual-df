@@ -22,7 +22,7 @@ fn parse_directory(raws_directory: String) -> Vec<raws::creature::DFCreature> {
     // Read all the files in the directory, selectively parse the .txt files
     for entry in WalkDir::new(&raws_directory)
         .into_iter()
-        .filter_map(|e| e.ok())
+        .filter_map(std::result::Result::ok)
     {
         let f_name = entry.file_name().to_string_lossy();
 
@@ -43,7 +43,7 @@ fn parse_directory(raws_directory: String) -> Vec<raws::creature::DFCreature> {
 fn turn_vec_into_json_string(v: Vec<raws::creature::DFCreature>) -> String {
     let mut owned_string: String = "[".to_owned();
     owned_string.push_str(stringify_raw_vec(v).join(",").as_str());
-    owned_string.push_str("]");
+    owned_string.push(']');
     println!("JSON String is {} characters", owned_string.len());
     owned_string
 }
@@ -68,10 +68,11 @@ fn save_vec_to_json_file(v: Vec<raws::creature::DFCreature>, out_directory: Path
 fn stringify_raw_vec(raws: Vec<raws::creature::DFCreature>) -> Vec<String> {
     let mut results: Vec<String> = Vec::new();
     for creature in raws {
-        results.push(format!(
-            "{}",
-            to_string(&conversion::WebCreature::from(creature)).unwrap()
-        ));
+        results.push(
+            to_string(&conversion::WebCreature::from(creature))
+                .unwrap()
+                .to_string(),
+        );
     }
     results
 }
