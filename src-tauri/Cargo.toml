@@ -24,6 +24,10 @@ regex = "1.5"
 slug = "0.1"
 walkdir = "2"
 
+[dependencies.lazy_static]
+git = "https://github.com/rust-lang-nursery/lazy-static.rs.git"
+rev = "e83d66490775eb953807c39d1f073a6daa3bc760"
+
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/tauri-plugin-store"
 #branch = "main"
