@@ -1,21 +1,52 @@
+use super::raws::{biomes, creature, names};
 use encoding_rs_io::DecodeReaderBytesBuilder;
 use regex::Regex;
 use slug::slugify;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-
-use super::raws::{biomes, creature, names};
+use std::num::ParseIntError;
 
 enum RawObjectKind {
     Creature,
     None,
 }
 
-pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
-    let re = Regex::new(r"(\[(?P<key>[^\[:]+):?(?P<value>[^\]\[]*)])").unwrap();
+fn parse_min_max_range(split: &Vec<&str>) -> Result<[u16; 2], ParseIntError> {
+    let min: u16 = match split[0].parse() {
+        Ok(n) => n,
+        Err(e) => {
+            println!("min_value parsing error\n{:?}", e);
+            return Err(e);
+        }
+    };
+    let max: u16 = match split[1].parse() {
+        Ok(n) => n,
+        Err(e) => {
+            println!("max_value parsing error\n{:?}", e);
+            return Err(e);
+        }
+    };
+    Ok([min, max])
+}
+
+pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
+    let re = match Regex::new(r"(\[(?P<key>[^\[:]+):?(?P<value>[^\]\[]*)])") {
+        Ok(re) => re,
+        Err(e) => panic!("App is unusable if the regular expression failed!\n{:?}", e),
+    };
+
+    let mut results: Vec<creature::DFCreature> = Vec::new();
+
     let enc = encoding_rs::Encoding::for_label(b"latin1");
 
-    let file = File::open(&input_path).unwrap();
+    let file = match File::open(&input_path) {
+        Ok(f) => f,
+        Err(e) => {
+            println!("Error opening raw file for parsing!\n{:?}", e);
+            return results;
+        }
+    };
+
     let decoding_reader = DecodeReaderBytesBuilder::new().encoding(enc).build(file);
     let reader = BufReader::new(decoding_reader);
 
@@ -27,14 +58,18 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
     let mut empty_caste = creature::DFCreatureCaste::new("none");
     let mut caste_temp = &mut empty_caste;
 
-    let mut results: Vec<creature::DFCreature> = Vec::new();
-
     for (index, line) in reader.lines().enumerate() {
         if line.is_err() {
             eprintln!("Error processing {}:{}", &input_path, index);
             continue;
         }
-        let line = line.unwrap();
+        let line = match line {
+            Ok(l) => l,
+            Err(e) => {
+                println!("Line-reading error\n{:?}", e);
+                continue;
+            }
+        };
         if index == 0 {
             raw_filename = String::from(&line);
             continue;
@@ -68,6 +103,7 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                                 started = true;
                             }
                             creature_temp = creature::DFCreature::new(&raw_filename, &cap[3]);
+                            //Todo: This is probably causing the caste problem. #33
                             creature_temp
                                 .castes
                                 .push(creature::DFCreatureCaste::new("EVERY"));
@@ -82,28 +118,45 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                 },
                 "BODY_SIZE" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
-                    match split.len() {
-                        3 => caste_temp.body_size.push(creature::DFBodySize::new(
-                            split[0].parse().expect("Bad year argument for body size"),
-                            split[1].parse().expect("Bad days argument for body size"),
-                            split[2].parse().expect("Bad size argument for body size"),
-                        )),
-                        _ => (),
+                    if split.len() == 3 {
+                        let years: u32 = match split[0].parse() {
+                            Ok(n) => n,
+                            Err(e) => {
+                                println!("Unable to parse years from BODY_SIZE\n{:?}", e);
+                                break;
+                            }
+                        };
+                        let days: u32 = match split[1].parse() {
+                            Ok(n) => n,
+                            Err(e) => {
+                                println!("Unable to parse days from BODY_SIZE\n{:?}", e);
+                                break;
+                            }
+                        };
+                        let size: u32 = match split[2].parse() {
+                            Ok(n) => n,
+                            Err(e) => {
+                                println!("Unable to parse size from BODY_SIZE\n{:?}", e);
+                                break;
+                            }
+                        };
+                        caste_temp
+                            .body_size
+                            .push(creature::DFBodySize::new(years, days, size));
                     }
                 }
                 "MILKABLE" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
-                    match split.len() {
-                        3 => {
-                            caste_temp.milkable = creature::DFMilkable::new(
-                                &format!("{}:{}", split[0], split[1]),
-                                split[2]
-                                    .parse()
-                                    .expect("Bad frequency argument for milkable"),
-                            )
-                        }
-
-                        _ => (),
+                    if split.len() == 3 {
+                        let freq: u32 = match split[2].parse() {
+                            Ok(n) => n,
+                            Err(e) => {
+                                println!("Unable to parse frequency from MILKABLE\n{:?}", e);
+                                break;
+                            }
+                        };
+                        caste_temp.milkable =
+                            creature::DFMilkable::new(&format!("{}:{}", split[0], split[1]), freq);
                     }
                 }
                 "PREFSTRING" => {
@@ -113,7 +166,7 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                     caste_temp.creature_class.push(String::from(&cap[3]));
                 }
                 "NAME" => {
-                    creature_temp.name = names::Name::new(String::from(&cap[3]));
+                    creature_temp.name = names::Name::new(&cap[3]);
                 }
                 "CASTE" => {
                     creature_temp
@@ -122,77 +175,85 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                     caste_temp = creature_temp.castes.last_mut().unwrap();
                 }
                 "CASTE_NAME" => {
-                    caste_temp.caste_name = names::Name::new(String::from(&cap[3]));
+                    caste_temp.caste_name = names::Name::new(&cap[3]);
                 }
                 "GENERAL_BABY_NAME" => {
-                    creature_temp.general_baby_name =
-                        names::SingPlurName::new(String::from(&cap[3]));
+                    creature_temp.general_baby_name = names::SingPlurName::new(&cap[3]);
                 }
                 "GENERAL_CHILD_NAME" => {
-                    creature_temp.general_child_name =
-                        names::SingPlurName::new(String::from(&cap[3]));
+                    creature_temp.general_child_name = names::SingPlurName::new(&cap[3]);
                 }
                 "LAYS_EGGS" => {
                     caste_temp.lays_eggs = true;
                 }
-                "EGG_SIZE" => {
-                    caste_temp.egg_size = cap[3].parse().expect("EGG_SIZE should be an integer");
-                }
-                "BABY" => {
-                    caste_temp.baby = cap[3].parse().expect("BABY should be an integer");
-                }
-                "CHILD" => {
-                    caste_temp.child = cap[3].parse().expect("CHILD should be an integer");
-                }
-                "DIFFICULTY" => {
-                    caste_temp.difficulty =
-                        cap[3].parse().expect("DIFFICULTY should be an integer");
-                }
-                "GRASSTRAMPLE" => {
-                    caste_temp.grass_trample =
-                        cap[3].parse().expect("GRASSTRAMPLE should be an integer");
-                }
-                "GRAZER" => {
-                    caste_temp.grazer = cap[3].parse().expect("GRAZER should be an integer");
-                }
-                "LOW_LIGHT_VISION" => {
-                    caste_temp.low_light_vision = cap[3]
-                        .parse()
-                        .expect("LOW_LIGHT_VISION should be an integer");
-                }
-                "PETVALUE" => {
-                    caste_temp.pet_value = cap[3].parse().expect("PETVALUE should be an integer");
-                }
-                "POP_RATIO" => {
-                    caste_temp.pop_ratio = cap[3].parse().expect("POP_RATIO should be an integer");
-                }
+                "EGG_SIZE" => match cap[3].parse() {
+                    Ok(n) => caste_temp.egg_size = n,
+                    Err(e) => println!("EGG_SIZE parsing error\n{:?}", e),
+                },
+                "BABY" => match cap[3].parse() {
+                    Ok(n) => caste_temp.baby = n,
+                    Err(e) => println!("BABY parsing error\n{:?}", e),
+                },
+                "CHILD" => match cap[3].parse() {
+                    Ok(n) => caste_temp.child = n,
+                    Err(e) => println!("CHILD parsing error\n{:?}", e),
+                },
+                "DIFFICULTY" => match cap[3].parse() {
+                    Ok(n) => caste_temp.difficulty = n,
+                    Err(e) => println!("DIFFICULTY parsing error\n{:?}", e),
+                },
+                "GRASSTRAMPLE" => match cap[3].parse() {
+                    Ok(n) => caste_temp.grass_trample = n,
+                    Err(e) => println!("GRASSTRAMPLE parsing error\n{:?}", e),
+                },
+                "GRAZER" => match cap[3].parse() {
+                    Ok(n) => caste_temp.grazer = n,
+                    Err(e) => println!("GRAZER parsing error\n{:?}", e),
+                },
+                "LOW_LIGHT_VISION" => match cap[3].parse() {
+                    Ok(n) => caste_temp.low_light_vision = n,
+                    Err(e) => println!("LOW_LIGHT_VISION parsing error\n{:?}", e),
+                },
+                "PETVALUE" => match cap[3].parse() {
+                    Ok(n) => caste_temp.pet_value = n,
+                    Err(e) => println!("PETVALUE parsing error\n{:?}", e),
+                },
+                "POP_RATIO" => match cap[3].parse() {
+                    Ok(n) => caste_temp.pop_ratio = n,
+                    Err(e) => println!("POP_RATIO parsing error\n{:?}", e),
+                },
                 "CLUTCH_SIZE" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
-                    caste_temp.clutch_size[0] = split[0]
-                        .parse()
-                        .expect("CLUTCH_SIZE min should be an integer");
-                    caste_temp.clutch_size[1] = split[1]
-                        .parse()
-                        .expect("CLUTCH_SIZE max should be an integer");
+                    match parse_min_max_range(&split) {
+                        Ok(range) => {
+                            caste_temp.clutch_size[0] = range[0];
+                            caste_temp.clutch_size[1] = range[1];
+                        }
+                        Err(_e) => println!("Unable to parse range for CLUTCH_SIZE"),
+                    }
                 }
                 "LITTERSIZE" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
-                    caste_temp.litter_size[0] = split[0]
-                        .parse()
-                        .expect("LITTERSIZE min should be an integer");
-                    caste_temp.litter_size[1] = split[1]
-                        .parse()
-                        .expect("LITTERSIZE max should be an integer");
+                    match parse_min_max_range(&split) {
+                        Ok(range) => {
+                            caste_temp.litter_size[0] = range[0];
+                            caste_temp.litter_size[1] = range[1];
+                        }
+                        Err(_e) => println!("Unable to parse range for LITTERSIZE"),
+                    }
                 }
                 "DESCRIPTION" => {
                     caste_temp.description = String::from(&cap[3]);
                 }
                 "MAXAGE" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
-                    caste_temp.max_age[0] =
-                        split[0].parse().expect("MAXAGE min should be an integer");
-                    caste_temp.max_age[1] =
-                        split[1].parse().expect("MAXAGE max should be an integer");
+                    match parse_min_max_range(&split) {
+                        Ok(range) => {
+                            caste_temp.max_age[0] = range[0];
+                            caste_temp.max_age[1] = range[1];
+                        }
+                        Err(_e) => println!("Unable to parse range for MAXAGE"),
+                    }
                 }
                 "COPY_TAGS_FROM" => {
                     creature_temp.copy_tags_from.push(format!(
@@ -223,7 +284,7 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                 "NOCTURNAL" => {
                     caste_temp.active_time |= creature::ACTIVE_NOCTURNAL;
                 }
-                "AMBUSHPREDATOR" => {
+                "AMBUSHPREDATOR" | "AMBUSH_PREDATOR" => {
                     caste_temp.ambush_predator = true;
                 }
                 "AMPHIBIOUS" => {
@@ -266,21 +327,23 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                 }
                 "CLUSTER_NUMBER" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
-                    creature_temp.cluster_number[0] = split[0]
-                        .parse()
-                        .expect("CLUSTER_NUMBER min should be an integer");
-                    creature_temp.cluster_number[1] = split[1]
-                        .parse()
-                        .expect("CLUSTER_NUMBER max should be an integer");
+                    match parse_min_max_range(&split) {
+                        Ok(range) => {
+                            creature_temp.cluster_number[0] = range[0];
+                            creature_temp.cluster_number[1] = range[1];
+                        }
+                        Err(_e) => println!("Unable to parse range for CLUSTER_NUMBER"),
+                    }
                 }
                 "POPULATION_NUMBER" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
-                    creature_temp.population_number[0] = split[0]
-                        .parse()
-                        .expect("POPULATION_NUMBER min should be an integer");
-                    creature_temp.population_number[1] = split[1]
-                        .parse()
-                        .expect("POPULATION_NUMBER max should be an integer");
+                    match parse_min_max_range(&split) {
+                        Ok(range) => {
+                            creature_temp.population_number[0] = range[0];
+                            creature_temp.population_number[1] = range[1];
+                        }
+                        Err(_e) => println!("Unable to parse range for POPULATION_NUMBER"),
+                    }
                 }
                 "DOES_NOT_EXIST" => {
                     creature_temp.does_not_exist = true;
@@ -321,10 +384,10 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                 "VERMIN_EATER" => {
                     creature_temp.vermin_eater = true;
                 }
-                "FREQUENCY" => {
-                    creature_temp.frequency =
-                        cap[3].parse().expect("Frequency should be an integer");
-                }
+                "FREQUENCY" => match cap[3].parse() {
+                    Ok(n) => creature_temp.frequency = n,
+                    Err(e) => println!("Failed to parse FREQUENCY\n{:?}", e),
+                },
                 "LARGE_ROAMING" => {
                     creature_temp.large_roaming = true;
                 }
@@ -339,9 +402,6 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                 }
                 "ADOPTS_OWNER" => {
                     caste_temp.adopts_owner = true;
-                }
-                "AMBUSH_PREDATOR" => {
-                    caste_temp.ambush_predator = true;
                 }
                 "BENIGN" => {
                     caste_temp.benign = true;
@@ -443,10 +503,7 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                 "MEGABEAST" => {
                     caste_temp.megabeast = true;
                 }
-                "MISCHIEVIOUS" => {
-                    caste_temp.mischievous = true;
-                }
-                "MISCHIEVOUS" => {
+                "MISCHIEVIOUS" | "MISCHIEVOUS" => {
                     caste_temp.mischievous = true;
                 }
                 "MOUNT" => {
@@ -616,6 +673,9 @@ pub fn parse_file(input_path: String) -> Vec<creature::DFCreature> {
                 }
                 "WEBIMMUNE" => {
                     caste_temp.web_immune = true;
+                }
+                "SELECT_CASTE" => {
+                    //Todo
                 }
                 &_ => (),
             }

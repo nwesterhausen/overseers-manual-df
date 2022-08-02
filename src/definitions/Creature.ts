@@ -38,9 +38,9 @@ export const CasteOptions = [
   'SPECIES',
   'child_SPECIES',
   'baby_SPECIES',
-  'EVERY',
-  'child_EVERY',
-  'baby_EVERY',
+  'ALL',
+  'child_ALL',
+  'baby_ALL',
   'MALE',
   'child_MALE',
   'baby_MALE',
@@ -164,7 +164,7 @@ export const GrownAtStatus = (grown_data: CasteRange<number>): string => {
   const sts: string[] = [];
   for (const caste of castes) {
     if (grown_data[caste] > 0) {
-      if (caste === 'EVERY') {
+      if (caste === 'ALL') {
         sts.push(`They reach adulthood at ${grown_data[caste]} years.`);
       } else {
         sts.push(`${caste[0]}${caste.slice(1).toLowerCase()}s reach adulthood at ${grown_data[caste]} years.`);
@@ -337,11 +337,11 @@ const TRAINABLE_HUNTING = 1, // 0001
 export const AssignBasedOn = (creature: Creature, basedOn: Creature): Creature => {
   // Special cases handled here before we go through any other keys that might be "default"
   if (
-    creature.creature_class.EVERY &&
-    creature.creature_class.EVERY.length > 1 &&
-    basedOn.creature_class.EVERY.length > 1
+    creature.creature_class.ALL &&
+    creature.creature_class.ALL.length > 1 &&
+    basedOn.creature_class.ALL.length > 1
   ) {
-    creature.creature_class.EVERY = [...new Set(creature.creature_class.EVERY.concat(basedOn.creature_class.EVERY))];
+    creature.creature_class.ALL = [...new Set(creature.creature_class.ALL.concat(basedOn.creature_class.ALL))];
   }
 
   // Go through all keys and assign if they are empty or defaults
@@ -368,33 +368,33 @@ const DEFAULT_CREATURE: Creature = {
   biomes: [],
   cluster_range: [],
   body_size: {
-    EVERY: [],
+    ALL: [],
   },
   grown_at: {} as CasteRange<number>,
   egg_sizes: {} as CasteRange<number>,
   pet_value: {} as CasteRange<number>,
   intelligence: {
-    EVERY: [false, false],
+    ALL: [false, false],
   },
   flier: {
-    EVERY: false,
+    ALL: false,
   },
   gnawer: {
-    EVERY: false,
+    ALL: false,
   },
   trainable: {
-    EVERY: 0,
+    ALL: 0,
   },
   active_time: {
-    EVERY: 0,
+    ALL: 0,
   },
   inactive_season: {
-    EVERY: 0,
+    ALL: 0,
   },
   creature_class: {},
   names_map: {
     SPECIES: [],
-    EVERY: [],
+    ALL: [],
   },
   local_pops_controllable: false,
   local_pops_produce_heroes: false,
@@ -409,8 +409,8 @@ const DEFAULT_CREATURE: Creature = {
 export const PetValueStatus = (creature: Creature): string => {
   const ret: string[] = [];
   for (const c in creature.pet_value) {
-    if (c === 'EVERY' || c === 'SPECIES') {
-      ret.push(`Worth ${creature.pet_value.EVERY} as a pet.`);
+    if (c === 'ALL' || c === 'SPECIES') {
+      ret.push(`Worth ${creature.pet_value.ALL} as a pet.`);
     } else {
       ret.push(`${toTitleCase(c)}s worth ${creature.pet_value[c]} as a pet.`);
     }
@@ -438,10 +438,10 @@ export const GenerateSearchString = (creature: Creature): string[] => {
     creature.gnawer ? 'gnawer' : '',
     creature.pet_value ? `pet value ${creature.pet_value}` : '',
   ];
-  if (creature.intelligence.EVERY) {
-    searchableTerms.push(creature.intelligence.EVERY[0] && creature.intelligence.EVERY[1] ? 'intelligent' : '');
-    searchableTerms.push(creature.intelligence.EVERY[0] ? 'learns' : '');
-    searchableTerms.push(creature.intelligence.EVERY[1] ? 'speaks' : '');
+  if (creature.intelligence.ALL) {
+    searchableTerms.push(creature.intelligence.ALL[0] && creature.intelligence.ALL[1] ? 'intelligent' : '');
+    searchableTerms.push(creature.intelligence.ALL[0] ? 'learns' : '');
+    searchableTerms.push(creature.intelligence.ALL[1] ? 'speaks' : '');
   }
   return searchableTerms.join(' ').replaceAll('  ', ' ').split(' ');
 };

@@ -1,3 +1,13 @@
 {
-    "conventionalCommits.promptScopes": false
+    "conventionalCommits.promptScopes": false,
+    "rust-analyzer.checkOnSave.overrideCommand": [
+        "cargo", "clippy", 
+        "--message-format=json",
+        "--", 
+        "-W", "clippy::pedantic", 
+        "-W", "clippy::nursery", 
+        "-W", "clippy::unwrap_used", 
+        "-W", "clippy::expect_used",
+        "-A", "clippy::too_many_lines",
+    ]
 }

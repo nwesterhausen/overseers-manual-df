@@ -10,7 +10,7 @@ pub struct Name {
 
 impl Name {
     // Take the arguments for a name and split ':' into sing, plural, adjective
-    pub fn new(argument_text: String) -> Self {
+    pub fn new(argument_text: &str) -> Self {
         let mut arg_names: Vec<&str> = argument_text.split(':').collect::<Vec<&str>>();
         let mut names: Vec<&str> = Vec::new();
         while !arg_names.is_empty() {
@@ -44,7 +44,7 @@ pub struct SingPlurName {
 }
 
 impl SingPlurName {
-    pub fn new(argument_text: String) -> Self {
+    pub fn new(argument_text: &str) -> Self {
         let mut arg_names: Vec<&str> = argument_text.split(':').collect::<Vec<&str>>();
         let mut names: Vec<&str> = Vec::new();
         while !arg_names.is_empty() {
