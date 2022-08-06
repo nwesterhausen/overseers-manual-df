@@ -1,6 +1,6 @@
 use std::num::ParseIntError;
 
-use super::raws::creature;
+use super::raws::tags;
 
 pub fn parse_min_max_range(split: &[&str]) -> Result<[u16; 2], ParseIntError> {
     let min: u16 = match split[0].parse() {
@@ -20,7 +20,7 @@ pub fn parse_min_max_range(split: &[&str]) -> Result<[u16; 2], ParseIntError> {
     Ok([min, max])
 }
 
-pub fn parse_body_size(split: &[&str]) -> Result<creature::DFBodySize, ParseIntError> {
+pub fn parse_body_size(split: &[&str]) -> Result<tags::DFBodySize, ParseIntError> {
     let years: u32 = match split[0].parse() {
         Ok(n) => n,
         Err(e) => {
@@ -42,5 +42,5 @@ pub fn parse_body_size(split: &[&str]) -> Result<creature::DFBodySize, ParseIntE
             return Err(e);
         }
     };
-    Ok(creature::DFBodySize::new(years, days, size))
+    Ok(tags::DFBodySize::new(years, days, size))
 }
