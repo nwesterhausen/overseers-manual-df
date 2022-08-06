@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use super::raws::creature::{DFBodySize, DFCreature};
+use super::raws::{creature::DFCreature, tags::DFBodySize};
 
 // Creature Object for Web Consumption
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -61,8 +61,8 @@ impl WebCreature {
             active_time: creature.get_active_time(),
             inactive_season: creature.get_inactive_season(),
             creature_class: creature.get_creature_class(),
-            local_pops_controllable: creature.local_pops_controllable,
-            local_pops_produce_heros: creature.local_pops_produce_heroes,
+            local_pops_controllable: creature.get_local_pops_controllable(),
+            local_pops_produce_heros: creature.get_local_pops_produce_heros(),
         }
     }
 }

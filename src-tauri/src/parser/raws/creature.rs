@@ -3,36 +3,20 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use slug::slugify;
 
-use super::names::{Name, SingPlurName};
+use super::{
+    names::{Name, SingPlurName},
+    tags,
+};
 
-// Creature Raw
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct DFCreature {
     identifier: String,
     parent_raw: String,
     #[serde(rename = "objectId")]
     object_id: String,
+
     // Boolean Flags
-    pub artificial_hiveable: bool,
-    pub does_not_exist: bool,
-    pub evil: bool,
-    pub fanciful: bool,
-    pub generated: bool,
-    pub good: bool,
-    pub large_roaming: bool,
-    pub local_pops_controllable: bool,
-    pub local_pops_produce_heroes: bool,
-    pub loose_clusters: bool,
-    pub mundane: bool,
-    pub savage: bool,
-    pub ubiquitous: bool,
-    pub vermin_eater: bool,
-    pub vermin_fish: bool,
-    pub vermin_grounder: bool,
-    pub vermin_rotter: bool,
-    pub vermin_soil: bool,
-    pub vermin_soil_colony: bool,
+    pub tags: Vec<tags::CreatureTag>,
 
     // integers
     pub frequency: u16, //Defaults to 50 if not specified
@@ -57,105 +41,64 @@ pub struct DFCreature {
     pub copy_tags_from: Vec<String>, // vec of creature identifiers
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+impl Clone for DFCreature {
+    fn clone(&self) -> Self {
+        DFCreature {
+            identifier: self.identifier.to_string(),
+            parent_raw: self.identifier.to_string(),
+            object_id: self.identifier.to_string(),
+            tags: self.tags.clone(),
+            frequency: self.frequency,
+            cluster_number: [self.cluster_number[0], self.cluster_number[1]],
+            population_number: [self.population_number[0], self.population_number[1]],
+            general_baby_name: self.general_baby_name.clone(),
+            general_child_name: self.general_child_name.clone(),
+            name: self.name.clone(),
+            biomes: self.biomes.clone(),
+            pref_string: self.pref_string.clone(),
+            castes: self.castes.clone(),
+            copy_tags_from: self.copy_tags_from.clone(),
+        }
+    }
+}
+
+impl Clone for DFCreatureCaste {
+    fn clone(&self) -> Self {
+        DFCreatureCaste {
+            name: self.name.to_string(),
+            tags: self.tags.clone(),
+            clutch_size: [self.clutch_size[0], self.clutch_size[1]],
+            litter_size: [self.clutch_size[0], self.clutch_size[1]],
+            max_age: [self.max_age[0], self.max_age[1]],
+            active_time: self.active_time,
+            curious_beast: self.curious_beast,
+            no_season: self.no_season,
+            trainable: self.trainable,
+            baby: self.baby,
+            child: self.child,
+            difficulty: self.difficulty,
+            egg_size: self.egg_size,
+            grass_trample: self.grass_trample,
+            grazer: self.grazer,
+            low_light_vision: self.low_light_vision,
+            pet_value: self.pet_value,
+            pop_ratio: self.pop_ratio,
+            baby_name: self.baby_name.clone(),
+            caste_name: self.caste_name.clone(),
+            child_name: self.child_name.clone(),
+            description: self.description.to_string(),
+            creature_class: self.creature_class.clone(),
+            body_size: self.body_size.clone(),
+            milkable: self.milkable.clone(),
+        }
+    }
+}
+#[derive(Serialize, Deserialize, Debug)]
 pub struct DFCreatureCaste {
     // Identification
     pub name: String,
     // Boolean Flags
-    pub adopts_owner: bool,
-    pub ambush_predator: bool,
-    pub amphibious: bool,
-    pub aquatic: bool,
-    pub arena_restricted: bool,
-    pub at_peace_with_wildlife: bool,
-    pub benign: bool,
-    pub bone_carnivore: bool,
-    pub can_learn: bool,
-    pub can_speak: bool,
-    pub carnivore: bool,
-    pub common_domestic: bool,
-    pub cookable_live: bool,
-    pub demon: bool,
-    pub die_when_vermin_bite: bool,
-    pub equips: bool,
-    pub extravision: bool,
-    pub feature_beast: bool,
-    pub female: bool,
-    pub fire_immune: bool,
-    pub fire_immune_super: bool,
-    pub fish_item: bool,
-    pub flier: bool,
-    pub gnawer: bool,
-    pub has_nerves: bool,
-    pub hunts_vermin: bool,
-    pub immobile: bool,
-    pub immobile_land: bool,
-    pub immolate: bool,
-    pub intelligent: bool,
-    pub large_predator: bool,
-    pub lays_eggs: bool,
-    pub light_gen: bool,
-    pub lock_picker: bool,
-    pub magma_vision: bool,
-    pub male: bool,
-    pub meanderer: bool,
-    pub megabeast: bool,
-    pub mischievous: bool,
-    pub mount: bool,
-    pub mount_exotic: bool,
-    pub multipart_full_vision: bool,
-    pub multiple_litter_rare: bool,
-    pub natural: bool,
-    pub no_connections_for_movement: bool,
-    pub no_dizziness: bool,
-    pub no_drink: bool,
-    pub no_eat: bool,
-    pub no_fevers: bool,
-    pub no_gender: bool,
-    pub no_sleep: bool,
-    pub no_bones: bool,
-    pub no_breathe: bool,
-    pub no_emotion: bool,
-    pub no_exert: bool,
-    pub no_fear: bool,
-    pub no_meat: bool,
-    pub no_nausea: bool,
-    pub no_pain: bool,
-    pub no_skin: bool,
-    pub no_skull: bool,
-    pub no_smelly_rot: bool,
-    pub no_stuck_ins: bool,
-    pub no_stun: bool,
-    pub not_butcherable: bool,
-    pub not_living: bool,
-    pub no_thought: bool,
-    pub opposed_to_life: bool,
-    pub outsider_controllable: bool,
-    pub pack_animal: bool,
-    pub paralyzeimmune: bool,
-    pub pet: bool,
-    pub pet_exotic: bool,
-    pub power: bool,
-    pub semi_megabeast: bool,
-    pub slow_learner: bool,
-    pub small_remains: bool,
-    pub standard_grazer: bool, //Acts as [GRAZER] but set to 20000*G*(max size)^(-3/4)
-    pub supernatural: bool,
-    pub swims_innate: bool,
-    pub swims_learned: bool,
-    pub thick_web: bool,
-    pub titan: bool,
-    pub trances: bool,
-    pub trap_avoid: bool,
-    pub unique_demon: bool,
-    pub vegetation: bool,
-    pub vermin_hateable: bool,
-    pub vermin_micro: bool,
-    pub vermin_no_fish: bool,
-    pub vermin_no_roam: bool,
-    pub vermin_no_trap: bool,
-    pub wagon_puller: bool,
-    pub web_immune: bool,
+    pub tags: Vec<tags::CasteTag>,
 
     // [min, max] ranges
     pub clutch_size: [u16; 2],
@@ -189,47 +132,8 @@ pub struct DFCreatureCaste {
     pub creature_class: Vec<String>,
 
     // Custom tokens
-    pub body_size: Vec<DFBodySize>,
-    pub milkable: DFMilkable,
-}
-
-// active time:
-//      diurnal & nocturnal & crepuscular & matutinal & vespertine = 31
-pub static ACTIVE_DIURNAL: u8 = 1;
-pub static ACTIVE_NOCTURNAL: u8 = 2;
-pub static ACTIVE_CREPUSCULAR: u8 = 4;
-pub static ACTIVE_MATUTINAL: u8 = 8;
-pub static ACTIVE_VESPERTINE: u8 = 16;
-
-// curious beast:
-//      eater & guzzler & item = 7
-pub static CURIOUS_EATER: u8 = 1;
-pub static CURIOUS_GUZZLER: u8 = 2;
-pub static CURIOUS_ITEM: u8 = 4;
-
-// "no" season (creature does not appear):
-//      NO_SPRING & NO_SUMMER & NO_AUTUMN & NO_WINTER = 15
-pub static NO_SPRING: u8 = 1;
-pub static NO_SUMMER: u8 = 2;
-pub static NO_FALL: u8 = 4;
-pub static NO_WINTER: u8 = 8;
-
-// trainable:
-//      war & hunting = 3
-pub static TRAINABLE_HUNTING: u8 = 1;
-pub static TRAINABLE_WAR: u8 = 2;
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DFBodySize {
-    years: u32,
-    days: u32,
-    size_cm3: u32,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DFMilkable {
-    material: String,
-    frequency: u32,
+    pub body_size: Vec<tags::DFBodySize>,
+    pub milkable: tags::DFMilkable,
 }
 
 impl DFCreature {
@@ -239,25 +143,7 @@ impl DFCreature {
             parent_raw: String::from(raw),
             object_id: format!("{}-{}-{}", raw, "CREATURE", slugify(id)),
             // Boolean Flags
-            artificial_hiveable: false,
-            does_not_exist: false,
-            evil: false,
-            fanciful: false,
-            generated: false,
-            good: false,
-            large_roaming: false,
-            local_pops_controllable: false,
-            local_pops_produce_heroes: false,
-            loose_clusters: false,
-            mundane: false,
-            savage: false,
-            ubiquitous: false,
-            vermin_eater: false,
-            vermin_fish: false,
-            vermin_grounder: false,
-            vermin_rotter: false,
-            vermin_soil: false,
-            vermin_soil_colony: false,
+            tags: Vec::new(),
 
             // integers
             frequency: 50, //Defaults to 50 if not specified
@@ -358,8 +244,8 @@ impl DFCreature {
         }
         clutch_sizes
     }
-    pub fn get_body_sizes(&self) -> HashMap<String, Vec<DFBodySize>> {
-        let mut body_sizes: HashMap<String, Vec<DFBodySize>> = HashMap::new();
+    pub fn get_body_sizes(&self) -> HashMap<String, Vec<tags::DFBodySize>> {
+        let mut body_sizes: HashMap<String, Vec<tags::DFBodySize>> = HashMap::new();
         for self_caste in &self.castes {
             let caste_body_sizes = Vec::clone(&self_caste.body_size);
             body_sizes.insert(String::from(&self_caste.name), caste_body_sizes);
@@ -377,7 +263,7 @@ impl DFCreature {
     }
     pub fn lays_eggs(&self) -> bool {
         for self_caste in &self.castes {
-            if self_caste.lays_eggs {
+            if self_caste.tags.contains(&tags::CasteTag::LaysEggs) {
                 return true;
             }
         }
@@ -386,7 +272,7 @@ impl DFCreature {
     pub fn get_egg_sizes(&self) -> HashMap<String, u32> {
         let mut values: HashMap<String, u32> = HashMap::new();
         for self_caste in &self.castes {
-            if self_caste.lays_eggs {
+            if self_caste.tags.contains(&tags::CasteTag::LaysEggs) {
                 values.insert(String::from(&self_caste.name), self_caste.egg_size);
             }
         }
@@ -404,13 +290,18 @@ impl DFCreature {
     pub fn get_intelligence(&self) -> HashMap<String, [bool; 2]> {
         let mut intelligence: HashMap<String, [bool; 2]> = HashMap::new();
         for self_caste in &self.castes {
-            if self_caste.intelligent {
+            if self_caste.tags.contains(&tags::CasteTag::Intelligent) {
                 intelligence.insert(String::from(&self_caste.name), [true, true]);
             }
-            if self_caste.can_learn || self_caste.can_speak {
+            if self_caste.tags.contains(&tags::CasteTag::CanLearn)
+                || self_caste.tags.contains(&tags::CasteTag::CanSpeak)
+            {
                 intelligence.insert(
                     String::from(&self_caste.name),
-                    [self_caste.can_learn, self_caste.can_speak],
+                    [
+                        self_caste.tags.contains(&tags::CasteTag::CanLearn),
+                        self_caste.tags.contains(&tags::CasteTag::CanSpeak),
+                    ],
                 );
             }
         }
@@ -422,8 +313,11 @@ impl DFCreature {
     pub fn get_gnawer(&self) -> HashMap<String, bool> {
         let mut gnawer: HashMap<String, bool> = HashMap::new();
         for self_caste in &self.castes {
-            if self_caste.gnawer || self_caste.name.eq("ALL") {
-                gnawer.insert(String::from(&self_caste.name), self_caste.gnawer);
+            if self_caste.tags.contains(&tags::CasteTag::Gnawer) || self_caste.name.eq("ALL") {
+                gnawer.insert(
+                    String::from(&self_caste.name),
+                    self_caste.tags.contains(&tags::CasteTag::Gnawer),
+                );
             }
         }
         gnawer
@@ -431,8 +325,11 @@ impl DFCreature {
     pub fn get_flier(&self) -> HashMap<String, bool> {
         let mut flier: HashMap<String, bool> = HashMap::new();
         for self_caste in &self.castes {
-            if self_caste.flier || self_caste.name.eq("ALL") {
-                flier.insert(String::from(&self_caste.name), self_caste.flier);
+            if self_caste.tags.contains(&tags::CasteTag::Flier) || self_caste.name.eq("ALL") {
+                flier.insert(
+                    String::from(&self_caste.name),
+                    self_caste.tags.contains(&tags::CasteTag::Flier),
+                );
             }
         }
         flier
@@ -476,6 +373,14 @@ impl DFCreature {
         }
         creature_class
     }
+    pub fn get_local_pops_controllable(&self) -> bool {
+        self.tags
+            .contains(&tags::CreatureTag::LocalPopsControllable)
+    }
+    pub fn get_local_pops_produce_heros(&self) -> bool {
+        self.tags
+            .contains(&tags::CreatureTag::LocalPopsProduceHeroes)
+    }
 }
 
 impl DFCreatureCaste {
@@ -484,100 +389,7 @@ impl DFCreatureCaste {
             // Identification
             name: String::from(name),
             // Boolean Flags
-            adopts_owner: false,
-            ambush_predator: false,
-            amphibious: false,
-            aquatic: false,
-            arena_restricted: false,
-            at_peace_with_wildlife: false,
-            benign: false,
-            bone_carnivore: false,
-            can_learn: false,
-            can_speak: false,
-            carnivore: false,
-            common_domestic: false,
-            cookable_live: false,
-            demon: false,
-            die_when_vermin_bite: false,
-            equips: false,
-            extravision: false,
-            feature_beast: false,
-            female: false,
-            fire_immune: false,
-            fire_immune_super: false,
-            fish_item: false,
-            flier: false,
-            gnawer: false,
-            has_nerves: false,
-            hunts_vermin: false,
-            immobile: false,
-            immobile_land: false,
-            immolate: false,
-            intelligent: false,
-            large_predator: false,
-            lays_eggs: false,
-            light_gen: false,
-            lock_picker: false,
-            magma_vision: false,
-            male: false,
-            meanderer: false,
-            megabeast: false,
-            mischievous: false,
-            mount: false,
-            mount_exotic: false,
-            multipart_full_vision: false,
-            multiple_litter_rare: false,
-            natural: false,
-            no_connections_for_movement: false,
-            no_dizziness: false,
-            no_drink: false,
-            no_eat: false,
-            no_fevers: false,
-            no_gender: false,
-            no_sleep: false,
-            no_bones: false,
-            no_breathe: false,
-            no_emotion: false,
-            no_exert: false,
-            no_fear: false,
-            no_meat: false,
-            no_nausea: false,
-            no_pain: false,
-            no_skin: false,
-            no_skull: false,
-            no_smelly_rot: false,
-            no_stuck_ins: false,
-            no_stun: false,
-            not_butcherable: false,
-            not_living: false,
-            no_thought: false,
-            opposed_to_life: false,
-            outsider_controllable: false,
-            pack_animal: false,
-            paralyzeimmune: false,
-            pet: false,
-            pet_exotic: false,
-            power: false,
-            semi_megabeast: false,
-            slow_learner: false,
-            small_remains: false,
-            standard_grazer: false, //Acts as [GRAZER] but set to 20000*G*(max size)^(-3/4)
-            supernatural: false,
-            swims_innate: false,
-            swims_learned: false,
-            thick_web: false,
-            titan: false,
-            trances: false,
-            trap_avoid: false,
-            unique_demon: false,
-            vegetation: false,
-            vermin_hateable: false,
-            vermin_micro: false,
-            vermin_no_fish: false,
-            vermin_no_roam: false,
-            vermin_no_trap: false,
-            wagon_puller: false,
-            web_immune: false,
+            tags: Vec::new(),
 
             // [min, max] ranges
             clutch_size: [0, 0],
@@ -612,26 +424,7 @@ impl DFCreatureCaste {
 
             // Custom tokens
             body_size: Vec::new(),
-            milkable: DFMilkable::new("", 0),
-        }
-    }
-}
-
-impl DFMilkable {
-    pub fn new(material: &str, frequency: u32) -> Self {
-        Self {
-            material: String::from(material),
-            frequency,
-        }
-    }
-}
-
-impl DFBodySize {
-    pub const fn new(years: u32, days: u32, size_cm3: u32) -> Self {
-        Self {
-            years,
-            days,
-            size_cm3,
+            milkable: tags::DFMilkable::new("", 0),
         }
     }
 }
