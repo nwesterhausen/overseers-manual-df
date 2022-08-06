@@ -1,5 +1,6 @@
 use super::parsing;
-use super::raws::{biomes, creature, names};
+use super::raws::tags::{CasteTag, CreatureTag};
+use super::raws::{biomes, creature, names, tags};
 
 use encoding_rs_io::DecodeReaderBytesBuilder;
 use lazy_static::lazy_static;
@@ -41,6 +42,9 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
     let mut empty_caste = creature::DFCreatureCaste::new("none");
     let mut caste_temp = &mut empty_caste;
 
+    let mut caste_tags: Vec<CasteTag> = Vec::new();
+    let mut creature_tags: Vec<CreatureTag> = Vec::new();
+
     for (index, line) in reader.lines().enumerate() {
         if line.is_err() {
             eprintln!("Error processing {}:{}", &input_path, index);
@@ -81,19 +85,34 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                                 //println!("{:#?}", creature_temp);
                                 // writeln!(stream, "{},", to_string(&creature_temp).unwrap())
                                 //  .expect("Unable to write creature info to out.json.");
+                                caste_temp.tags = caste_tags.clone();
+                                creature_temp.tags = creature_tags.clone();
                                 results.push(creature_temp);
                             } else {
                                 started = true;
                             }
                             creature_temp = creature::DFCreature::new(&raw_filename, &cap[3]);
                             //Todo: This is probably causing the caste problem. #33
+
                             creature_temp
                                 .castes
-                                .push(creature::DFCreatureCaste::new("EVERY"));
+                                .push(creature::DFCreatureCaste::new("ALL"));
+
                             caste_temp = creature_temp.castes.last_mut().unwrap();
+
+                            caste_tags = Vec::new();
+                            creature_tags = Vec::new();
                         }
                         RawObjectKind::None => (),
                     }
+                }
+                "CASTE" => {
+                    caste_temp.tags = caste_tags.clone();
+                    creature_temp
+                        .castes
+                        .push(creature::DFCreatureCaste::new(&cap[3]));
+                    caste_temp = creature_temp.castes.last_mut().unwrap();
+                    caste_tags = Vec::new();
                 }
                 "BIOME" => match biomes::BIOMES.get(&cap[3]) {
                     Some(biome_name) => creature_temp.biomes.push((*biome_name).to_string()),
@@ -122,7 +141,7 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                             }
                         };
                         caste_temp.milkable =
-                            creature::DFMilkable::new(&format!("{}:{}", split[0], split[1]), freq);
+                            tags::DFMilkable::new(&format!("{}:{}", split[0], split[1]), freq);
                     }
                 }
                 "PREFSTRING" => {
@@ -134,12 +153,6 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                 "NAME" => {
                     creature_temp.name = names::Name::new(&cap[3]);
                 }
-                "CASTE" => {
-                    creature_temp
-                        .castes
-                        .push(creature::DFCreatureCaste::new(&cap[3]));
-                    caste_temp = creature_temp.castes.last_mut().unwrap();
-                }
                 "CASTE_NAME" => {
                     caste_temp.caste_name = names::Name::new(&cap[3]);
                 }
@@ -150,7 +163,7 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                     creature_temp.general_child_name = names::SingPlurName::new(&cap[3]);
                 }
                 "LAYS_EGGS" => {
-                    caste_temp.lays_eggs = true;
+                    caste_tags.push(tags::CasteTag::LaysEggs);
                 }
                 "EGG_SIZE" => match cap[3].parse() {
                     Ok(n) => caste_temp.egg_size = n,
@@ -231,65 +244,64 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                 }
                 "ALL_ACTIVE" => {
                     caste_temp.active_time = caste_temp.active_time
-                        | creature::ACTIVE_DIURNAL
-                        | creature::ACTIVE_NOCTURNAL
-                        | creature::ACTIVE_CREPUSCULAR;
+                        | tags::ACTIVE_DIURNAL
+                        | tags::ACTIVE_NOCTURNAL
+                        | tags::ACTIVE_CREPUSCULAR;
                 }
                 "DIURNAL" => {
-                    caste_temp.active_time |= creature::ACTIVE_DIURNAL;
+                    caste_temp.active_time |= tags::ACTIVE_DIURNAL;
                 }
                 "CREPUSCULAR" => {
-                    caste_temp.active_time |= creature::ACTIVE_CREPUSCULAR;
+                    caste_temp.active_time |= tags::ACTIVE_CREPUSCULAR;
                 }
                 "MATUTINAL" => {
-                    caste_temp.active_time |= creature::ACTIVE_MATUTINAL;
+                    caste_temp.active_time |= tags::ACTIVE_MATUTINAL;
                 }
                 "VESPERTINE" => {
-                    caste_temp.active_time |= creature::ACTIVE_VESPERTINE;
+                    caste_temp.active_time |= tags::ACTIVE_VESPERTINE;
                 }
                 "NOCTURNAL" => {
-                    caste_temp.active_time |= creature::ACTIVE_NOCTURNAL;
+                    caste_temp.active_time |= tags::ACTIVE_NOCTURNAL;
                 }
                 "AMBUSHPREDATOR" | "AMBUSH_PREDATOR" => {
-                    caste_temp.ambush_predator = true;
+                    caste_tags.push(tags::CasteTag::AmbushPredator);
                 }
                 "AMPHIBIOUS" => {
-                    caste_temp.amphibious = true;
+                    caste_tags.push(tags::CasteTag::Amphibious);
                 }
                 "CURIOUSBEAST_EATER" => {
-                    caste_temp.curious_beast |= creature::CURIOUS_EATER;
+                    caste_temp.curious_beast |= tags::CURIOUS_EATER;
                 }
                 "CURIOUSBEAST_GUZZLER" => {
-                    caste_temp.curious_beast |= creature::CURIOUS_GUZZLER;
+                    caste_temp.curious_beast |= tags::CURIOUS_GUZZLER;
                 }
                 "CURIOUSBEAST_ITEM" => {
-                    caste_temp.curious_beast |= creature::CURIOUS_ITEM;
+                    caste_temp.curious_beast |= tags::CURIOUS_ITEM;
                 }
                 "NO_SPRING" => {
-                    caste_temp.no_season |= creature::NO_SPRING;
+                    caste_temp.no_season |= tags::NO_SPRING;
                 }
                 "NO_SUMMER" => {
-                    caste_temp.no_season |= creature::NO_SUMMER;
+                    caste_temp.no_season |= tags::NO_SUMMER;
                 }
                 "NO_AUTUMN" => {
-                    caste_temp.no_season |= creature::NO_FALL;
+                    caste_temp.no_season |= tags::NO_FALL;
                 }
                 "NO_WINTER" => {
-                    caste_temp.no_season |= creature::NO_WINTER;
+                    caste_temp.no_season |= tags::NO_WINTER;
                 }
                 "TRAINABLE_HUNTING" => {
-                    caste_temp.trainable |= creature::TRAINABLE_HUNTING;
+                    caste_temp.trainable |= tags::TRAINABLE_HUNTING;
                 }
                 "TRAINABLE_WAR" => {
-                    caste_temp.trainable |= creature::TRAINABLE_WAR;
+                    caste_temp.trainable |= tags::TRAINABLE_WAR;
                 }
                 "TRAINABLE" => {
-                    caste_temp.trainable = caste_temp.trainable
-                        | creature::TRAINABLE_WAR
-                        | creature::TRAINABLE_HUNTING;
+                    caste_temp.trainable =
+                        caste_temp.trainable | tags::TRAINABLE_WAR | tags::TRAINABLE_HUNTING;
                 }
                 "ARTIFICIAL_HIVEABLE" => {
-                    creature_temp.artificial_hiveable = true;
+                    creature_tags.push(tags::CreatureTag::ArtificialHiveable);
                 }
                 "CLUSTER_NUMBER" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
@@ -312,333 +324,333 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                     }
                 }
                 "DOES_NOT_EXIST" => {
-                    creature_temp.does_not_exist = true;
+                    creature_tags.push(tags::CreatureTag::DoesNotExist);
                 }
                 "EVIL" => {
-                    creature_temp.evil = true;
+                    creature_tags.push(tags::CreatureTag::Evil);
                 }
                 "FANCIFUL" => {
-                    creature_temp.fanciful = true;
+                    creature_tags.push(tags::CreatureTag::Fanciful);
                 }
                 "GOOD" => {
-                    creature_temp.good = true;
+                    creature_tags.push(tags::CreatureTag::Good);
                 }
                 "SAVAGE" => {
-                    creature_temp.savage = true;
+                    creature_tags.push(tags::CreatureTag::Savage);
                 }
                 "GENERATED" => {
-                    creature_temp.generated = true;
+                    creature_tags.push(tags::CreatureTag::Generated);
                 }
                 "UBIQUITOUS" => {
-                    creature_temp.ubiquitous = true;
+                    creature_tags.push(tags::CreatureTag::Ubiquitous);
                 }
                 "VERMIN_SOIL" => {
-                    creature_temp.vermin_soil = true;
+                    creature_tags.push(tags::CreatureTag::VerminSoil);
                 }
                 "VERMIN_SOIL_COLONY" => {
-                    creature_temp.vermin_soil_colony = true;
+                    creature_tags.push(tags::CreatureTag::VerminSoilColony);
                 }
                 "VERMIN_ROTTER" => {
-                    creature_temp.vermin_rotter = true;
+                    creature_tags.push(tags::CreatureTag::VerminRotter);
                 }
                 "VERMIN_GROUNDER" => {
-                    creature_temp.vermin_grounder = true;
+                    creature_tags.push(tags::CreatureTag::VerminGrounder);
                 }
                 "VERMIN_FISH" => {
-                    creature_temp.vermin_fish = true;
+                    creature_tags.push(tags::CreatureTag::VerminFish);
                 }
                 "VERMIN_EATER" => {
-                    creature_temp.vermin_eater = true;
+                    creature_tags.push(tags::CreatureTag::VerminEater);
                 }
                 "FREQUENCY" => match cap[3].parse() {
                     Ok(n) => creature_temp.frequency = n,
                     Err(e) => println!("Failed to parse FREQUENCY\n{:?}", e),
                 },
                 "LARGE_ROAMING" => {
-                    creature_temp.large_roaming = true;
+                    creature_tags.push(tags::CreatureTag::LargeRoaming);
                 }
                 "LOCAL_POPS_CONTROLLABLE" => {
-                    creature_temp.local_pops_controllable = true;
+                    creature_tags.push(tags::CreatureTag::LocalPopsControllable);
                 }
                 "LOCAL_POPS_PRODUCE_HEROES" => {
-                    creature_temp.local_pops_produce_heroes = true;
+                    creature_tags.push(tags::CreatureTag::LocalPopsProduceHeroes);
                 }
                 "LOOSE_CLUSTERS" => {
-                    creature_temp.loose_clusters = true;
+                    creature_tags.push(tags::CreatureTag::LooseClusters);
                 }
                 "ADOPTS_OWNER" => {
-                    caste_temp.adopts_owner = true;
+                    caste_tags.push(tags::CasteTag::AdoptsOwner);
                 }
                 "BENIGN" => {
-                    caste_temp.benign = true;
+                    caste_tags.push(tags::CasteTag::Benign);
                 }
                 "AQUATIC" => {
-                    caste_temp.aquatic = true;
+                    caste_tags.push(tags::CasteTag::Aquatic);
                 }
                 "ARENA_RESTRICTED" => {
-                    caste_temp.arena_restricted = true;
+                    caste_tags.push(tags::CasteTag::ArenaRestricted);
                 }
                 "AT_PEACE_WITH_WILDLIFE" => {
-                    caste_temp.at_peace_with_wildlife = true;
+                    caste_tags.push(tags::CasteTag::AtPeaceWithWildlife);
                 }
                 "BONECARN" => {
-                    caste_temp.bone_carnivore = true;
-                    caste_temp.carnivore = true;
+                    caste_tags.push(tags::CasteTag::BoneCarn);
+                    caste_tags.push(tags::CasteTag::Carnivore);
                 }
                 "CAN_LEARN" => {
-                    caste_temp.can_learn = true;
+                    caste_tags.push(tags::CasteTag::CanLearn);
                 }
                 "CAN_SPEAK" => {
-                    caste_temp.can_speak = true;
+                    caste_tags.push(tags::CasteTag::CanSpeak);
                 }
                 "CARNIVORE" => {
-                    caste_temp.carnivore = true;
+                    caste_tags.push(tags::CasteTag::Carnivore);
                 }
                 "COMMON_DOMESTIC" => {
-                    caste_temp.common_domestic = true;
+                    caste_tags.push(tags::CasteTag::CommonDomestic);
                 }
                 "COOKABLE_LIVE" => {
-                    caste_temp.cookable_live = true;
+                    caste_tags.push(tags::CasteTag::CookableLive);
                 }
                 "DEMON" => {
-                    caste_temp.demon = true;
+                    caste_tags.push(tags::CasteTag::Demon);
                 }
                 "DIE_WHEN_VERMIN_BITE" => {
-                    caste_temp.die_when_vermin_bite = true;
+                    caste_tags.push(tags::CasteTag::DieWhenVerminBite);
                 }
                 "EQUIPS" => {
-                    caste_temp.equips = true;
+                    caste_tags.push(tags::CasteTag::Equips);
                 }
                 "EXTRAVISION" => {
-                    caste_temp.extravision = true;
+                    caste_tags.push(tags::CasteTag::Extravision);
                 }
                 "FEATURE_BEAST" => {
-                    caste_temp.feature_beast = true;
+                    caste_tags.push(tags::CasteTag::FeatureBeast);
                 }
                 "FEMALE" => {
-                    caste_temp.female = true;
+                    caste_tags.push(tags::CasteTag::Female);
                 }
                 "FIREIMMUNE" => {
-                    caste_temp.fire_immune = true;
+                    caste_tags.push(tags::CasteTag::FireImmune);
                 }
                 "FIREIMMUNE_SUPER" => {
-                    caste_temp.fire_immune_super = true;
+                    caste_tags.push(tags::CasteTag::FireimmuneSuper);
                 }
                 "FISHITEM" => {
-                    caste_temp.fish_item = true;
+                    caste_tags.push(tags::CasteTag::FishItem);
                 }
                 "FLIER" => {
-                    caste_temp.flier = true;
+                    caste_tags.push(tags::CasteTag::Flier);
                 }
                 "GNAWER" => {
-                    caste_temp.gnawer = true;
+                    caste_tags.push(tags::CasteTag::Gnawer);
                 }
                 "HAS_NERVES" => {
-                    caste_temp.has_nerves = true;
+                    caste_tags.push(tags::CasteTag::HasNerves);
                 }
                 "HUNTS_VERMIN" => {
-                    caste_temp.hunts_vermin = true;
+                    caste_tags.push(tags::CasteTag::HuntsVermin);
                 }
                 "IMMOBILE" => {
-                    caste_temp.immobile = true;
+                    caste_tags.push(tags::CasteTag::Immobile);
                 }
                 "IMMOBILE_LAND" => {
-                    caste_temp.immobile_land = true;
+                    caste_tags.push(tags::CasteTag::ImmobileLand);
                 }
                 "IMMOLATE" => {
-                    caste_temp.immolate = true;
+                    caste_tags.push(tags::CasteTag::Immolate);
                 }
                 "INTELLIGENT" => {
-                    caste_temp.intelligent = true;
+                    caste_tags.push(tags::CasteTag::Intelligent);
                 }
                 "LIGHT_GEN" => {
-                    caste_temp.light_gen = true;
+                    caste_tags.push(tags::CasteTag::LightGen);
                 }
                 "LOCKPICKER" => {
-                    caste_temp.lock_picker = true;
+                    caste_tags.push(tags::CasteTag::LockPicker);
                 }
                 "MAGMA_VISION" => {
-                    caste_temp.magma_vision = true;
+                    caste_tags.push(tags::CasteTag::MagmaVision);
                 }
                 "MALE" => {
-                    caste_temp.male = true;
+                    caste_tags.push(tags::CasteTag::Male);
                 }
                 "MEANDERER" => {
-                    caste_temp.meanderer = true;
+                    caste_tags.push(tags::CasteTag::Meanderer);
                 }
                 "MEGABEAST" => {
-                    caste_temp.megabeast = true;
+                    caste_tags.push(tags::CasteTag::Megabeast);
                 }
                 "MISCHIEVIOUS" | "MISCHIEVOUS" => {
-                    caste_temp.mischievous = true;
+                    caste_tags.push(tags::CasteTag::Mischievous);
                 }
                 "MOUNT" => {
-                    caste_temp.mount = true;
+                    caste_tags.push(tags::CasteTag::Mount);
                 }
                 "MOUNT_EXOTIC" => {
-                    caste_temp.mount_exotic = true;
+                    caste_tags.push(tags::CasteTag::MountExotic);
                 }
                 "MULTIPART_FULL_VISION" => {
-                    caste_temp.multipart_full_vision = true;
+                    caste_tags.push(tags::CasteTag::MultipartFullVision);
                 }
                 "MULTIPLE_LITTER_RARE" => {
-                    caste_temp.multiple_litter_rare = true;
+                    caste_tags.push(tags::CasteTag::MultipleLitterRare);
                 }
                 "MUNDANE" => {
-                    creature_temp.mundane = true;
+                    creature_tags.push(tags::CreatureTag::Mundane);
                 }
                 "NATURAL" => {
-                    caste_temp.natural = true;
+                    caste_tags.push(tags::CasteTag::Natural);
                 }
                 "NO_CONNECTIONS_FOR_MOVEMENT" => {
-                    caste_temp.no_connections_for_movement = true;
+                    caste_tags.push(tags::CasteTag::NoConnectionsForMovement);
                 }
                 "NO_DIZZINESS" => {
-                    caste_temp.no_dizziness = true;
+                    caste_tags.push(tags::CasteTag::NoDizziness);
                 }
                 "NO_DRINK" => {
-                    caste_temp.no_drink = true;
+                    caste_tags.push(tags::CasteTag::NoDrink);
                 }
                 "NO_EAT" => {
-                    caste_temp.no_eat = true;
+                    caste_tags.push(tags::CasteTag::NoEat);
                 }
                 "NO_FEVERS" => {
-                    caste_temp.no_fevers = true;
+                    caste_tags.push(tags::CasteTag::NoFevers);
                 }
                 "NO_GENDER" => {
-                    caste_temp.no_gender = true;
+                    caste_tags.push(tags::CasteTag::NoGender);
                 }
                 "NO_SLEEP" => {
-                    caste_temp.no_sleep = true;
+                    caste_tags.push(tags::CasteTag::NoSleep);
                 }
                 "NOBONES" => {
-                    caste_temp.no_bones = true;
+                    caste_tags.push(tags::CasteTag::NoBones);
                 }
                 "NOBREATHE" => {
-                    caste_temp.no_breathe = true;
+                    caste_tags.push(tags::CasteTag::NoBreathe);
                 }
                 "NOEMOTION" => {
-                    caste_temp.no_emotion = true;
+                    caste_tags.push(tags::CasteTag::NoEmotion);
                 }
                 "NOEXERT" => {
-                    caste_temp.no_exert = true;
+                    caste_tags.push(tags::CasteTag::NoExert);
                 }
                 "NOFEAR" => {
-                    caste_temp.no_fear = true;
+                    caste_tags.push(tags::CasteTag::NoFear);
                 }
                 "NOMEAT" => {
-                    caste_temp.no_meat = true;
+                    caste_tags.push(tags::CasteTag::NoMeat);
                 }
                 "NONAUSEA" => {
-                    caste_temp.no_nausea = true;
+                    caste_tags.push(tags::CasteTag::NoNausea);
                 }
                 "NOPAIN" => {
-                    caste_temp.no_pain = true;
+                    caste_tags.push(tags::CasteTag::NoPain);
                 }
                 "NOSKIN" => {
-                    caste_temp.no_skin = true;
+                    caste_tags.push(tags::CasteTag::NoSkin);
                 }
                 "NOSKULL" => {
-                    caste_temp.no_skull = true;
+                    caste_tags.push(tags::CasteTag::NoSkull);
                 }
                 "NOSMELLYROT" => {
-                    caste_temp.no_smelly_rot = true;
+                    caste_tags.push(tags::CasteTag::NoSmellyRot);
                 }
                 "NOSTUCKINS" => {
-                    caste_temp.no_stuck_ins = true;
+                    caste_tags.push(tags::CasteTag::NoStuckIns);
                 }
                 "NOSTUN" => {
-                    caste_temp.no_stun = true;
+                    caste_tags.push(tags::CasteTag::NoStrun);
                 }
                 "NOT_BUTCHERABLE" => {
-                    caste_temp.not_butcherable = true;
+                    caste_tags.push(tags::CasteTag::NotButcherable);
                 }
                 "NOT_LIVING" => {
-                    caste_temp.not_living = true;
+                    caste_tags.push(tags::CasteTag::NotLiving);
                 }
                 "NOTHOUGHT" => {
-                    caste_temp.no_thought = true;
+                    caste_tags.push(tags::CasteTag::NoThought);
                 }
                 "OPPOSED_TO_LIFE" => {
-                    caste_temp.opposed_to_life = true;
+                    caste_tags.push(tags::CasteTag::OpposedToLife);
                 }
                 "OUTSIDER_CONTROLLABLE" => {
-                    caste_temp.outsider_controllable = true;
+                    caste_tags.push(tags::CasteTag::OutsiderControllable);
                 }
                 "PACK_ANIMAL" => {
-                    caste_temp.pack_animal = true;
+                    caste_tags.push(tags::CasteTag::PackAnimal);
                 }
                 "PARALYZEIMMUNE" => {
-                    caste_temp.paralyzeimmune = true;
+                    caste_tags.push(tags::CasteTag::ParalyzeImmune);
                 }
                 "PET" => {
-                    caste_temp.pet = true;
+                    caste_tags.push(tags::CasteTag::Pet);
                 }
                 "PET_EXOTIC" => {
-                    caste_temp.pet_exotic = true;
+                    caste_tags.push(tags::CasteTag::PetExotic);
                 }
                 "POWER" => {
-                    caste_temp.power = true;
+                    caste_tags.push(tags::CasteTag::Power);
                 }
                 "SEMIMEGABEAST" => {
-                    caste_temp.semi_megabeast = true;
+                    caste_tags.push(tags::CasteTag::SemiMegabeast);
                 }
                 "SLOW_LEARNER" => {
-                    caste_temp.slow_learner = true;
+                    caste_tags.push(tags::CasteTag::SlowLearner);
                 }
                 "SMALL_REMAINS" => {
-                    caste_temp.small_remains = true;
+                    caste_tags.push(tags::CasteTag::SmallRemains);
                 }
                 "STANDARD_GRAZER" => {
-                    caste_temp.standard_grazer = true;
+                    caste_tags.push(tags::CasteTag::StandardGrazer);
                 }
                 "SUPERNATURAL" => {
-                    caste_temp.supernatural = true;
+                    caste_tags.push(tags::CasteTag::Supernatural);
                 }
                 "SWIMS_INNATE" => {
-                    caste_temp.swims_innate = true;
+                    caste_tags.push(tags::CasteTag::SwimsInnate);
                 }
                 "SWIMS_LEARNED" => {
-                    caste_temp.swims_learned = true;
+                    caste_tags.push(tags::CasteTag::SwimsLearned);
                 }
                 "THICKWEB" => {
-                    caste_temp.thick_web = true;
+                    caste_tags.push(tags::CasteTag::ThickWeb);
                 }
                 "TITAN" => {
-                    caste_temp.titan = true;
+                    caste_tags.push(tags::CasteTag::Titan);
                 }
                 "TRANCES" => {
-                    caste_temp.trances = true;
+                    caste_tags.push(tags::CasteTag::Trances);
                 }
                 "TRAPAVOID" => {
-                    caste_temp.trap_avoid = true;
+                    caste_tags.push(tags::CasteTag::TrapAvoid);
                 }
                 "UNIQUE_DEMON" => {
-                    caste_temp.unique_demon = true;
+                    caste_tags.push(tags::CasteTag::UniqueDemon);
                 }
                 "VEGETATION" => {
-                    caste_temp.vegetation = true;
+                    caste_tags.push(tags::CasteTag::Vegetation);
                 }
                 "VERMIN_HATEABLE" => {
-                    caste_temp.vermin_hateable = true;
+                    caste_tags.push(tags::CasteTag::VerminHateable);
                 }
                 "VERMIN_MICRO" => {
-                    caste_temp.vermin_micro = true;
+                    caste_tags.push(tags::CasteTag::VerminMicro);
                 }
                 "VERMIN_NOFISH" => {
-                    caste_temp.vermin_no_fish = true;
+                    caste_tags.push(tags::CasteTag::VerminNofish);
                 }
                 "VERMIN_NOROAM" => {
-                    caste_temp.vermin_no_roam = true;
+                    caste_tags.push(tags::CasteTag::VerminNoroam);
                 }
                 "VERMIN_NOTRAP" => {
-                    caste_temp.vermin_no_trap = true;
+                    caste_tags.push(tags::CasteTag::VerminNotrap);
                 }
                 "WAGON_PULLER" => {
-                    caste_temp.wagon_puller = true;
+                    caste_tags.push(tags::CasteTag::WagonPuller);
                 }
                 "WEBIMMUNE" => {
-                    caste_temp.web_immune = true;
+                    caste_tags.push(tags::CasteTag::WebImmune);
                 }
                 "SELECT_CASTE" => {
                     //Todo
