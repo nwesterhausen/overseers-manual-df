@@ -1,3 +1,10 @@
+## [0.10.4](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.10.3...v0.10.4) (2022-08-06)
+
+
+### Bug Fixes
+
+* ⚡️ using enums instead of booleans for tags ([5f92498](https://github.com/nwesterhausen/overseers-manual-df/commit/5f924983781ae73a5e4ee921dbc612e55053c7e8))
+
 ## [0.10.3](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.10.2...v0.10.3) (2022-07-09)
 
 
