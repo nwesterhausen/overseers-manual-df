@@ -29,11 +29,11 @@ fn parse_directory(raws_directory: &str) -> Vec<raws::creature::DFCreature> {
 
         if f_name.ends_with(".txt") {
             let entry_path = entry.path().to_string_lossy().to_string();
-            // println!("parsing {}", &entry_path);
+            log::debug!("parsing {}", &entry_path);
             creatures.append(&mut reader::parse_file(&entry_path));
         }
     }
-    println!(
+    log::debug!(
         "{} creatures parsed from directory {}",
         creatures.len(),
         &raws_directory
@@ -45,7 +45,7 @@ fn turn_vec_into_json_string(v: Vec<raws::creature::DFCreature>) -> String {
     let mut owned_string: String = "[".to_owned();
     owned_string.push_str(stringify_raw_vec(v).join(",").as_str());
     owned_string.push(']');
-    println!("JSON String is {} characters", owned_string.len());
+    log::debug!("JSON String is {} characters", owned_string.len());
     owned_string
 }
 
@@ -55,7 +55,7 @@ fn save_vec_to_json_file(v: Vec<raws::creature::DFCreature>, out_directory: &Pat
     let out_file = match File::create(&out_filepath.as_path()) {
         Ok(f) => f,
         Err(e) => {
-            println!("Unable to open out.json for writing \n{:?}", e);
+            log::error!("Unable to open out.json for writing \n{:?}", e);
             return;
         }
     };
@@ -65,7 +65,7 @@ fn save_vec_to_json_file(v: Vec<raws::creature::DFCreature>, out_directory: &Pat
     match write!(stream, "[") {
         Ok(_x) => (),
         Err(e) => {
-            println!("{}\n{:?}", write_error, e);
+            log::error!("{}\n{:?}", write_error, e);
             return;
         }
     };
@@ -73,14 +73,14 @@ fn save_vec_to_json_file(v: Vec<raws::creature::DFCreature>, out_directory: &Pat
     match write!(stream, "{}", stringify_raw_vec(v).join(",")) {
         Ok(_x) => (),
         Err(e) => {
-            println!("{}\n{:?}", write_error, e);
+            log::error!("{}\n{:?}", write_error, e);
             return;
         }
     };
     match stream.flush() {
         Ok(_x) => (),
         Err(e) => {
-            println!("{}\n{:?}", write_error, e);
+            log::error!("{}\n{:?}", write_error, e);
             return;
         }
     };
@@ -88,27 +88,31 @@ fn save_vec_to_json_file(v: Vec<raws::creature::DFCreature>, out_directory: &Pat
     match write!(stream, "]") {
         Ok(_x) => (),
         Err(e) => {
-            println!("{}\n{:?}", write_error, e);
+            log::error!("{}\n{:?}", write_error, e);
             return;
         }
     };
     match stream.flush() {
         Ok(_x) => (),
         Err(e) => {
-            println!("{}\n{:?}", write_error, e);
+            log::error!("{}\n{:?}", write_error, e);
         }
     };
 }
 
 fn stringify_raw_vec(raws: Vec<raws::creature::DFCreature>) -> Vec<String> {
     let mut results: Vec<String> = Vec::new();
+    if raws.is_empty() {
+        return results;
+    }
+    log::debug!("{} creatures being serialized", raws.len());
     for creature in raws {
         match to_string(&conversion::WebCreature::from(&creature)) {
             Ok(s) => {
                 results.push(s.to_string());
             }
             Err(e) => {
-                println!("Failure to serialize creature\n{}", e);
+                log::error!("Failure to serialize creature\n{}", e);
             }
         }
     }

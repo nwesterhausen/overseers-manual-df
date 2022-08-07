@@ -80,20 +80,20 @@ This is just a convenience type for referencing data which is stored at the Cast
 
 #### CasteOptions
 
-| Option            | Description                             |
-| ----------------- | --------------------------------------- |
-| `'SPECIES'`       | the creature generally                  |
-| `'child_SPECIES'` | children of the creature generally      |
-| `'baby_SPECIES'`  | babies the creature generally           |
-| `'ALL'`         | ALL Caste of the creature             |
-| `'child_ALL'`   | children of ALL Caste of the creature |
-| `'baby_ALL'`    | babies of ALL Caste of the creature   |
-| `'MALE'`          | Male Caste of the creature              |
-| `'child_MALE'`    | Male children Caste of the creature     |
-| `'baby_MALE'`     | Male babies Caste of the creature       |
-| `'FEMALE'`        | Female Caste of the creature            |
-| `'child_FEMALE'`  | Female children Caste of the creature   |
-| `'baby_FEMALE'`   | Female babies Caste of the creature     |
+| Option            | Description                           |
+| ----------------- | ------------------------------------- |
+| `'SPECIES'`       | the creature generally                |
+| `'child_SPECIES'` | children of the creature generally    |
+| `'baby_SPECIES'`  | babies the creature generally         |
+| `'ALL'`           | ALL Caste of the creature             |
+| `'child_ALL'`     | children of ALL Caste of the creature |
+| `'baby_ALL'`      | babies of ALL Caste of the creature   |
+| `'MALE'`          | Male Caste of the creature            |
+| `'child_MALE'`    | Male children Caste of the creature   |
+| `'baby_MALE'`     | Male babies Caste of the creature     |
+| `'FEMALE'`        | Female Caste of the creature          |
+| `'child_FEMALE'`  | Female children Caste of the creature |
+| `'baby_FEMALE'`   | Female babies Caste of the creature   |
 
 ### BodySizeRange Type
 

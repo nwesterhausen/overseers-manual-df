@@ -7,6 +7,7 @@ import {
   GrownAtStatus,
   PetValueStatus,
   TrainableStatus,
+  UndergroundDepthDescription,
 } from '../definitions/Creature';
 import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
 import { toTitleCase } from '../definitions/Utils';
@@ -99,6 +100,10 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
                 <tr>
                   <th>Found In</th>
                   <td>{props.creature.biomes.length ? props.creature.biomes.join(', ') : 'No natural biomes.'}</td>
+                </tr>
+                <tr>
+                  <th>Inhabitted Depth</th>
+                  <td>{UndergroundDepthDescription(props.creature.underground_depth)}</td>
                 </tr>
                 <tr>
                   <th>Group Size</th>
