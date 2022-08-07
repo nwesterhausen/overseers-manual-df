@@ -23,6 +23,12 @@ encoding_rs_io = "0.1"
 regex = "1.5"
 slug = "0.1"
 walkdir = "2"
+log = "0.4.17"
+
+[dependencies.simple_logger]
+default-features = false
+version = "2.2.0"
+features = ["colors"]
 
 [dependencies.lazy_static]
 git = "https://github.com/rust-lang-nursery/lazy-static.rs.git"
