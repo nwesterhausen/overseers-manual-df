@@ -9,7 +9,7 @@ import {
   LAST_SAVE,
   PATH_STRING,
   PATH_TYPE,
-  set as saveToStore
+  set as saveToStore,
 } from '../settings';
 
 export const DIR_NONE = Symbol('none'),
@@ -92,12 +92,43 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   const [saveDirectoryOptions, setSaveDirectoryOptions] = createSignal<string[]>([]);
   // Currently selected save signal
   const [currentSave, setCurrentSave] = createSignal<string>('');
-  
+
   // When we update the save directory, we need to update the list of possible saves
   createEffect(async () => {
+    console.log('directoryPath effect', directoryPath());
+    refreshValidDirectories(false);
+  });
+
+  // Save the current save to store when it changes
+  createEffect(() => {
+    if (currentSave() !== '') {
+      saveToStore(LAST_SAVE, currentSave());
+    }
+  });
+
+  // Some extra logging
+  createEffect(() => {
+    console.debug(`Manual folder selection ${activateManualDirectorySelection() ? 'activated' : 'reset'}`);
+  });
+
+  // Listen for a file being dropped on the window to change the save location.
+  listen('tauri://file-drop', (event: Event<string[]>) => {
+    if (event.payload.length > 0) {
+      const file = event.payload[0];
+      if (file.endsWith('gamelog.txt')) {
+        setDirectoryPath(splitPathAgnostically(file).slice(0, -1));
+      }
+    }
+  });
+
+  /**
+   * Read the save dir and find any valid save files
+   * @param forced - whether this is a forced refresh or not
+   */
+  const refreshValidDirectories = async (forced: boolean) => {
+    console.debug(`Forced refresh: ${forced}`);
     if (directoryPath().length > 0) {
       const validSaveOptions: string[] = [];
-      console.log('directoryPath effect', directoryPath());
 
       try {
         // Combine the save folder path (stored as array) into a path string
@@ -149,27 +180,7 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     } else {
       setDirectoryType(DIR_NONE);
     }
-  });
-  // Save the current save to store when it changes
-  createEffect(() => {
-    if (currentSave() !== '') {
-      saveToStore(LAST_SAVE, currentSave());
-    }
-  });
-  // Some extra logging
-  createEffect(() => {
-    console.debug(`Manual folder selection ${activateManualDirectorySelection() ? 'activated' : 'reset'}`);
-  });
-
-  // Listen for a file being dropped on the window to change the save location.
-  listen('tauri://file-drop', (event: Event<string[]>) => {
-    if (event.payload.length > 0) {
-      const file = event.payload[0];
-      if (file.endsWith('gamelog.txt')) {
-        setDirectoryPath(splitPathAgnostically(file).slice(0, -1));
-      }
-    }
-  });
+  };
 
   // Setting up the settings storage.
   initStore()
@@ -208,5 +219,6 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     currentSave,
     saveDirectoryOptions,
     setCurrentSave,
+    refreshSaveDirs: () => refreshValidDirectories(true),
   };
 });

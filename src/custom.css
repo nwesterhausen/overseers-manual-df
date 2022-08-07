@@ -23,6 +23,10 @@
   color: #073642;
 }
 
+.icon-fix {
+  vertical-align: -0.125em;
+}
+
 /* Custom Scrollbar */
 /* width */
 ::-webkit-scrollbar {

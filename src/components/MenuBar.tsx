@@ -1,7 +1,8 @@
-import { Container, Nav, Navbar, NavDropdown, OverlayTrigger, Stack, Tooltip } from 'solid-bootstrap';
+import { Button, Container, Nav, Navbar, NavDropdown, NavItem, OverlayTrigger, Stack, Tooltip } from 'solid-bootstrap';
 import { Component, For, Match, Switch } from 'solid-js';
 import { DIR_DF, DIR_NONE, DIR_SAVE, useDirectoryProvider } from '../providers/DirectoryProvider';
 import { BsFolderSymlinkFill } from 'solid-icons/bs';
+import { HiOutlineRefresh } from 'solid-icons/hi';
 
 const MenuBar: Component = () => {
   const directoryContext = useDirectoryProvider();
@@ -42,6 +43,17 @@ const MenuBar: Component = () => {
               </Stack>
             </NavDropdown.Item>
           </NavDropdown>
+
+          <NavItem class='mx-2'>
+            <OverlayTrigger
+              placement='auto'
+              overlay={<Tooltip id='refresh-button-tooltip'>Refresh save directories from current folder</Tooltip>}>
+              <Button variant='outline-info' class='border-0' onClick={directoryContext.refreshSaveDirs}>
+                <HiOutlineRefresh class='icon-fix' />
+              </Button>
+            </OverlayTrigger>
+          </NavItem>
+
           <NavDropdown title='Change Save' menuVariant='dark'>
             <For
               each={directoryContext.saveDirectoryOptions()}
