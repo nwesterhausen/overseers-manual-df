@@ -6,6 +6,7 @@
 use std::path::PathBuf;
 use tauri_plugin_store::PluginBuilder;
 // use tauri::{AppHandle, Runtime};
+use simple_logger::SimpleLogger;
 
 mod parser;
 
@@ -25,6 +26,19 @@ fn parse_raws_in_file(path: &str) -> String {
 }
 
 fn main() {
+    // Setup logging
+    match SimpleLogger::new()
+        .with_colors(true)
+        .with_level(log::LevelFilter::Info)
+        .env()
+        .init()
+    {
+        Ok(logger) => logger,
+        Err(e) => {
+            println!("Unable to start SimpleLogger: {:?}", e);
+        }
+    }
+
     let app = tauri::Builder::default()
         .plugin(PluginBuilder::default().build())
         .invoke_handler(tauri::generate_handler![
