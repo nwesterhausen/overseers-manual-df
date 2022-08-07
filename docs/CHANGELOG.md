@@ -1,3 +1,23 @@
+## [0.11.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.10.4...v0.11.0) (2022-08-07)
+
+
+### Features
+
+* ⚡️ automatically detect df directory or not ([fa21e0d](https://github.com/nwesterhausen/overseers-manual-df/commit/fa21e0d5a11bae890dba9371f197e548d4122808))
+* ✨ add button to manually refresh valid save dirs ([e37e474](https://github.com/nwesterhausen/overseers-manual-df/commit/e37e474b44452c6e2ee9498aa25e668a585d4b1e))
+* ✨ add refresh button for parsed raws ([ae386a4](https://github.com/nwesterhausen/overseers-manual-df/commit/ae386a4dc9b1b316c45014d863fc6821286f133c))
+* ✨ handle SELECT_CASTE tag ([c2efb8f](https://github.com/nwesterhausen/overseers-manual-df/commit/c2efb8f4633aff93c6f2c74f9f7ce04b482304da))
+* ✨ parse UNDERGROUND_DEPTH ([3e99894](https://github.com/nwesterhausen/overseers-manual-df/commit/3e99894b0ed44e887ba9f765d7d2b698f284eb4e)), closes [#31](https://github.com/nwesterhausen/overseers-manual-df/issues/31)
+* ✨ pass creature and caste tags from raws to frontend ([b397dd5](https://github.com/nwesterhausen/overseers-manual-df/commit/b397dd58cccb534b9c5739b5eaa0875963fad15f))
+* 🔊 use simple_logger library ([96b671c](https://github.com/nwesterhausen/overseers-manual-df/commit/96b671cb7f62767cf487021bfadadbf86f5a50b3))
+
+
+### Bug Fixes
+
+* 🐛 don't filter caste names to "known" since they can be anything ([5b4767f](https://github.com/nwesterhausen/overseers-manual-df/commit/5b4767f4d7658116b26c03ed5d936f762b07da7b)), closes [#33](https://github.com/nwesterhausen/overseers-manual-df/issues/33)
+* 🐛 improve df directory detection ([7a5830e](https://github.com/nwesterhausen/overseers-manual-df/commit/7a5830e64d4632bee91bad3c49ea26c07b63e674))
+* 📌 add version to simple_logger dependency ([d1c4360](https://github.com/nwesterhausen/overseers-manual-df/commit/d1c4360d7408ef0b67cc804d09addfd1f46c4cd1))
+
 ## [0.10.4](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.10.3...v0.10.4) (2022-08-06)
 
 
