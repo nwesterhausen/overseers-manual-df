@@ -29,46 +29,18 @@ const MenuBar: Component = () => {
               </NavDropdown.Header>
             </OverlayTrigger>
             <NavDropdown.Divider />
-            <OverlayTrigger
-              placement='right'
-              overlay={
-                <Tooltip id='df-dir-tooltip'>
-                  Select your Dwarf Fortress directory. This is the same folder that has <code>gamelog.txt</code> in it.
-                </Tooltip>
-              }>
-              <NavDropdown.Item
-                onClick={() => {
-                  directoryContext.setDirectoryType(DIR_DF);
-                  directoryContext.setManualFolderSelect(true);
-                }}>
-                <Stack direction='horizontal' gap={1}>
-                  <span class='me-auto'>
-                    {directoryContext.directoryPath().length > 0 ? 'Change ' : 'Set '}
-                    Dwarf Fortress Directory
-                  </span>
-                  <BsFolderSymlinkFill />
-                </Stack>
-              </NavDropdown.Item>
-            </OverlayTrigger>
-            <OverlayTrigger
-              placement='right'
-              overlay={
-                <Tooltip id='save-only-dir-tooltip'>
-                  Instead of using your Dwarf Fortress game directory, choose a directory containing save folders (e.g.
-                  an archival set of old saves or backups).
-                </Tooltip>
-              }>
-              <NavDropdown.Item
-                onClick={() => {
-                  directoryContext.setDirectoryType(DIR_SAVE);
-                  directoryContext.setManualFolderSelect(true);
-                }}>
-                <Stack direction='horizontal' gap={1}>
-                  <span class='me-auto'>Choose a save-only location instead</span>
-                  <BsFolderSymlinkFill />
-                </Stack>
-              </NavDropdown.Item>
-            </OverlayTrigger>
+            <NavDropdown.Item
+              onClick={() => {
+                directoryContext.setManualFolderSelect(true);
+              }}>
+              <Stack direction='horizontal' gap={1}>
+                <span class='me-auto'>
+                  {directoryContext.directoryPath().length > 0 ? 'Change ' : 'Set '}
+                  Directory
+                </span>
+                <BsFolderSymlinkFill />
+              </Stack>
+            </NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title='Change Save' menuVariant='dark'>
             <For
