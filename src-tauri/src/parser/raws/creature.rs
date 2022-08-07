@@ -5,7 +5,7 @@ use slug::slugify;
 
 use super::{
     names::{Name, SingPlurName},
-    tags,
+    tags::{self, CasteTag},
 };
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -380,6 +380,15 @@ impl DFCreature {
     pub fn get_local_pops_produce_heros(&self) -> bool {
         self.tags
             .contains(&tags::CreatureTag::LocalPopsProduceHeroes)
+    }
+    pub fn get_caste_tags(&self) -> HashMap<String, Vec<CasteTag>> {
+        let mut tags: HashMap<String, Vec<CasteTag>> = HashMap::new();
+        for self_caste in &self.castes {
+            if self_caste.pet_value > 0 {
+                tags.insert(String::from(&self_caste.name), Vec::clone(&self_caste.tags));
+            }
+        }
+        tags
     }
 }
 
