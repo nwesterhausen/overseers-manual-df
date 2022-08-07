@@ -3,7 +3,7 @@ import { invoke } from '@tauri-apps/api';
 import { createEffect, createMemo, createResource, createSignal, JSX } from 'solid-js';
 import { AssignBasedOn, Creature, GenerateSearchString } from '../definitions/Creature';
 import { FilterInvalidRaws, Raw, RawsFirstLetters } from '../definitions/Raw';
-import { useDirectoryProvider } from './DirectoryProvider';
+import { DIR_DF, useDirectoryProvider } from './DirectoryProvider';
 import { readDir } from '@tauri-apps/api/fs';
 import { ProgressBar } from 'solid-bootstrap';
 import { useSearchProvider } from './SearchProvider';
@@ -86,8 +86,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   async function parseRawsInSave(): Promise<Creature[]> {
     setParsingProgress(0);
     setParsingStatus(STS_PARSING);
-
-    const dir = [...directoryContext.saveFolderPath(), directoryContext.currentSave(), 'raw'].join('/');
+    let dir = [...directoryContext.directoryPath(), directoryContext.currentSave(), 'raw'].join('/');
+    if (directoryContext.directoryType() === DIR_DF) {
+      dir = [...directoryContext.directoryPath(), 'data', 'save', directoryContext.currentSave(), 'raw'].join('/');
+    }
     const rawFiles = await ReadAllRawFilePaths(dir);
     console.log(rawFiles.length, 'raw files to parse.');
     const rawsArr = [];

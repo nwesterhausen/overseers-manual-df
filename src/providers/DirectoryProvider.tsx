@@ -1,16 +1,10 @@
 import { createContextProvider } from '@solid-primitives/context';
 import { open as tauriOpen, OpenDialogOptions } from '@tauri-apps/api/dialog';
 import { listen } from '@tauri-apps/api/event';
-import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import { readDir } from '@tauri-apps/api/fs';
+import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import {
-  init as initStore,
-  get as getFromStore,
-  set as saveToStore,
-  PATH_STRING,
-  LAST_SAVE,
-  PATH_TYPE,
-  clear,
+  get as getFromStore, init as initStore, LAST_SAVE, PATH_STRING, PATH_TYPE, set as saveToStore
 } from '../settings';
 
 export const DIR_NONE = Symbol('none'),
@@ -43,6 +37,7 @@ function splitPathAgnostically(path: string): string[] {
     pathDelimation = '\\';
   }
   const pathArr = path.split(pathDelimation);
+  console.debug(`Saving ${pathArr} as path`);
   return pathArr;
 }
 
@@ -59,12 +54,14 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     async (): Promise<string[]> => {
       try {
         const folderPath = await tauriOpen(openDialogOptions);
+        console.debug(folderPath);
         if (Array.isArray(folderPath)) {
           return splitPathAgnostically(folderPath[0]);
         }
         return splitPathAgnostically(folderPath);
       } catch (error) {
         console.debug(error);
+        setManualDirectorySelection(false);
         return [];
       }
     },
@@ -74,19 +71,8 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   );
   // Directory path, but more generic so we can be flexible
   const directoryPath = createMemo((): string[] => {
-    if (directoryType() === DIR_NONE) return [];
     if (manuallySpecifiedPath().length > 0) return manuallySpecifiedPath();
     if (dragAndDropPath().length > 0) return dragAndDropPath();
-    return [];
-  });
-  // Based on the path and path type, we can expose the save directory
-  const saveFolderPath = createMemo((): string[] => {
-    if (directoryType() === DIR_DF) {
-      return directoryPath().concat('data', 'save');
-    }
-    if (directoryType() === DIR_SAVE) {
-      return directoryPath();
-    }
     return [];
   });
   // Based on the memo changing, we update the save folder path (and save it to our settings storage)
@@ -112,78 +98,57 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     }
   });
   // When we update the save directory, we need to update the list of possible saves
-  createEffect(() => {
-    if (directoryPath().join('').length > 0) {
-      const savePath = saveFolderPath().join('/');
-      readDir(savePath)
-        .then((values) => {
-          console.log(values);
-          const saveArr = [];
-          values.forEach((fileEntry) => {
-            saveArr.push(fileEntry.name);
-          });
-          const validSaveOptions: Promise<string>[] = saveArr.map((v) => {
-            if (directoryType() === DIR_SAVE || directoryType() === DIR_DF) {
-              return new Promise<string>((resolve) => {
-                const subpath = `${savePath}/${v}`;
-                readDir(subpath)
-                  .then((values) => {
-                    let fail = true;
-                    values.forEach((fileEntry) => {
-                      if (fileEntry.name === 'raw') {
-                        fail = false;
-                      }
-                    });
-                    if (fail) {
-                      console.debug(`${v} determined invalid (no raw folder)`);
-                      return resolve('');
-                    }
-                    return resolve(v);
-                  })
-                  .catch((err) => {
-                    console.debug(err);
-                    return resolve('');
-                  });
-              });
+  createEffect(async () => {
+    if (directoryPath().length > 0) {
+      const validSaveOptions: string[] = [];
+
+      try {
+        // Combine the save folder path (stored as array) into a path string
+        let savePath = directoryPath().join('/');
+
+        // Use the tauri fs.readDir API
+        let dirContents = await readDir(savePath, { recursive: true });
+
+        console.log(`Read ${dirContents.length} children of ${savePath}`);
+
+        const hasGamelogTxt = dirContents.filter((v) => v.name === 'gamelog.txt').length > 0;
+        if (hasGamelogTxt) {
+          setDirectoryType(DIR_DF);
+          // Update the save path to reflect data/save
+          savePath = [...directoryPath(), 'data', 'save'].join('/');
+
+          // reload dirContents
+          dirContents = await readDir(savePath, { recursive: true });
+        } else {
+          setDirectoryType(DIR_SAVE);
+        }
+
+        // For each entry in the directory, push only options which have children into an array to check
+        for (const entry of dirContents) {
+          console.debug(`into ${entry.name}`);
+          // Check if the entry is a directory. If it is, look inside and see if it has what we want
+          if (entry.children) {
+            // Check if this entry has a raw directory inside of it (which is where we look for raws)
+            if (entry.children.filter((v) => v.children && v.name === 'raw').length > 0) {
+              validSaveOptions.push(entry.name);
             } else {
-              return new Promise<string>((res) => {
-                return res('');
-              });
+              console.log(`${entry.name} has no 'raw' directory, can't parse`);
             }
-          });
-          return Promise.all(validSaveOptions);
-        })
-        .then((validSaves) => {
-          const saveArr = [...new Set(validSaves)].filter((v) => v.length > 0);
-          console.log(saveArr);
-          if (saveArr.length === 0) {
-            setDirectoryType(DIR_NONE);
-            setDragAndDropPath([]);
           }
-          setSaveDirectoryOptions(saveArr);
-        })
-        .then(() => getFromStore(LAST_SAVE))
-        .then((last_save) => {
-          if (last_save.length === 0) {
-            setCurrentSave('');
-            return;
-          }
-          console.log(`Checking for ${last_save} within valid options.`);
-          if (saveDirectoryOptions().indexOf(last_save) > -1) {
-            setCurrentSave(last_save);
-          } else {
-            console.log(`${last_save} is invalid option`);
-            setCurrentSave('');
-            return clear(LAST_SAVE);
-          }
-        })
-        .catch((err) => {
-          console.debug('Invalid option for saveDirectory');
+        }
+      } catch (err) {
+        console.debug(err);
+      } finally {
+        if (validSaveOptions.length === 0) {
+          console.log('Invalid option for saveDirectory');
           setDirectoryType(DIR_NONE);
           setSaveDirectoryOptions([]);
           setManualDirectorySelection(false);
-          console.debug(err);
-        });
+        }
+      }
+      setSaveDirectoryOptions(validSaveOptions);
+    } else {
+      setDirectoryType(DIR_NONE);
     }
   });
   // Save the current save to store when it changes
@@ -241,7 +206,6 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     saveDirectoryOptions,
     setCurrentSave,
     setDragAndDropPath,
-    saveFolderPath,
     setDirectoryType,
   };
 });
