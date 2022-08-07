@@ -27,6 +27,7 @@ export type Creature = {
   based_on?: string;
   biomes: string[];
   cluster_range: number[];
+  underground_depth: number[];
   body_size: CasteRange<BodySizeRange[]>;
   grown_at: CasteRange<number>;
   names_map: CasteRange<string[]>;
@@ -388,6 +389,7 @@ const DEFAULT_CREATURE: Creature = {
   clutch_size: {} as CasteRange<number[]>,
   biomes: [],
   cluster_range: [],
+  underground_depth: [],
   body_size: {
     ALL: [],
   },
@@ -468,4 +470,28 @@ export const GenerateSearchString = (creature: Creature): string[] => {
     searchableTerms.push(creature.intelligence.ALL[1] ? 'speaks' : '');
   }
   return searchableTerms.join(' ').replaceAll('  ', ' ').split(' ');
+};
+
+const DepthRanges = [
+  'Aboveground',
+  '1st Cavern Layer',
+  '2nd Cavern Layer',
+  '3rd Cavern Layer',
+  'Magma Sea Layer',
+  'HFS',
+];
+
+/**
+ * Turn the UNDERGROUND_DEPTH tag into a string description
+ *
+ * @param depth_range - [min,max] UNDERGROUND_DEPTH tag values
+ * @returns string describing what depths they are found at
+ */
+export const UndergroundDepthDescription = (depth_range: number[]): string => {
+  const topLevel = depth_range[0];
+  const bottomLevel = depth_range[1];
+  if (topLevel === bottomLevel) {
+    return DepthRanges[topLevel];
+  }
+  return `${DepthRanges[topLevel]} to ${DepthRanges[bottomLevel]}`;
 };

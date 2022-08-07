@@ -448,6 +448,19 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                         creature_temp.get_identifier()
                     ),
                 },
+                "UNDERGROUND_DEPTH" => {
+                    let split = cap[3].split(':').collect::<Vec<&str>>();
+                    match parsing::parse_min_max_range(&split) {
+                        Ok(range) => {
+                            creature_temp.underground_depth[0] = range[0];
+                            creature_temp.underground_depth[1] = range[1];
+                        }
+                        Err(_e) => log::error!(
+                            "{}:Unable to parse range for UNDERGROUND_DEPTH",
+                            creature_temp.get_identifier()
+                        ),
+                    }
+                }
                 "LARGE_ROAMING" => {
                     creature_tags.push(tags::CreatureTag::LargeRoaming);
                 }

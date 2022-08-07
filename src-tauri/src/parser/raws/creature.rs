@@ -24,6 +24,7 @@ pub struct DFCreature {
     // [min, max] ranges
     pub cluster_number: [u16; 2],    //Defaults to 1:1 if not specified.
     pub population_number: [u16; 2], //default 1:1
+    pub underground_depth: [u16; 2], //default 0:0 (aboveground)
 
     // strings
     pub general_baby_name: SingPlurName,
@@ -51,6 +52,7 @@ impl Clone for DFCreature {
             frequency: self.frequency,
             cluster_number: [self.cluster_number[0], self.cluster_number[1]],
             population_number: [self.population_number[0], self.population_number[1]],
+            underground_depth: [self.underground_depth[0], self.underground_depth[1]],
             general_baby_name: self.general_baby_name.clone(),
             general_child_name: self.general_child_name.clone(),
             name: self.name.clone(),
@@ -151,6 +153,7 @@ impl DFCreature {
             // [min, max] ranges
             cluster_number: [1, 1],    //Defaults to 1:1 if not specified.
             population_number: [1, 1], //default 1:1
+            underground_depth: [0, 0], //default 0:0 (aboveground)
 
             // strings
             general_baby_name: SingPlurName::new(""),
