@@ -39,11 +39,12 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
     let mut current_object = RawObjectKind::None;
     let mut started = false;
     let mut creature_temp = creature::DFCreature::new("None", "None");
-    let mut empty_caste = creature::DFCreatureCaste::new("none");
-    let mut caste_temp = &mut empty_caste;
 
     let mut caste_tags: Vec<CasteTag> = Vec::new();
     let mut creature_tags: Vec<CreatureTag> = Vec::new();
+    let mut temp_caste_vec: Vec<creature::DFCreatureCaste> = Vec::new();
+
+    let mut caste_temp = creature::DFCreatureCaste::new("ALL");
 
     for (index, line) in reader.lines().enumerate() {
         if line.is_err() {
@@ -81,37 +82,42 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                         RawObjectKind::Creature => {
                             if started {
                                 // If we already *were* capturing a creature, export it.
-                                // Reset the temp values !!Todo
-                                //println!("{:#?}", creature_temp);
-                                // writeln!(stream, "{},", to_string(&creature_temp).unwrap())
-                                //  .expect("Unable to write creature info to out.json.");
+                                //1. Save caste tags
                                 caste_temp.tags = caste_tags.clone();
+                                //2. Save caste
+                                temp_caste_vec.push(caste_temp.clone());
+                                //3. Save creature tags
                                 creature_temp.tags = creature_tags.clone();
+                                //4. Save tamp_castes to creature
+                                creature_temp.castes = temp_caste_vec.clone();
+                                //5. Save creature
                                 results.push(creature_temp);
                             } else {
                                 started = true;
                             }
+                            //Reset all temp values
+                            //1. Make new creature from [CREATURE:<NAME>]
                             creature_temp = creature::DFCreature::new(&raw_filename, &cap[3]);
-                            //Todo: This is probably causing the caste problem. #33
-
-                            creature_temp
-                                .castes
-                                .push(creature::DFCreatureCaste::new("ALL"));
-
-                            caste_temp = creature_temp.castes.last_mut().unwrap();
-
+                            //2. Make new caste
+                            caste_temp = creature::DFCreatureCaste::new("ALL");
+                            //3. Reset/empty caste tags
                             caste_tags = Vec::new();
+                            //4. Reset/empty creature tags
                             creature_tags = Vec::new();
+                            //5. Reset/empty caste vector
+                            temp_caste_vec = Vec::new();
                         }
                         RawObjectKind::None => (),
                     }
                 }
                 "CASTE" => {
+                    //1. Save caste tags
                     caste_temp.tags = caste_tags.clone();
-                    creature_temp
-                        .castes
-                        .push(creature::DFCreatureCaste::new(&cap[3]));
-                    caste_temp = creature_temp.castes.last_mut().unwrap();
+                    //2. Save caste
+                    temp_caste_vec.push(caste_temp.clone());
+                    //3. Make new caste from [CASTE:<NAME>]
+                    caste_temp = creature::DFCreatureCaste::new(&cap[3]);
+                    //4. Reset/empty caste tags
                     caste_tags = Vec::new();
                 }
                 "BIOME" => match biomes::BIOMES.get(&cap[3]) {
@@ -653,7 +659,37 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                     caste_tags.push(tags::CasteTag::WebImmune);
                 }
                 "SELECT_CASTE" => {
-                    //Todo
+                    //SELECT_CASTE:<CASTE_NAME> --> retrieve tags for this
+                    let target_caste_name = &cap[3];
+                    // println!("{}: selecting caste {}", creature_temp.get_identifier(), target_caste_name);
+                    //1. Save current tags
+                    caste_temp.tags = caste_tags.clone();
+                    //2. Save caste
+                    temp_caste_vec.push(caste_temp.clone());
+                    // (Assume we didn't find a matching caste)
+                    //4. Make new caste from [CASTE:<NAME>]
+                    caste_temp = creature::DFCreatureCaste::new(&cap[3]);
+                    //5. Reset/empty caste tags
+                    caste_tags = Vec::new();
+                    //3. Find and get the caste we select
+                    let mut caste_found = false;
+                    let mut target_caste_index: usize = 0;
+                    for (index, val) in temp_caste_vec.iter().enumerate() {
+                        if val.name.eq(target_caste_name) {
+                            //Save index
+                            target_caste_index = index;
+                            //Set caste found
+                            caste_found = true;
+                            // Break loop
+                            break;
+                        }
+                    }
+                    if caste_found {
+                        //4. Grab the target caste from the array
+                        caste_temp = temp_caste_vec.swap_remove(target_caste_index);
+                        //5. Set the tag array to its tags
+                        caste_tags = caste_temp.tags.clone();
+                    }
                 }
                 &_ => (),
             }
