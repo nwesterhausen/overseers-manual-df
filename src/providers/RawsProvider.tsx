@@ -86,20 +86,29 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   async function parseRawsInSave(): Promise<Creature[]> {
     setParsingProgress(0);
     setParsingStatus(STS_PARSING);
+
+    // Set the directory, and if it's a Dwarf Fortress directory, append /data/save
     let dir = [...directoryContext.directoryPath(), directoryContext.currentSave(), 'raw'].join('/');
     if (directoryContext.directoryType() === DIR_DF) {
       dir = [...directoryContext.directoryPath(), 'data', 'save', directoryContext.currentSave(), 'raw'].join('/');
     }
+    // Grab all raw files in the target directory
     const rawFiles = await ReadAllRawFilePaths(dir);
     console.log(rawFiles.length, 'raw files to parse.');
     const rawsArr = [];
 
+    // Loop over all raw files in the target directory
     for (let i = 0; i < rawFiles.length; i++) {
+      // We want to update the progress for each file to tell the user what's happening
       setParsingProgress((i + 1) / rawFiles.length);
       const v = rawFiles[i];
+      // Send raw file to be parsed by tauri backend
       const strRaw = await invoke('parse_raws_in_file', { path: v });
+      // Validate we did get string back
       if (typeof strRaw === 'string') {
+        // Turn string into JSON
         const jsonRaw = await JSON.parse(strRaw);
+        // Validate type of JSON received
         if (Array.isArray(jsonRaw)) {
           rawsArr.push(jsonRaw);
         }
@@ -109,39 +118,42 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     setParsingProgress(100);
     setParsingStatus(STS_LOADING);
 
+    // Flatten the array of arrays
     const result = rawsArr.flat();
 
-    if (Array.isArray(result)) {
-      const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.name < b.name ? -1 : 1));
+    // Sort all raws by name
+    const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.name < b.name ? -1 : 1));
 
-      for (let i = 0; i < sortResult.length; i++) {
-        const val: Creature = sortResult[i];
-        if (val.based_on && val.based_on.length) {
-          const matches = sortResult.filter((c) => c.objectId === val.based_on);
-          if (matches.length === 1) {
-            sortResult[i] = AssignBasedOn(val, matches[0]);
-          } else {
-            console.warn(`${matches.length} matches for ${val.based_on}`);
-          }
+    // Loop over all sorted raws
+    for (let i = 0; i < sortResult.length; i++) {
+      // Assume its a creature raw (all we handle right now)
+      const val: Creature = sortResult[i];
+      // If its based on another raw, find it and apply it
+      if (val.based_on && val.based_on.length) {
+        const matches = sortResult.filter((c) => c.objectId === val.based_on);
+        if (matches.length === 1) {
+          sortResult[i] = AssignBasedOn(val, matches[0]);
+        } else {
+          console.warn(`${matches.length} matches for 'based_on':${val.based_on}`);
         }
-        sortResult[i].searchString = GenerateSearchString(sortResult[i]);
       }
-      if (sortResult.length === 0) {
-        setParsingStatus(STS_EMPTY);
-      } else {
-        setParsingStatus(STS_IDLE);
-      }
-      setTimeout(() => {
-        setLoadRaws(false);
-      }, 50);
-      return sortResult;
+      // Build a search string for the raw
+      sortResult[i].searchString = GenerateSearchString(sortResult[i]);
     }
 
-    console.debug(result);
-    console.error('Result was not an array');
-    setParsingStatus(STS_IDLE);
-    setLoadRaws(false);
-    return [];
+    // Based on the number of results, set raws as EMPTY or IDLE
+    if (sortResult.length === 0) {
+      setParsingStatus(STS_EMPTY);
+    } else {
+      setParsingStatus(STS_IDLE);
+    }
+
+    // Reset the trigger after 50ms
+    setTimeout(() => {
+      setLoadRaws(false);
+    }, 50);
+
+    return sortResult;
   }
 
   return { currentStatus: parsingStatus, rawsJson, setLoadRaws, parsingProgressBar, rawsAlphabet };
