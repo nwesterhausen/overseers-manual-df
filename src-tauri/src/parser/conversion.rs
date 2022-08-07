@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
 use super::raws::{
-    creature::DFCreature,
+    creature::{self, DFCreature},
     tags::{CasteTag, CreatureTag, DFBodySize},
 };
 
@@ -38,6 +38,7 @@ pub struct WebCreature {
     local_pops_produce_heros: bool,
     tags: Vec<CreatureTag>,
     caste_tags: HashMap<String, Vec<CasteTag>>,
+    castes: Vec<creature::DFCreatureCaste>,
 }
 
 impl WebCreature {
@@ -70,6 +71,7 @@ impl WebCreature {
             local_pops_produce_heros: creature.get_local_pops_produce_heros(),
             tags: Vec::clone(&creature.tags),
             caste_tags: creature.get_caste_tags(),
+            castes: Vec::clone(&creature.castes),
         }
     }
 }
