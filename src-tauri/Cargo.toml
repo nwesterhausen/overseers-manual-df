@@ -27,6 +27,7 @@ log = "0.4.17"
 
 [dependencies.simple_logger]
 default-features = false
+version = "2.2.0"
 features = ["colors"]
 
 [dependencies.lazy_static]
