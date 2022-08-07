@@ -1,10 +1,15 @@
 import { createContextProvider } from '@solid-primitives/context';
 import { open as tauriOpen, OpenDialogOptions } from '@tauri-apps/api/dialog';
-import { listen } from '@tauri-apps/api/event';
+import { Event, listen } from '@tauri-apps/api/event';
 import { readDir } from '@tauri-apps/api/fs';
-import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
+import { createEffect, createResource, createSignal } from 'solid-js';
 import {
-  get as getFromStore, init as initStore, LAST_SAVE, PATH_STRING, PATH_TYPE, set as saveToStore
+  get as getFromStore,
+  init as initStore,
+  LAST_SAVE,
+  PATH_STRING,
+  PATH_TYPE,
+  set as saveToStore
 } from '../settings';
 
 export const DIR_NONE = Symbol('none'),
@@ -47,7 +52,7 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   // Signal to open the directory open dialog, change to true to open it
   const [activateManualDirectorySelection, setManualDirectorySelection] = createSignal(false);
   // Path to the dropped file location
-  const [dragAndDropPath, setDragAndDropPath] = createSignal([]);
+  const [directoryPath, setDirectoryPath] = createSignal([]);
   // This resource calls the Tauri API to open a file dialog
   const [manuallySpecifiedPath] = createResource(
     activateManualDirectorySelection,
@@ -69,12 +74,10 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
       initialValue: [],
     }
   );
-  // Directory path, but more generic so we can be flexible
-  const directoryPath = createMemo((): string[] => {
-    if (manuallySpecifiedPath().length > 0) return manuallySpecifiedPath();
-    if (dragAndDropPath().length > 0) return dragAndDropPath();
-    return [];
-  });
+
+  // When a path is manually specified, update the stored path
+  createEffect(() => setDirectoryPath(manuallySpecifiedPath.latest));
+
   // Based on the memo changing, we update the save folder path (and save it to our settings storage)
   createEffect(() => {
     if (directoryPath().length > 0) {
@@ -89,18 +92,12 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   const [saveDirectoryOptions, setSaveDirectoryOptions] = createSignal<string[]>([]);
   // Currently selected save signal
   const [currentSave, setCurrentSave] = createSignal<string>('');
-  // If the directory is determined to be "NONE" then we need to clear out any saved directory
-  createEffect(() => {
-    if (directoryType() !== DIR_NONE) {
-      setCurrentSave('');
-      setDragAndDropPath([]);
-      setManualDirectorySelection(false);
-    }
-  });
+  
   // When we update the save directory, we need to update the list of possible saves
   createEffect(async () => {
     if (directoryPath().length > 0) {
       const validSaveOptions: string[] = [];
+      console.log('directoryPath effect', directoryPath());
 
       try {
         // Combine the save folder path (stored as array) into a path string
@@ -109,12 +106,14 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
         // Use the tauri fs.readDir API
         let dirContents = await readDir(savePath, { recursive: true });
 
-        console.log(`Read ${dirContents.length} children of ${savePath}`);
+        console.debug(`Read ${dirContents.length} children of ${savePath}`);
 
         const hasGamelogTxt = dirContents.filter((v) => v.name === 'gamelog.txt').length > 0;
         if (hasGamelogTxt) {
+          console.debug('Matched a gamelog.txt file');
           setDirectoryType(DIR_DF);
           // Update the save path to reflect data/save
+          console.debug(directoryPath());
           savePath = [...directoryPath(), 'data', 'save'].join('/');
 
           // reload dirContents
@@ -163,9 +162,13 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   });
 
   // Listen for a file being dropped on the window to change the save location.
-  listen('tauri://file-drop', (event) => {
-    setDirectoryType(DIR_DF);
-    setDragAndDropPath(event.payload[0]);
+  listen('tauri://file-drop', (event: Event<string[]>) => {
+    if (event.payload.length > 0) {
+      const file = event.payload[0];
+      if (file.endsWith('gamelog.txt')) {
+        setDirectoryPath(splitPathAgnostically(file).slice(0, -1));
+      }
+    }
   });
 
   // Setting up the settings storage.
@@ -179,7 +182,7 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     .then((val) => {
       if (val.length > 0) {
         console.log('Setting initial value for directory to', val);
-        setDragAndDropPath(splitPathAgnostically(val));
+        setDirectoryPath(splitPathAgnostically(val));
       }
       return getFromStore(PATH_TYPE);
     })
@@ -205,7 +208,5 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     currentSave,
     saveDirectoryOptions,
     setCurrentSave,
-    setDragAndDropPath,
-    setDirectoryType,
   };
 });
