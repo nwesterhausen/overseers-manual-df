@@ -4,7 +4,7 @@
 [![semantic-release: angular](https://img.shields.io/badge/semantic--release-conventionalcommits-e10079?logo=semantic-release&style=plastic)](https://github.com/semantic-release/semantic-release)
 ![last commit](https://img.shields.io/github/last-commit/nwesterhausen/overseers-manual-df?style=plastic)
 [![supports df 47.05](https://img.shields.io/badge/Supports%20Dwarf%20Fortress-0.47.05-%235E3E0D?style=plastic)](https://bay12games.com/dwarves/)
-[![on DF File Depot](https://img.shields.io/badge/DFFD-0.10.1-blue?style=plastic)](https://dffd.bay12games.com/file.php?id=15966)
+[![on DF File Depot](https://img.shields.io/badge/DFFD-0.11.0-blue?style=plastic)](https://dffd.bay12games.com/file.php?id=15966)
 
 ![app icon](src-tauri/icons/128x128.png)
 
