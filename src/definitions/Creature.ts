@@ -7,13 +7,18 @@ export type BodySizeRange = {
   size_cm3: number;
 };
 
+export type MilkableDesc = {
+  material: string;
+  frequency: number;
+};
+
 export type CasteRange<T> = {
-  [key in typeof CasteOptions[number]]: T;
+  [key: string]: T;
 };
 
 export type CasteTags = {
-  [key in typeof CasteOptions[number]]: string[];
-}
+  [key: string]: string[];
+};
 
 export type Creature = {
   max_age: CasteRange<number[]>;
@@ -36,23 +41,38 @@ export type Creature = {
   creature_class: CasteRange<string[]>;
   local_pops_controllable: boolean;
   local_pops_produce_heroes: boolean;
-  caste_tags: CasteTags,
+
+  caste_tags: CasteTags;
+  castes: Caste[];
 } & Raw;
 
-export const CasteOptions = [
-  'SPECIES',
-  'child_SPECIES',
-  'baby_SPECIES',
-  'ALL',
-  'child_ALL',
-  'baby_ALL',
-  'MALE',
-  'child_MALE',
-  'baby_MALE',
-  'FEMALE',
-  'child_FEMALE',
-  'baby_FEMALE',
-];
+export type Caste = {
+  name: string;
+  tags: string[];
+  clutch_size: number[];
+  litter_size: number[];
+  max_age: number[];
+  active_time: number;
+  curious_beast: number;
+  no_season: number;
+  trainable: number;
+  baby: number;
+  child: number;
+  difficulty: number;
+  egg_size: number;
+  grass_trample: number;
+  grazer: number;
+  low_light_vision: number;
+  pet_value: number;
+  pop_ratio: number;
+  baby_name: string[];
+  caste_name: string[];
+  child_name: string[];
+  description: string;
+  creature_class: string[];
+  body_size: BodySizeRange[];
+  milkable: MilkableDesc;
+};
 
 /**
  * Returns true if the raw is a Creature raw.
@@ -341,11 +361,7 @@ const TRAINABLE_HUNTING = 1, // 0001
  */
 export const AssignBasedOn = (creature: Creature, basedOn: Creature): Creature => {
   // Special cases handled here before we go through any other keys that might be "default"
-  if (
-    creature.creature_class.ALL &&
-    creature.creature_class.ALL.length > 1 &&
-    basedOn.creature_class.ALL.length > 1
-  ) {
+  if (creature.creature_class.ALL && creature.creature_class.ALL.length > 1 && basedOn.creature_class.ALL.length > 1) {
     creature.creature_class.ALL = [...new Set(creature.creature_class.ALL.concat(basedOn.creature_class.ALL))];
   }
 
@@ -405,6 +421,7 @@ const DEFAULT_CREATURE: Creature = {
   local_pops_produce_heroes: false,
   tags: [],
   caste_tags: {} as CasteTags,
+  castes: [] as Caste[],
 };
 
 /**
