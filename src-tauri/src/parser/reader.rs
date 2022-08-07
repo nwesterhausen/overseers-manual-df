@@ -26,7 +26,7 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
     let file = match File::open(&input_path) {
         Ok(f) => f,
         Err(e) => {
-            println!("Error opening raw file for parsing!\n{:?}", e);
+            log::error!("Error opening raw file for parsing!\n{:?}", e);
             return results;
         }
     };
@@ -48,13 +48,13 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
 
     for (index, line) in reader.lines().enumerate() {
         if line.is_err() {
-            eprintln!("Error processing {}:{}", &input_path, index);
+            log::error!("Error processing {}:{}", &input_path, index);
             continue;
         }
         let line = match line {
             Ok(l) => l,
             Err(e) => {
-                println!("Line-reading error\n{:?}", e);
+                log::error!("Line-reading error\n{:?}", e);
                 continue;
             }
         };
@@ -63,15 +63,15 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
             continue;
         }
         for cap in RE.captures_iter(&line) {
-            // println!("Key: {} Value: {}", &cap[2], &cap[3])
+            log::debug!("Key: {} Value: {}", &cap[2], &cap[3]);
             match &cap[2] {
                 "OBJECT" => match &cap[3] {
                     "CREATURE" => {
-                        // println!("Discovered raws for creatures.");
+                        // Discovered raws for creatures.
                         current_object = RawObjectKind::Creature;
                     }
                     &_ => {
-                        println!("No support right now for OBJECT:{}", &cap[3]);
+                        log::debug!("No support right now for OBJECT:{}", &cap[3]);
                         return results;
                         // current_object = RawObjectKind::None;
                     }
@@ -122,7 +122,7 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                 }
                 "BIOME" => match biomes::BIOMES.get(&cap[3]) {
                     Some(biome_name) => creature_temp.biomes.push((*biome_name).to_string()),
-                    None => println!("{} is not in biome dictionary!", &cap[3]),
+                    None => log::warn!("{} is not in biome dictionary!", &cap[3]),
                 },
                 "BODY_SIZE" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
@@ -130,7 +130,12 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                         match parsing::parse_body_size(&split) {
                             Ok(size) => caste_temp.body_size.push(size),
                             Err(e) => {
-                                println!("Unable to parse BODYSIZE\n{:?}", e);
+                                log::error!(
+                                    "{}:{}:Unable to parse BODYSIZE\n{:?}",
+                                    creature_temp.get_identifier(),
+                                    caste_temp.name,
+                                    e
+                                );
                                 break;
                             }
                         }
@@ -142,7 +147,12 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                         let freq: u32 = match split[2].parse() {
                             Ok(n) => n,
                             Err(e) => {
-                                println!("Unable to parse frequency from MILKABLE\n{:?}", e);
+                                log::error!(
+                                    "{}:{}:Unable to parse frequency from MILKABLE\n{:?}",
+                                    creature_temp.get_identifier(),
+                                    caste_temp.name,
+                                    e
+                                );
                                 break;
                             }
                         };
@@ -173,39 +183,84 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                 }
                 "EGG_SIZE" => match cap[3].parse() {
                     Ok(n) => caste_temp.egg_size = n,
-                    Err(e) => println!("EGG_SIZE parsing error\n{:?}", e),
+                    Err(e) => log::error!(
+                        "{}:{}:EGG_SIZE parsing error\n{:?}",
+                        creature_temp.get_identifier(),
+                        caste_temp.name,
+                        e
+                    ),
                 },
                 "BABY" => match cap[3].parse() {
                     Ok(n) => caste_temp.baby = n,
-                    Err(e) => println!("BABY parsing error\n{:?}", e),
+                    Err(e) => log::error!(
+                        "{}:{}:BABY parsing error\n{:?}",
+                        creature_temp.get_identifier(),
+                        caste_temp.name,
+                        e
+                    ),
                 },
                 "CHILD" => match cap[3].parse() {
                     Ok(n) => caste_temp.child = n,
-                    Err(e) => println!("CHILD parsing error\n{:?}", e),
+                    Err(e) => log::error!(
+                        "{}:{}:CHILD parsing error\n{:?}",
+                        creature_temp.get_identifier(),
+                        caste_temp.name,
+                        e
+                    ),
                 },
                 "DIFFICULTY" => match cap[3].parse() {
                     Ok(n) => caste_temp.difficulty = n,
-                    Err(e) => println!("DIFFICULTY parsing error\n{:?}", e),
+                    Err(e) => log::error!(
+                        "{}:{}:DIFFICULTY parsing error\n{:?}",
+                        creature_temp.get_identifier(),
+                        caste_temp.name,
+                        e
+                    ),
                 },
                 "GRASSTRAMPLE" => match cap[3].parse() {
                     Ok(n) => caste_temp.grass_trample = n,
-                    Err(e) => println!("GRASSTRAMPLE parsing error\n{:?}", e),
+                    Err(e) => log::error!(
+                        "{}:{}:GRASSTRAMPLE parsing error\n{:?}",
+                        creature_temp.get_identifier(),
+                        caste_temp.name,
+                        e
+                    ),
                 },
                 "GRAZER" => match cap[3].parse() {
                     Ok(n) => caste_temp.grazer = n,
-                    Err(e) => println!("GRAZER parsing error\n{:?}", e),
+                    Err(e) => log::error!(
+                        "{}:{}:GRAZER parsing error\n{:?}",
+                        creature_temp.get_identifier(),
+                        caste_temp.name,
+                        e
+                    ),
                 },
                 "LOW_LIGHT_VISION" => match cap[3].parse() {
                     Ok(n) => caste_temp.low_light_vision = n,
-                    Err(e) => println!("LOW_LIGHT_VISION parsing error\n{:?}", e),
+                    Err(e) => log::error!(
+                        "{}:{}:LOW_LIGHT_VISION parsing error\n{:?}",
+                        creature_temp.get_identifier(),
+                        caste_temp.name,
+                        e
+                    ),
                 },
                 "PETVALUE" => match cap[3].parse() {
                     Ok(n) => caste_temp.pet_value = n,
-                    Err(e) => println!("PETVALUE parsing error\n{:?}", e),
+                    Err(e) => log::error!(
+                        "{}:{}:PETVALUE parsing error\n{:?}",
+                        creature_temp.get_identifier(),
+                        caste_temp.name,
+                        e
+                    ),
                 },
                 "POP_RATIO" => match cap[3].parse() {
                     Ok(n) => caste_temp.pop_ratio = n,
-                    Err(e) => println!("POP_RATIO parsing error\n{:?}", e),
+                    Err(e) => log::error!(
+                        "{}:{}:POP_RATIO parsing error\n{:?}",
+                        creature_temp.get_identifier(),
+                        caste_temp.name,
+                        e
+                    ),
                 },
                 "CLUTCH_SIZE" => {
                     let split = cap[3].split(':').collect::<Vec<&str>>();
@@ -214,7 +269,11 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                             caste_temp.clutch_size[0] = range[0];
                             caste_temp.clutch_size[1] = range[1];
                         }
-                        Err(_e) => println!("Unable to parse range for CLUTCH_SIZE"),
+                        Err(_e) => log::error!(
+                            "{}:{}:Unable to parse range for CLUTCH_SIZE",
+                            creature_temp.get_identifier(),
+                            caste_temp.name
+                        ),
                     }
                 }
                 "LITTERSIZE" => {
@@ -224,7 +283,11 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                             caste_temp.litter_size[0] = range[0];
                             caste_temp.litter_size[1] = range[1];
                         }
-                        Err(_e) => println!("Unable to parse range for LITTERSIZE"),
+                        Err(_e) => log::error!(
+                            "{}:{}:Unable to parse range for LITTERSIZE",
+                            creature_temp.get_identifier(),
+                            caste_temp.name
+                        ),
                     }
                 }
                 "DESCRIPTION" => {
@@ -237,7 +300,11 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                             caste_temp.max_age[0] = range[0];
                             caste_temp.max_age[1] = range[1];
                         }
-                        Err(_e) => println!("Unable to parse range for MAXAGE"),
+                        Err(_e) => log::error!(
+                            "{}:{}:Unable to parse range for MAXAGE",
+                            creature_temp.get_identifier(),
+                            caste_temp.name
+                        ),
                     }
                 }
                 "COPY_TAGS_FROM" => {
@@ -316,7 +383,10 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                             creature_temp.cluster_number[0] = range[0];
                             creature_temp.cluster_number[1] = range[1];
                         }
-                        Err(_e) => println!("Unable to parse range for CLUSTER_NUMBER"),
+                        Err(_e) => log::error!(
+                            "{}:Unable to parse range for CLUSTER_NUMBER",
+                            creature_temp.get_identifier()
+                        ),
                     }
                 }
                 "POPULATION_NUMBER" => {
@@ -326,7 +396,10 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                             creature_temp.population_number[0] = range[0];
                             creature_temp.population_number[1] = range[1];
                         }
-                        Err(_e) => println!("Unable to parse range for POPULATION_NUMBER"),
+                        Err(_e) => log::error!(
+                            "{}:Unable to parse range for POPULATION_NUMBER",
+                            creature_temp.get_identifier()
+                        ),
                     }
                 }
                 "DOES_NOT_EXIST" => {
@@ -370,7 +443,10 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                 }
                 "FREQUENCY" => match cap[3].parse() {
                     Ok(n) => creature_temp.frequency = n,
-                    Err(e) => println!("Failed to parse FREQUENCY\n{:?}", e),
+                    Err(_e) => log::error!(
+                        "{}:Unable to parse FREQUENCY",
+                        creature_temp.get_identifier()
+                    ),
                 },
                 "LARGE_ROAMING" => {
                     creature_tags.push(tags::CreatureTag::LargeRoaming);
@@ -661,7 +737,11 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
                 "SELECT_CASTE" => {
                     //SELECT_CASTE:<CASTE_NAME> --> retrieve tags for this
                     let target_caste_name = &cap[3];
-                    // println!("{}: selecting caste {}", creature_temp.get_identifier(), target_caste_name);
+                    log::debug!(
+                        "{}: selecting caste {}",
+                        creature_temp.get_identifier(),
+                        target_caste_name
+                    );
                     //1. Save current tags
                     caste_temp.tags = caste_tags.clone();
                     //2. Save caste
@@ -698,13 +778,10 @@ pub fn parse_file(input_path: &str) -> Vec<creature::DFCreature> {
     match current_object {
         RawObjectKind::Creature => {
             // If we already *were* capturing a creature, export it.
-            // println!("Finished capturing creature, now finished");
-            // Reset the temp values !!Todo
-            //println!("{:#?}", creature_temp);
             results.push(creature_temp);
         }
         RawObjectKind::None => (),
     }
-    //println!("{} creatures defined in {}", results.len(), &raw_filename);
+    log::info!("{} creatures defined in {}", results.len(), &raw_filename);
     results
 }
