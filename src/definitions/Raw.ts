@@ -8,6 +8,7 @@ export type Raw = {
   description: string;
   parent_raw: string;
   searchString?: string[];
+  tags: string[];
 };
 
 /**

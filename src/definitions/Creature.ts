@@ -11,6 +11,10 @@ export type CasteRange<T> = {
   [key in typeof CasteOptions[number]]: T;
 };
 
+export type CasteTags = {
+  [key in typeof CasteOptions[number]]: string[];
+}
+
 export type Creature = {
   max_age: CasteRange<number[]>;
   lays_eggs: boolean;
@@ -32,6 +36,7 @@ export type Creature = {
   creature_class: CasteRange<string[]>;
   local_pops_controllable: boolean;
   local_pops_produce_heroes: boolean;
+  caste_tags: CasteTags,
 } & Raw;
 
 export const CasteOptions = [
@@ -398,6 +403,8 @@ const DEFAULT_CREATURE: Creature = {
   },
   local_pops_controllable: false,
   local_pops_produce_heroes: false,
+  tags: [],
+  caste_tags: {} as CasteTags,
 };
 
 /**
