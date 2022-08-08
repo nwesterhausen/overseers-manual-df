@@ -48,6 +48,9 @@ export type Creature = {
   low_light_vision: CasteRange<number>;
   pop_ratio: CasteRange<number>;
   milkable: CasteRange<MilkableDesc>;
+
+  pref_string: string[];
+  population_number: number[];
 } & Raw;
 
 export type Caste = {
@@ -457,6 +460,16 @@ const DEFAULT_CREATURE: Creature = {
   low_light_vision: {},
   pop_ratio: {},
   milkable: {},
+  pref_string: [],
+  population_number: [1, 1],
+};
+
+export const PopulationNumberStatus = (creature: Creature): string => {
+  let descriptor = 'alone.';
+  if (creature.population_number[0] !== creature.population_number[1]) {
+    descriptor = `in groups of ${creature.population_number[0]} to ${creature.population_number[1]}.`;
+  }
+  return `They live in the world ${descriptor}`;
 };
 
 /**
@@ -505,6 +518,7 @@ export const GenerateSearchString = (creature: Creature): string[] => {
   }
   searchableTerms = searchableTerms.concat(creature.tags);
   searchableTerms = searchableTerms.concat(Object.values(creature.caste_tags).flat());
+  searchableTerms = searchableTerms.concat(creature.pref_string);
   return searchableTerms
     .join(' ')
     .toLowerCase()

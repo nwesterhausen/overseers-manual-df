@@ -8,6 +8,7 @@ import {
   GrownAtStatus,
   IsEggLayer,
   PetValueStatus,
+  PopulationNumberStatus,
   TrainableStatus,
   UndergroundDepthDescription,
 } from '../definitions/Creature';
@@ -104,6 +105,10 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
                   </td>
                 </tr>
                 <tr>
+                  <th>Likeable Features</th>
+                  <td>{props.creature.pref_string.length > 0 ? props.creature.pref_string.join(', ') : 'None'}</td>
+                </tr>
+                <tr>
                   <th>Life Expectancy</th>
                   <td>{LifeExpectancyStatus(props.creature)}</td>
                 </tr>
@@ -121,7 +126,9 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
                 </tr>
                 <tr>
                   <th>Group Size</th>
-                  <td>{ClusterSizeStatus(props.creature)}</td>
+                  <td>
+                    {ClusterSizeStatus(props.creature)} {PopulationNumberStatus(props.creature)}
+                  </td>
                 </tr>
                 <tr>
                   <th>Growth Patterns</th>
