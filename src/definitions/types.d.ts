@@ -5,9 +5,8 @@ export type Raw = {
   objectId: string;
   identifier: string;
   name: string;
-  description: string;
   parent_raw: string;
-  searchString?: string[];
+  searchString?: string[]; //Used in project 'overseers-manual-df'
   tags: string[];
 };
 
@@ -24,10 +23,6 @@ export type MilkableDesc = {
 
 export type CasteRange<T> = {
   [key: string]: T;
-};
-
-export type CasteTags = {
-  [key: string]: string[];
 };
 
 export type Creature = {
@@ -50,7 +45,7 @@ export type Creature = {
   inactive_season: CasteRange<number>;
   creature_class: CasteRange<string[]>;
 
-  caste_tags: CasteTags;
+  caste_tags: CasteRange<string[]>;
 
   difficulty: CasteRange<number>;
   grass_trample: CasteRange<number>;
@@ -61,4 +56,6 @@ export type Creature = {
 
   pref_string: string[];
   population_number: number[];
+
+  descriptions: CasteRange<string>;
 } & Raw;
