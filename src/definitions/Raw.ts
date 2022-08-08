@@ -1,15 +1,4 @@
-/**
- * The common similarities amongst all raw definitions.
- */
-export type Raw = {
-  objectId: string;
-  identifier: string;
-  name: string;
-  description: string;
-  parent_raw: string;
-  searchString?: string[];
-  tags: string[];
-};
+import { Raw } from './types';
 
 /**
  * Array.prototype.filter function to only allow valid Raw objects.

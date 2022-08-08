@@ -1,8 +1,9 @@
 import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
 import { createEffect, createMemo, createResource, createSignal, JSX } from 'solid-js';
-import { AssignBasedOn, Creature, GenerateSearchString } from '../definitions/Creature';
-import { FilterInvalidRaws, Raw, RawsFirstLetters } from '../definitions/Raw';
+import { AssignBasedOn, GenerateSearchString } from '../definitions/Creature';
+import { FilterInvalidRaws, RawsFirstLetters } from '../definitions/Raw';
+import type { Creature, Raw } from '../definitions/types';
 import { DIR_DF, useDirectoryProvider } from './DirectoryProvider';
 import { readDir } from '@tauri-apps/api/fs';
 import { ProgressBar } from 'solid-bootstrap';
@@ -45,7 +46,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         raw.searchString &&
         searchTerms.filter((v) => {
           for (const term of raw.searchString) {
-            if (term.indexOf(v) !== -1) return true;
+            if (term.indexOf(v.toLowerCase()) !== -1) return true;
           }
           return false;
         }).length === searchTerms.length

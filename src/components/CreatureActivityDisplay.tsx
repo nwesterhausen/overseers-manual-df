@@ -1,6 +1,7 @@
 import { Stack } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
-import { ActiveTimeStatus, CasteRange, Creature, NoSeasonStatus } from '../definitions/Creature';
+import { ActiveTimeStatus, NoSeasonStatus } from '../definitions/Creature';
+import type { CasteRange, Creature } from '../definitions/types';
 import { toTitleCase } from '../definitions/Utils';
 
 const CreatureActivityDisplay: Component<{ creature: Creature }> = (props) => {

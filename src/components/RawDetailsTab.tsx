@@ -1,6 +1,6 @@
 import { Tab, Table } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { Raw } from '../definitions/Raw';
+import type { Raw } from '../definitions/types';
 
 const RawDetailsTab: Component<{ item: Raw }> = (props) => {
   return (

@@ -8,21 +8,19 @@ use tauri_plugin_store::PluginBuilder;
 // use tauri::{AppHandle, Runtime};
 use simple_logger::SimpleLogger;
 
-mod parser;
-
 #[tauri::command]
 fn parse_raws_at_path(path: &str) -> String {
-    parser::parse_directory_to_json_string(path)
+    dfraw_json_parser::parse_directory_to_json_string(path)
 }
 
 #[tauri::command]
 fn parse_raws_at_path_to_file(path: &str, out_file: String) {
-    parser::parse_directory_to_json_file(path, &PathBuf::from(out_file));
+    dfraw_json_parser::parse_directory_to_json_file(path, &PathBuf::from(out_file));
 }
 
 #[tauri::command]
 fn parse_raws_in_file(path: &str) -> String {
-    parser::parse_directory_to_json_string(path)
+    dfraw_json_parser::parse_directory_to_json_string(path)
 }
 
 fn main() {
