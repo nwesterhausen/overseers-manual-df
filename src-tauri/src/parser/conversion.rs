@@ -43,6 +43,8 @@ pub struct WebCreature {
     low_light_vision: HashMap<String, u32>,
     pop_ratio: HashMap<String, u16>,
     milkable: HashMap<String, DFMilkable>,
+    pref_string: Vec<String>,
+    population_number: [u16; 2],
 }
 
 impl WebCreature {
@@ -80,6 +82,8 @@ impl WebCreature {
             low_light_vision: creature.get_low_light_vision_by_caste(),
             milkable: creature.get_milkable_by_caste(),
             pop_ratio: creature.get_pop_ratio_by_caste(),
+            pref_string: creature.pref_string.clone(),
+            population_number: creature.population_number,
         }
     }
 }
