@@ -4,7 +4,9 @@ import {
   ClusterSizeStatus,
   CondesedEggSize,
   Creature,
+  FirstPetValue,
   GrownAtStatus,
+  IsEggLayer,
   PetValueStatus,
   TrainableStatus,
   UndergroundDepthDescription,
@@ -13,7 +15,10 @@ import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
 import { toTitleCase } from '../definitions/Utils';
 import CreatureActivityDisplay from './CreatureActivityDisplay';
 import CreatureBodySizeTable from './CreatureBodySizeTable';
+import CreatureGrazerTable from './CreatureGrazerTable';
+import CreatureMilkTable from './CreatureMilkTable';
 import CreatureNamesTable from './CreatureNamesTable';
+import CreatureNumberTable from './CreatureNumberTable';
 import RawDetailsTab from './RawDetailsTab';
 import RawJsonTab from './RawJsonTab';
 import TwoPartBadge from './TwoPartBadge';
@@ -43,7 +48,7 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
           .map((v) => toTitleCase(v))
           .join(' ')}
         <Stack class='d-flex justify-content-end w-100 me-3' direction='horizontal' gap={1}>
-          {props.creature.lays_eggs ? (
+          {IsEggLayer(props.creature) ? (
             <TwoPartBadge bg='primary' name='Egg Size' value={'' + CondesedEggSize(props.creature.egg_sizes)} />
           ) : (
             <></>
@@ -68,13 +73,21 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
             </>
           )}
           {props.creature.gnawer.ALL ? <TwoPartBadge bg='primary' name='Gnawer' value={''} /> : <></>}
-          {props.creature.pet_value.ALL > 0 ? (
-            <TwoPartBadge bg='primary' name='Pet Value' value={`${props.creature.pet_value.ALL}`} />
+          {FirstPetValue(props.creature) > 0 ? (
+            <TwoPartBadge bg='primary' name='Pet Value' value={`${FirstPetValue(props.creature)}`} />
           ) : (
             <></>
           )}
-          {props.creature.local_pops_controllable ? <TwoPartBadge bg='primary' name='Playable' value={''} /> : <></>}
-          {props.creature.local_pops_produce_heroes ? <TwoPartBadge bg='primary' name='Civilized' value={''} /> : <></>}
+          {props.creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? (
+            <></>
+          ) : (
+            <TwoPartBadge bg='primary' name='Playable' value={''} />
+          )}
+          {props.creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? (
+            <></>
+          ) : (
+            <TwoPartBadge bg='primary' name='Civilized' value={''} />
+          )}
         </Stack>
       </Accordion.Header>
       <Accordion.Body class='p-0 pt-1'>
@@ -137,6 +150,45 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
                 <tr>
                   <th>Pet Value</th>
                   <td>{PetValueStatus(props.creature)}</td>
+                </tr>
+                <tr>
+                  <th>Difficulty</th>
+                  <td>
+                    <CreatureNumberTable values={props.creature.difficulty} fallbackDesc='Mundane/no difficulty' />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Lowlight Vision</th>
+                  <td>
+                    <CreatureNumberTable
+                      values={props.creature.low_light_vision}
+                      fallbackDesc='No low light visibility'
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Grass Trambling</th>
+                  <td>
+                    <CreatureNumberTable values={props.creature.grass_trample} fallbackDesc='Does not trample grass' />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Grazer</th>
+                  <td>
+                    <CreatureGrazerTable values={props.creature.grazer} fallbackDesc='Does not graze' />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Population Ratio</th>
+                  <td>
+                    <CreatureNumberTable values={props.creature.pop_ratio} fallbackDesc='No data available' />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Milk Production</th>
+                  <td>
+                    <CreatureMilkTable values={props.creature.milkable} fallbackDesc='None' />
+                  </td>
                 </tr>
               </tbody>
             </Table>
