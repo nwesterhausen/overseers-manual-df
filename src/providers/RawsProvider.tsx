@@ -45,7 +45,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         raw.searchString &&
         searchTerms.filter((v) => {
           for (const term of raw.searchString) {
-            if (term.indexOf(v) !== -1) return true;
+            if (term.indexOf(v.toLowerCase()) !== -1) return true;
           }
           return false;
         }).length === searchTerms.length

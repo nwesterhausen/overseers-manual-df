@@ -16,6 +16,7 @@ import { toTitleCase } from '../definitions/Utils';
 import CreatureActivityDisplay from './CreatureActivityDisplay';
 import CreatureBodySizeTable from './CreatureBodySizeTable';
 import CreatureGrazerTable from './CreatureGrazerTable';
+import CreatureListTable from './CreatureListTable';
 import CreatureMilkTable from './CreatureMilkTable';
 import CreatureNamesTable from './CreatureNamesTable';
 import CreatureNumberTable from './CreatureNumberTable';
@@ -145,6 +146,15 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
                     {props.creature.creature_class.ALL
                       ? props.creature.creature_class.ALL.map((v) => toTitleCase(v.replaceAll('_', ' '))).join(', ')
                       : 'None'}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Tags</th>
+                  <td>
+                    <CreatureListTable
+                      values={Object.assign(props.creature.caste_tags, { SPECIES: props.creature.tags })}
+                      fallbackDesc=''
+                    />
                   </td>
                 </tr>
                 <tr>
