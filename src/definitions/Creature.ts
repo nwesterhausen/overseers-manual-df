@@ -1,57 +1,5 @@
-import { Raw } from './Raw';
+import type { Raw, BodySizeRange, CasteRange, CasteTags, Creature, MilkableDesc } from './types';
 import { SearchableNames, SimplifyVolume, toTitleCase } from './Utils';
-
-export type BodySizeRange = {
-  years: number;
-  days: number;
-  size_cm3: number;
-};
-
-export type MilkableDesc = {
-  material: string;
-  frequency: number;
-};
-
-export type CasteRange<T> = {
-  [key: string]: T;
-};
-
-export type CasteTags = {
-  [key: string]: string[];
-};
-
-export type Creature = {
-  max_age: CasteRange<number[]>;
-  clutch_size: CasteRange<number[]>;
-  based_on?: string;
-  biomes: string[];
-  cluster_range: number[];
-  underground_depth: number[];
-  body_size: CasteRange<BodySizeRange[]>;
-  grown_at: CasteRange<number>;
-  names_map: CasteRange<string[]>;
-  egg_sizes: CasteRange<number>;
-  pet_value: CasteRange<number>;
-  intelligence: CasteRange<boolean[]>;
-  flier: CasteRange<boolean>;
-  gnawer: CasteRange<boolean>;
-  trainable: CasteRange<number>;
-  active_time: CasteRange<number>;
-  inactive_season: CasteRange<number>;
-  creature_class: CasteRange<string[]>;
-
-  caste_tags: CasteTags;
-
-  difficulty: CasteRange<number>;
-  grass_trample: CasteRange<number>;
-  grazer: CasteRange<number>;
-  low_light_vision: CasteRange<number>;
-  pop_ratio: CasteRange<number>;
-  milkable: CasteRange<MilkableDesc>;
-
-  pref_string: string[];
-  population_number: number[];
-} & Raw;
 
 export type Caste = {
   name: string;

@@ -544,6 +544,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "850878694b7933ca4c9569d30a34b55031b9b139ee1fc7b94a527c4ef960d690"
 
 [[package]]
+name = "dfraw_json_parser"
+version = "0.2.0"
+source = "git+https://github.com/nwesterhausen/dfraw_json_parser.git#41822170b73e9b26df9561789791945f6658db40"
+dependencies = [
+ "encoding_rs",
+ "encoding_rs_io",
+ "lazy_static 1.5.0",
+ "log",
+ "phf 0.10.1",
+ "regex",
+ "serde",
+ "serde_json",
+ "slug",
+ "walkdir",
+]
+
+[[package]]
 name = "digest"
 version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1728,20 +1745,12 @@ dependencies = [
 name = "overseers-manual-tauriapp"
 version = "0.1.1"
 dependencies = [
- "encoding_rs",
- "encoding_rs_io",
- "lazy_static 1.5.0",
+ "dfraw_json_parser",
  "log",
- "phf 0.10.1",
- "regex",
- "serde",
- "serde_json",
  "simple_logger",
- "slug",
  "tauri",
  "tauri-build",
  "tauri-plugin-store",
- "walkdir",
 ]
 
 [[package]]
