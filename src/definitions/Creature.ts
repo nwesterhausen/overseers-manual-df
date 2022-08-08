@@ -487,7 +487,7 @@ export const PetValueStatus = (creature: Creature): string => {
  * @returns An array of strings that can be used to describe the creature
  */
 export const GenerateSearchString = (creature: Creature): string[] => {
-  const searchableTerms = [
+  let searchableTerms = [
     SearchableNames(creature.names_map),
     IsEggLayer(creature) ? `eggs ${CondesedEggSize(creature.egg_sizes)}` : '',
     creature.description,
@@ -503,8 +503,11 @@ export const GenerateSearchString = (creature: Creature): string[] => {
     searchableTerms.push(creature.intelligence.ALL[0] ? 'learns' : '');
     searchableTerms.push(creature.intelligence.ALL[1] ? 'speaks' : '');
   }
+  searchableTerms = searchableTerms.concat(creature.tags);
+  searchableTerms = searchableTerms.concat(Object.values(creature.caste_tags).flat());
   return searchableTerms
     .join(' ')
+    .toLowerCase()
     .replace(/\s\s+/g, ' ')
     .split(' ')
     .filter((v) => v.length > 0)
