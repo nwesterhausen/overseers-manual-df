@@ -1,3 +1,17 @@
+## [0.12.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.11.0...v0.12.0) (2022-08-08)
+
+
+### Features
+
+* ✨ include preference strings and population number from creature data ([555fa30](https://github.com/nwesterhausen/overseers-manual-df/commit/555fa30a0d8eca49877934553aba57c52ccb12ac))
+* ✨ include tags in listings ([936f0ee](https://github.com/nwesterhausen/overseers-manual-df/commit/936f0ee467f58db9a176b1e7108db6c94320eaa7))
+* ✨ now displays all information parsed in entries ([6718fcd](https://github.com/nwesterhausen/overseers-manual-df/commit/6718fcd171a081fbecb68902e9cbbe9c410a445b))
+
+
+### Bug Fixes
+
+* 🐛 fix descriptions ([9e7e259](https://github.com/nwesterhausen/overseers-manual-df/commit/9e7e259e4e0d7f7e6c750faaba1746871affe4d2))
+
 ## [0.11.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.10.4...v0.11.0) (2022-08-07)
 
 
