@@ -12,16 +12,12 @@ const CreatureNamesTable: Component<{ names: CasteRange<string[]> }> = (props) =
           {(caste) =>
             names[caste] && names[caste].length && names[caste].join('').length ? (
               <tr>
-                {caste === 'ALL' ? (
-                  <td>General</td>
-                ) : (
-                  <td>
-                    {caste
-                      .split('_')
-                      .map((v) => toTitleCase(v))
-                      .join(' ')}
-                  </td>
-                )}
+                <td>
+                  {caste
+                    .split('_')
+                    .map((v) => toTitleCase(v))
+                    .join(' ')}
+                </td>
                 <td>{CleanName(names[caste])}</td>
               </tr>
             ) : (

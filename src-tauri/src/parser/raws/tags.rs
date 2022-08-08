@@ -134,6 +134,9 @@ impl DFBodySize {
             size_cm3,
         }
     }
+    pub fn size_cm3(&self) -> u32 {
+        self.size_cm3
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -147,6 +150,10 @@ impl DFMilkable {
             material: String::from(material),
             frequency,
         }
+    }
+    // Helper for emptiness
+    pub fn is_empty(&self) -> bool {
+        self.material.len() == 0 && self.frequency == 0
     }
 }
 

@@ -22,7 +22,6 @@ export type CasteTags = {
 
 export type Creature = {
   max_age: CasteRange<number[]>;
-  lays_eggs: boolean;
   clutch_size: CasteRange<number[]>;
   based_on?: string;
   biomes: string[];
@@ -40,11 +39,15 @@ export type Creature = {
   active_time: CasteRange<number>;
   inactive_season: CasteRange<number>;
   creature_class: CasteRange<string[]>;
-  local_pops_controllable: boolean;
-  local_pops_produce_heroes: boolean;
 
   caste_tags: CasteTags;
-  castes: Caste[];
+
+  difficulty: CasteRange<number>;
+  grass_trample: CasteRange<number>;
+  grazer: CasteRange<number>;
+  low_light_vision: CasteRange<number>;
+  pop_ratio: CasteRange<number>;
+  milkable: CasteRange<MilkableDesc>;
 } & Raw;
 
 export type Caste = {
@@ -82,8 +85,53 @@ export type Caste = {
  * @returns True if the raw is a creature.
  */
 export function isCreature(raw: Raw | Creature): boolean {
-  return (<Creature>raw).lays_eggs !== undefined;
+  return (<Creature>raw).biomes !== undefined;
 }
+
+/**
+ * Helper to tell if a caste of the creature lays eggs.
+ *
+ * @param creature - Creature to check for egg laying tag
+ * @returns true if one caste of this creature lays eggs
+ */
+export const IsEggLayer = (creature: Creature): boolean => {
+  for (const casteTags of Object.values(creature.caste_tags)) {
+    if (casteTags.indexOf('LaysEggs') !== -1) {
+      return true;
+    }
+  }
+  return false;
+};
+
+/**
+ * Helper to tell get a single pet value.
+ *
+ * @param creature - Creature to get pet value from
+ * @returns pet value of first encountered value or 0
+ */
+export const FirstPetValue = (creature: Creature): number => {
+  for (const petValue of Object.values(creature.pet_value)) {
+    if (petValue > 0) {
+      return petValue;
+    }
+  }
+  return 0;
+};
+
+/**
+ * Helper to tell get a single difficulty value.
+ *
+ * @param creature - Creature to get difficulty value from
+ * @returns difficulty value of first encountered value or 0
+ */
+export const FirstDifficulty = (creature: Creature): number => {
+  for (const difficulty of Object.values(creature.difficulty)) {
+    if (difficulty > 0) {
+      return difficulty;
+    }
+  }
+  return 0;
+};
 
 /**
  * Returns a short description of the creature's egg-laying behavior.
@@ -92,7 +140,7 @@ export function isCreature(raw: Raw | Creature): boolean {
  * @returns Text to describe the egg-laying of the creature.
  */
 export const EggLayingStatus = (creature: Creature): string => {
-  if (!creature.lays_eggs) {
+  if (!IsEggLayer(creature)) {
     return "Doesn't lay eggs.";
   }
   const size = CondesedEggSize(creature.egg_sizes);
@@ -385,45 +433,30 @@ const DEFAULT_CREATURE: Creature = {
   description: '',
   parent_raw: '',
   max_age: {} as CasteRange<number[]>,
-  lays_eggs: false,
   clutch_size: {} as CasteRange<number[]>,
   biomes: [],
   cluster_range: [],
   underground_depth: [],
-  body_size: {
-    ALL: [],
-  },
+  body_size: {},
   grown_at: {} as CasteRange<number>,
   egg_sizes: {} as CasteRange<number>,
   pet_value: {} as CasteRange<number>,
-  intelligence: {
-    ALL: [false, false],
-  },
-  flier: {
-    ALL: false,
-  },
-  gnawer: {
-    ALL: false,
-  },
-  trainable: {
-    ALL: 0,
-  },
-  active_time: {
-    ALL: 0,
-  },
-  inactive_season: {
-    ALL: 0,
-  },
+  intelligence: {},
+  flier: {},
+  gnawer: {},
+  trainable: {},
+  active_time: {},
+  inactive_season: {},
   creature_class: {},
-  names_map: {
-    SPECIES: [],
-    ALL: [],
-  },
-  local_pops_controllable: false,
-  local_pops_produce_heroes: false,
+  names_map: {},
   tags: [],
   caste_tags: {} as CasteTags,
-  castes: [] as Caste[],
+  difficulty: {},
+  grass_trample: {},
+  grazer: {},
+  low_light_vision: {},
+  pop_ratio: {},
+  milkable: {},
 };
 
 /**
@@ -456,20 +489,26 @@ export const PetValueStatus = (creature: Creature): string => {
 export const GenerateSearchString = (creature: Creature): string[] => {
   const searchableTerms = [
     SearchableNames(creature.names_map),
-    creature.lays_eggs ? `eggs ${CondesedEggSize(creature.egg_sizes)}` : '',
+    IsEggLayer(creature) ? `eggs ${CondesedEggSize(creature.egg_sizes)}` : '',
     creature.description,
     creature.flier ? 'flier' : '',
-    creature.local_pops_controllable ? 'playable' : '',
-    creature.local_pops_controllable ? 'civillized' : '',
+    creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? '' : 'playable',
+    creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? '' : 'civillized',
     creature.gnawer ? 'gnawer' : '',
-    creature.pet_value ? `pet value ${creature.pet_value}` : '',
+    FirstPetValue(creature) > 0 ? `pet value ${FirstPetValue(creature)}` : '',
+    FirstDifficulty(creature) > 0 ? `difficulty ${FirstDifficulty(creature)}` : '',
   ];
   if (creature.intelligence.ALL) {
     searchableTerms.push(creature.intelligence.ALL[0] && creature.intelligence.ALL[1] ? 'intelligent' : '');
     searchableTerms.push(creature.intelligence.ALL[0] ? 'learns' : '');
     searchableTerms.push(creature.intelligence.ALL[1] ? 'speaks' : '');
   }
-  return searchableTerms.join(' ').replaceAll('  ', ' ').split(' ');
+  return searchableTerms
+    .join(' ')
+    .replace(/\s\s+/g, ' ')
+    .split(' ')
+    .filter((v) => v.length > 0)
+    .sort();
 };
 
 const DepthRanges = [
