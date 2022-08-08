@@ -1,6 +1,6 @@
 import { Table } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
-import { CasteRange, MilkableDesc } from '../definitions/Creature';
+import type { CasteRange, MilkableDesc } from '../definitions/types';
 import { toTitleCase } from '../definitions/Utils';
 
 const CreatureMilkTable: Component<{ values: CasteRange<MilkableDesc>; fallbackDesc: string }> = (props) => {

@@ -1,6 +1,7 @@
 import { Stack, Table } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
-import { BodySizeRange, BodySizeStatus, CasteRange } from '../definitions/Creature';
+import { BodySizeStatus } from '../definitions/Creature';
+import type { CasteRange, BodySizeRange } from '../definitions/types';
 
 const CreatureBodySizeTable: Component<{ bodysize: CasteRange<BodySizeRange[]> }> = (props) => {
   const castes = Object.keys(props.bodysize);

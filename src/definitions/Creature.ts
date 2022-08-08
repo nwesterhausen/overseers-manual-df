@@ -1,4 +1,4 @@
-import type { Raw, BodySizeRange, CasteRange, CasteTags, Creature, MilkableDesc } from './types';
+import type { Raw, BodySizeRange, CasteRange, Creature, MilkableDesc } from './types';
 import { SearchableNames, SimplifyVolume, toTitleCase } from './Utils';
 
 export type Caste = {
@@ -381,17 +381,17 @@ const DEFAULT_CREATURE: Creature = {
   objectId: '',
   identifier: '',
   name: '',
-  description: '',
+  descriptions: {},
   parent_raw: '',
-  max_age: {} as CasteRange<number[]>,
-  clutch_size: {} as CasteRange<number[]>,
+  max_age: {},
+  clutch_size: {},
   biomes: [],
   cluster_range: [],
   underground_depth: [],
   body_size: {},
-  grown_at: {} as CasteRange<number>,
-  egg_sizes: {} as CasteRange<number>,
-  pet_value: {} as CasteRange<number>,
+  grown_at: {},
+  egg_sizes: {},
+  pet_value: {},
   intelligence: {},
   flier: {},
   gnawer: {},
@@ -401,7 +401,7 @@ const DEFAULT_CREATURE: Creature = {
   creature_class: {},
   names_map: {},
   tags: [],
-  caste_tags: {} as CasteTags,
+  caste_tags: {},
   difficulty: {},
   grass_trample: {},
   grazer: {},
@@ -451,7 +451,7 @@ export const GenerateSearchString = (creature: Creature): string[] => {
   let searchableTerms = [
     SearchableNames(creature.names_map),
     IsEggLayer(creature) ? `eggs ${CondesedEggSize(creature.egg_sizes)}` : '',
-    creature.description,
+    Object.values(creature.descriptions).join(' '),
     creature.flier ? 'flier' : '',
     creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? '' : 'playable',
     creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? '' : 'civillized',

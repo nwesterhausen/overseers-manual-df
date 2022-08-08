@@ -1,4 +1,4 @@
-import { CasteRange } from './Creature';
+import type { CasteRange } from '../definitions/types';
 
 export const M3_to_CM3 = 1000000;
 

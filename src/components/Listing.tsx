@@ -1,6 +1,7 @@
 import { Accordion, Tab } from 'solid-bootstrap';
 import { Component, createMemo, createSignal, For } from 'solid-js';
-import { Creature, isCreature } from '../definitions/Creature';
+import { isCreature } from '../definitions/Creature';
+import type { Creature } from '../definitions/types';
 import { useRawsProvider } from '../providers/RawsProvider';
 import { useSearchProvider } from '../providers/SearchProvider';
 import AlphaLinks from './AlphaLinks';

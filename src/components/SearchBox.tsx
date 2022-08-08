@@ -17,7 +17,7 @@ const SearchBox: Component = () => {
           type='search'
           placeholder='Filter results'
           aria-label='Search'
-          onInput={debounce((event) => {
+          onInput={debounce((event: Event) => {
             const targetEl = event.target as HTMLInputElement;
             searchContext.setSearchString(targetEl.value.toLowerCase());
           }, 100)}

@@ -3,7 +3,6 @@ import { Component } from 'solid-js';
 import {
   ClusterSizeStatus,
   CondesedEggSize,
-  Creature,
   FirstPetValue,
   GrownAtStatus,
   IsEggLayer,
@@ -12,6 +11,7 @@ import {
   TrainableStatus,
   UndergroundDepthDescription,
 } from '../definitions/Creature';
+import type { Creature } from '../definitions/types';
 import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
 import { toTitleCase } from '../definitions/Utils';
 import CreatureActivityDisplay from './CreatureActivityDisplay';
@@ -47,7 +47,7 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
       <Accordion.Header class='overflow-hidden text-nowrap'>
         {props.creature.names_map.SPECIES[0]
           .split(' ')
-          .map((v) => toTitleCase(v))
+          .map((v: string) => toTitleCase(v))
           .join(' ')}
         <Stack class='d-flex justify-content-end w-100 me-3' direction='horizontal' gap={1}>
           {IsEggLayer(props.creature) ? (
@@ -95,7 +95,7 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
       <Accordion.Body class='p-0 pt-1'>
         <Tabs defaultActiveKey={`${props.creature.objectId}-data`} class='mb-2'>
           <Tab eventKey={`${props.creature.objectId}-data`} title='Description'>
-            <p class='px-3 pt-3'>{props.creature.description}</p>
+            <p class='px-3 pt-3'>{Object.values(props.creature.descriptions).join(' ')}</p>
             <Table>
               <tbody>
                 <tr>
