@@ -213,6 +213,7 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
           </Tab>
           <RawDetailsTab item={props.creature} />
           <RawJsonTab item={props.creature} />
+          <Tab disabled title={`${props.creature.raw_module} v${props.creature.raw_module_version}`} />
         </Tabs>
       </Accordion.Body>
     </Accordion.Item>
