@@ -1,5 +1,5 @@
-import { Button, Container, Stack } from 'solid-bootstrap';
-import { Component, For } from 'solid-js';
+import { Button, Stack } from 'solid-bootstrap';
+import { Component } from 'solid-js';
 import { useDirectoryProvider } from '../providers/DirectoryProvider';
 
 const DFDirectoryNotSet: Component = () => {
@@ -31,24 +31,7 @@ const DFDirectoryNotSet: Component = () => {
             </Stack>
           </Stack>
         </>
-      ) : directoryContext.currentSave().length > 0 ? (
-        <></>
-      ) : (
-        <>
-          <p class='text-center'>Please choose a save to load raws from:</p>
-          <Container class='justify-content-center d-flex mx-auto w-50'>
-            <Stack gap={1}>
-              <For each={directoryContext.saveDirectoryOptions()}>
-                {(dir) => (
-                  <Button onClick={() => directoryContext.setCurrentSave(dir)} variant='outline-secondary'>
-                    {dir}
-                  </Button>
-                )}
-              </For>
-            </Stack>
-          </Container>
-        </>
-      )}
+      ) : <></>}
     </>
   );
 };

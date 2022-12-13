@@ -8,6 +8,8 @@ export type Raw = {
   parent_raw: string;
   searchString?: string[]; //Used in project 'overseers-manual-df'
   tags: string[];
+  raw_module: string;
+  raw_module_version: string;
 };
 
 export type BodySizeRange = {
