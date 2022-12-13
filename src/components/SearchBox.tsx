@@ -1,8 +1,9 @@
+import { debounce } from '@solid-primitives/scheduled';
 import { Form, Spinner, Stack } from 'solid-bootstrap';
 import { Component, Match, Switch } from 'solid-js';
-import { debounce } from '@solid-primitives/scheduled';
 import { STS_EMPTY, STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../providers/RawsProvider';
 import { useSearchProvider } from '../providers/SearchProvider';
+import ParsingProgressBar from './ParsingProgressBar';
 
 const SearchBox: Component = () => {
   const rawsContext = useRawsProvider();
@@ -32,7 +33,7 @@ const SearchBox: Component = () => {
       <Match when={rawsContext.currentStatus() === STS_PARSING}>
         <Stack class='justify-content-center d-flex' gap={3}>
           <span>Parsing raw files...</span>
-          {rawsContext.parsingProgressBar()}
+          <ParsingProgressBar />
         </Stack>
       </Match>
     </Switch>

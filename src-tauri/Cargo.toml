@@ -15,9 +15,13 @@ rust-version = "1.57"
 tauri-build = { version = "1.2", features = [] }
 
 [dependencies]
-tauri = { version = "1.2", features = ["dialog-open", "fs-read-dir", "updater", "window-set-title"] }
+tauri = { version = "1.2", features = [
+    "dialog-open",
+    "fs-read-dir",
+    "updater",
+    "window-set-title",
+] }
 log = "0.4.17"
-dfraw_json_parser = "0.3.0"
 
 [dependencies.simple_logger]
 default-features = false
@@ -27,6 +31,10 @@ features = ["colors"]
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/tauri-plugin-store"
 #branch = "main"
+
+[dependencies.dfraw_json_parser]
+version = "0.3.1"
+features = ["tauri"]
 
 [features]
 # by default Tauri runs in production mode

@@ -1,10 +1,10 @@
 import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
-import { ProgressBar } from 'solid-bootstrap';
-import { createEffect, createMemo, createResource, createSignal, JSX } from 'solid-js';
+import { appWindow } from '@tauri-apps/api/window';
+import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import { AssignBasedOn, GenerateSearchString } from '../definitions/Creature';
 import { FilterInvalidRaws, RawsFirstLetters } from '../definitions/Raw';
-import type { Creature, Raw } from '../definitions/types';
+import type { Creature, ProgressPayload, Raw } from '../definitions/types';
 import { useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
 
@@ -59,11 +59,21 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   });
 
   // Signal for raw parsing progress
-  const [parsingProgress, setParsingProgress] = createSignal(100);
-  const parsingProgressBar = createMemo((): JSX.Element => {
-    const percentage = Math.floor(100 * parsingProgress());
-    return <ProgressBar now={percentage} label={`${percentage}%`} />;
-  });
+  const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>({ current_module: '', percentage: 0.0 });
+
+  // Listen to window events from Tauri
+  appWindow.listen(
+    'PROGRESS',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ({ event, payload }) => {
+      const progress = (payload as ProgressPayload);
+      setParsingProgress(progress);
+      console.log(payload);
+    })
+    .then(() => {
+      console.log("Listening for progress updates from backend.")
+    }
+    ).catch(console.error);
 
   // Signal no set directory
   createEffect(() => {
@@ -77,14 +87,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   async function parseRaws(): Promise<Creature[]> {
     const dir = directoryContext.directoryPath().join("/");
 
-    setParsingProgress(0);
     setParsingStatus(STS_PARSING);
 
     try {
-      const raw_file_data: Creature[][] = JSON.parse(await invoke('parse_raws_at_game_path', { path: dir }));
+      const raw_file_data: Creature[][] = JSON.parse(await invoke('parse_raws_at_game_path', { path: dir, window: appWindow }));
 
-      setParsingProgress(100);
       setParsingStatus(STS_LOADING);
+      setParsingProgress({ current_module: '', percentage: 1.0 });
 
       // Flatten the array of arrays
       const result = raw_file_data.flat();
@@ -124,10 +133,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       return sortResult;
     } catch (e) {
       console.error(e);
-      setParsingProgress(100);
+      setParsingProgress({ current_module: '', percentage: 0.0 });
       setParsingStatus(STS_EMPTY);
     }
   }
 
-  return { currentStatus: parsingStatus, rawsJson, setLoadRaws, parsingProgressBar, rawsAlphabet };
+  return { currentStatus: parsingStatus, rawsJson, setLoadRaws, parsingProgress, rawsAlphabet };
 });
