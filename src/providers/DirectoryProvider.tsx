@@ -6,10 +6,9 @@ import { createEffect, createResource, createSignal } from 'solid-js';
 import {
   get as getFromStore,
   init as initStore,
-  LAST_SAVE,
   PATH_STRING,
   PATH_TYPE,
-  set as saveToStore,
+  set as saveToStore
 } from '../settings';
 
 export const DIR_NONE = Symbol('none'),
@@ -21,7 +20,7 @@ export const DIR_NONE = Symbol('none'),
  */
 const openDialogOptions: OpenDialogOptions = {
   directory: true,
-  title: 'Select your current Dwarf Fortress Directory',
+  title: 'Select your Dwarf Fortress install Directory',
 };
 
 /**
@@ -52,7 +51,7 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   // Signal to open the directory open dialog, change to true to open it
   const [activateManualDirectorySelection, setManualDirectorySelection] = createSignal(false);
   // Path to the dropped file location
-  const [directoryPath, setDirectoryPath] = createSignal([]);
+  const [directoryPath, setDirectoryPath] = createSignal<string[]>([]);
   // This resource calls the Tauri API to open a file dialog
   const [manuallySpecifiedPath] = createResource(
     activateManualDirectorySelection,
@@ -88,22 +87,11 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
       }, 10);
     }
   });
-  // List of possible save folders (each can have their own raws)
-  const [saveDirectoryOptions, setSaveDirectoryOptions] = createSignal<string[]>([]);
-  // Currently selected save signal
-  const [currentSave, setCurrentSave] = createSignal<string>('');
 
   // When we update the save directory, we need to update the list of possible saves
   createEffect(async () => {
     console.log('directoryPath effect', directoryPath());
     refreshValidDirectories(false);
-  });
-
-  // Save the current save to store when it changes
-  createEffect(() => {
-    if (currentSave() !== '') {
-      saveToStore(LAST_SAVE, currentSave());
-    }
   });
 
   // Some extra logging
@@ -128,57 +116,23 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   const refreshValidDirectories = async (forced: boolean) => {
     console.debug(`Forced refresh: ${forced}`);
     if (directoryPath().length > 0) {
-      const validSaveOptions: string[] = [];
 
       try {
-        // Combine the save folder path (stored as array) into a path string
-        let savePath = directoryPath().join('/');
-
         // Use the tauri fs.readDir API
-        let dirContents = await readDir(savePath, { recursive: true });
+        const dirContents = await readDir(directoryPath().join("/"), { recursive: true });
 
-        console.debug(`Read ${dirContents.length} children of ${savePath}`);
+        console.debug(`Read ${dirContents.length} children of ${directoryPath().join("/")}`);
 
         const hasGamelogTxt = dirContents.filter((v) => v.name === 'gamelog.txt').length > 0;
         if (hasGamelogTxt) {
           console.debug('Matched a gamelog.txt file');
           setDirectoryType(DIR_DF);
-          // Update the save path to reflect data/save
-          console.debug(directoryPath());
-          savePath = [...directoryPath(), 'data', 'save'].join('/');
-
-          // reload dirContents
-          dirContents = await readDir(savePath, { recursive: true });
         } else {
-          setDirectoryType(DIR_SAVE);
-        }
-
-        // For each entry in the directory, push only options which have children into an array to check
-        for (const entry of dirContents) {
-          console.debug(`into ${entry.name}`);
-          // Check if the entry is a directory. If it is, look inside and see if it has what we want
-          if (entry.children) {
-            // Check if this entry has a raw directory inside of it (which is where we look for raws)
-            if (entry.children.filter((v) => v.children && v.name === 'raw').length > 0) {
-              validSaveOptions.push(entry.name);
-            } else {
-              console.log(`${entry.name} has no 'raw' directory, can't parse`);
-            }
-          }
-        }
-      } catch (err) {
-        console.debug(err);
-      } finally {
-        if (validSaveOptions.length === 0) {
-          console.log('Invalid option for saveDirectory');
           setDirectoryType(DIR_NONE);
-          setSaveDirectoryOptions([]);
-          setManualDirectorySelection(false);
         }
+      } catch (e) {
+        console.error(e);
       }
-      setSaveDirectoryOptions(validSaveOptions);
-    } else {
-      setDirectoryType(DIR_NONE);
     }
   };
 
@@ -200,8 +154,6 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     .then((val) => {
       if (val === DIR_DF.toString()) {
         setDirectoryType(DIR_DF);
-      } else if (val === DIR_SAVE.toString()) {
-        setDirectoryType(DIR_SAVE);
       } else {
         setDirectoryType(DIR_NONE);
         saveToStore(PATH_TYPE, DIR_NONE.toString());
@@ -216,9 +168,6 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     setManualFolderSelect: setManualDirectorySelection,
     directoryPath,
     directoryType,
-    currentSave,
-    saveDirectoryOptions,
-    setCurrentSave,
     refreshSaveDirs: () => refreshValidDirectories(true),
   };
 });

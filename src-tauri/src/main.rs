@@ -3,24 +3,18 @@
     windows_subsystem = "windows"
 )]
 
-use std::path::PathBuf;
 use tauri_plugin_store::PluginBuilder;
 // use tauri::{AppHandle, Runtime};
 use simple_logger::SimpleLogger;
 
 #[tauri::command]
-fn parse_raws_at_path(path: &str) -> String {
-    dfraw_json_parser::parse_directory_to_json_string(path)
-}
+fn parse_raws_at_game_path(path: &str) -> String {
+    let raws = dfraw_json_parser::parse_game_raws(path);
+    let mut final_json = "[".to_owned();
+    final_json.push_str(raws.join(",").as_str());
+    final_json.push(']');
 
-#[tauri::command]
-fn parse_raws_at_path_to_file(path: &str, out_file: String) {
-    dfraw_json_parser::parse_directory_to_json_file(path, &PathBuf::from(out_file));
-}
-
-#[tauri::command]
-fn parse_raws_in_file(path: &str) -> String {
-    dfraw_json_parser::parse_directory_to_json_string(path)
+    final_json
 }
 
 fn main() {
@@ -39,11 +33,7 @@ fn main() {
 
     let app = tauri::Builder::default()
         .plugin(PluginBuilder::default().build())
-        .invoke_handler(tauri::generate_handler![
-            parse_raws_at_path,
-            parse_raws_at_path_to_file,
-            parse_raws_in_file
-        ])
+        .invoke_handler(tauri::generate_handler![parse_raws_at_game_path])
         .run(tauri::generate_context!());
 
     match app {

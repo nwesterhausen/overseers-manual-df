@@ -7,7 +7,6 @@ import Listing from './components/Listing';
 import MenuBar from './components/MenuBar';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import SearchBox from './components/SearchBox';
-import { useDirectoryProvider } from './providers/DirectoryProvider';
 import { STS_IDLE, useRawsProvider } from './providers/RawsProvider';
 
 // App name for title
@@ -16,7 +15,6 @@ const APP_NAME = "Overseer's Reference Manual";
 // const APP_REPO = "https://github.com/nwesterhausen/overseers-manual-df"
 
 const App: Component = () => {
-  const directoryContext = useDirectoryProvider();
   const rawsContext = useRawsProvider();
 
   // Tauri provides the app version in a promise, so we use a resource for it
@@ -27,11 +25,7 @@ const App: Component = () => {
   // When we update the currently selected save, we want to save it so we remember next time the app opens
   // Also update the title depending on the current save or app version changing
   createEffect(() => {
-    if (directoryContext.currentSave() !== '') {
-      appWindow.setTitle(`${APP_NAME} ${appVersion()} - ${directoryContext.currentSave()}`);
-    } else {
-      appWindow.setTitle(`${APP_NAME} ${appVersion()}`);
-    }
+    appWindow.setTitle(`${APP_NAME} ${appVersion()}`);
   });
 
   // Helper boolean to know when to display the page or not
