@@ -8,8 +8,8 @@ use tauri_plugin_store::PluginBuilder;
 use simple_logger::SimpleLogger;
 
 #[tauri::command]
-fn parse_raws_at_game_path(path: &str) -> String {
-    let raws = dfraw_json_parser::parse_game_raws(path);
+fn parse_raws_at_game_path(path: &str, window: tauri::window::Window) -> String {
+    let raws = dfraw_json_parser::parse_game_raws_with_tauri_emit(path, window);
     let mut final_json = "[".to_owned();
     final_json.push_str(raws.join(",").as_str());
     final_json.push(']');

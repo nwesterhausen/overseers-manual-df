@@ -1,5 +1,5 @@
 import { Container, Nav, Navbar, NavItem, OverlayTrigger, Stack, Tooltip } from 'solid-bootstrap';
-import { BsFolderSymlinkFill, BsGearFill } from 'solid-icons/bs';
+import { BsFolderSymlinkFill } from 'solid-icons/bs';
 import { HiOutlineRefresh } from 'solid-icons/hi';
 import { Component, Match, Switch } from 'solid-js';
 import { DIR_DF, DIR_NONE, useDirectoryProvider } from '../providers/DirectoryProvider';
@@ -61,14 +61,14 @@ const MenuBar: Component = () => {
             </OverlayTrigger>
           </NavItem>
 
-          <NavItem class='mx-2 btn btn-secondary'>
+          {/* <NavItem class='mx-2 btn btn-secondary'>
             <Stack direction='horizontal' gap={1}>
               <span class='me-auto'>
                 Parser Settings
               </span>
               <BsGearFill />
             </Stack>
-          </NavItem>
+          </NavItem> */}
         </Nav>
       </Container>
     </Navbar>
