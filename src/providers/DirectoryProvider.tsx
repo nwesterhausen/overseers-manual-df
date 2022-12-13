@@ -37,11 +37,11 @@ function splitPathAgnostically(path: string): string[] {
     console.debug('Caught an empty path length');
     return [];
   }
-  let pathDelimation = '/';
+  let pathDelineation = '/';
   if (path.indexOf('\\') !== -1) {
-    pathDelimation = '\\';
+    pathDelineation = '\\';
   }
-  const pathArr = path.split(pathDelimation);
+  const pathArr = path.split(pathDelineation);
   console.debug(`Saving ${pathArr} as path`);
   return pathArr;
 }
@@ -81,7 +81,7 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   // Based on the memo changing, we update the save folder path (and save it to our settings storage)
   createEffect(() => {
     if (directoryPath().length > 0) {
-      saveToStore(PATH_STRING, directoryPath().join('/')); // Decided to deliminate with `/` in the settings file
+      saveToStore(PATH_STRING, directoryPath().join('/')); // Decided to delineate with `/` in the settings file
       saveToStore(PATH_TYPE, directoryType().toString());
       setTimeout(() => {
         setManualDirectorySelection(false);

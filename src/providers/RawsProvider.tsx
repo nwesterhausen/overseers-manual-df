@@ -1,12 +1,12 @@
 import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
+import { readDir } from '@tauri-apps/api/fs';
+import { ProgressBar } from 'solid-bootstrap';
 import { createEffect, createMemo, createResource, createSignal, JSX } from 'solid-js';
 import { AssignBasedOn, GenerateSearchString } from '../definitions/Creature';
 import { FilterInvalidRaws, RawsFirstLetters } from '../definitions/Raw';
 import type { Creature, Raw } from '../definitions/types';
 import { DIR_DF, useDirectoryProvider } from './DirectoryProvider';
-import { readDir } from '@tauri-apps/api/fs';
-import { ProgressBar } from 'solid-bootstrap';
 import { useSearchProvider } from './SearchProvider';
 
 // Statuses for the parsing status
@@ -62,8 +62,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   // Signal for raw parsing progress
   const [parsingProgress, setParsingProgress] = createSignal(100);
   const parsingProgressBar = createMemo((): JSX.Element => {
-    const perc = Math.floor(100 * parsingProgress());
-    return <ProgressBar now={perc} label={`${perc}%`} />;
+    const percentage = Math.floor(100 * parsingProgress());
+    return <ProgressBar now={percentage} label={`${percentage}%`} />;
   });
 
   // Signal no chose save file
@@ -163,14 +163,14 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 /**
  * Returns an array of paths for the raw files in a directory
  *
- * @param basepath - Directory to find raw files under
+ * @param basePath - Directory to find raw files under
  * @returns array of paths to raw files
  */
-const ReadAllRawFilePaths = async (basepath: string): Promise<string[]> => {
+const ReadAllRawFilePaths = async (basePath: string): Promise<string[]> => {
   const possibleRaws: string[] = [];
 
   try {
-    const entries = await readDir(basepath, { recursive: true });
+    const entries = await readDir(basePath, { recursive: true });
     for (const entry of entries) {
       console.log(entry);
       if (entry.children && entry.name === 'objects') {

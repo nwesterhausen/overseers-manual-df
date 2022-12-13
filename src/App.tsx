@@ -1,14 +1,14 @@
-import { Container, Tabs, Tab } from 'solid-bootstrap';
-import { appWindow } from '@tauri-apps/api/window';
-import { Component, createEffect, createMemo, createResource } from 'solid-js';
-import Listing from './components/Listing';
 import { getVersion } from '@tauri-apps/api/app';
+import { appWindow } from '@tauri-apps/api/window';
+import { Container, Tab, Tabs } from 'solid-bootstrap';
+import { Component, createEffect, createMemo, createResource } from 'solid-js';
+import DFDirectoryNotSet from './components/DFDirectoryNotSet';
+import Listing from './components/Listing';
+import MenuBar from './components/MenuBar';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
+import SearchBox from './components/SearchBox';
 import { useDirectoryProvider } from './providers/DirectoryProvider';
 import { STS_IDLE, useRawsProvider } from './providers/RawsProvider';
-import SearchBox from './components/SearchBox';
-import MenuBar from './components/MenuBar';
-import DFDirectoryNotSet from './components/DFDirectoryNotSet';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";

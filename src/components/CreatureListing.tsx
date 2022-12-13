@@ -1,18 +1,19 @@
-import { Accordion, Tabs, Tab, Table, Stack } from 'solid-bootstrap';
+import { Accordion, Stack, Tab, Table, Tabs } from 'solid-bootstrap';
 import { Component } from 'solid-js';
 import {
   ClusterSizeStatus,
-  CondesedEggSize,
+  CondensedEggSize,
+  EggLayingStatus,
   FirstPetValue,
   GrownAtStatus,
   IsEggLayer,
+  LifeExpectancyStatus,
   PetValueStatus,
   PopulationNumberStatus,
   TrainableStatus,
   UndergroundDepthDescription,
 } from '../definitions/Creature';
 import type { Creature } from '../definitions/types';
-import { EggLayingStatus, LifeExpectancyStatus } from '../definitions/Creature';
 import { toTitleCase } from '../definitions/Utils';
 import CreatureActivityDisplay from './CreatureActivityDisplay';
 import CreatureBodySizeTable from './CreatureBodySizeTable';
@@ -28,7 +29,7 @@ import TwoPartBadge from './TwoPartBadge';
 /**
  * Given a Creature, returns a listing entry for it.
  *
- * The CreatureListing is an accordian with a tabbed interior. The tabs are:
+ * The CreatureListing is an accordion with a tabbed interior. The tabs are:
  *
  * - Description:
  *      Gives a description of the creature, followed by its known names and other details.
@@ -40,7 +41,7 @@ import TwoPartBadge from './TwoPartBadge';
  * @returns Component of creature data for a listing.
  */
 const CreatureListing: Component<{ creature: Creature }> = (props) => {
-  const listingId = props.creature.objectId + 'accordian';
+  const listingId = props.creature.objectId + 'accordion';
 
   return (
     <Accordion.Item id={listingId} eventKey={listingId}>
@@ -51,14 +52,14 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
           .join(' ')}
         <Stack class='d-flex justify-content-end w-100 me-3' direction='horizontal' gap={1}>
           {IsEggLayer(props.creature) ? (
-            <TwoPartBadge bg='primary' name='Egg Size' value={'' + CondesedEggSize(props.creature.egg_sizes)} />
+            <TwoPartBadge bg='primary' name='Egg Size' value={'' + CondensedEggSize(props.creature.egg_sizes)} />
           ) : (
             <></>
           )}
           {props.creature.flier.ALL ? <TwoPartBadge bg='primary' name='Flier' value={''} /> : <></>}
           {props.creature.intelligence.ALL &&
-          props.creature.intelligence.ALL[0] &&
-          props.creature.intelligence.ALL[1] ? (
+            props.creature.intelligence.ALL[0] &&
+            props.creature.intelligence.ALL[1] ? (
             <TwoPartBadge bg='primary' name='Intelligent' value={''} />
           ) : (
             <>
@@ -121,7 +122,7 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
                   <td>{props.creature.biomes.length ? props.creature.biomes.join(', ') : 'No natural biomes.'}</td>
                 </tr>
                 <tr>
-                  <th>Inhabitted Depth</th>
+                  <th>Inhabited Depth</th>
                   <td>{UndergroundDepthDescription(props.creature.underground_depth)}</td>
                 </tr>
                 <tr>
@@ -133,7 +134,7 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
                 <tr>
                   <th>Growth Patterns</th>
                   <td>
-                    <CreatureBodySizeTable bodysize={props.creature.body_size} />
+                    <CreatureBodySizeTable bodySize={props.creature.body_size} />
                     <span>{GrownAtStatus(props.creature.grown_at)}</span>
                   </td>
                 </tr>
@@ -184,7 +185,7 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
                   </td>
                 </tr>
                 <tr>
-                  <th>Grass Trambling</th>
+                  <th>Grass Trampling</th>
                   <td>
                     <CreatureNumberTable values={props.creature.grass_trample} fallbackDesc='Does not trample grass' />
                   </td>
