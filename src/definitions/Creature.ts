@@ -1,4 +1,4 @@
-import type { Raw, BodySizeRange, CasteRange, Creature, MilkableDesc } from './types';
+import type { BodySizeRange, CasteRange, Creature, MilkableDesc, Raw } from './types';
 import { SearchableNames, SimplifyVolume, toTitleCase } from './Utils';
 
 export type Caste = {
@@ -94,7 +94,7 @@ export const EggLayingStatus = (creature: Creature): string => {
   if (!IsEggLayer(creature)) {
     return "Doesn't lay eggs.";
   }
-  const size = CondesedEggSize(creature.egg_sizes);
+  const size = CondensedEggSize(creature.egg_sizes);
   const keys = Object.keys(creature.clutch_size);
   if (keys.length === 0) {
     if (size > 0) {
@@ -209,7 +209,7 @@ export const GrownAtStatus = (grown_data: CasteRange<number>): string => {
  * @param sizes - Caste mapping of the egg size
  * @returns The first encountered egg size
  */
-export const CondesedEggSize = (sizes: CasteRange<number>): number => {
+export const CondensedEggSize = (sizes: CasteRange<number>): number => {
   const castes = Object.keys(sizes);
   if (castes.length >= 1) {
     return sizes[castes[0]];
@@ -244,33 +244,33 @@ export const AverageClutchSize = (clutch_size: CasteRange<number[]>): number => 
  * @returns String describing the caste's active time
  */
 export const ActiveTimeStatus = (activeTimeBitmask: number): string => {
-  const strarr: string[] = [];
+  const strArr: string[] = [];
   // Bitmask math/tests
   if (activeTimeBitmask & ACTIVE_DIURNAL) {
-    strarr.push('during the day');
+    strArr.push('during the day');
   }
   if (activeTimeBitmask & ACTIVE_NOCTURNAL) {
-    strarr.push('during the night');
+    strArr.push('during the night');
   }
   if (activeTimeBitmask & ACTIVE_CREPUSCULAR) {
-    strarr.push('at twilight');
+    strArr.push('at twilight');
   }
   if (activeTimeBitmask & ACTIVE_MATUTINAL) {
-    strarr.push('at dawn');
+    strArr.push('at dawn');
   }
   if (activeTimeBitmask & ACTIVE_VESPERTINE) {
-    strarr.push('at evening');
+    strArr.push('at evening');
   }
 
-  switch (strarr.length) {
+  switch (strArr.length) {
     case 0:
       return 'No known active time-of-day.';
     case 1:
-      return `Active ${strarr[0]}.`;
+      return `Active ${strArr[0]}.`;
     case 2:
-      return `Active ${strarr.join(' and ')}.`;
+      return `Active ${strArr.join(' and ')}.`;
     default:
-      return `Active ${strarr.slice(0, -1).join(', ')}, and ${strarr.slice(-1)}.`;
+      return `Active ${strArr.slice(0, -1).join(', ')}, and ${strArr.slice(-1)}.`;
   }
 };
 
@@ -291,30 +291,30 @@ const ACTIVE_DIURNAL = 1, // 0000 0001
  * @returns String describing the caste's active seasons
  */
 export const NoSeasonStatus = (noSeasonBitmask: number): string => {
-  const strarr: string[] = [];
+  const strArr: string[] = [];
   // Bitmask math/tests
   if (!(noSeasonBitmask & NO_SPRING)) {
-    strarr.push('spring');
+    strArr.push('spring');
   }
   if (!(noSeasonBitmask & NO_SUMMER)) {
-    strarr.push('summer');
+    strArr.push('summer');
   }
   if (!(noSeasonBitmask & NO_FALL)) {
-    strarr.push('autumn');
+    strArr.push('autumn');
   }
   if (!(noSeasonBitmask & NO_WINTER)) {
-    strarr.push('winter');
+    strArr.push('winter');
   }
 
-  switch (strarr.length) {
+  switch (strArr.length) {
     case 0:
-      return 'No known active seaons.';
+      return 'No known active seasons.';
     case 1:
-      return `Active during ${strarr[0]}.`;
+      return `Active during ${strArr[0]}.`;
     case 2:
-      return `Active during ${strarr.join(' and ')}.`;
+      return `Active during ${strArr.join(' and ')}.`;
     default:
-      return `Active during ${strarr.slice(0, -1).join(', ')}, and ${strarr.slice(-1)}.`;
+      return `Active during ${strArr.slice(0, -1).join(', ')}, and ${strArr.slice(-1)}.`;
   }
 };
 
@@ -334,17 +334,17 @@ const NO_SPRING = 1, // 0001
  * @returns String describing the caste's trainability
  */
 export const TrainableStatus = (trainableBitmask: number): string => {
-  const strarr: string[] = [];
+  const strArr: string[] = [];
   // Bitmask math/tests
   if (trainableBitmask & TRAINABLE_HUNTING) {
-    strarr.push('hunting');
+    strArr.push('hunting');
   }
   if (trainableBitmask & TRAINABLE_WAR) {
-    strarr.push('war');
+    strArr.push('war');
   }
 
-  if (strarr.length) {
-    return `Trainable for ${strarr.join(' and ')}.`;
+  if (strArr.length) {
+    return `Trainable for ${strArr.join(' and ')}.`;
   }
   return 'Not trainable.';
 };
@@ -450,11 +450,11 @@ export const PetValueStatus = (creature: Creature): string => {
 export const GenerateSearchString = (creature: Creature): string[] => {
   let searchableTerms = [
     SearchableNames(creature.names_map),
-    IsEggLayer(creature) ? `eggs ${CondesedEggSize(creature.egg_sizes)}` : '',
+    IsEggLayer(creature) ? `eggs ${CondensedEggSize(creature.egg_sizes)}` : '',
     Object.values(creature.descriptions).join(' '),
     creature.flier ? 'flier' : '',
     creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? '' : 'playable',
-    creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? '' : 'civillized',
+    creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? '' : 'civilized',
     creature.gnawer ? 'gnawer' : '',
     FirstPetValue(creature) > 0 ? `pet value ${FirstPetValue(creature)}` : '',
     FirstDifficulty(creature) > 0 ? `difficulty ${FirstDifficulty(creature)}` : '',

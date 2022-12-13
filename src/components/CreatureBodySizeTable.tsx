@@ -1,16 +1,16 @@
 import { Stack, Table } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
 import { BodySizeStatus } from '../definitions/Creature';
-import type { CasteRange, BodySizeRange } from '../definitions/types';
+import type { BodySizeRange, CasteRange } from '../definitions/types';
 
-const CreatureBodySizeTable: Component<{ bodysize: CasteRange<BodySizeRange[]> }> = (props) => {
-  const castes = Object.keys(props.bodysize);
+const CreatureBodySizeTable: Component<{ bodySize: CasteRange<BodySizeRange[]> }> = (props) => {
+  const castes = Object.keys(props.bodySize);
   return (
     <Table size='sm' borderless>
       <tbody>
         <For each={castes} fallback={<p>No body size data.</p>}>
           {(caste) =>
-            props.bodysize[caste].length ? (
+            props.bodySize[caste].length ? (
               <tr>
                 <td>
                   {caste[0]}
@@ -18,7 +18,7 @@ const CreatureBodySizeTable: Component<{ bodysize: CasteRange<BodySizeRange[]> }
                 </td>
                 <td>
                   <Stack gap={1}>
-                    <For each={props.bodysize[caste]}>{(size) => <span>{BodySizeStatus(size)}</span>}</For>
+                    <For each={props.bodySize[caste]}>{(size) => <span>{BodySizeStatus(size)}</span>}</For>
                   </Stack>
                 </td>
               </tr>

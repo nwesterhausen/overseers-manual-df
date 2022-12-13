@@ -30,7 +30,7 @@ export const SimplifyVolume = (volume_cm3: number): string => {
 };
 
 /**
- * Returns the given string with the first letter capitalized and ther rest lower cased.
+ * Returns the given string with the first letter capitalized and the rest lower cased.
  *
  * @param str - String to convert to "Title Case"
  * @returns String in Title Case

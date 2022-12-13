@@ -26,11 +26,11 @@ const CondenseInactiveSeasons = (inactiveSeasons: CasteRange<number>): string[] 
   const keys = Object.keys(inactiveSeasons);
   if (keys.length > 1) {
     // Multiple sets of season activity based on caste
-    const strarr: string[] = [];
+    const strArr: string[] = [];
     for (const k of keys) {
-      strarr.push(`${toTitleCase(k)}: ${NoSeasonStatus(inactiveSeasons[k])}`);
+      strArr.push(`${toTitleCase(k)}: ${NoSeasonStatus(inactiveSeasons[k])}`);
     }
-    return strarr;
+    return strArr;
   }
   if (keys.length === 0) {
     return [];
@@ -41,11 +41,11 @@ const CondenseActiveTimes = (inactiveSeasons: CasteRange<number>): string[] => {
   const keys = Object.keys(inactiveSeasons);
   if (keys.length > 1) {
     // Multiple sets of season activity based on caste
-    const strarr: string[] = [];
+    const strArr: string[] = [];
     for (const k of keys) {
-      strarr.push(`${toTitleCase(k)}: ${ActiveTimeStatus(inactiveSeasons[k])}`);
+      strArr.push(`${toTitleCase(k)}: ${ActiveTimeStatus(inactiveSeasons[k])}`);
     }
-    return strarr;
+    return strArr;
   }
   if (keys.length === 0) {
     return [];

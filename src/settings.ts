@@ -17,28 +17,28 @@ export async function init() {
   await store.load();
   const keys = await store.keys();
   console.log(keys);
-  let resave = false;
+  let reSave = false;
   if (keys.indexOf(DATA_VERSION) === -1) {
     console.log('Missing', DATA_VERSION);
     await store.set(DATA_VERSION, CURRENT_VERSION);
-    resave = true;
+    reSave = true;
   }
   if (keys.indexOf(PATH_STRING) === -1) {
     console.log('Missing', PATH_STRING);
     await store.set(PATH_STRING, '');
-    resave = true;
+    reSave = true;
   }
   if (keys.indexOf(LAST_SAVE) === -1) {
     console.log('Missing', LAST_SAVE);
     await store.set(LAST_SAVE, '');
-    resave = true;
+    reSave = true;
   }
   if (keys.indexOf(PATH_TYPE) === -1) {
     console.log('Missing', PATH_TYPE);
     await store.set(PATH_TYPE, '');
-    resave = true;
+    reSave = true;
   }
-  if (resave) {
+  if (reSave) {
     await store.save();
   }
 }
@@ -84,7 +84,7 @@ export async function clear(key: string) {
  *
  * If the key is invalid, it returns an empty string.
  *
- * @param key - The key to retreive data from.
+ * @param key - The key to retrieve data from.
  * @returns The value stored under that key
  */
 export async function get(key: string): Promise<string> {

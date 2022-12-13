@@ -12,7 +12,7 @@ const RawDetailsTab: Component<{ item: Raw }> = (props) => {
             <td>{props.item.identifier}</td>
           </tr>
           <tr>
-            <th>Rawfile</th>
+            <th>Raw file</th>
             <td>{props.item.parent_raw}</td>
           </tr>
           <tr>

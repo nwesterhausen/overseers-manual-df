@@ -11,10 +11,10 @@ const Listing: Component = () => {
   const rawsContext = useRawsProvider();
   const searchContext = useSearchProvider();
 
-  const secretid = `list${Math.floor(Math.random() * 100)}`;
+  const secretId = `list${Math.floor(Math.random() * 100)}`;
 
   // Filter the active key around
-  const [activeKey, setActiveKey] = createSignal(`${secretid}-${rawsContext.rawsAlphabet()[0]}`);
+  const [activeKey, setActiveKey] = createSignal(`${secretId}-${rawsContext.rawsAlphabet()[0]}`);
   const selectedLetter = createMemo(() => {
     return activeKey().split('-')[1];
   });
@@ -22,17 +22,17 @@ const Listing: Component = () => {
   return (
     <Tab.Container
       mountOnEnter
-      id={secretid}
-      defaultActiveKey={secretid + '-' + rawsContext.rawsAlphabet()[0]}
+      id={secretId}
+      defaultActiveKey={secretId + '-' + rawsContext.rawsAlphabet()[0]}
       onSelect={(key) => {
         setActiveKey(key);
       }}>
-      <AlphaLinks id={secretid} />
+      <AlphaLinks id={secretId} />
       {rawsContext.rawsJson().length > 0 ? (
         <Tab.Content>
           <For each={rawsContext.rawsAlphabet()}>
             {(letter) => (
-              <Tab.Pane eventKey={`${secretid}-${letter}`}>
+              <Tab.Pane eventKey={`${secretId}-${letter}`}>
                 <Accordion flush>
                   {letter === selectedLetter() ? (
                     <For
@@ -47,7 +47,7 @@ const Listing: Component = () => {
               </Tab.Pane>
             )}
           </For>
-          <Tab.Pane eventKey={`${secretid}-all`}>
+          <Tab.Pane eventKey={`${secretId}-all`}>
             <Accordion flush>
               {'all' === selectedLetter() ? (
                 <For each={rawsContext.rawsJson()} fallback={<div>No items</div>}>
