@@ -1,3 +1,11 @@
+## [0.13.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.12.1...v0.13.0) (2022-12-14)
+
+
+### Features
+
+* 🚀 support DF 50.xx ([520bd11](https://github.com/nwesterhausen/overseers-manual-df/commit/520bd1153bbca8db59a8d9e2e604b23aceeec94c))
+* 🚀 support DF 50.xx ([bdf73e6](https://github.com/nwesterhausen/overseers-manual-df/commit/bdf73e698d0332c6db89d042a6c95ec04b180a48))
+
 ## [0.12.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.12.0...v0.12.1) (2022-12-13)
 
 
