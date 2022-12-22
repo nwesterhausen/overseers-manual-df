@@ -1,5 +1,5 @@
-import type { BodySizeRange, CasteRange, Creature, MilkableDesc, Raw } from './types';
 import { SearchableNames, SimplifyVolume, toTitleCase } from './Utils';
+import type { BodySizeRange, CasteRange, Creature, MilkableDesc, Raw } from './types';
 
 export type Caste = {
   name: string;
@@ -381,6 +381,13 @@ const DEFAULT_CREATURE: Creature = {
   objectId: '',
   identifier: '',
   name: '',
+  raw_module: '',
+  raw_module_version: '',
+  raw_type: 'Creature',
+  based_on: '',
+  searchString: [],
+  raw_module_found_in: '',
+  raw_module_parents: [],
   descriptions: {},
   parent_raw: '',
   max_age: {},

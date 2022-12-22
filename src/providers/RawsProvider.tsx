@@ -2,8 +2,7 @@ import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
 import { appWindow } from '@tauri-apps/api/window';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
-import { AssignBasedOn, GenerateSearchString } from '../definitions/Creature';
-import { FilterInvalidRaws, RawsFirstLetters } from '../definitions/Raw';
+import { RawsFirstLetters, UniqueSort } from '../definitions/Raw';
 import type { Creature, ProgressPayload, Raw } from '../definitions/types';
 import { useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
@@ -84,13 +83,16 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     }
   });
 
-  async function parseRaws(): Promise<Creature[]> {
+  // Provide access to only Creatures
+  const creatureRaws = createMemo(() => jsonRawsResource.latest.filter(x => x.raw_type === "Creature") as Creature[])
+
+  async function parseRaws(): Promise<Raw[]> {
     const dir = directoryContext.directoryPath().join("/");
 
     setParsingStatus(STS_PARSING);
 
     try {
-      const raw_file_data: Creature[][] = JSON.parse(await invoke('parse_raws_at_game_path', { path: dir, window: appWindow }));
+      const raw_file_data: Raw[][] = JSON.parse(await invoke('parse_raws_at_game_path', { path: dir, window: appWindow }));
 
       setParsingStatus(STS_LOADING);
       setParsingProgress({ current_module: '', percentage: 1.0 });
@@ -98,25 +100,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       // Flatten the array of arrays
       const result = raw_file_data.flat();
 
-      // Sort all raws by name
-      const sortResult = result.filter(FilterInvalidRaws).sort((a, b) => (a.name < b.name ? -1 : 1));
-
-      // Loop over all sorted raws
-      for (let i = 0; i < sortResult.length; i++) {
-        // Assume its a creature raw (all we handle right now)
-        const val: Creature = sortResult[i];
-        // If its based on another raw, find it and apply it
-        if (val.based_on && val.based_on.length) {
-          const matches = sortResult.filter((c) => c.objectId === val.based_on);
-          if (matches.length === 1) {
-            sortResult[i] = AssignBasedOn(val, matches[0]);
-          } else {
-            console.warn(`${matches.length} matches for 'based_on':${val.based_on}`);
-          }
-        }
-        // Build a search string for the raw
-        sortResult[i].searchString = GenerateSearchString(sortResult[i]);
-      }
+      const sortResult = UniqueSort(result);
 
       // Based on the number of results, set raws as EMPTY or IDLE
       if (sortResult.length === 0) {
@@ -138,5 +122,5 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     }
   }
 
-  return { currentStatus: parsingStatus, rawsJson, setLoadRaws, parsingProgress, rawsAlphabet };
+  return { currentStatus: parsingStatus, rawsJson, setLoadRaws, parsingProgress, rawsAlphabet, creatureRaws };
 });
