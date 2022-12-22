@@ -16,7 +16,7 @@ const ParsingProgressBar: Component = () => {
     return (
         <Stack direction="vertical" gap={3}>
             <ProgressBar now={percentage()} animated />
-            <p class='text-center'>{`${percentage()}% (parsing "${current()}")`}</p>
+            <p class='text-center'>{`${percentage()}% ...parsing "${current()}"`}</p>
         </Stack>
     )
 }
