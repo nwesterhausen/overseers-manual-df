@@ -1,4 +1,4 @@
-import { ProgressBar } from "solid-bootstrap";
+import { ProgressBar, Stack } from "solid-bootstrap";
 import { Component, createMemo } from "solid-js";
 import { STS_PARSING, useRawsProvider } from "../providers/RawsProvider";
 
@@ -14,7 +14,10 @@ const ParsingProgressBar: Component = () => {
         return rawsContext.parsingProgress().current_module;
     })
     return (
-        <ProgressBar now={percentage()} label={`${percentage()}% (${current()})`} animated />
+        <Stack direction="vertical" gap={3}>
+            <ProgressBar now={percentage()} animated />
+            <p class='text-center'>{`${percentage()}% (parsing "${current()}")`}</p>
+        </Stack>
     )
 }
 
