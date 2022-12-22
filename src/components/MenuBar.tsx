@@ -1,4 +1,4 @@
-import { Container, Nav, Navbar, NavItem, OverlayTrigger, Stack, Tooltip } from 'solid-bootstrap';
+import { Container, Nav, NavItem, Navbar, OverlayTrigger, Stack, Tooltip } from 'solid-bootstrap';
 import { BsFolderSymlinkFill } from 'solid-icons/bs';
 import { HiOutlineRefresh } from 'solid-icons/hi';
 import { Component, Match, Switch } from 'solid-js';
@@ -11,7 +11,7 @@ const MenuBar: Component = () => {
 
   return (
     <Navbar variant='dark'>
-      <Container class='p-0'>
+      <Container class='p-0' fluid>
         <Nav>
           <NavItem class='mx-2 btn btn-primary'
             onClick={() => {
