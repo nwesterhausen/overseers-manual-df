@@ -10,6 +10,9 @@ export type Raw = {
   tags: string[];
   raw_module: string;
   raw_module_version: string;
+  raw_type: string;
+  raw_module_found_in: string;
+  raw_module_parents?: string[]; //Use in 'overseers-manual-df'
 };
 
 export type BodySizeRange = {
