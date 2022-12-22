@@ -1,3 +1,17 @@
+## [0.14.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.13.0...v0.14.0) (2022-12-22)
+
+
+### Features
+
+* :lipstick: improve progress info ([252748e](https://github.com/nwesterhausen/overseers-manual-df/commit/252748ea34b801e20054d3c8be865eecbd055ad8))
+* :sparkles: de-dupe parsed raws by identifier ([13cc748](https://github.com/nwesterhausen/overseers-manual-df/commit/13cc748a6e2e19c97e332f28184cb817339cb7c7))
+
+
+### Bug Fixes
+
+* :lipstick: have content fill window ([7187ddf](https://github.com/nwesterhausen/overseers-manual-df/commit/7187ddf281d139c5f0dbad4a37fdd995eb9c2f9e))
+* :lipstick: remove extra parentheses ([6c87608](https://github.com/nwesterhausen/overseers-manual-df/commit/6c876086f6f66e5f115af69e79797c204209b290))
+
 ## [0.13.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.12.1...v0.13.0) (2022-12-14)
 
 
