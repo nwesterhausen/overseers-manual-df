@@ -36,7 +36,7 @@ const App: Component = () => {
   return (
     <>
       <MenuBar />
-      <Container class='p-2'>
+      <Container class='p-2' fluid>
         <DFDirectoryNotSet />
         <SearchBox />
         {contentToDisplay() ? (
