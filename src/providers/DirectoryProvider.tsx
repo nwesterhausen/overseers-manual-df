@@ -1,9 +1,9 @@
 import { createContextProvider } from '@solid-primitives/context';
-import { open as tauriOpen, OpenDialogOptions } from '@tauri-apps/api/dialog';
+import { OpenDialogOptions, open as tauriOpen } from '@tauri-apps/api/dialog';
 import { Event, listen } from '@tauri-apps/api/event';
 import { readDir } from '@tauri-apps/api/fs';
 import { createEffect, createResource, createSignal } from 'solid-js';
-import { get as getFromStore, init as initStore, PATH_STRING, PATH_TYPE, set as saveToStore } from '../settings';
+import { PATH_STRING, PATH_TYPE, get as getFromStore, init as initStore, set as saveToStore } from '../settings';
 
 export const DIR_NONE = Symbol('none'),
   DIR_DF = Symbol('df'),
@@ -76,10 +76,10 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     if (directoryPath().length > 0) {
       saveToStore(PATH_STRING, directoryPath().join('/')); // Decided to delineate with `/` in the settings file
       saveToStore(PATH_TYPE, directoryType().toString());
-      setTimeout(() => {
-        setManualDirectorySelection(false);
-      }, 10);
     }
+    setTimeout(() => {
+      setManualDirectorySelection(false);
+    }, 10);
   });
 
   // When we update the save directory, we need to update the list of possible saves
