@@ -9,6 +9,7 @@ import MenuBar from './components/MenuBar';
 import ParsingProgressBar from './components/ParsingProgressBar';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import SearchBox from './components/SearchBox';
+import SearchFilters from './components/SearchFilters';
 import { STS_IDLE, useRawsProvider } from './providers/RawsProvider';
 
 // App name for title
@@ -41,6 +42,7 @@ const App: Component = () => {
       <Container class='p-2' fluid>
         <DFDirectoryNotSet />
         <SearchBox />
+        <SearchFilters />
         <ParsingProgressBar />
         <LoadingRawsProgress />
         {contentToDisplay() ? (
