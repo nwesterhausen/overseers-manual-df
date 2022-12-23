@@ -70,3 +70,16 @@ export type ProgressPayload = {
   current_module: string;
   percentage: number;
 };
+
+// info.txt raw definition
+export type DFInfoFile = {
+  identifier: string;
+  sourced_directory: string;
+  numeric_version: number;
+  displayed_version: string;
+  earliest_compatible_numeric_version: number;
+  earliest_compatible_displayed_version: string;
+  author: string;
+  name: string;
+  description: string;
+};
