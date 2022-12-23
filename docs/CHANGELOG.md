@@ -1,3 +1,21 @@
+## [0.16.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.15.0...v0.16.0) (2022-12-23)
+
+
+### Features
+
+* ⚡️ improve menu bar responsiveness ([0bf5183](https://github.com/nwesterhausen/overseers-manual-df/commit/0bf518309db1f4612df284b2020c372d14f654a1))
+
+
+### Bug Fixes
+
+* 🐛 allow chosing a directory after canceling the dialog ([b3425cf](https://github.com/nwesterhausen/overseers-manual-df/commit/b3425cf3bd13fa3dfc8d3d563eb5eb19cf8752e1))
+* 🐛 always show the loading message ([3d1aa1c](https://github.com/nwesterhausen/overseers-manual-df/commit/3d1aa1c9c1c6f4f02bb5d00ea7af9938848977ac))
+
+
+### Performance Improvements
+
+* 🔥 remove dead code ([a558106](https://github.com/nwesterhausen/overseers-manual-df/commit/a558106944315724a85934c73359895a6c6febc4))
+
 ## [0.15.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.14.0...v0.15.0) (2022-12-23)
 
 
