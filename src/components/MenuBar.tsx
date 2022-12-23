@@ -1,8 +1,8 @@
-import { Container, Nav, NavItem, Navbar, OverlayTrigger, Stack, Tooltip } from 'solid-bootstrap';
-import { BsFolderSymlinkFill } from 'solid-icons/bs';
+import { Button, OverlayTrigger, Tooltip } from 'solid-bootstrap';
+import { AiTwotoneFolderAdd } from 'solid-icons/ai';
 import { HiOutlineRefresh } from 'solid-icons/hi';
-import { Component, Match, Switch } from 'solid-js';
-import { DIR_DF, DIR_NONE, useDirectoryProvider } from '../providers/DirectoryProvider';
+import { Component, Show } from 'solid-js';
+import { useDirectoryProvider } from '../providers/DirectoryProvider';
 import { STS_IDLE, useRawsProvider } from '../providers/RawsProvider';
 
 const MenuBar: Component = () => {
@@ -10,67 +10,54 @@ const MenuBar: Component = () => {
   const rawsContext = useRawsProvider();
 
   return (
-    <Navbar variant='dark'>
-      <Container class='p-0' fluid>
-        <Nav>
-          <NavItem
-            class='mx-2 btn btn-primary'
+    <div class='hstack gap-2 px-2'>
+      <Show when={directoryContext.directoryPath().length > 0}>
+        <div>
+          <OverlayTrigger
+            placement='auto'
+            overlay={<Tooltip id='directory-type-details'>Directory set as Dwarf Fortress Directory</Tooltip>}>
+            <span
+              style={{
+                'min-width': '0px',
+                width: 'calc(100vw - 12rem)',
+                'max-width': `${directoryContext.directoryPath().join('/').length * 10}px`,
+                display: 'inline-block',
+              }}
+              class='btn btn-secondary disabled text-truncate'>
+              {directoryContext.directoryPath().join('/')}
+            </span>
+          </OverlayTrigger>
+        </div>
+      </Show>
+
+      <div>
+        <OverlayTrigger
+          placement='auto'
+          overlay={
+            <Tooltip>
+              {directoryContext.directoryPath().length > 0 ? 'Change ' : 'Set '}Dwarf Fortress Game Directory
+            </Tooltip>
+          }>
+          <Button
+            variant='secondary'
             onClick={() => {
               directoryContext.setManualFolderSelect(true);
             }}>
-            <Stack direction='horizontal' gap={1}>
-              <span class='me-auto'>
-                {directoryContext.directoryPath().length > 0 ? 'Change ' : 'Set '}
-                Directory
-              </span>
-              <BsFolderSymlinkFill />
-            </Stack>
-          </NavItem>
+            <AiTwotoneFolderAdd />
+          </Button>
+        </OverlayTrigger>
+      </div>
 
-          <OverlayTrigger
-            placement='auto'
-            overlay={
-              <Tooltip id='directory-type-details'>
-                <Switch>
-                  <Match when={directoryContext.directoryType() === DIR_DF}>Dwarf Fortress Directory</Match>
-                  <Match when={directoryContext.directoryType() === DIR_NONE}>Please set the directory!</Match>
-                </Switch>
-              </Tooltip>
-            }>
-            <NavItem class='mx-2 btn btn-secondary disabled'>
-              {directoryContext.directoryPath().length > 0
-                ? directoryContext.directoryPath().join('/')
-                : 'No Directory Set'}
-            </NavItem>
+      <Show when={rawsContext.parsingStatus() === STS_IDLE}>
+        <div>
+          <OverlayTrigger placement='auto' overlay={<Tooltip id='refresh-button-tooltip'>Re-read Raw Modules</Tooltip>}>
+            <Button variant='secondary' onClick={() => rawsContext.setLoadRaws(true)}>
+              <HiOutlineRefresh />
+            </Button>
           </OverlayTrigger>
-
-          <NavItem class='mx-2'>
-            <OverlayTrigger placement='auto' overlay={<Tooltip id='refresh-button-tooltip'>Refresh the raws</Tooltip>}>
-              <NavItem
-                class='mx-2 btn btn-info'
-                classList={{
-                  disabled: rawsContext.parsingStatus() !== STS_IDLE,
-                }}
-                onClick={() => rawsContext.setLoadRaws(true)}>
-                <Stack direction='horizontal' gap={1}>
-                  <span class='me-auto'>Re-read Raw Modules</span>
-                  <HiOutlineRefresh />
-                </Stack>
-              </NavItem>
-            </OverlayTrigger>
-          </NavItem>
-
-          {/* <NavItem class='mx-2 btn btn-secondary'>
-            <Stack direction='horizontal' gap={1}>
-              <span class='me-auto'>
-                Parser Settings
-              </span>
-              <BsGearFill />
-            </Stack>
-          </NavItem> */}
-        </Nav>
-      </Container>
-    </Navbar>
+        </div>
+      </Show>
+    </div>
   );
 };
 
