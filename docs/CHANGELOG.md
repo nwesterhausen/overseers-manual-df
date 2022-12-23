@@ -1,3 +1,12 @@
+## [0.17.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.16.0...v0.17.0) (2022-12-23)
+
+
+### Features
+
+* ✨ add filter for included raw modules ([9ffcf0b](https://github.com/nwesterhausen/overseers-manual-df/commit/9ffcf0baf00b9dcf3d9a301fd609a781831fbcac))
+* ✨ provide a simple interface for viewing mod details ([4d5b487](https://github.com/nwesterhausen/overseers-manual-df/commit/4d5b48795e9465518b796590e7cdee803b6afc88))
+* ✨ provide qol for search filter modal ([4e6f96a](https://github.com/nwesterhausen/overseers-manual-df/commit/4e6f96a9e6644112c11309886cf11d168b531b04))
+
 ## [0.16.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.15.0...v0.16.0) (2022-12-23)
 
 
