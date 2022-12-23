@@ -44,3 +44,15 @@
   width: calc(100vw - 00.5rem);
   overflow-x: hidden;
 }
+
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  :hover {
+    overflow: auto;
+    white-space: normal;
+    text-overflow: unset;
+  }
+}
