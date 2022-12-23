@@ -4,7 +4,9 @@ import { Container, Tab, Tabs } from 'solid-bootstrap';
 import { Component, createEffect, createMemo, createResource } from 'solid-js';
 import DFDirectoryNotSet from './components/DFDirectoryNotSet';
 import ListingBestiary from './components/ListingBestiary';
+import LoadingRawsProgress from './components/LoadingRawsProgress';
 import MenuBar from './components/MenuBar';
+import ParsingProgressBar from './components/ParsingProgressBar';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import SearchBox from './components/SearchBox';
 import { STS_IDLE, useRawsProvider } from './providers/RawsProvider';
@@ -39,6 +41,8 @@ const App: Component = () => {
       <Container class='p-2' fluid>
         <DFDirectoryNotSet />
         <SearchBox />
+        <ParsingProgressBar />
+        <LoadingRawsProgress />
         {contentToDisplay() ? (
           <></>
         ) : (

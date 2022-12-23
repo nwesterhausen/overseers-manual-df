@@ -1,5 +1,5 @@
 import { ProgressBar, Stack } from 'solid-bootstrap';
-import { Component, createMemo } from 'solid-js';
+import { Component, Show, createMemo } from 'solid-js';
 import { STS_PARSING, useRawsProvider } from '../providers/RawsProvider';
 
 const ParsingProgressBar: Component = () => {
@@ -14,10 +14,15 @@ const ParsingProgressBar: Component = () => {
     return rawsContext.parsingProgress().current_module;
   });
   return (
-    <Stack direction='vertical' gap={3}>
-      <ProgressBar now={percentage()} animated />
-      <p class='text-center'>{`${percentage()}% ...parsing "${current()}"`}</p>
-    </Stack>
+    <Show when={rawsContext.parsingStatus() === STS_PARSING}>
+      <Stack class='justify-content-center d-flex' gap={3}>
+        <span>Parsing raw files...</span>
+        <Stack direction='vertical' gap={3}>
+          <ProgressBar now={percentage()} animated />
+          <p class='text-center'>{`${percentage()}% ...parsing "${current()}"`}</p>
+        </Stack>
+      </Stack>
+    </Show>
   );
 };
 
