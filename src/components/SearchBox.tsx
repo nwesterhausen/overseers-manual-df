@@ -10,10 +10,10 @@ const SearchBox: Component = () => {
   const searchContext = useSearchProvider();
   return (
     <Switch>
-      <Match when={rawsContext.currentStatus() === STS_EMPTY}>
+      <Match when={rawsContext.parsingStatus() === STS_EMPTY}>
         <></>
       </Match>
-      <Match when={rawsContext.currentStatus() === STS_IDLE}>
+      <Match when={rawsContext.parsingStatus() === STS_IDLE}>
         <Form.Control
           type='search'
           placeholder='Filter results'
@@ -24,13 +24,13 @@ const SearchBox: Component = () => {
           }, 100)}
         />
       </Match>
-      <Match when={rawsContext.currentStatus() === STS_LOADING}>
+      <Match when={rawsContext.parsingStatus() === STS_LOADING}>
         <Stack class='justify-content-center d-flex' direction='horizontal' gap={3}>
           <Spinner animation='grow' />
           <span>Loading raws...</span>
         </Stack>
       </Match>
-      <Match when={rawsContext.currentStatus() === STS_PARSING}>
+      <Match when={rawsContext.parsingStatus() === STS_PARSING}>
         <Stack class='justify-content-center d-flex' gap={3}>
           <span>Parsing raw files...</span>
           <ParsingProgressBar />

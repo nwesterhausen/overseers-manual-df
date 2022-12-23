@@ -50,7 +50,7 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
       rawsSorted[i].raw_module_parents = [rawsSorted[i].raw_module_found_in];
     }
     switch (rawsSorted[i].raw_type) {
-      case "Creature":
+      case 'Creature':
         // Assume its a creature raw (all we handle right now)
         const creature = rawsSorted[i] as Creature;
         // If its based on another raw, find it and apply it
@@ -73,11 +73,10 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
   // Unique values only
   const uniqResult = rawsSorted.reduce((res: Raw[], current) => {
     // Check if we already have one with that identifier
-    const raw = res.find(v => v.identifier === current.identifier);
+    const raw = res.find((v) => v.identifier === current.identifier);
 
     // If the identifier exists in our results array, we already have it entered. We can append our source to it.
     if (raw) {
-
       // Check if the array of module_parents exists or not first
       if (Array.isArray(raw.raw_module_parents)) {
         raw.raw_module_parents.push(current.raw_module_found_in);
@@ -94,4 +93,4 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
 
   // Return the sorted and unique result
   return uniqResult;
-}
+};

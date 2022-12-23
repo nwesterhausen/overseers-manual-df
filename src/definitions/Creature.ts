@@ -474,6 +474,9 @@ export const GenerateSearchString = (creature: Creature): string[] => {
   searchableTerms = searchableTerms.concat(creature.tags);
   searchableTerms = searchableTerms.concat(Object.values(creature.caste_tags).flat());
   searchableTerms = searchableTerms.concat(creature.pref_string);
+
+  searchableTerms.push(creature.raw_module);
+
   return searchableTerms
     .join(' ')
     .toLowerCase()

@@ -69,4 +69,4 @@ export type Creature = {
 export type ProgressPayload = {
   current_module: string;
   percentage: number;
-}
+};

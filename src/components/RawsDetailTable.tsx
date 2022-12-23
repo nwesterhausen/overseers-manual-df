@@ -1,11 +1,11 @@
-import { Tab, Table } from 'solid-bootstrap';
+import { Table } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import type { Raw } from '../definitions/types';
+import { Raw } from '../definitions/types';
 
-const RawDetailsTab: Component<{ item: Raw }> = (props) => {
+const RawJsonTable: Component<{ item: Raw }> = (props) => {
   return (
-    <Tab eventKey={`${props.item.objectId}-raws`} title='Raw Details'>
-      <Table size='sm'>
+    <>
+      <Table>
         <tbody>
           <tr>
             <th>Identifier</th>
@@ -19,10 +19,16 @@ const RawDetailsTab: Component<{ item: Raw }> = (props) => {
             <th>ObjectID</th>
             <td>{props.item.objectId}</td>
           </tr>
+          <tr>
+            <th>Raws as JSON</th>
+            <td>
+              <pre class='p-1 text-muted'>{JSON.stringify(props.item, null, 2)}</pre>
+            </td>
+          </tr>
         </tbody>
       </Table>
-    </Tab>
+    </>
   );
 };
 
-export default RawDetailsTab;
+export default RawJsonTable;

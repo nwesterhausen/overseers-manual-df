@@ -1,30 +1,10 @@
-import { Accordion, Stack, Tab, Table, Tabs } from 'solid-bootstrap';
-import { Component } from 'solid-js';
-import {
-  ClusterSizeStatus,
-  CondensedEggSize,
-  EggLayingStatus,
-  FirstPetValue,
-  GrownAtStatus,
-  IsEggLayer,
-  LifeExpectancyStatus,
-  PetValueStatus,
-  PopulationNumberStatus,
-  TrainableStatus,
-  UndergroundDepthDescription,
-} from '../definitions/Creature';
-import type { Creature } from '../definitions/types';
+import { Button, Card, Modal, Stack } from 'solid-bootstrap';
+import { Component, Show, createSignal } from 'solid-js';
 import { toTitleCase } from '../definitions/Utils';
-import CreatureActivityDisplay from './CreatureActivityDisplay';
-import CreatureBodySizeTable from './CreatureBodySizeTable';
-import CreatureGrazerTable from './CreatureGrazerTable';
-import CreatureListTable from './CreatureListTable';
-import CreatureMilkTable from './CreatureMilkTable';
-import CreatureNamesTable from './CreatureNamesTable';
-import CreatureNumberTable from './CreatureNumberTable';
-import RawDetailsTab from './RawDetailsTab';
-import RawJsonTab from './RawJsonTab';
-import TwoPartBadge from './TwoPartBadge';
+import type { Creature } from '../definitions/types';
+import CreatureDescriptionTable from './CreateDescriptionTable';
+import CreatureBadges from './CreatureBadges';
+import RawJsonTable from './RawsDetailTable';
 
 /**
  * Given a Creature, returns a listing entry for it.
@@ -41,182 +21,80 @@ import TwoPartBadge from './TwoPartBadge';
  * @returns Component of creature data for a listing.
  */
 const CreatureListing: Component<{ creature: Creature }> = (props) => {
-  const listingId = props.creature.objectId + 'accordion';
+  const listingId = props.creature.objectId + 'listing';
+  const title = props.creature.names_map.SPECIES[0]
+    .split(' ')
+    .map((v: string) => toTitleCase(v))
+    .join(' ');
+  const subTitle = props.creature.raw_module + ' v' + props.creature.raw_module_version;
+
+  const [showDescription, setShowDescription] = createSignal(false);
+  const handleOpenDescription = () => setShowDescription(true);
+  const handleCloseDescription = () => setShowDescription(false);
+
+  const [showRawDetails, setShowRawDetails] = createSignal(false);
+  const handleOpenRawDetails = () => setShowRawDetails(true);
+  const handleCloseRawDetails = () => setShowRawDetails(false);
 
   return (
-    <Accordion.Item id={listingId} eventKey={listingId}>
-      <Accordion.Header class='overflow-hidden text-nowrap'>
-        {props.creature.names_map.SPECIES[0]
-          .split(' ')
-          .map((v: string) => toTitleCase(v))
-          .join(' ')}
-        <Stack class='d-flex justify-content-end w-100 me-3' direction='horizontal' gap={1}>
-          {IsEggLayer(props.creature) ? (
-            <TwoPartBadge bg='primary' name='Egg Size' value={'' + CondensedEggSize(props.creature.egg_sizes)} />
-          ) : (
-            <></>
-          )}
-          {props.creature.flier.ALL ? <TwoPartBadge bg='primary' name='Flier' value={''} /> : <></>}
-          {props.creature.intelligence.ALL &&
-            props.creature.intelligence.ALL[0] &&
-            props.creature.intelligence.ALL[1] ? (
-            <TwoPartBadge bg='primary' name='Intelligent' value={''} />
-          ) : (
-            <>
-              {props.creature.intelligence.ALL && props.creature.intelligence.ALL[0] ? (
-                <TwoPartBadge bg='primary' name='Learns' value={''} />
-              ) : (
-                <></>
-              )}
-              {props.creature.intelligence.ALL && props.creature.intelligence.ALL[1] ? (
-                <TwoPartBadge bg='primary' name='Speaks' value={''} />
-              ) : (
-                <></>
-              )}
-            </>
-          )}
-          {props.creature.gnawer.ALL ? <TwoPartBadge bg='primary' name='Gnawer' value={''} /> : <></>}
-          {FirstPetValue(props.creature) > 0 ? (
-            <TwoPartBadge bg='primary' name='Pet Value' value={`${FirstPetValue(props.creature)}`} />
-          ) : (
-            <></>
-          )}
-          {props.creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? (
-            <></>
-          ) : (
-            <TwoPartBadge bg='primary' name='Playable' value={''} />
-          )}
-          {props.creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? (
-            <></>
-          ) : (
-            <TwoPartBadge bg='primary' name='Civilized' value={''} />
-          )}
+    <Card style={{ width: '20rem', 'min-height': '20rem' }} id={listingId}>
+      <Card.Body>
+        <Card.Title class='fw-bolder'>{title}</Card.Title>
+        <Card.Subtitle class='mb-2 text-muted'>{subTitle}</Card.Subtitle>
+        <Card.Text>
+          <Show
+            when={Object.values(props.creature.descriptions).length > 0}
+            fallback={<p class='text-muted fst-italic'>No description available.</p>}>
+            {Object.values(props.creature.descriptions).join(' ')}
+          </Show>
+        </Card.Text>
+      </Card.Body>
+      <div class='mb-2'>
+        <CreatureBadges creature={props.creature} />
+      </div>
+      <Card.Footer class='mt-auto'>
+        <Stack gap={2}>
+          <Button variant='primary' size='sm' onClick={handleOpenDescription}>
+            Show All Details
+          </Button>
+          <a
+            onClick={handleOpenRawDetails}
+            class='text-center text-decoration-none fw-light text-muted indicate-clickable'>
+            See Raw Info
+          </a>
         </Stack>
-      </Accordion.Header>
-      <Accordion.Body class='p-0 pt-1'>
-        <Tabs defaultActiveKey={`${props.creature.objectId}-data`} class='mb-2'>
-          <Tab eventKey={`${props.creature.objectId}-data`} title='Description'>
-            <p class='px-3 pt-3'>{Object.values(props.creature.descriptions).join(' ')}</p>
-            <Table>
-              <tbody>
-                <tr>
-                  <th>Names</th>
-                  <td>
-                    <CreatureNamesTable names={props.creature.names_map} />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Likeable Features</th>
-                  <td>{props.creature.pref_string.length > 0 ? props.creature.pref_string.join(', ') : 'None'}</td>
-                </tr>
-                <tr>
-                  <th>Life Expectancy</th>
-                  <td>{LifeExpectancyStatus(props.creature)}</td>
-                </tr>
-                <tr>
-                  <th>Egg Laying</th>
-                  <td>{EggLayingStatus(props.creature)}</td>
-                </tr>
-                <tr>
-                  <th>Found In</th>
-                  <td>{props.creature.biomes.length ? props.creature.biomes.join(', ') : 'No natural biomes.'}</td>
-                </tr>
-                <tr>
-                  <th>Inhabited Depth</th>
-                  <td>{UndergroundDepthDescription(props.creature.underground_depth)}</td>
-                </tr>
-                <tr>
-                  <th>Group Size</th>
-                  <td>
-                    {ClusterSizeStatus(props.creature)} {PopulationNumberStatus(props.creature)}
-                  </td>
-                </tr>
-                <tr>
-                  <th>Growth Patterns</th>
-                  <td>
-                    <CreatureBodySizeTable bodySize={props.creature.body_size} />
-                    <span>{GrownAtStatus(props.creature.grown_at)}</span>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Activity</th>
-                  <td>
-                    <CreatureActivityDisplay creature={props.creature} />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Trainable</th>
-                  <td>{TrainableStatus(props.creature.trainable.ALL)}</td>
-                </tr>
-                <tr>
-                  <th>Defining Classes</th>
-                  <td>
-                    {props.creature.creature_class.ALL
-                      ? props.creature.creature_class.ALL.map((v) => toTitleCase(v.replaceAll('_', ' '))).join(', ')
-                      : 'None'}
-                  </td>
-                </tr>
-                <tr>
-                  <th>Tags</th>
-                  <td>
-                    <CreatureListTable
-                      values={Object.assign(props.creature.caste_tags, { SPECIES: props.creature.tags })}
-                      fallbackDesc=''
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Pet Value</th>
-                  <td>{PetValueStatus(props.creature)}</td>
-                </tr>
-                <tr>
-                  <th>Difficulty</th>
-                  <td>
-                    <CreatureNumberTable values={props.creature.difficulty} fallbackDesc='Mundane/no difficulty' />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Lowlight Vision</th>
-                  <td>
-                    <CreatureNumberTable
-                      values={props.creature.low_light_vision}
-                      fallbackDesc='No low light visibility'
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Grass Trampling</th>
-                  <td>
-                    <CreatureNumberTable values={props.creature.grass_trample} fallbackDesc='Does not trample grass' />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Grazer</th>
-                  <td>
-                    <CreatureGrazerTable values={props.creature.grazer} fallbackDesc='Does not graze' />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Population Ratio</th>
-                  <td>
-                    <CreatureNumberTable values={props.creature.pop_ratio} fallbackDesc='No data available' />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Milk Production</th>
-                  <td>
-                    <CreatureMilkTable values={props.creature.milkable} fallbackDesc='None' />
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-          </Tab>
-          <RawDetailsTab item={props.creature} />
-          <RawJsonTab item={props.creature} />
-          <Tab disabled title={`${props.creature.raw_module} v${props.creature.raw_module_version}`} />
-        </Tabs>
-      </Accordion.Body>
-    </Accordion.Item>
+      </Card.Footer>
+      <Modal
+        dialogClass='modal90w'
+        id={`${listingId}-details`}
+        show={showDescription()}
+        onHide={handleCloseDescription}>
+        <Modal.Header closeButton>
+          <Modal.Title>{title} Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <CreatureDescriptionTable creature={props.creature} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleCloseDescription}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal dialogClass='modal90w' id={`${listingId}-raws`} show={showRawDetails()} onHide={handleCloseRawDetails}>
+        <Modal.Header closeButton>
+          <Modal.Title>{title} Raws</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <RawJsonTable item={props.creature} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleCloseRawDetails}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Card>
   );
 };
 
