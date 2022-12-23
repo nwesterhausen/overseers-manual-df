@@ -16,6 +16,9 @@ const SearchFilters: Component = () => {
         <RawModuleFilter />
       </Modal.Body>
       <Modal.Footer>
+        <Button variant='secondary' onClick={searchContext.handleHideSearchFilters}>
+          Close
+        </Button>
         <Button variant='danger' onClick={rawsContext.removeAllRawModuleFilters}>
           Reset All
         </Button>
