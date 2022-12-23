@@ -1,3 +1,10 @@
+## [0.15.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.14.0...v0.15.0) (2022-12-23)
+
+
+### Features
+
+* :sparkles: remove alphabetical split of raws ([487ca4a](https://github.com/nwesterhausen/overseers-manual-df/commit/487ca4ab4e7cddbaa894931a3e2afcf40649da1b))
+
 ## [0.14.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.13.0...v0.14.0) (2022-12-22)
 
 
