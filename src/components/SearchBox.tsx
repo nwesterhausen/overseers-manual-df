@@ -15,7 +15,7 @@ const SearchBox: Component = () => {
           <Button
             class='border-0 p-1'
             style={{ position: 'relative' }}
-            variant='outline-info'
+            variant='outline-primary'
             onClick={searchContext.handleToggleSearchFilters}>
             <IoOptionsSharp size={'1.5rem'} />
             <Show when={rawsContext.rawModuleFilters().length > 0}>
