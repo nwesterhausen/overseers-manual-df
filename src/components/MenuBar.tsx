@@ -13,7 +13,8 @@ const MenuBar: Component = () => {
     <Navbar variant='dark'>
       <Container class='p-0' fluid>
         <Nav>
-          <NavItem class='mx-2 btn btn-primary'
+          <NavItem
+            class='mx-2 btn btn-primary'
             onClick={() => {
               directoryContext.setManualFolderSelect(true);
             }}>
@@ -44,17 +45,15 @@ const MenuBar: Component = () => {
           </OverlayTrigger>
 
           <NavItem class='mx-2'>
-            <OverlayTrigger
-              placement='auto'
-              overlay={<Tooltip id='refresh-button-tooltip'>Refresh the raws</Tooltip>}>
-
-              <NavItem class='mx-2 btn btn-info' classList={{
-                "disabled": rawsContext.currentStatus() !== STS_IDLE
-              }}
+            <OverlayTrigger placement='auto' overlay={<Tooltip id='refresh-button-tooltip'>Refresh the raws</Tooltip>}>
+              <NavItem
+                class='mx-2 btn btn-info'
+                classList={{
+                  disabled: rawsContext.parsingStatus() !== STS_IDLE,
+                }}
                 onClick={() => rawsContext.setLoadRaws(true)}>
                 <Stack direction='horizontal' gap={1}>
-                  <span class='me-auto' >Re-read Raw Modules
-                  </span>
+                  <span class='me-auto'>Re-read Raw Modules</span>
                   <HiOutlineRefresh />
                 </Stack>
               </NavItem>

@@ -3,12 +3,8 @@
   height: 1.5em;
 }
 
-.letter-nav .nav-item {
-  padding: 0;
+.indicate-clickable {
   cursor: pointer;
-}
-.letter-nav .nav-item .nav-link {
-  padding: 0.5rem;
 }
 
 .double-badge span {
@@ -18,13 +14,9 @@
   padding: 0.23rem;
 }
 
-.accordion-button:not(.collapsed) {
-  background-color: #a9bdbd;
-  color: #073642;
-}
-
-.icon-fix {
-  vertical-align: -0.125em;
+.modal90w {
+  width: 90%;
+  max-width: none !important;
 }
 
 /* Custom Scrollbar */
@@ -35,26 +27,20 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #002b36;
+  background: var(--bs-light);
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #839496;
+  background: var(--bs-gray);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #495057;
+  background: var(--bs-dark);
 }
 
 #root {
   width: calc(100vw - 00.5rem);
-}
-
-/* Fix for dark nav dropdown */
-.dropdown-item.active {
-  color: #073642 !important;
-  background-color: #a9bdbd !important;
-  font-weight: bold;
+  overflow-x: hidden;
 }

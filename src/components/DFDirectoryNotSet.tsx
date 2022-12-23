@@ -31,7 +31,9 @@ const DFDirectoryNotSet: Component = () => {
             </Stack>
           </Stack>
         </>
-      ) : <></>}
+      ) : (
+        <></>
+      )}
     </>
   );
 };

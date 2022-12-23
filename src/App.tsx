@@ -3,7 +3,7 @@ import { appWindow } from '@tauri-apps/api/window';
 import { Container, Tab, Tabs } from 'solid-bootstrap';
 import { Component, createEffect, createMemo, createResource } from 'solid-js';
 import DFDirectoryNotSet from './components/DFDirectoryNotSet';
-import Listing from './components/Listing';
+import ListingBestiary from './components/ListingBestiary';
 import MenuBar from './components/MenuBar';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import SearchBox from './components/SearchBox';
@@ -30,7 +30,7 @@ const App: Component = () => {
 
   // Helper boolean to know when to display the page or not
   const contentToDisplay = createMemo(() => {
-    return rawsContext.rawsJson().length === 0 || rawsContext.currentStatus() !== STS_IDLE;
+    return rawsContext.parsingStatus() !== STS_IDLE;
   });
 
   return (
@@ -44,8 +44,8 @@ const App: Component = () => {
         ) : (
           <Tabs defaultActiveKey='bestiary' class='my-3'>
             {/* A bestiary (from bestiarum vocabulum) is a compendium of beasts. */}
-            <Tab eventKey='bestiary' title='Bestiary'>
-              <Listing />
+            <Tab eventKey='bestiary' title='Bestiary' disabled={rawsContext.creatureRaws().length === 0}>
+              <ListingBestiary />
             </Tab>
             <Tab disabled title='More to come in the future!'></Tab>
           </Tabs>

@@ -3,13 +3,7 @@ import { open as tauriOpen, OpenDialogOptions } from '@tauri-apps/api/dialog';
 import { Event, listen } from '@tauri-apps/api/event';
 import { readDir } from '@tauri-apps/api/fs';
 import { createEffect, createResource, createSignal } from 'solid-js';
-import {
-  get as getFromStore,
-  init as initStore,
-  PATH_STRING,
-  PATH_TYPE,
-  set as saveToStore
-} from '../settings';
+import { get as getFromStore, init as initStore, PATH_STRING, PATH_TYPE, set as saveToStore } from '../settings';
 
 export const DIR_NONE = Symbol('none'),
   DIR_DF = Symbol('df'),
@@ -116,12 +110,11 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   const refreshValidDirectories = async (forced: boolean) => {
     console.debug(`Forced refresh: ${forced}`);
     if (directoryPath().length > 0) {
-
       try {
         // Use the tauri fs.readDir API
-        const dirContents = await readDir(directoryPath().join("/"), { recursive: true });
+        const dirContents = await readDir(directoryPath().join('/'), { recursive: true });
 
-        console.debug(`Read ${dirContents.length} children of ${directoryPath().join("/")}`);
+        console.debug(`Read ${dirContents.length} children of ${directoryPath().join('/')}`);
 
         const hasGamelogTxt = dirContents.filter((v) => v.name === 'gamelog.txt').length > 0;
         if (hasGamelogTxt) {

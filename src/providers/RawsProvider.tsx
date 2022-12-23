@@ -28,17 +28,19 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   // Signal for loading raws
   const [loadRaws, setLoadRaws] = createSignal(false);
   // Resource for raws
-  const [jsonRawsResource] = createResource(loadRaws, parseRaws, {
+  const [allRawsJsonArray] = createResource(loadRaws, parseRaws, {
     initialValue: [],
   });
 
   // Raws after filtering by the search
-  const rawsJson = createMemo(() => {
+  const allRawsJsonSearchFiltered = createMemo(() => {
+    // Search filtering
     if (searchContext.searchString() === '') {
-      return jsonRawsResource();
+      return allRawsJsonArray();
     }
     const searchTerms = searchContext.searchString().split(' ');
-    return jsonRawsResource().filter((raw) => {
+
+    return allRawsJsonArray().filter((raw) => {
       return (
         // Filter the object based on the searchableString value
         raw.searchString &&
@@ -53,26 +55,28 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   });
 
   // The alphabet but only the letters for which we have entries.
-  const rawsAlphabet = createMemo((): string[] => {
-    return RawsFirstLetters(rawsJson() as Raw[]);
+  const allRawsAlphabet = createMemo((): string[] => {
+    return RawsFirstLetters(allRawsJsonSearchFiltered() as Raw[]);
   });
 
   // Signal for raw parsing progress
   const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>({ current_module: '', percentage: 0.0 });
 
   // Listen to window events from Tauri
-  appWindow.listen(
-    'PROGRESS',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ({ event, payload }) => {
-      const progress = (payload as ProgressPayload);
-      setParsingProgress(progress);
-      console.log(payload);
-    })
+  appWindow
+    .listen(
+      'PROGRESS',
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      ({ event, payload }) => {
+        const progress = payload as ProgressPayload;
+        setParsingProgress(progress);
+        console.log(payload);
+      }
+    )
     .then(() => {
-      console.log("Listening for progress updates from backend.")
-    }
-    ).catch(console.error);
+      console.log('Listening for progress updates from backend.');
+    })
+    .catch(console.error);
 
   // Signal no set directory
   createEffect(() => {
@@ -84,15 +88,21 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   });
 
   // Provide access to only Creatures
-  const creatureRaws = createMemo(() => jsonRawsResource.latest.filter(x => x.raw_type === "Creature") as Creature[])
+  const creatureRaws = createMemo(
+    () => allRawsJsonSearchFiltered().filter((x) => x.raw_type === 'Creature') as Creature[]
+  );
+
+  const creatureRawsAlphabet = createMemo(() => RawsFirstLetters(creatureRaws()));
 
   async function parseRaws(): Promise<Raw[]> {
-    const dir = directoryContext.directoryPath().join("/");
+    const dir = directoryContext.directoryPath().join('/');
 
     setParsingStatus(STS_PARSING);
 
     try {
-      const raw_file_data: Raw[][] = JSON.parse(await invoke('parse_raws_at_game_path', { path: dir, window: appWindow }));
+      const raw_file_data: Raw[][] = JSON.parse(
+        await invoke('parse_raws_at_game_path', { path: dir, window: appWindow })
+      );
 
       setParsingStatus(STS_LOADING);
       setParsingProgress({ current_module: '', percentage: 1.0 });
@@ -122,5 +132,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     }
   }
 
-  return { currentStatus: parsingStatus, rawsJson, setLoadRaws, parsingProgress, rawsAlphabet, creatureRaws };
+  return {
+    parsingStatus,
+    allRawsJsonSearchFiltered,
+    setLoadRaws,
+    parsingProgress,
+    allRawsAlphabet,
+    creatureRaws,
+    creatureRawsAlphabet,
+  };
 });
