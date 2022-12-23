@@ -29,7 +29,7 @@ When the app is started for the first time, it presents some instructions:
 
 ![first-launch](docs/img/app_launched.png)
 
-After a save directory is set and deemed valid by the app, it will parse and present data from the raws for searching
+After a game directory is set and deemed valid by the app, it will parse and present data from the raws for searching
 through.
 
 ## Supported Data
