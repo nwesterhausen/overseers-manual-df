@@ -27,15 +27,35 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     initialValue: [],
   });
 
+  const rawModules = createMemo(() => [...new Set(allRawsJsonArray.latest.map((v) => v.raw_module))]);
+  const [rawModuleFilters, setRawModuleFilters] = createSignal<string[]>([]);
+  const addRawModuleFilter = (module: string) => {
+    if (rawModuleFilters().indexOf(module) === -1) {
+      setRawModuleFilters([...rawModuleFilters(), module]);
+    }
+  };
+  const removeRawModuleFilter = (module: string) => {
+    if (rawModuleFilters().indexOf(module) !== -1) {
+      setRawModuleFilters(rawModuleFilters().filter((v) => v !== module));
+    }
+  };
+  const removeAllRawModuleFilters = () => {
+    setRawModuleFilters([]);
+  };
+
+  const allRawsModuleFiltered = createMemo(() => {
+    return allRawsJsonArray.latest.filter((v) => rawModuleFilters().indexOf(v.raw_module) === -1);
+  });
+
   // Raws after filtering by the search
   const allRawsJsonSearchFiltered = createMemo(() => {
     // Search filtering
     if (searchContext.searchString() === '') {
-      return allRawsJsonArray();
+      return allRawsModuleFiltered();
     }
     const searchTerms = searchContext.searchString().split(' ');
 
-    return allRawsJsonArray().filter((raw) => {
+    return allRawsModuleFiltered().filter((raw) => {
       return (
         // Filter the object based on the searchableString value
         raw.searchString &&
@@ -127,5 +147,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     setLoadRaws,
     parsingProgress,
     creatureRaws,
+    rawModules,
+    rawModuleFilters,
+    addRawModuleFilter,
+    removeRawModuleFilter,
+    removeAllRawModuleFilters,
   };
 });

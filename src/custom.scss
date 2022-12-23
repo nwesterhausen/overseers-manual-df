@@ -7,6 +7,49 @@
   cursor: pointer;
 }
 
+/* Make the badge float in the top right corner of the button */
+.badge-dot {
+  background-color: var(--bs-danger);
+  border-radius: 3px;
+
+  padding: 3px 3px;
+
+  position: absolute;
+  /* Position the badge within the relatively positioned button */
+  top: 4px;
+  right: 2px;
+}
+
+.search-filters {
+  animation: slide-down 0.4s ease;
+  .hidden-away {
+    animation: slide-up-away 0.4s ease;
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10vh);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slide-up-away {
+  0% {
+    opacity: 1;
+    transform: translateY(10vh);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
 .double-badge span {
   font-size: 0.8rem;
   font-weight: bold;
@@ -43,16 +86,4 @@
 #root {
   width: calc(100vw - 00.5rem);
   overflow-x: hidden;
-}
-
-.ellipsis {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-
-  :hover {
-    overflow: auto;
-    white-space: normal;
-    text-overflow: unset;
-  }
 }
