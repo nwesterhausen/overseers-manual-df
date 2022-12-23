@@ -3,7 +3,7 @@ import { invoke } from '@tauri-apps/api';
 import { appWindow } from '@tauri-apps/api/window';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import { UniqueSort } from '../definitions/Raw';
-import type { Creature, ProgressPayload, Raw } from '../definitions/types';
+import type { Creature, DFInfoFile, ProgressPayload, Raw } from '../definitions/types';
 import { useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
 
@@ -24,6 +24,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const [loadRaws, setLoadRaws] = createSignal(false);
   // Resource for raws
   const [allRawsJsonArray] = createResource(loadRaws, parseRaws, {
+    initialValue: [],
+  });
+  // Resource for raws info files
+  const [allRawsInfosJsonArray] = createResource(loadRaws, parseRawsInfo, {
     initialValue: [],
   });
 
@@ -141,6 +145,20 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     }
   }
 
+  async function parseRawsInfo(): Promise<DFInfoFile[]> {
+    const dir = directoryContext.directoryPath().join('/');
+
+    setParsingStatus(STS_PARSING);
+
+    try {
+      const raw_file_data: DFInfoFile[] = JSON.parse(await invoke('parse_raws_info_at_game_path', { path: dir }));
+
+      return raw_file_data.sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   return {
     parsingStatus,
     allRawsJsonSearchFiltered,
@@ -152,5 +170,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     addRawModuleFilter,
     removeRawModuleFilter,
     removeAllRawModuleFilters,
+    rawsInfo: allRawsInfosJsonArray,
   };
 });

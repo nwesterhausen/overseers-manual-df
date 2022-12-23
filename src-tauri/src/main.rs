@@ -17,6 +17,16 @@ fn parse_raws_at_game_path(path: &str, window: tauri::window::Window) -> String 
     final_json
 }
 
+#[tauri::command]
+fn parse_raws_info_at_game_path(path: &str) -> String {
+    let raws_info = dfraw_json_parser::parse_raw_module_info(path);
+    let mut final_json = "[".to_owned();
+    final_json.push_str(raws_info.join(",").as_str());
+    final_json.push(']');
+
+    final_json
+}
+
 fn main() {
     // Setup logging
     match SimpleLogger::new()
@@ -33,7 +43,10 @@ fn main() {
 
     let app = tauri::Builder::default()
         .plugin(PluginBuilder::default().build())
-        .invoke_handler(tauri::generate_handler![parse_raws_at_game_path])
+        .invoke_handler(tauri::generate_handler![
+            parse_raws_at_game_path,
+            parse_raws_info_at_game_path
+        ])
         .run(tauri::generate_context!());
 
     match app {
