@@ -1,5 +1,5 @@
 import { AssignBasedOn, GenerateSearchString } from './Creature';
-import { Creature, Raw } from './types';
+import { Creature, DFInfoFile, Raw } from './types';
 
 /**
  * Array.prototype.filter function to only allow valid Raw objects.
@@ -40,18 +40,22 @@ export const RawsFirstLetters = (arr: Raw[]): string[] => {
  * Returns a unique and sorted array of raws from raws
  */
 export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
-  // Sort all raws by name
-  const rawsSorted = rawsArray.filter(FilterInvalidRaws).sort((a, b) => (a.name < b.name ? -1 : 1));
+  // Sort all raws by objectId
+  const rawsSorted = rawsArray.filter(FilterInvalidRaws).sort((a, b) => (a.objectId < b.objectId ? -1 : 1));
 
+  console.info(`Looping over ${rawsSorted.length} raw objects`);
   // Loop over all sorted raws
   for (let i = 0; i < rawsSorted.length; i++) {
     if (!rawsSorted[i].raw_module_parents) {
       // Initialize raw_module_parents
       rawsSorted[i].raw_module_parents = [rawsSorted[i].raw_module_found_in];
     }
+    // Initialized all_tags field
+    rawsSorted[i].all_tags = [...rawsSorted[i].tags];
     switch (rawsSorted[i].raw_type) {
       case 'Creature':
-        // Assume its a creature raw (all we handle right now)
+        {
+        // Coerce RAW into Creature based on raw_type
         const creature = rawsSorted[i] as Creature;
         // If its based on another raw, find it and apply it
         if (creature.based_on && creature.based_on.length) {
@@ -60,11 +64,19 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
             rawsSorted[i] = AssignBasedOn(creature, matches[0] as Creature);
           } else {
             console.warn(`${matches.length} matches for 'based_on':${creature.based_on}`);
+            if (matches.length > 1) {
+            rawsSorted[i] = AssignBasedOn(creature, matches[0] as Creature);
+            }
           }
+        }
+        // Append all caste tags to all_tags
+        for (const caste of Object.keys(creature.caste_tags)) {
+          rawsSorted[i].all_tags.push(...creature.caste_tags[caste]);
         }
         // Build a search string for the raw
         rawsSorted[i].searchString = GenerateSearchString(rawsSorted[i] as Creature);
         break;
+      }
       default:
         console.error(`Unhandled raw type ${rawsSorted[i].raw_type}!`);
     }
@@ -94,3 +106,86 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
   // Return the sorted and unique result
   return uniqResult;
 };
+
+export function RawsOnlyWithoutModules(rawsArray: Raw[], requiredModules: string[]): Raw[] {
+  // Early return if no required modules
+  if (requiredModules.length === 0) {
+    return rawsArray;
+  }
+
+  return rawsArray.filter((v) => requiredModules.indexOf(v.raw_module) === -1);
+}
+
+export function RawsOnlyWithTagsOrAll(rawsArray: Raw[], allowedTags: string[]): Raw[] {
+  // Early return if no allowed tags (we return all)
+  if (allowedTags.length === 0) {
+    return rawsArray;
+  }
+
+  console.log(`restricting to raws with tags ${allowedTags.join(" & ")}`)
+
+  return rawsArray.filter((v) => {
+    if (typeof v.all_tags === 'undefined') {
+      return false;
+    }
+    return v.all_tags.filter((w) => allowedTags.indexOf(w) !== -1).length > 0;
+  })
+}
+
+export function RawsMatchingSearchString(rawsArray: Raw[], searchString: string): Raw[] {
+    // Early return if no search string
+    if (searchString === '') {
+      return rawsArray;
+    }
+
+    // Split the search string into terms to find
+    const searchTerms = searchString.toLowerCase().split(' ');
+
+    // Perform the search filtering
+    return rawsArray.filter((raw) => {
+      // Guard against non-existent search string
+      if (!raw.searchString || !Array.isArray(raw.searchString)) {
+        return false;
+      }
+
+      // Early return if search string is empty
+      if (raw.searchString.length === 0) {
+        return false;
+      }
+
+      // Guard against badly typed search string
+      if (typeof raw.searchString[0] !== 'string') {
+        return false;
+      }
+
+      return (
+        // Filter the object based on the search terms
+        searchTerms.filter((v) => {
+          // Restrict to only any matching search terms
+          for (const term of raw.searchString) {
+            if (term.indexOf(v.toLowerCase()) !== -1) return true;
+          }
+          return false;
+        })
+        // Return "true" only when all of the input search terms do match a value
+        // in the raws search string, otherwise we don't include that raw in the 
+        // results.
+        .length === searchTerms.length
+      );
+    });
+}
+
+
+
+  /**
+   * Helper to display the "NAME vVERSION" for a module, or just the module if there isn't module info available.
+   * Example usage:
+   * `labelForModule(rawsContext.rawsInfo.latest.find(v => v.identifier === module), module)`
+   */
+  export function labelForModule(moduleInfo: DFInfoFile | undefined, moduleId?: string): string {
+    if (typeof moduleId === 'undefined') {
+      return moduleId || "";
+    }
+
+    return `${moduleInfo.name} v${moduleInfo.displayed_version}`;
+  }

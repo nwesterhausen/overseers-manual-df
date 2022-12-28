@@ -1,7 +1,7 @@
 import { Table } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
-import type { CasteRange } from '../definitions/types';
-import { toTitleCase, CleanName } from '../definitions/Utils';
+import { CleanName, toTitleCase } from '../../definitions/Utils';
+import type { CasteRange } from '../../definitions/types';
 
 const CreatureNamesTable: Component<{ names: CasteRange<string[]> }> = (props) => {
   const names = props.names;

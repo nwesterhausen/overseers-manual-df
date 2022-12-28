@@ -2,7 +2,7 @@ import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
 import { appWindow } from '@tauri-apps/api/window';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
-import { UniqueSort } from '../definitions/Raw';
+import { RawsMatchingSearchString, RawsOnlyWithTagsOrAll, RawsOnlyWithoutModules, UniqueSort, labelForModule } from '../definitions/Raw';
 import type { Creature, DFInfoFile, ProgressPayload, Raw } from '../definitions/types';
 import { useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
@@ -30,9 +30,25 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const [allRawsInfosJsonArray] = createResource(loadRaws, parseRawsInfo, {
     initialValue: [],
   });
+  const allRawInfoNames = createMemo<{ [module: string]: string }>(() => {
+    const labeled = {};
+    for (const module of allRawsInfosJsonArray.latest) {
+      labeled[module.identifier] = labelForModule(module);
+    }
+    return labeled;
+  })
 
-  const rawModules = createMemo(() => [...new Set(allRawsJsonArray.latest.map((v) => v.raw_module))]);
+  const rawModules = createMemo(() => {
+    const modules = [...new Set(allRawsJsonArray.latest.map((v) => v.raw_module))];
+    return modules.sort((a, b) => {
+      const nameA = allRawsInfosJsonArray.latest.find(v => v.identifier === a) || { name: a };
+      const nameB = allRawsInfosJsonArray.latest.find(v => v.identifier === b) || { name: b };
+
+      return (nameA.name.toLowerCase() < nameB.name.toLowerCase()) ? -1 : 1;
+    })
+  });
   const [rawModuleFilters, setRawModuleFilters] = createSignal<string[]>([]);
+
   const addRawModuleFilter = (module: string) => {
     if (rawModuleFilters().indexOf(module) === -1) {
       setRawModuleFilters([...rawModuleFilters(), module]);
@@ -46,31 +62,24 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const removeAllRawModuleFilters = () => {
     setRawModuleFilters([]);
   };
-
-  const allRawsModuleFiltered = createMemo(() => {
-    return allRawsJsonArray.latest.filter((v) => rawModuleFilters().indexOf(v.raw_module) === -1);
-  });
+  const addAllRawModuleFilters = () => {
+    setRawModuleFilters(rawModules());
+  };
 
   // Raws after filtering by the search
   const allRawsJsonSearchFiltered = createMemo(() => {
-    // Search filtering
-    if (searchContext.searchString() === '') {
-      return allRawsModuleFiltered();
-    }
-    const searchTerms = searchContext.searchString().split(' ');
 
-    return allRawsModuleFiltered().filter((raw) => {
-      return (
-        // Filter the object based on the searchableString value
-        raw.searchString &&
-        searchTerms.filter((v) => {
-          for (const term of raw.searchString) {
-            if (term.indexOf(v.toLowerCase()) !== -1) return true;
-          }
-          return false;
-        }).length === searchTerms.length
-      );
-    });
+    // Filter by modules first (easiest wide amount to filter). We pre-sort the raws in one step here.
+    const moduleFiltered = RawsOnlyWithoutModules(
+      allRawsJsonArray.latest.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1),
+      rawModuleFilters()
+    );
+    // Filter by required tags (somewhat expensive)
+    const tagFiltered = RawsOnlyWithTagsOrAll(moduleFiltered, searchContext.requiredTagFilters());
+    // Filter remaining by search tags (most expensive)
+    const searchFiltered = RawsMatchingSearchString(tagFiltered, searchContext.searchString());
+
+    return searchFiltered;
   });
 
   // Signal for raw parsing progress
@@ -112,11 +121,12 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     setParsingStatus(STS_PARSING);
 
     try {
-      const raw_file_data: Raw[][] = JSON.parse(
-        await invoke('parse_raws_at_game_path', { path: dir, window: appWindow })
-      );
+      const raw_file_json_string: string = await invoke('parse_raws_at_game_path', { path: dir, window: appWindow });
 
+      await new Promise((resolve) => setTimeout(resolve, 1));
+      const raw_file_data: Raw[][] = await JSON.parse(raw_file_json_string);
       setParsingStatus(STS_LOADING);
+
       await new Promise((resolve) => setTimeout(resolve, 1));
       setParsingProgress({ current_module: '', percentage: 0.0 });
 
@@ -148,8 +158,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   async function parseRawsInfo(): Promise<DFInfoFile[]> {
     const dir = directoryContext.directoryPath().join('/');
 
-    setParsingStatus(STS_PARSING);
-
     try {
       const raw_file_data: DFInfoFile[] = JSON.parse(await invoke('parse_raws_info_at_game_path', { path: dir }));
 
@@ -170,6 +178,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     addRawModuleFilter,
     removeRawModuleFilter,
     removeAllRawModuleFilters,
+    addAllRawModuleFilters,
     rawsInfo: allRawsInfosJsonArray,
   };
 });
