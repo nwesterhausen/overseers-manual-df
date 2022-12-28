@@ -1,15 +1,20 @@
 import { Button, Form } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
-import { useRawsProvider } from '../providers/RawsProvider';
+import { labelForModule } from '../../definitions/Raw';
+import { useRawsProvider } from '../../providers/RawsProvider';
 
 const RawModuleFilter: Component = () => {
   const rawsContext = useRawsProvider();
+
   return (
     <div>
       <legend>
         <div class='d-flex'>
           <div>Enabled Raw Modules</div>
-          <div class='ms-auto'>
+          <div class='ms-auto hstack gap-2'>
+            <Button size='sm' variant='secondary' onClick={rawsContext.addAllRawModuleFilters}>
+              Clear All
+            </Button>
             <Button size='sm' variant='danger' onClick={rawsContext.removeAllRawModuleFilters}>
               Reset
             </Button>
@@ -21,7 +26,7 @@ const RawModuleFilter: Component = () => {
           <Form.Check
             type='switch'
             id={`${module}-enabled`}
-            label={module}
+            label={labelForModule(rawsContext.rawsInfo().find(v => v.identifier === module), module)}
             checked={rawsContext.rawModuleFilters().indexOf(module) === -1}
             onChange={(event) => {
               const el = event.target as HTMLInputElement;

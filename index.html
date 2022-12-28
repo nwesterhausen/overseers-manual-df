@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#002b36" />
-    <title>Overseer's Reference Manual</title>
 
-    <!-- Load the alternate CSS first ...
-         in this case the Bootstrap-Dark Variant CSS -->
-    <link
-      href="node_modules/bootswatch/dist/simplex/bootstrap.min.css"
-      rel="stylesheet"
-      media="(prefers-color-scheme: light)" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#002b36" />
+  <title>Overseer's Reference Manual</title>
 
-    <!-- and then the primary CSS last ...
-         in this case the (original) Bootstrap Variant CSS -->
-    <link
-      href="node_modules/bootswatch/dist/solar/bootstrap.min.css"
-      rel="stylesheet"
-      media="(prefers-color-scheme: dark)" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script src="/src/index.tsx" type="module"></script>
-  </body>
+  <!-- Load the alternate CSS first ...
+         in this case the bootswatch simplex theme -->
+  <link href="node_modules/bootswatch/dist/simplex/bootstrap.min.css" rel="stylesheet"
+    media="(prefers-color-scheme: light)" />
+
+  <!-- and then the primary CSS last ...
+         in this case the bootswatch solar theme -->
+  <link href="node_modules/bootswatch/dist/solar/bootstrap.min.css" rel="stylesheet"
+    media="(prefers-color-scheme: dark)" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="/src/index.tsx" type="module"></script>
+</body>
+
 </html>

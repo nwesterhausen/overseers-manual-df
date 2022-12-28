@@ -9,7 +9,8 @@ import MenuBar from './components/MenuBar';
 import ParsingProgressBar from './components/ParsingProgressBar';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import SearchBox from './components/SearchBox';
-import SearchFilters from './components/SearchFilters';
+import SearchFilters from './components/filtering/SearchFilters';
+import TagFilterModal from './components/filtering/TagFilterModal';
 import { STS_IDLE, useRawsProvider } from './providers/RawsProvider';
 
 // App name for title
@@ -43,6 +44,7 @@ const App: Component = () => {
         <DFDirectoryNotSet />
         <SearchBox />
         <SearchFilters />
+        <TagFilterModal />
         <ParsingProgressBar />
         <LoadingRawsProgress />
         {contentToDisplay() ? (

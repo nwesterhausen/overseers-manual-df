@@ -1,7 +1,7 @@
 import { Button, Modal } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { useRawsProvider } from '../providers/RawsProvider';
-import { useSearchProvider } from '../providers/SearchProvider';
+import { useRawsProvider } from '../../providers/RawsProvider';
+import { useSearchProvider } from '../../providers/SearchProvider';
 import RawModuleFilter from './RawModuleFilter';
 
 const SearchFilters: Component = () => {
@@ -16,11 +16,15 @@ const SearchFilters: Component = () => {
         <RawModuleFilter />
       </Modal.Body>
       <Modal.Footer>
+        <Button variant='danger' onClick={() => {
+          // reset raw module filters
+          rawsContext.removeAllRawModuleFilters();
+          // reset anything else
+        }}>
+          Reset All
+        </Button>
         <Button variant='secondary' onClick={searchContext.handleHideSearchFilters}>
           Close
-        </Button>
-        <Button variant='danger' onClick={rawsContext.removeAllRawModuleFilters}>
-          Reset All
         </Button>
       </Modal.Footer>
     </Modal>

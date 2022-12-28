@@ -1,8 +1,8 @@
 import { Stack } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { CondensedEggSize, FirstPetValue, IsEggLayer } from '../definitions/Creature';
-import { Creature } from '../definitions/types';
-import TwoPartBadge from './TwoPartBadge';
+import { CondensedEggSize, FirstPetValue, IsEggLayer } from '../../definitions/Creature';
+import { Creature } from '../../definitions/types';
+import TwoPartBadge from '../TwoPartBadge';
 
 const CreatureBadges: Component<{ creature: Creature }> = (props) => {
   return (

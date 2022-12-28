@@ -1,9 +1,9 @@
 import { Table } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
-import type { CasteRange, MilkableDesc } from '../definitions/types';
-import { toTitleCase } from '../definitions/Utils';
+import { toTitleCase } from '../../definitions/Utils';
+import type { CasteRange } from '../../definitions/types';
 
-const CreatureMilkTable: Component<{ values: CasteRange<MilkableDesc>; fallbackDesc: string }> = (props) => {
+const CreatureListTable: Component<{ values: CasteRange<string[]>; fallbackDesc: string }> = (props) => {
   const values = props.values;
   return (
     <Table class='m-0 p-0' size='sm' borderless>
@@ -12,9 +12,7 @@ const CreatureMilkTable: Component<{ values: CasteRange<MilkableDesc>; fallbackD
           {(caste) => (
             <tr>
               <td>{toTitleCase(caste)}</td>
-              <td>
-                Produces {values[caste].material} every {values[caste].frequency} ticks
-              </td>
+              <td>{values[caste].join(', ')}</td>
             </tr>
           )}
         </For>
@@ -23,4 +21,4 @@ const CreatureMilkTable: Component<{ values: CasteRange<MilkableDesc>; fallbackD
   );
 };
 
-export default CreatureMilkTable;
+export default CreatureListTable;
