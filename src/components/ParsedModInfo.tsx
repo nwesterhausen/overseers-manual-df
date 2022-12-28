@@ -34,7 +34,7 @@ const ParsedModInfo: Component = () => {
             const el = e.target as HTMLSelectElement;
             setSelected(el.value);
           }}>
-          <For each={rawsContext.rawsInfo.latest}>
+          <For each={rawsContext.rawsInfo.latest.sort((a, b) => a.display_title < b.display_title ? -1 : 1)}>
             {(modInfo) => (
               <option value={modInfo.identifier} selected={selected() === modInfo.identifier}>
                 {modInfo.name} v{modInfo.displayed_version} (from {modInfo.sourced_directory})
