@@ -17,6 +17,11 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: latest
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          cache: pnpm
 
       - name: Install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-20.04'
@@ -31,12 +36,6 @@ jobs:
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './src-tauri -> target'
-
-      - name: Sync node version and setup cache
-        uses: actions/setup-node@v3
-        with:
-          node-version: 'lts/*'
-          cache: pnpm
 
       - name: Install app dependencies and build web
         run: |
