@@ -26,7 +26,6 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
     .split(' ')
     .map((v: string) => toTitleCase(v))
     .join(' ');
-  const subTitle = props.creature.raw_module + ' v' + props.creature.raw_module_version;
 
   const [showDescription, setShowDescription] = createSignal(false);
   const handleOpenDescription = () => setShowDescription(true);
@@ -40,7 +39,7 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
     <Card style={{ width: '20rem', 'min-height': '20rem' }} id={listingId}>
       <Card.Body>
         <Card.Title class='fw-bolder'>{title}</Card.Title>
-        <Card.Subtitle class='mb-2 text-muted'>{subTitle}</Card.Subtitle>
+        <Card.Subtitle class='mb-2 text-muted'>{props.creature.raw_module_display}</Card.Subtitle>
         <Card.Text>
           <Show
             when={Object.values(props.creature.descriptions).length > 0}
