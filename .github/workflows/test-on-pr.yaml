@@ -36,7 +36,9 @@ jobs:
 
       - name: Install app dependencies and build web
         run: |
-          pnpm install && pnpm build
+          npm install -g pnpm
+          pnpm install
+          pnpm build
 
       - name: Build the Tauri App
         uses: tauri-apps/tauri-action@dev
