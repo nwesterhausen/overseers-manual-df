@@ -13,6 +13,7 @@ export type Raw = {
   raw_type: string;
   raw_module_found_in: string;
   raw_module_parents?: string[]; //Use in 'overseers-manual-df'
+  all_tags?: string[]; //Use in 'overseers-manual-df'
 };
 
 export type BodySizeRange = {
@@ -82,4 +83,6 @@ export type DFInfoFile = {
   author: string;
   name: string;
   description: string;
+  objectId: string;
+  display_title: string; // used in 'overseers-manual-df'
 };

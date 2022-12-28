@@ -1,8 +1,8 @@
 import { Stack } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
-import { ActiveTimeStatus, NoSeasonStatus } from '../definitions/Creature';
-import type { CasteRange, Creature } from '../definitions/types';
-import { toTitleCase } from '../definitions/Utils';
+import { ActiveTimeStatus, NoSeasonStatus } from '../../definitions/Creature';
+import { toTitleCase } from '../../definitions/Utils';
+import type { CasteRange, Creature } from '../../definitions/types';
 
 const CreatureActivityDisplay: Component<{ creature: Creature }> = (props) => {
   const seasonActivity = CondenseInactiveSeasons(props.creature.inactive_season);

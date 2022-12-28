@@ -78,7 +78,7 @@ const MenuBar: Component = () => {
 
       <div class='ms-auto'>
         <OverlayTrigger placement='auto' overlay={<Tooltip>Settings</Tooltip>}>
-          <Button class='border-0 p-1' variant='outline-warning' onClick={() => window.alert('hi')}>
+          <Button disabled class='border-0 p-1' variant='outline-warning' onClick={() => window.alert('hi')}>
             <IoCogSharp size={'1.5rem'} />
           </Button>
         </OverlayTrigger>

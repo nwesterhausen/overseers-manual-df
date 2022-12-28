@@ -1,7 +1,7 @@
 import { Table } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
-import type { CasteRange } from '../definitions/types';
-import { toTitleCase } from '../definitions/Utils';
+import { toTitleCase } from '../../definitions/Utils';
+import type { CasteRange } from '../../definitions/types';
 
 function rawToTiles(grazeVal: number): number {
   const mathTile = 20000 / grazeVal;

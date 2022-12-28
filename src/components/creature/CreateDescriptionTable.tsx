@@ -9,9 +9,9 @@ import {
   PopulationNumberStatus,
   TrainableStatus,
   UndergroundDepthDescription,
-} from '../definitions/Creature';
-import { toTitleCase } from '../definitions/Utils';
-import { Creature } from '../definitions/types';
+} from '../../definitions/Creature';
+import { toTitleCase } from '../../definitions/Utils';
+import { Creature } from '../../definitions/types';
 import CreatureActivityDisplay from './CreatureActivityDisplay';
 import CreatureBodySizeTable from './CreatureBodySizeTable';
 import CreatureGrazerTable from './CreatureGrazerTable';
