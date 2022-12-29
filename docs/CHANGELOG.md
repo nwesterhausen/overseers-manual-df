@@ -1,3 +1,21 @@
+## [0.18.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.17.0...v0.18.0) (2022-12-29)
+
+
+### Features
+
+* ✨ restrict raws based on tags ([e875daf](https://github.com/nwesterhausen/overseers-manual-df/commit/e875dafe1c507c47b0fef996a42b789b0f9160b8))
+* ✨ utilize raw_module_display for nicer module on creature cards ([535eb18](https://github.com/nwesterhausen/overseers-manual-df/commit/535eb18cdb61b78ddb2c9068ecf101e625ba79ad))
+
+
+### Bug Fixes
+
+* ⚡️ fix sorting of raw module dropdown ([04c45cc](https://github.com/nwesterhausen/overseers-manual-df/commit/04c45cc7ee41e8d9763f8f846d45848b9a85397c))
+
+
+### Reverts
+
+* Revert "chore: ⬆️ minor dependency upgrade" ([1252df0](https://github.com/nwesterhausen/overseers-manual-df/commit/1252df0ed83047952f99dc65867c6a7308881d8e))
+
 ## [0.17.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.16.0...v0.17.0) (2022-12-23)
 
 
