@@ -67,6 +67,50 @@ export type Creature = {
   descriptions: CasteRange<string>;
 } & Raw;
 
+export type SingPluralName = {
+  singular: string;
+  plural: string;
+}
+
+export type StateName = {
+  solid: string;
+  liquid: string;
+  gas: string;
+}
+
+export type SimpleMaterial = {
+
+  material_type: string;
+  state_name: StateName;
+  state_adj: StateName;
+  material_value: number;
+  tags: string[];
+  state_color: String;
+}
+
+// Plant raw definition
+export type Plant = {
+
+  name: string;
+  pref_string: string;
+  value: number;
+
+  // Environment Tokens
+  underground_depth: number[];
+  frequency: number;
+  cluster_size: number;
+  biomes: string[];
+  // pub growth: DFPlantGrowth,
+  // pub materials: Vec<DFMaterialTemplate>,
+  // pub seed: DFPlantSeed,
+  // Sub Tags
+  materials: SimpleMaterial[];
+  growth_names: {
+    [growth: string]: SingPluralName;
+  }
+  growth_duration: number;
+} & Raw;
+
 // Definition for tauri progress event payload
 export type ProgressPayload = {
   current_module: string;

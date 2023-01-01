@@ -20,7 +20,7 @@ import CreatureBadges from './creature/CreatureBadges';
  * @param props - Contains the creature to render details for.
  * @returns Component of creature data for a listing.
  */
-const CreatureListing: Component<{ creature: Creature }> = (props) => {
+const CreatureCard: Component<{ creature: Creature }> = (props) => {
   const listingId = props.creature.objectId + 'listing';
   const title = props.creature.names_map.SPECIES[0]
     .split(' ')
@@ -97,4 +97,4 @@ const CreatureListing: Component<{ creature: Creature }> = (props) => {
   );
 };
 
-export default CreatureListing;
+export default CreatureCard;

@@ -1,19 +1,19 @@
 import { Component, For } from 'solid-js';
 import { useRawsProvider } from '../providers/RawsProvider';
-import CreatureCard from './CreatureCard';
+import BotanicalCard from './BotanicalCard';
 
-const ListingBestiary: Component = () => {
+const ListingBotanicals: Component = () => {
   const rawsContext = useRawsProvider();
 
   return (
     <div class='row justify-content-center gap-3'>
       <For
-        each={rawsContext.creatureRaws()}
+        each={rawsContext.plantRaws()}
         fallback={<div class='text-center fst-italic text-muted'>No matches in the Bestiary</div>}>
-        {(raw) => <CreatureCard creature={raw} />}
+        {(raw) => <BotanicalCard plant={raw} />}
       </For>
     </div>
   );
 };
 
-export default ListingBestiary;
+export default ListingBotanicals;
