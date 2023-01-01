@@ -79,20 +79,17 @@ export type StateName = {
 }
 
 export type SimpleMaterial = {
-
   material_type: string;
   state_name: StateName;
   state_adj: StateName;
   material_value: number;
   tags: string[];
-  state_color: String;
+  state_color: string;
 }
 
 // Plant raw definition
 export type Plant = {
-
-  name: string;
-  pref_string: string;
+  pref_string: string[];
   value: number;
 
   // Environment Tokens

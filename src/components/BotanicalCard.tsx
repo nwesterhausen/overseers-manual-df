@@ -1,18 +1,19 @@
 import { Button, Card, Modal, Stack } from 'solid-bootstrap';
-import { Component, For, createSignal } from 'solid-js';
+import { Component, For, Show, createSignal } from 'solid-js';
 import type { Plant } from '../definitions/types';
 import RawJsonTable from './RawsDetailTable';
+import PlantDescriptionTable from './plant/PlantDescriptionTable';
 
 /**
- * Given a Creature, returns a listing entry for it.
+ * Given a Plant, returns a listing entry for it.
  *
- * The CreatureListing is an accordion with a tabbed interior. The tabs are:
+ * The BotanicalCard is an card with buttons for showing more data.
  *
- * - Description:
- *      Gives a description of the creature, followed by its known names and other details.
+ * - Show All Details:
+ *      Gives a description of the plant, followed by its known names and other details.
  *
  * - Raw Details:
- *      Some details on the raw file it was extracted from. This includes
+ *      Some details on the raw file it was extracted from. 
  *
  * @param props - Contains the creature to render details for.
  * @returns Component of creature data for a listing.
@@ -35,12 +36,11 @@ const BotanicalCard: Component<{ plant: Plant }> = (props) => {
         <Card.Title class='fw-bolder'>{title}</Card.Title>
         <Card.Subtitle class='mb-2 text-muted'>{props.plant.raw_module_display}</Card.Subtitle>
         <Card.Text>
-          Provides
-          <ul>
-            <For each={Object.keys(props.plant.growth_names)}>
-              {(growth) => <li>{props.plant.growth_names[growth].singular}</li>}
-            </For>
-          </ul>
+          <For each={props.plant.materials} fallback={"No listed materials"}>
+            {(material) => <Show when={material.material_type !== 'None'}>
+              <li><strong>{material.material_type}</strong>: {material.state_name.solid}</li>
+            </Show>}
+          </For>
         </Card.Text>
       </Card.Body>
       <Card.Footer class='mt-auto'>
@@ -63,7 +63,7 @@ const BotanicalCard: Component<{ plant: Plant }> = (props) => {
         <Modal.Header closeButton>
           <Modal.Title>{title} Details</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{/* <CreatureDescriptionTable creature={props.plant} /> */}</Modal.Body>
+        <Modal.Body><PlantDescriptionTable plant={props.plant} /></Modal.Body>
         <Modal.Footer>
           <Button variant='secondary' onClick={handleCloseDescription}>
             Close

@@ -1,5 +1,6 @@
-import { AssignBasedOn, GenerateSearchString } from './Creature';
-import { Creature, DFInfoFile, Raw } from './types';
+import { AssignBasedOn, GenerateCreatureSearchString } from './Creature';
+import { GeneratePlantSearchString } from './Plant';
+import { Creature, DFInfoFile, Plant, Raw } from './types';
 
 /**
  * Array.prototype.filter function to only allow valid Raw objects.
@@ -51,6 +52,7 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
       rawsSorted[i].raw_module_parents = [rawsSorted[i].raw_module_found_in];
     }
     // Initialized all_tags field
+    console.debug(`Sorting ${rawsSorted[i].raw_type} ${rawsSorted[i].name}`)
     rawsSorted[i].all_tags = [...rawsSorted[i].tags];
     switch (rawsSorted[i].raw_type) {
       case 'Creature':
@@ -74,9 +76,23 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
           rawsSorted[i].all_tags.push(...creature.caste_tags[caste]);
         }
         // Build a search string for the raw
-        rawsSorted[i].searchString = GenerateSearchString(rawsSorted[i] as Creature);
+        rawsSorted[i].searchString = GenerateCreatureSearchString(rawsSorted[i] as Creature);
         break;
       }
+      case 'Plant':
+        {
+          // Coerce RAW into Plant based on raw_type
+          const plant = rawsSorted[i] as Plant;
+
+          // Append all material tags to all_tags
+          for (const material of Object.keys(plant.materials)) {
+            rawsSorted[i].all_tags.push(...plant.materials[material].tags)
+          }
+
+          // Build a search string for the raw
+          rawsSorted[i].searchString = GeneratePlantSearchString(rawsSorted[i] as Plant);
+          break;
+        }
       default:
         console.error(`Unhandled raw type ${rawsSorted[i].raw_type}!`);
     }
