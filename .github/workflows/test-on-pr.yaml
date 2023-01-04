@@ -33,6 +33,8 @@ jobs:
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './src-tauri -> target'
+          cache-on-failure: true
+          shared-job: tauri
 
       - name: Install app dependencies and build web
         run: |
