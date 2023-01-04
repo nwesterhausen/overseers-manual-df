@@ -1,3 +1,10 @@
+## [0.19.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.18.1...v0.19.0) (2023-01-04)
+
+
+### Features
+
+* 🌟 add botanicals (plants) tab ([#42](https://github.com/nwesterhausen/overseers-manual-df/issues/42)) ([bb64fa2](https://github.com/nwesterhausen/overseers-manual-df/commit/bb64fa2b1f70f1ef363f7ffcfa5be4f44d98e12f))
+
 ## [0.18.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.18.0...v0.18.1) (2022-12-29)
 
 
