@@ -4,6 +4,7 @@ import { Container, Tab, Tabs } from 'solid-bootstrap';
 import { Component, createEffect, createMemo, createResource } from 'solid-js';
 import DFDirectoryNotSet from './components/DFDirectoryNotSet';
 import ListingBestiary from './components/ListingBestiary';
+import ListingBotanicals from './components/ListingBotanicals';
 import LoadingRawsProgress from './components/LoadingRawsProgress';
 import MenuBar from './components/MenuBar';
 import ParsingProgressBar from './components/ParsingProgressBar';
@@ -54,6 +55,10 @@ const App: Component = () => {
             {/* A bestiary (from bestiarum vocabulum) is a compendium of beasts. */}
             <Tab eventKey='bestiary' title='Bestiary' disabled={rawsContext.creatureRaws().length === 0}>
               <ListingBestiary />
+            </Tab>
+            {/* A botanical dictionary */}
+            <Tab eventKey='botanicals' title='Botanicals' disabled={rawsContext.plantRaws().length === 0}>
+              <ListingBotanicals />
             </Tab>
             <Tab disabled title='More to come in the future!'></Tab>
           </Tabs>
