@@ -1,8 +1,9 @@
 import { Button, Card, Modal, Stack } from 'solid-bootstrap';
-import { Component, For, Show, createSignal } from 'solid-js';
+import { Component, createSignal } from 'solid-js';
 import type { Plant } from '../definitions/types';
 import RawJsonTable from './RawsDetailTable';
 import PlantDescriptionTable from './plant/PlantDescriptionTable';
+import PlantProvidesList from './plant/PlantProvidesList';
 
 /**
  * Given a Plant, returns a listing entry for it.
@@ -36,11 +37,7 @@ const BotanicalCard: Component<{ plant: Plant }> = (props) => {
         <Card.Title class='fw-bolder'>{title}</Card.Title>
         <Card.Subtitle class='mb-2 text-muted'>{props.plant.raw_module_display}</Card.Subtitle>
         <Card.Text>
-          <For each={props.plant.materials} fallback={"No listed materials"}>
-            {(material) => <Show when={material.material_type !== 'None'}>
-              <li><strong>{material.material_type}</strong>: {material.state_name.solid}</li>
-            </Show>}
-          </For>
+          <PlantProvidesList plant={props.plant} />
         </Card.Text>
       </Card.Body>
       <Card.Footer class='mt-auto'>
