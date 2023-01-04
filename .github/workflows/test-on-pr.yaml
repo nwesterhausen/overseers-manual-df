@@ -36,7 +36,7 @@ jobs:
         with:
           workspaces: './src-tauri -> target'
           cache-on-failure: true
-          shared-job: tauri
+          shared-key: tauri
 
       - name: Install app dependencies and build web
         run: |
