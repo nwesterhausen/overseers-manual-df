@@ -377,7 +377,7 @@ export const AssignBasedOn = (creature: Creature, basedOn: Creature): Creature =
   return creature;
 };
 
-const DEFAULT_CREATURE: Creature = {
+const DEFAULT_CREATURE: Partial<Creature> = {
   objectId: '',
   identifier: '',
   name: '',
@@ -454,7 +454,7 @@ export const PetValueStatus = (creature: Creature): string => {
  * @param creature - Creature to create search terms for
  * @returns An array of strings that can be used to describe the creature
  */
-export const GenerateSearchString = (creature: Creature): string[] => {
+export const GenerateCreatureSearchString = (creature: Creature): string[] => {
   let searchableTerms = [
     SearchableNames(creature.names_map),
     IsEggLayer(creature) ? `eggs ${CondensedEggSize(creature.egg_sizes)}` : '',

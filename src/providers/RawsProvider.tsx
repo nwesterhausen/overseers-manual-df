@@ -2,8 +2,13 @@ import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
 import { appWindow } from '@tauri-apps/api/window';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
-import { RawsMatchingSearchString, RawsOnlyWithTagsOrAll, RawsOnlyWithoutModules, UniqueSort, labelForModule } from '../definitions/Raw';
-import type { Creature, DFInfoFile, ProgressPayload, Raw } from '../definitions/types';
+import {
+  RawsMatchingSearchString,
+  RawsOnlyWithTagsOrAll,
+  RawsOnlyWithoutModules,
+  UniqueSort,
+} from '../definitions/Raw';
+import type { Creature, DFInfoFile, Plant, ProgressPayload, Raw } from '../definitions/types';
 import { useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
 
@@ -30,22 +35,15 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const [allRawsInfosJsonArray] = createResource(loadRaws, parseRawsInfo, {
     initialValue: [],
   });
-  const allRawInfoNames = createMemo<{ [module: string]: string }>(() => {
-    const labeled = {};
-    for (const module of allRawsInfosJsonArray.latest) {
-      labeled[module.identifier] = labelForModule(module);
-    }
-    return labeled;
-  })
 
   const rawModules = createMemo(() => {
     const modules = [...new Set(allRawsJsonArray.latest.map((v) => v.raw_module))];
     return modules.sort((a, b) => {
-      const nameA = allRawsInfosJsonArray.latest.find(v => v.identifier === a) || { name: a };
-      const nameB = allRawsInfosJsonArray.latest.find(v => v.identifier === b) || { name: b };
+      const nameA = allRawsInfosJsonArray.latest.find((v) => v.identifier === a) || { name: a };
+      const nameB = allRawsInfosJsonArray.latest.find((v) => v.identifier === b) || { name: b };
 
-      return (nameA.name.toLowerCase() < nameB.name.toLowerCase()) ? -1 : 1;
-    })
+      return nameA.name.toLowerCase() < nameB.name.toLowerCase() ? -1 : 1;
+    });
   });
   const [rawModuleFilters, setRawModuleFilters] = createSignal<string[]>([]);
 
@@ -68,10 +66,9 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   // Raws after filtering by the search
   const allRawsJsonSearchFiltered = createMemo(() => {
-
     // Filter by modules first (easiest wide amount to filter). We pre-sort the raws in one step here.
     const moduleFiltered = RawsOnlyWithoutModules(
-      allRawsJsonArray.latest.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1),
+      allRawsJsonArray.latest.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)),
       rawModuleFilters()
     );
     // Filter by required tags (somewhat expensive)
@@ -114,6 +111,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const creatureRaws = createMemo(
     () => allRawsJsonSearchFiltered().filter((x) => x.raw_type === 'Creature') as Creature[]
   );
+  // Provide access to only Creatures
+  const plantRaws = createMemo(() => allRawsJsonSearchFiltered().filter((x) => x.raw_type === 'Plant') as Plant[]);
 
   async function parseRaws(): Promise<Raw[]> {
     const dir = directoryContext.directoryPath().join('/');
@@ -173,6 +172,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     setLoadRaws,
     parsingProgress,
     creatureRaws,
+    plantRaws,
     rawModules,
     rawModuleFilters,
     addRawModuleFilter,
