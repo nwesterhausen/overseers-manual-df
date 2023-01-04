@@ -9,7 +9,7 @@ const ListingBotanicals: Component = () => {
     <div class='row justify-content-center gap-3'>
       <For
         each={rawsContext.plantRaws()}
-        fallback={<div class='text-center fst-italic text-muted'>No matches in the Bestiary</div>}>
+        fallback={<div class='text-center fst-italic text-muted'>No matches among the botanicals</div>}>
         {(raw) => <BotanicalCard plant={raw} />}
       </For>
     </div>
