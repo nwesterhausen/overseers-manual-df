@@ -1,3 +1,11 @@
+## [0.20.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.20.0...v0.20.1) (2023-01-05)
+
+
+### Bug Fixes
+
+* 🎨 theme changer default to system color scheme ([54291a3](https://github.com/nwesterhausen/overseers-manual-df/commit/54291a35ef738616be2f8c123d1127a8bc1d76fd))
+* 🎨 tweak theming ([44c6536](https://github.com/nwesterhausen/overseers-manual-df/commit/44c6536e34ae29811afac05582ed459d5b8fc72c))
+
 ## [0.20.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.19.0...v0.20.0) (2023-01-05)
 
 
