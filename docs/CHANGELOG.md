@@ -1,3 +1,10 @@
+## [0.20.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.20.1...v0.20.2) (2023-01-05)
+
+
+### Bug Fixes
+
+* ✏️ capitalize titles for plant cards ([84626c9](https://github.com/nwesterhausen/overseers-manual-df/commit/84626c9e98d5ded6eb352603ae16fe1803267782))
+
 ## [0.20.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.20.0...v0.20.1) (2023-01-05)
 
 
