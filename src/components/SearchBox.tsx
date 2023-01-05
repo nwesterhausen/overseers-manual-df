@@ -22,7 +22,7 @@ const SearchBox: Component = () => {
           }, 100)}
         />
 
-        <div class='hstack gap-2 button-icon-adjust-25'>
+        <div class='hstack gap-2 button-icon-adjust-25 ms-auto me-auto'>
           <Button
             class='border-0 p-1'
             style={{ position: 'relative' }}

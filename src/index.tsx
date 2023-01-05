@@ -1,21 +1,23 @@
 /* @refresh reload */
 import { render } from 'solid-js/web';
-import './custom.scss';
+import './sass/main.scss';
 
 import App from './App';
 import { DirectoryProvider } from './providers/DirectoryProvider';
 import { RawsProvider } from './providers/RawsProvider';
 import { SearchProvider } from './providers/SearchProvider';
+import { ThemeProvider } from './providers/ThemeProvider';
 
 render(
   () => (
-    <SearchProvider>
-      <DirectoryProvider>
-        <RawsProvider>
-          <App />
-        </RawsProvider>
-      </DirectoryProvider>
-    </SearchProvider>
+    <ThemeProvider>
+      <SearchProvider>
+        <DirectoryProvider>
+          <RawsProvider>
+            <App />
+          </RawsProvider>
+        </DirectoryProvider>
+      </SearchProvider></ThemeProvider>
   ),
   document.getElementById('root') as HTMLElement
 );
