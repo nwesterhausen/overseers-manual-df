@@ -1,5 +1,6 @@
 import { Button, Card, Modal, Stack } from 'solid-bootstrap';
 import { Component, createSignal } from 'solid-js';
+import { toTitleCase } from '../definitions/Utils';
 import type { Plant } from '../definitions/types';
 import RawJsonTable from './RawsDetailTable';
 import PlantDescriptionTable from './plant/PlantDescriptionTable';
@@ -21,7 +22,7 @@ import PlantProvidesList from './plant/PlantProvidesList';
  */
 const BotanicalCard: Component<{ plant: Plant }> = (props) => {
   const listingId = props.plant.objectId + 'listing';
-  const title = props.plant.name;
+  const title = toTitleCase(props.plant.name);
 
   const [showDescription, setShowDescription] = createSignal(false);
   const handleOpenDescription = () => setShowDescription(true);
