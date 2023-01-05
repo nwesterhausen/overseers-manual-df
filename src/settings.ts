@@ -1,4 +1,4 @@
-import { Store } from 'tauri-plugin-store-api';
+import { Store } from './plugins/store';
 
 const store = new Store('settings.json');
 const CURRENT_VERSION = 2;
