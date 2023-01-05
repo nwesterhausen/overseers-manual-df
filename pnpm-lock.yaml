@@ -1,5 +1,7 @@
 lockfileVersion: 5.4
 
+packageExtensionsChecksum: 32110a3e8439b57d1f6d1c335c63789c
+
 specifiers:
   '@popperjs/core': ^2.11.6
   '@semantic-release/changelog': ^6.0.2
