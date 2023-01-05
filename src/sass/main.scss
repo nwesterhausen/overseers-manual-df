@@ -1,0 +1,9 @@
+// Import all of Bootstrap's CSS
+@import '~bootstrap/scss/bootstrap';
+
+// Override the Color Scheme
+// Not really sure what I'm doing with this so leaving out for now.
+// @import './custom-dark.scss';
+
+// Import Our Custom Styles
+@import './custom.scss';

@@ -4,6 +4,7 @@ import { Component, Show, createSignal } from 'solid-js';
 import { useDirectoryProvider } from '../providers/DirectoryProvider';
 import { STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../providers/RawsProvider';
 import ParsedModInfo from './ParsedModInfo';
+import ThemeChangeButton from './ThemeChangeButton';
 
 const MenuBar: Component = () => {
   const directoryContext = useDirectoryProvider();
@@ -15,7 +16,7 @@ const MenuBar: Component = () => {
 
   return (
     <div class='hstack gap-2 px-2'>
-      <div>
+      <div class='me-auto'>
         <OverlayTrigger
           placement='auto'
           overlay={
@@ -31,28 +32,7 @@ const MenuBar: Component = () => {
             <IoFolderOpenSharp size={'1.5rem'} />
           </Button>
         </OverlayTrigger>
-      </div>
 
-      <Show when={directoryContext.directoryPath().length > 0}>
-        <div>
-          <OverlayTrigger
-            placement='auto'
-            overlay={<Tooltip id='directory-type-details'>Directory set as Dwarf Fortress Directory</Tooltip>}>
-            <span
-              style={{
-                'min-width': '0px',
-                width: 'calc(100vw - 12rem)',
-                'max-width': `${directoryContext.directoryPath().join('/').length * 10}px`,
-                display: 'inline-block',
-              }}
-              class='btn btn-secondary disabled text-truncate'>
-              {directoryContext.directoryPath().join('/')}
-            </span>
-          </OverlayTrigger>
-        </div>
-      </Show>
-
-      <div>
         <OverlayTrigger placement='auto' overlay={<Tooltip id='refresh-button-tooltip'>Re-read Raw Modules</Tooltip>}>
           <Button
             class='border-0 p-1'
@@ -62,9 +42,7 @@ const MenuBar: Component = () => {
             <IoRefreshSharp size={'1.5rem'} />
           </Button>
         </OverlayTrigger>
-      </div>
 
-      <div>
         <OverlayTrigger placement='auto' overlay={<Tooltip>Raw Modules Details</Tooltip>}>
           <Button
             class='border-0 p-1'
@@ -76,7 +54,30 @@ const MenuBar: Component = () => {
         </OverlayTrigger>
       </div>
 
+      <div class='hstack gap-2 px-2'>
+        <Show when={directoryContext.directoryPath().length > 0}>
+          <div>
+            <OverlayTrigger
+              placement='auto'
+              overlay={<Tooltip id='directory-type-details'>Directory set as Dwarf Fortress Directory</Tooltip>}>
+              <span
+                style={{
+                  'min-width': '0px',
+                  width: 'calc(100vw - 12rem)',
+                  'max-width': `${directoryContext.directoryPath().join('/').length * 10}px`,
+                  display: 'inline-block',
+                }}
+                class='btn btn-secondary disabled text-truncate'>
+                {directoryContext.directoryPath().join('/')}
+              </span>
+            </OverlayTrigger>
+          </div>
+        </Show>
+      </div>
+
       <div class='ms-auto'>
+        <ThemeChangeButton />
+
         <OverlayTrigger placement='auto' overlay={<Tooltip>Settings</Tooltip>}>
           <Button disabled class='border-0 p-1' variant='outline-warning' onClick={() => window.alert('hi')}>
             <IoCogSharp size={'1.5rem'} />
