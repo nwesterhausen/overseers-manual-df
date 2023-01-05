@@ -24,8 +24,8 @@ export class Store {
   /**
    * Inserts a key-value pair into the store.
    *
-   * @param key
-   * @param value
+   * @param key -
+   * @param value -
    * @returns
    */
   set(key: string, value: unknown): Promise<void> {
@@ -39,7 +39,7 @@ export class Store {
   /**
    * Returns the value for the given `key` or `null` the key does not exist.
    *
-   * @param key
+   * @param key -
    * @returns
    */
   get<T>(key: string): Promise<T | null> {
@@ -52,7 +52,7 @@ export class Store {
   /**
    * Returns `true` if the given `key` exists in the store.
    *
-   * @param key
+   * @param key -
    * @returns
    */
   has(key: string): Promise<boolean> {
@@ -65,7 +65,7 @@ export class Store {
   /**
    * Removes a key-value pair from the store.
    *
-   * @param key
+   * @param key -
    * @returns
    */
   delete(key: string): Promise<boolean> {
@@ -160,7 +160,7 @@ export class Store {
   /**
    * Saves the store to disk at the stores `path`.
    *
-   * As the store is only persistet to disk before the apps exit, changes might be lost in a crash.
+   * As the store is only persisted to disk before the apps exit, changes might be lost in a crash.
    * This method let's you persist the store to disk whenever you deem necessary.
    * @returns
    */
@@ -172,8 +172,8 @@ export class Store {
 
   /**
    * Listen to changes on a store key.
-   * @param key
-   * @param cb
+   * @param key -
+   * @param cb -
    * @returns A promise resolving to a function to unlisten to the event.
    */
   onKeyChange<T>(key: string, cb: (value: T | null) => void): Promise<UnlistenFn> {
@@ -186,7 +186,7 @@ export class Store {
 
   /**
    * Listen to changes on the store.
-   * @param cb
+   * @param cb -
    * @returns A promise resolving to a function to unlisten to the event.
    */
   onChange(cb: (key: string, value: unknown) => void): Promise<UnlistenFn> {
