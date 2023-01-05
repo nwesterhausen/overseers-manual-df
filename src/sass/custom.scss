@@ -1,63 +1,3 @@
-.icon-link svg {
-  width: 1.5em;
-  height: 1.5em;
-}
-
-.indicate-clickable {
-  cursor: pointer;
-}
-
-.button-icon-adjust-25 {
-  .btn {
-    svg {
-      margin-top: -0.25rem;
-    }
-  }
-}
-
-/* Make the badge float in the top right corner of the button */
-.badge-dot {
-  background-color: var(--bs-info);
-  border-radius: 3px;
-
-  padding: 3px 3px;
-
-  position: absolute;
-  /* Position the badge within the relatively positioned button */
-  top: 4px;
-  left: 2px;
-}
-
-.search-filters {
-  animation: slide-down 0.4s ease;
-  .hidden-away {
-    animation: slide-up-away 0.4s ease;
-  }
-}
-
-@keyframes slide-down {
-  0% {
-    opacity: 0;
-    transform: translateY(-10vh);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes slide-up-away {
-  0% {
-    opacity: 1;
-    transform: translateY(10vh);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(0);
-  }
-}
-
 .double-badge span {
   font-size: 0.8rem;
   font-weight: bold;
@@ -65,33 +5,33 @@
   padding: 0.23rem;
 }
 
-.modal90w {
-  width: 90%;
-  max-width: none !important;
-}
+.listing-card {
+  width: 20rem;
+  min-height: 20rem;
+  padding-left: 0;
+  padding-right: 0;
 
-/* Custom Scrollbar */
-/* width */
-::-webkit-scrollbar {
-  width: 0.5rem;
-}
+  .card-body {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: var(--bs-light);
-}
+  .card-title {
+    font-weight: bolder;
+  }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: var(--bs-gray);
-}
+  .card-subtitle {
+    margin-bottom: 0.25rem;
+    color: var(--bs-text-muted);
+  }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: var(--bs-dark);
-}
+  .card-badges {
+    margin-bottom: 0.25rem;
+  }
 
-#root {
-  width: calc(100vw - 00.5rem);
-  overflow-x: hidden;
+  .card-footer {
+    margin-top: auto;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }

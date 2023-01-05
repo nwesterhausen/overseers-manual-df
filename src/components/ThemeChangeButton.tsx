@@ -7,14 +7,14 @@ const ThemeChangeButton: Component = () => {
     const [theme, { setDark, setLight }] = useThemeChanger();
 
     return (
-        <OverlayTrigger placement='auto' overlay={<Tooltip>{`Use ${theme.dark ? 'light' : 'dark'} theme`}</Tooltip>}>
+        <OverlayTrigger placement='auto' overlay={<Tooltip>{`Use ${theme.theme === 'dark' ? 'light' : 'dark'} theme`}</Tooltip>}>
             <Button class='border-0 p-1' variant='outline-primary' onClick={() => {
-                if (theme.dark) {
+                if (theme.theme === 'dark') {
                     setLight();
                 } else {
                     setDark();
                 }
-            }}>{theme.dark ? <HiSolidSun size={'1.5rem'} /> : <HiSolidMoon size={'1.5rem'} />}</Button>
+            }}>{theme.theme === 'dark' ? <HiSolidSun size={'1.5rem'} /> : <HiSolidMoon size={'1.5rem'} />}</Button>
         </OverlayTrigger>
     )
 }

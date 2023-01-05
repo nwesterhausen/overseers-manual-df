@@ -32,15 +32,15 @@ const BotanicalCard: Component<{ plant: Plant }> = (props) => {
   const handleCloseRawDetails = () => setShowRawDetails(false);
 
   return (
-    <Card style={{ width: '20rem', 'min-height': '20rem' }} id={listingId}>
+    <Card class='listing-card' id={listingId}>
       <Card.Body>
-        <Card.Title class='fw-bolder'>{title}</Card.Title>
-        <Card.Subtitle class='mb-2 text-muted'>{props.plant.raw_module_display}</Card.Subtitle>
+        <Card.Title >{title}</Card.Title>
+        <Card.Subtitle>{props.plant.raw_module_display}</Card.Subtitle>
         <Card.Text>
           <PlantProvidesList plant={props.plant} />
         </Card.Text>
       </Card.Body>
-      <Card.Footer class='mt-auto'>
+      <Card.Footer >
         <Stack gap={2}>
           <Button variant='primary' size='sm' onClick={handleOpenDescription}>
             Show All Details
@@ -52,6 +52,8 @@ const BotanicalCard: Component<{ plant: Plant }> = (props) => {
           </a>
         </Stack>
       </Card.Footer>
+
+      {/* Include modal for "Show All Details" */}
       <Modal
         dialogClass='modal90w'
         id={`${listingId}-details`}
@@ -67,6 +69,8 @@ const BotanicalCard: Component<{ plant: Plant }> = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* Include modal for "See Raw Info" */}
       <Modal dialogClass='modal90w' id={`${listingId}-raws`} show={showRawDetails()} onHide={handleCloseRawDetails}>
         <Modal.Header closeButton>
           <Modal.Title>{title} Raws</Modal.Title>
