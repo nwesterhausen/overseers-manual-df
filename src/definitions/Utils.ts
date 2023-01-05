@@ -39,6 +39,15 @@ export const toTitleCase = (str: string): string => {
   if (str.length <= 1) {
     return str.toUpperCase();
   }
+
+  // Support strings with spaces, and make our title case very title-y
+  if (/\s/.test(str)) {
+    return str
+      .split(' ')
+      .map((s) => `${s[0].toUpperCase()}${s.slice(1).toLowerCase()}`)
+      .join(' ');
+  }
+
   return `${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`;
 };
 
@@ -95,8 +104,8 @@ const GAME_TICKS_FORTRESS = {
   WEEK: 8_400,
   DAY: 1_200,
   HOUR: 50,
-  MINUTE: (5/6),
-  SECOND: (1/72),
+  MINUTE: 5 / 6,
+  SECOND: 1 / 72,
 };
 const GAME_TICKS_ADVENTURE = {
   SEASON: 14_515_200,
@@ -108,57 +117,56 @@ const GAME_TICKS_ADVENTURE = {
 };
 
 interface GameTicksDefinition {
-  SEASON: number,
-  WEEK: number,
-  DAY: number,
-  HOUR: number,
-  MINUTE: number,
-  SECOND: number,
+  SEASON: number;
+  WEEK: number;
+  DAY: number;
+  HOUR: number;
+  MINUTE: number;
+  SECOND: number;
 }
 
 export const TickToCalendarConversion = (gameTicks: number, fortressMode = true): string => {
   if (fortressMode) {
     return SpecificTickToCalendarConversion(gameTicks, GAME_TICKS_FORTRESS);
-  }else{
+  } else {
     return SpecificTickToCalendarConversion(gameTicks, GAME_TICKS_ADVENTURE);
   }
-}
+};
 
+const SpecificTickToCalendarConversion = (gameTicks: number, defined_spans: GameTicksDefinition): string => {
+  let mutGameTicks = gameTicks;
+  // Convert ticks to "time" for fortress mode
+  const seasons = Math.floor(mutGameTicks / defined_spans.SEASON);
+  mutGameTicks -= defined_spans.SEASON * seasons;
+  const weeks = Math.floor(mutGameTicks / defined_spans.WEEK);
+  mutGameTicks -= defined_spans.WEEK * weeks;
+  const days = Math.floor(mutGameTicks / defined_spans.DAY);
+  mutGameTicks -= defined_spans.DAY * days;
+  const hours = Math.floor(mutGameTicks / defined_spans.HOUR);
+  mutGameTicks -= defined_spans.HOUR * hours;
+  const minutes = Math.floor(mutGameTicks / defined_spans.MINUTE);
+  mutGameTicks -= defined_spans.MINUTE * minutes;
+  const seconds = Math.floor(mutGameTicks / defined_spans.SECOND);
+  mutGameTicks -= defined_spans.SECOND * seconds;
 
-const SpecificTickToCalendarConversion = (gameTicks: number,defined_spans: GameTicksDefinition): string => {
-    let mutGameTicks = gameTicks;
-    // Convert ticks to "time" for fortress mode
-    const seasons = Math.floor(mutGameTicks / defined_spans.SEASON);
-    mutGameTicks -= (defined_spans.SEASON) * seasons;
-    const weeks = Math.floor(mutGameTicks / defined_spans.WEEK);
-    mutGameTicks -= (defined_spans.WEEK) * weeks;
-    const days = Math.floor(mutGameTicks / defined_spans.DAY);
-    mutGameTicks -= (defined_spans.DAY) * days;
-    const hours = Math.floor(mutGameTicks / defined_spans.HOUR);
-    mutGameTicks -= (defined_spans.HOUR) * hours;
-    const minutes = Math.floor(mutGameTicks / defined_spans.MINUTE);
-    mutGameTicks -= (defined_spans.MINUTE) * minutes;
-    const seconds = Math.floor(mutGameTicks / defined_spans.SECOND);
-    mutGameTicks -= (defined_spans.SECOND) * seconds;
-    
-    const outStr: string[] = [];
-    if (seasons) {
-      outStr.push( `${seasons} Season${seasons > 1 ? 's':''}`);
-    }
-    if (weeks) {
-      outStr.push( `${weeks} Week${weeks > 1?'s':''}`);
-    }
-    if (days) {
-      outStr.push(`${days} Day${days>1?'s':''}`);
-    }
-    if (hours || minutes) {
-      outStr.push(`${hours}h ${minutes}m`);
-    }
+  const outStr: string[] = [];
+  if (seasons) {
+    outStr.push(`${seasons} Season${seasons > 1 ? 's' : ''}`);
+  }
+  if (weeks) {
+    outStr.push(`${weeks} Week${weeks > 1 ? 's' : ''}`);
+  }
+  if (days) {
+    outStr.push(`${days} Day${days > 1 ? 's' : ''}`);
+  }
+  if (hours || minutes) {
+    outStr.push(`${hours}h ${minutes}m`);
+  }
 
-    // Ignore hours minutes seconds for now?
+  // Ignore hours minutes seconds for now?
 
-    return outStr.join(', ');
-}
+  return outStr.join(', ');
+};
 
 /**
  * Check if an element is out of the viewport
