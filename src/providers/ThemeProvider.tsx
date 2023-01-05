@@ -2,41 +2,35 @@ import { ParentComponent, createContext, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 type ThemeStore = [
-  { theme: 'dark' | 'light' | 'dwarf' },
-  { setDark: () => void; setLight: () => void; setDwarf: () => void }
+  { dark: boolean },
+  { setDark: () => void; setLight: () => void; }
 ]
 
-const ThemeContext = createContext<ThemeStore>([{ theme: 'dwarf' }, {
+const ThemeContext = createContext<ThemeStore>([{ dark: true }, {
   setDark() {
     console.log("Theme not changed");
   },
   setLight() {
-    console.log("Theme not changed");
-  },
-  setDwarf() {
     console.log("Theme not changed");
   }
 }
 ]);
 
 export const ThemeProvider: ParentComponent = (props) => {
-  const [state, setState] = createStore({ theme: 'dwarf' });
-  document.getElementsByTagName("body")[0].setAttribute('data-bs-theme', 'dwarf');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const [state, setState] = createStore({ dark: true });
+  document.getElementsByTagName("body")[0].setAttribute('data-bs-theme', prefersDark.matches ? 'dark' : 'light');
 
   const themeChanger = [
     state,
     {
       setDark() {
-        setState({ "theme": 'light' });
+        setState({ "dark": true });
         document.getElementsByTagName("body")[0].setAttribute('data-bs-theme', 'dark');
       },
       setLight() {
-        setState({ "theme": 'dark' });
+        setState({ "dark": false });
         document.getElementsByTagName("body")[0].setAttribute('data-bs-theme', 'light');
-      },
-      setDwarf() {
-        setState({ "theme": 'dwarf' });
-        document.getElementsByTagName("body")[0].setAttribute('data-bs-theme', 'dwarf');
       }
     }
   ];
