@@ -1,3 +1,10 @@
+## [0.20.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.19.0...v0.20.0) (2023-01-05)
+
+
+### Features
+
+* ☀️🌙 add theme change button ([4703b02](https://github.com/nwesterhausen/overseers-manual-df/commit/4703b0228bb8641a3075d0c08922d1506e5023dd))
+
 ## [0.19.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.18.1...v0.19.0) (2023-01-04)
 
 
