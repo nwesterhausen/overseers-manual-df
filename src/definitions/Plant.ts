@@ -1,11 +1,15 @@
+import { StatesIntoFlatArray } from './Utils';
 import { Plant } from './types';
 
 export function GeneratePlantSearchString(plant: Plant): string[] {
-  let searchableTerms = [...plant.name.split(' ')];
-  searchableTerms = searchableTerms.concat(plant.pref_string);
+  let searchableTerms = [...plant.name.split(' ')]; // add name
+  searchableTerms = searchableTerms.concat(plant.pref_string); // add preference string
+  searchableTerms = searchableTerms.concat(plant.materials.map((m) => m.material_type)); // add material types
+  searchableTerms = searchableTerms.concat(plant.materials.map((m) => StatesIntoFlatArray(m.state_name)).flat()); //add material names
+  searchableTerms = searchableTerms.concat(plant.materials.map((m) => StatesIntoFlatArray(m.state_color)).flat()); //add material colors
 
-  searchableTerms.push(plant.raw_module);
-  searchableTerms.push(...plant.all_tags);
+  searchableTerms.push(plant.raw_module); // add sourced module
+  searchableTerms.push(...plant.all_tags); // add all tags
 
   return searchableTerms
     .join(' ')

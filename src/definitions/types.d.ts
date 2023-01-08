@@ -70,13 +70,13 @@ export type Creature = {
 export type SingPluralName = {
   singular: string;
   plural: string;
-}
+};
 
 export type StateName = {
   solid: string;
   liquid: string;
   gas: string;
-}
+};
 
 export type SimpleMaterial = {
   material_type: string;
@@ -84,8 +84,8 @@ export type SimpleMaterial = {
   state_adj: StateName;
   material_value: number;
   tags: string[];
-  state_color: string;
-}
+  state_color: StateName;
+};
 
 // Plant raw definition
 export type Plant = {
@@ -104,7 +104,7 @@ export type Plant = {
   materials: SimpleMaterial[];
   growth_names: {
     [growth: string]: SingPluralName;
-  }
+  };
   growth_duration: number;
 } & Raw;
 
