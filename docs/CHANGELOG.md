@@ -1,3 +1,11 @@
+## [0.21.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.20.2...v0.21.0) (2023-01-08)
+
+
+### Features
+
+* ✨ add material types, state names and state colors to plant search string ([fda25f7](https://github.com/nwesterhausen/overseers-manual-df/commit/fda25f776e9ed5722ddefb79e1fcfa37cfb908e6))
+* ✨ improve plant raw support and display ([9aedfcf](https://github.com/nwesterhausen/overseers-manual-df/commit/9aedfcfa09b50423cd3bfca0e824341464c3e9c7))
+
 ## [0.20.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.20.1...v0.20.2) (2023-01-05)
 
 
