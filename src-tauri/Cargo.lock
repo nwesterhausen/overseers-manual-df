@@ -507,9 +507,9 @@ checksum = "850878694b7933ca4c9569d30a34b55031b9b139ee1fc7b94a527c4ef960d690"
 
 [[package]]
 name = "dfraw_json_parser"
-version = "0.7.6"
+version = "0.7.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b271392236d8fd81e245e8d21d40817c0c66f623d25c6db4424fd5763485353a"
+checksum = "4c451defca6256a389643800f8afc5f81471643168dd714bd8379f426d295f28"
 dependencies = [
  "encoding_rs",
  "encoding_rs_io",

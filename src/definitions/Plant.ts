@@ -33,7 +33,8 @@ export function GetMaterialDescription(plant: Plant, material_type: string): str
     nonEdibleMaterials.indexOf(material.material_type) === -1 &&
     material.tags.indexOf('EdibleRaw') === -1 &&
     material.tags.indexOf('EdibleCooked') === -1 &&
-    material.tags.indexOf('AlcoholPlant') === -1
+    material.tags.indexOf('AlcoholPlant') === -1 &&
+    material.tags.indexOf('PowderMiscPlant') === -1
   ) {
     return '';
   }
@@ -90,7 +91,10 @@ export function GetMaterialDescription(plant: Plant, material_type: string): str
       return `${material.state_name.liquid} (brewed)`;
     }
     case 'Powder': {
-      return `${material.state_name.solid} (milled)`;
+      if (material.state_name.solid.includes('dye')) {
+        return `${material.state_name.solid} (milled into ${material.state_color.solid} dye)`;
+      }
+      return `${material.state_name.solid} (milled into flour)`;
     }
     case 'Structural': {
       if (material.state_name.solid === 'plant') {
