@@ -61,7 +61,7 @@ export const SearchableNames = (names: CasteRange<string[]> | string[]): string 
   if (Array.isArray(names)) {
     return names.join(' ');
   }
-  let flatNames = [];
+  let flatNames: string[] = [];
   for (const k of Object.keys(names)) {
     for (const name of names[k]) {
       flatNames = flatNames.concat(name.split(' '));

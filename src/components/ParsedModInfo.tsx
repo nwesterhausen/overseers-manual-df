@@ -22,10 +22,10 @@ const ParsedModInfo: Component = () => {
           <li>Total read raw modules: {rawsContext.rawsInfo.latest.length}</li>
           <li>
             From installed_mods:{' '}
-            {rawsContext.rawsInfo.latest.filter((v) => v.sourced_directory === 'installed_mods').length}
+            {rawsContext.rawsInfo.latest.filter((v) => v.sourcedDirectory === 'installed_mods').length}
           </li>
-          <li>From mods: {rawsContext.rawsInfo.latest.filter((v) => v.sourced_directory === 'mods').length}</li>
-          <li>From mods: {rawsContext.rawsInfo.latest.filter((v) => v.sourced_directory === 'vanilla').length}</li>
+          <li>From mods: {rawsContext.rawsInfo.latest.filter((v) => v.sourcedDirectory === 'mods').length}</li>
+          <li>From mods: {rawsContext.rawsInfo.latest.filter((v) => v.sourcedDirectory === 'vanilla').length}</li>
         </ul>
       </section>
       <section>
@@ -34,10 +34,10 @@ const ParsedModInfo: Component = () => {
             const el = e.target as HTMLSelectElement;
             setSelected(el.value);
           }}>
-          <For each={rawsContext.rawsInfo.latest.sort((a, b) => a.display_title < b.display_title ? -1 : 1)}>
+          <For each={rawsContext.rawsInfo.latest.sort((a, b) => a.displayTitle < b.displayTitle ? -1 : 1)}>
             {(modInfo) => (
               <option value={modInfo.identifier} selected={selected() === modInfo.identifier}>
-                {modInfo.name} v{modInfo.displayed_version} (from {modInfo.sourced_directory})
+                {modInfo.name} v{modInfo.displayedVersion} (from {modInfo.displayedVersion})
               </option>
             )}
           </For>

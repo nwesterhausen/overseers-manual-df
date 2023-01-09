@@ -46,7 +46,7 @@ export function isCreature(raw: Raw | Creature): boolean {
  * @returns true if one caste of this creature lays eggs
  */
 export const IsEggLayer = (creature: Creature): boolean => {
-  for (const casteTags of Object.values(creature.caste_tags)) {
+  for (const casteTags of Object.values(creature.casteTags)) {
     if (casteTags.indexOf('LaysEggs') !== -1) {
       return true;
     }
@@ -61,7 +61,7 @@ export const IsEggLayer = (creature: Creature): boolean => {
  * @returns pet value of first encountered value or 0
  */
 export const FirstPetValue = (creature: Creature): number => {
-  for (const petValue of Object.values(creature.pet_value)) {
+  for (const petValue of Object.values(creature.petValue)) {
     if (petValue > 0) {
       return petValue;
     }
@@ -94,8 +94,8 @@ export const EggLayingStatus = (creature: Creature): string => {
   if (!IsEggLayer(creature)) {
     return "Doesn't lay eggs.";
   }
-  const size = CondensedEggSize(creature.egg_sizes);
-  const keys = Object.keys(creature.clutch_size);
+  const size = CondensedEggSize(creature.eggSizes);
+  const keys = Object.keys(creature.clutchSize);
   if (keys.length === 0) {
     if (size > 0) {
       return `Lays an unknown quantity of eggs with volume ${SimplifyVolume(size)}.`;
@@ -103,15 +103,15 @@ export const EggLayingStatus = (creature: Creature): string => {
     return 'Lays an unknown quantity of eggs.';
   }
   const ret: string[] = [];
-  for (const k in creature.clutch_size) {
+  for (const k in creature.clutchSize) {
     if (size > 0) {
       ret.push(
-        `${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutch_size[k].join(
+        `${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutchSize[k].join(
           ' - '
         )} eggs with volume ${SimplifyVolume(size)}.`
       );
     } else {
-      ret.push(`${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutch_size[k].join(' - ')} eggs.`);
+      ret.push(`${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutchSize[k].join(' - ')} eggs.`);
     }
   }
   return ret.join(' ');
@@ -124,16 +124,16 @@ export const EggLayingStatus = (creature: Creature): string => {
  * @returns Text to describe the life expectancy of the creature.
  */
 export const LifeExpectancyStatus = (creature: Creature): string => {
-  const keys = Object.keys(creature.max_age);
+  const keys = Object.keys(creature.maxAge);
   if (keys.length === 0) {
     return 'Lives indefinitely.';
   }
   if (keys.length === 1) {
-    return `Live ${creature.max_age[keys[0]].join(' - ')} years.`;
+    return `Live ${creature.maxAge[keys[0]].join(' - ')} years.`;
   }
   const ret: string[] = [];
-  for (const c in creature.max_age) {
-    ret.push(`${c} lives ${creature.max_age[c].join(' - ')} years.`);
+  for (const c in creature.maxAge) {
+    ret.push(`${c} lives ${creature.maxAge[c].join(' - ')} years.`);
   }
   return ret.join(' ');
 };
@@ -145,7 +145,7 @@ export const LifeExpectancyStatus = (creature: Creature): string => {
  * @returns Text to describe the spawning patterns
  */
 export const ClusterSizeStatus = (creature: Creature): string => {
-  const [min, max] = creature.cluster_range;
+  const [min, max] = creature.clusterRange;
   if (min === max) {
     if (max === 0) {
       return 'They do not normally appear.';
@@ -361,8 +361,8 @@ const TRAINABLE_HUNTING = 1, // 0001
  */
 export const AssignBasedOn = (creature: Creature, basedOn: Creature): Creature => {
   // Special cases handled here before we go through any other keys that might be "default"
-  if (creature.creature_class.ALL && creature.creature_class.ALL.length > 1 && basedOn.creature_class.ALL.length > 1) {
-    creature.creature_class.ALL = [...new Set(creature.creature_class.ALL.concat(basedOn.creature_class.ALL))];
+  if (creature.creatureClass.ALL && creature.creatureClass.ALL.length > 1 && basedOn.creatureClass.ALL.length > 1) {
+    creature.creatureClass.ALL = [...new Set(creature.creatureClass.ALL.concat(basedOn.creatureClass.ALL))];
   }
 
   // Go through all keys and assign if they are empty or defaults
@@ -381,48 +381,48 @@ const DEFAULT_CREATURE: Partial<Creature> = {
   objectId: '',
   identifier: '',
   name: '',
-  raw_module: '',
-  raw_module_version: '',
-  raw_type: 'Creature',
-  based_on: '',
+  rawModule: '',
+  moduleVersion: '',
+  rawType: 'Creature',
+  basedOn: '',
   searchString: [],
-  raw_module_found_in: '',
-  raw_module_parents: [],
+  moduleSourceDirectory: '',
+  rawModuleParents: [],
   descriptions: {},
-  parent_raw: '',
-  max_age: {},
-  clutch_size: {},
+  parentRaw: '',
+  maxAge: {},
+  clutchSize: {},
   biomes: [],
-  cluster_range: [],
-  underground_depth: [],
-  body_size: {},
-  grown_at: {},
-  egg_sizes: {},
-  pet_value: {},
+  clusterRange: [],
+  undergroundDepth: [],
+  bodySize: {},
+  grownAt: {},
+  eggSizes: {},
+  petValue: {},
   intelligence: {},
   flier: {},
   gnawer: {},
   trainable: {},
-  active_time: {},
-  inactive_season: {},
-  creature_class: {},
-  names_map: {},
+  activeTime: {},
+  inactiveSeason: {},
+  creatureClass: {},
+  namesMap: {},
   tags: [],
-  caste_tags: {},
+  casteTags: {},
   difficulty: {},
-  grass_trample: {},
+  grassTrample: {},
   grazer: {},
-  low_light_vision: {},
-  pop_ratio: {},
+  lowlightVision: {},
+  populationRatio: {},
   milkable: {},
-  pref_string: [],
-  population_number: [1, 1],
+  preferenceStrings: [],
+  populationNumber: [1, 1],
 };
 
 export const PopulationNumberStatus = (creature: Creature): string => {
   let descriptor = 'alone.';
-  if (creature.population_number[0] !== creature.population_number[1]) {
-    descriptor = `in groups of ${creature.population_number[0]} to ${creature.population_number[1]}.`;
+  if (creature.populationNumber[0] !== creature.populationNumber[1]) {
+    descriptor = `in groups of ${creature.populationNumber[0]} to ${creature.populationNumber[1]}.`;
   }
   return `They live in the world ${descriptor}`;
 };
@@ -435,11 +435,11 @@ export const PopulationNumberStatus = (creature: Creature): string => {
  */
 export const PetValueStatus = (creature: Creature): string => {
   const ret: string[] = [];
-  for (const c in creature.pet_value) {
+  for (const c in creature.petValue) {
     if (c === 'ALL' || c === 'SPECIES') {
-      ret.push(`Worth ${creature.pet_value.ALL} as a pet.`);
+      ret.push(`Worth ${creature.petValue.ALL} as a pet.`);
     } else {
-      ret.push(`${toTitleCase(c)}s worth ${creature.pet_value[c]} as a pet.`);
+      ret.push(`${toTitleCase(c)}s worth ${creature.petValue[c]} as a pet.`);
     }
   }
   if (ret.length === 0) {
@@ -456,8 +456,8 @@ export const PetValueStatus = (creature: Creature): string => {
  */
 export const GenerateCreatureSearchString = (creature: Creature): string[] => {
   let searchableTerms = [
-    SearchableNames(creature.names_map),
-    IsEggLayer(creature) ? `eggs ${CondensedEggSize(creature.egg_sizes)}` : '',
+    SearchableNames(creature.namesMap),
+    IsEggLayer(creature) ? `eggs ${CondensedEggSize(creature.eggSizes)}` : '',
     Object.values(creature.descriptions).join(' '),
     creature.flier ? 'flier' : '',
     creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? '' : 'playable',
@@ -472,10 +472,10 @@ export const GenerateCreatureSearchString = (creature: Creature): string[] => {
     searchableTerms.push(creature.intelligence.ALL[1] ? 'speaks' : '');
   }
   searchableTerms = searchableTerms.concat(creature.tags);
-  searchableTerms = searchableTerms.concat(Object.values(creature.caste_tags).flat());
-  searchableTerms = searchableTerms.concat(creature.pref_string);
+  searchableTerms = searchableTerms.concat(Object.values(creature.casteTags).flat());
+  searchableTerms = searchableTerms.concat(creature.preferenceStrings);
 
-  searchableTerms.push(creature.raw_module);
+  searchableTerms.push(creature.rawModule);
 
   return searchableTerms
     .join(' ')

@@ -11,7 +11,7 @@ const ParsingProgressBar: Component = () => {
     return 0;
   });
   const current = createMemo(() => {
-    return rawsContext.parsingProgress().current_module;
+    return rawsContext.parsingProgress().currentModule;
   });
   return (
     <Show when={rawsContext.parsingStatus() === STS_PARSING}>

@@ -1,7 +1,7 @@
 import { Button, Card, Modal, Stack } from 'solid-bootstrap';
 import { Component, createSignal } from 'solid-js';
 import { toTitleCase } from '../definitions/Utils';
-import type { Plant } from '../definitions/types';
+import type { DFPlant } from '../definitions/types';
 import RawJsonTable from './RawsDetailTable';
 import PlantDescriptionTable from './plant/PlantDescriptionTable';
 import PlantProvidesList from './plant/PlantProvidesList';
@@ -20,7 +20,7 @@ import PlantProvidesList from './plant/PlantProvidesList';
  * @param props - Contains the creature to render details for.
  * @returns Component of creature data for a listing.
  */
-const BotanicalCard: Component<{ plant: Plant }> = (props) => {
+const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
   const listingId = props.plant.objectId + 'listing';
   const title = toTitleCase(props.plant.name);
 
@@ -36,7 +36,7 @@ const BotanicalCard: Component<{ plant: Plant }> = (props) => {
     <Card class='listing-card' id={listingId}>
       <Card.Body>
         <Card.Title >{title}</Card.Title>
-        <Card.Subtitle>{props.plant.raw_module_display}</Card.Subtitle>
+        <Card.Subtitle>{props.plant.moduleDisplayName}</Card.Subtitle>
         <Card.Text>
           <PlantProvidesList plant={props.plant} />
         </Card.Text>
