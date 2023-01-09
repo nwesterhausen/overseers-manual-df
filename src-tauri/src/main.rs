@@ -5,7 +5,7 @@
 
 use tauri_plugin_store::PluginBuilder;
 // use tauri::{AppHandle, Runtime};
-use simple_logger::SimpleLogger;
+use fern::colors::{Color, ColoredLevelConfig};
 
 #[tauri::command]
 fn parse_raws_at_game_path(path: &str, window: tauri::window::Window) -> String {
@@ -29,15 +29,31 @@ fn parse_raws_info_at_game_path(path: &str) -> String {
 
 fn main() {
     // Setup logging
-    match SimpleLogger::new()
-        .with_colors(true)
-        .with_level(log::LevelFilter::Info)
-        .env()
-        .init()
+    // Specify color configuration
+    let colors = ColoredLevelConfig::new()
+        // Specify info as cyan
+        .info(Color::Cyan);
+    // Initialize logger
+    match fern::Dispatch::new()
+        // Perform allocation-free log formatting
+        .format(move |out, message, record| {
+            out.finish(format_args!(
+                "{} [{}] {}",
+                chrono::Local::now().format("%Y-%m-%d %H:%M:%S"),
+                colors.color(record.level()),
+                message
+            ));
+        })
+        // Add blanket level filter -
+        .level(log::LevelFilter::Info)
+        // Output to stdout, files, and other Dispatch configurations
+        .chain(std::io::stdout())
+        // Apply globally
+        .apply()
     {
         Ok(logger) => logger,
         Err(e) => {
-            println!("Unable to start SimpleLogger: {:?}", e);
+            println!("Unable to start Fern: {:?}", e);
         }
     }
 

@@ -15,18 +15,14 @@ rust-version = "1.57"
 tauri-build = { version = "1.2", features = [] }
 
 [dependencies]
-tauri = { version = "1.2", features = [
-    "dialog-open",
-    "fs-read-dir",
-    "updater",
-    "window-set-title",
-] }
+tauri = { version = "1.2", features = ["dialog-open", "fs-read-dir", "updater", "window-set-title"] }
 log = "0.4.17"
+chrono = "0.4"
 
-[dependencies.simple_logger]
+[dependencies.fern]
 default-features = false
-version = "4.0.0"
-features = ["colors"]
+version = "0.6"
+features = ["colored"]
 
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/tauri-plugin-store"
