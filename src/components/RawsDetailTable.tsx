@@ -13,7 +13,7 @@ const RawJsonTable: Component<{ item: Raw }> = (props) => {
           </tr>
           <tr>
             <th>Raw file</th>
-            <td>{props.item.parent_raw}</td>
+            <td>{props.item.parentRaw}</td>
           </tr>
           <tr>
             <th>ObjectID</th>

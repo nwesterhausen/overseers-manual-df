@@ -10,7 +10,7 @@ const CreatureBadges: Component<{ creature: Creature }> = (props) => {
       <Stack class='d-flex justify-content-center w-100' direction='horizontal' gap={1}>
         {/* EGG BADGE */}
         {IsEggLayer(props.creature) ? (
-          <TwoPartBadge bg='primary' name='Egg' value={'' + CondensedEggSize(props.creature.egg_sizes)} />
+          <TwoPartBadge bg='primary' name='Egg' value={'' + CondensedEggSize(props.creature.eggSizes)} />
         ) : (
           <></>
         )}

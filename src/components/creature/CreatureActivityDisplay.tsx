@@ -5,8 +5,8 @@ import { toTitleCase } from '../../definitions/Utils';
 import type { CasteRange, Creature } from '../../definitions/types';
 
 const CreatureActivityDisplay: Component<{ creature: Creature }> = (props) => {
-  const seasonActivity = CondenseInactiveSeasons(props.creature.inactive_season);
-  const dayActivity = CondenseActiveTimes(props.creature.active_time);
+  const seasonActivity = CondenseInactiveSeasons(props.creature.inactiveSeason);
+  const dayActivity = CondenseActiveTimes(props.creature.activeTime);
 
   return (
     <Stack>

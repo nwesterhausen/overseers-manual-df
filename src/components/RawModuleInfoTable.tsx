@@ -12,7 +12,7 @@ const RawModuleInfoTable: Component<{ module: DFInfoFile }> = (props) => {
         <tr>
           <th>Name</th>
           <td>
-            {props.module.name} v{props.module.displayed_version}
+            {props.module.name} v{props.module.displayedVersion}
           </td>
         </tr>
         <tr>
@@ -29,7 +29,7 @@ const RawModuleInfoTable: Component<{ module: DFInfoFile }> = (props) => {
         </tr>
         <tr>
           <th>Found in</th>
-          <td>{props.module.sourced_directory}</td>
+          <td>{props.module.sourcedDirectory}</td>
         </tr>
       </tbody>
     </Table>
