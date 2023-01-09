@@ -27,12 +27,12 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
         <tr>
           <th>Names</th>
           <td>
-            <CreatureNamesTable names={props.creature.names_map} />
+            <CreatureNamesTable names={props.creature.namesMap} />
           </td>
         </tr>
         <tr>
           <th>Likeable Features</th>
-          <td>{props.creature.pref_string.length > 0 ? props.creature.pref_string.join(', ') : 'None'}</td>
+          <td>{props.creature.preferenceStrings.length > 0 ? props.creature.preferenceStrings.join(', ') : 'None'}</td>
         </tr>
         <tr>
           <th>Life Expectancy</th>
@@ -48,7 +48,7 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
         </tr>
         <tr>
           <th>Inhabited Depth</th>
-          <td>{UndergroundDepthDescription(props.creature.underground_depth)}</td>
+          <td>{UndergroundDepthDescription(props.creature.undergroundDepth)}</td>
         </tr>
         <tr>
           <th>Group Size</th>
@@ -59,8 +59,8 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
         <tr>
           <th>Growth Patterns</th>
           <td>
-            <CreatureBodySizeTable bodySize={props.creature.body_size} />
-            <span>{GrownAtStatus(props.creature.grown_at)}</span>
+            <CreatureBodySizeTable bodySize={props.creature.bodySize} />
+            <span>{GrownAtStatus(props.creature.grownAt)}</span>
           </td>
         </tr>
         <tr>
@@ -76,8 +76,8 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
         <tr>
           <th>Defining Classes</th>
           <td>
-            {props.creature.creature_class.ALL
-              ? props.creature.creature_class.ALL.map((v) => toTitleCase(v.replaceAll('_', ' '))).join(', ')
+            {props.creature.creatureClass.ALL
+              ? props.creature.creatureClass.ALL.map((v) => toTitleCase(v.replaceAll('_', ' '))).join(', ')
               : 'None'}
           </td>
         </tr>
@@ -85,7 +85,7 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
           <th>Tags</th>
           <td>
             <CreatureListTable
-              values={Object.assign(props.creature.caste_tags, { SPECIES: props.creature.tags })}
+              values={Object.assign(props.creature.casteTags, { SPECIES: props.creature.tags })}
               fallbackDesc=''
             />
           </td>
@@ -103,13 +103,13 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
         <tr>
           <th>Lowlight Vision</th>
           <td>
-            <CreatureNumberTable values={props.creature.low_light_vision} fallbackDesc='No low light visibility' />
+            <CreatureNumberTable values={props.creature.lowlightVision} fallbackDesc='No low light visibility' />
           </td>
         </tr>
         <tr>
           <th>Grass Trampling</th>
           <td>
-            <CreatureNumberTable values={props.creature.grass_trample} fallbackDesc='Does not trample grass' />
+            <CreatureNumberTable values={props.creature.grassTrample} fallbackDesc='Does not trample grass' />
           </td>
         </tr>
         <tr>
@@ -121,7 +121,7 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
         <tr>
           <th>Population Ratio</th>
           <td>
-            <CreatureNumberTable values={props.creature.pop_ratio} fallbackDesc='No data available' />
+            <CreatureNumberTable values={props.creature.populationRatio} fallbackDesc='No data available' />
           </td>
         </tr>
         <tr>

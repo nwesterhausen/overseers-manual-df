@@ -1,8 +1,8 @@
 import { Component, For, createMemo } from "solid-js";
 import { GetAllMaterialDescriptions } from "../../definitions/Plant";
-import { Plant } from "../../definitions/types";
+import { DFPlant } from "../../definitions/types";
 
-const PlantProvidesList: Component<{ plant: Plant }> = (props) => {
+const PlantProvidesList: Component<{ plant: DFPlant }> = (props) => {
     const materials = createMemo(() => GetAllMaterialDescriptions(props.plant));
     return (
         <>

@@ -22,7 +22,7 @@ import CreatureBadges from './creature/CreatureBadges';
  */
 const CreatureCard: Component<{ creature: Creature }> = (props) => {
   const listingId = props.creature.objectId + 'listing';
-  const title = props.creature.names_map.SPECIES[0]
+  const title = props.creature.namesMap["SPECIES"][0]
     .split(' ')
     .map((v: string) => toTitleCase(v))
     .join(' ');
@@ -39,7 +39,7 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
     <Card class='listing-card' id={listingId}>
       <Card.Body>
         <Card.Title>{title}</Card.Title>
-        <Card.Subtitle>{props.creature.raw_module_display}</Card.Subtitle>
+        <Card.Subtitle>{props.creature.moduleDisplayName}</Card.Subtitle>
         <Card.Text>
           <Show
             when={Object.values(props.creature.descriptions).length > 0}

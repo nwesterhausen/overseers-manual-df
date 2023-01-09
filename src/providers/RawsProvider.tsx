@@ -8,7 +8,7 @@ import {
   RawsOnlyWithoutModules,
   UniqueSort,
 } from '../definitions/Raw';
-import type { Creature, DFInfoFile, Plant, ProgressPayload, Raw } from '../definitions/types';
+import type { Creature, DFInfoFile, DFPlant, ProgressPayload, Raw } from '../definitions/types';
 import { useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
 
@@ -37,7 +37,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   });
 
   const rawModules = createMemo(() => {
-    const modules = [...new Set(allRawsJsonArray.latest.map((v) => v.raw_module))];
+    const modules = [...new Set(allRawsJsonArray.latest.map((v) => v.rawModule))];
     return modules.sort((a, b) => {
       const nameA = allRawsInfosJsonArray.latest.find((v) => v.identifier === a) || { name: a };
       const nameB = allRawsInfosJsonArray.latest.find((v) => v.identifier === b) || { name: b };
@@ -80,7 +80,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   });
 
   // Signal for raw parsing progress
-  const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>({ current_module: '', percentage: 0.0 });
+  const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>({ currentModule: '', percentage: 0.0 });
 
   // Listen to window events from Tauri
   appWindow
@@ -109,10 +109,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   // Provide access to only Creatures
   const creatureRaws = createMemo(
-    () => allRawsJsonSearchFiltered().filter((x) => x.raw_type === 'Creature') as Creature[]
+    () => allRawsJsonSearchFiltered().filter((x) => x.rawType === 'Creature') as Creature[]
   );
   // Provide access to only Creatures
-  const plantRaws = createMemo(() => allRawsJsonSearchFiltered().filter((x) => x.raw_type === 'Plant') as Plant[]);
+  const plantRaws = createMemo(() => allRawsJsonSearchFiltered().filter((x) => x.rawType === 'Plant') as DFPlant[]);
 
   async function parseRaws(): Promise<Raw[]> {
     const dir = directoryContext.directoryPath().join('/');
@@ -127,7 +127,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       setParsingStatus(STS_LOADING);
 
       await new Promise((resolve) => setTimeout(resolve, 1));
-      setParsingProgress({ current_module: '', percentage: 0.0 });
+      setParsingProgress({ currentModule: '', percentage: 0.0 });
 
       // Flatten the array of arrays
       const result = raw_file_data.flat();
@@ -149,7 +149,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       return sortResult;
     } catch (e) {
       console.error(e);
-      setParsingProgress({ current_module: '', percentage: 0.0 });
+      setParsingProgress({ currentModule: '', percentage: 0.0 });
       setParsingStatus(STS_EMPTY);
     }
   }
