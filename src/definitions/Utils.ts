@@ -171,3 +171,33 @@ const SpecificTickToCalendarConversion = (gameTicks: number, defined_spans: Game
 export function StatesIntoFlatArray(states: StateName): string[] {
   return [states.solid, states.liquid, states.gas];
 }
+
+const IgnoredSearchTerms = [
+  'a',
+  'and',
+  'but',
+  'for',
+  'in',
+  'it',
+  'its',
+  'of',
+  'on',
+  'that',
+  'the',
+  'they',
+  'their',
+  'with',
+]
+
+export function TransformIntoSearchTermString(searchableTerms: string[]): string {
+  const alphaNormalizedTerms = searchableTerms
+    .join(' ')
+    .toLowerCase()
+    .replace(/[\s\W]+/g, ' ')
+    .split(' ')
+    .filter((v) => v.length > 0 && IgnoredSearchTerms.indexOf(v) === -1);
+
+  const uniqueSearchTerms = [...new Set(alphaNormalizedTerms)];
+
+  return uniqueSearchTerms.join(' ');
+}

@@ -1,24 +1,17 @@
-import { StatesIntoFlatArray } from './Utils';
+import { GenerateMaterialSearchString } from './Material';
+import { TransformIntoSearchTermString } from './Utils';
 import { DFPlant } from './types';
 
 export function GeneratePlantSearchString(plant: DFPlant): string {
   let searchableTerms = [...plant.name.split(' ')]; // add name
   searchableTerms = searchableTerms.concat(plant.preferenceStrings); // add preference string
-  searchableTerms = searchableTerms.concat(plant.materials.map((m) => m.type)); // add material types
-  searchableTerms = searchableTerms.concat(plant.materials.map((m) => StatesIntoFlatArray(m.names)).flat()); //add material names
-  searchableTerms = searchableTerms.concat(plant.materials.map((m) => StatesIntoFlatArray(m.colors)).flat()); //add material colors
+  searchableTerms = searchableTerms.concat(plant.materials.map((m) => GenerateMaterialSearchString(m))); // add material info
 
   searchableTerms.push(plant.rawModule); // add sourced module
   searchableTerms.push(...plant.allTags); // add all tags
 
-  return searchableTerms
-    .join(' ')
-    .toLowerCase()
-    .replace(/\s\s+/g, ' ')
-    .split(' ')
-    .filter((v) => v.length > 0)
-    .sort()
-    .join(' ');
+
+  return TransformIntoSearchTermString(searchableTerms);
 }
 
 const liquidMaterials = ['DrinkPlant', 'Extract'];
