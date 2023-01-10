@@ -3,6 +3,7 @@ import { Button, Form, Modal } from 'solid-bootstrap';
 import { Component, For, Show, createResource } from 'solid-js';
 import { useDirectoryProvider } from '../../providers/DirectoryProvider';
 import { useSettingsContext } from '../../providers/SettingsProvider';
+import { PATH_STRING, PATH_TYPE, clear } from '../../settings';
 
 const SettingsModal: Component = () => {
   const [settings, { handleClose }] = useSettingsContext();
@@ -92,6 +93,14 @@ const SettingsModal: Component = () => {
               </ul>
             </Show>
           </p>
+        </section>
+        <section>
+          <legend>Stored Data</legend>
+          <p>The previous used Dwarf Fortress directory is saved in a file on disk to remember the next time you open this app.</p>
+          <Button variant='danger' onClick={async () => {
+            await clear(PATH_STRING);
+            await clear(PATH_TYPE);
+          }}>Clear All Stored Data</Button>
         </section>
         <section>
           <legend>About</legend>
