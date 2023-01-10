@@ -8,6 +8,7 @@ const TagIncludeFilter: Component = () => {
 
   return (
     <div>
+      <legend>Required Tags</legend>
       <For each={FILTERABLE_TAGS}>
         {(filterTag) => (
           <Form.Check
