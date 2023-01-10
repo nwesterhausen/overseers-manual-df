@@ -133,7 +133,7 @@ export type Environment = {
 };
 
 export type RollChance = {
-  metal: string;
+  result: string;
   chance: number;
 };
 
@@ -145,6 +145,8 @@ export type DFInorganic = {
   specificEnvironments: Environment[];
   metalOres: RollChance[];
   threadMetals: RollChance[];
+
+  magmaSafe: boolean;
 } & Raw;
 
 // info.txt raw definition

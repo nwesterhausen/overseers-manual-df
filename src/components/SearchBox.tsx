@@ -31,6 +31,7 @@ const SearchBox: Component = () => {
 
         <div>
           <Form.Check
+            type='switch'
             disabled={disabled()}
             onClick={searchContext.handleToggleRequireCreature}
             label="Creatures"
@@ -39,6 +40,7 @@ const SearchBox: Component = () => {
         </div>
         <div>
           <Form.Check
+            type='switch'
             disabled={disabled()}
             onClick={searchContext.handleToggleRequirePlant}
             label="Plants"
@@ -47,6 +49,7 @@ const SearchBox: Component = () => {
         </div>
         <div>
           <Form.Check
+            type='switch'
             disabled={disabled()}
             onClick={searchContext.handleToggleRequireInorganic}
             label="Inorganics"
@@ -57,10 +60,10 @@ const SearchBox: Component = () => {
           disabled={disabled()}
           class='border-0 p-1 ms-1'
           style={{ position: 'relative' }}
-          variant='outline-primary'
+          variant='outline-secondary'
           onClick={searchContext.handleToggleAdvancedFilters}>
           <IoOptionsSharp size={'1.5rem'} />
-          <span> Filter Raw Modules</span>
+          <span> Filters</span>
           <Show when={searchContext.advancedFiltering()}>
             <div class='badge-dot' />
           </Show>

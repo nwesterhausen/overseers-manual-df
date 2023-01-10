@@ -7,7 +7,7 @@ const DFDirectoryNotSet: Component = () => {
 
   return (
     <>
-      {directoryContext.directoryPath().length == 0 ? (
+      {directoryContext.directoryHistory().length == 0 ? (
         <>
           <Stack gap={2}>
             <h2>No valid path is set!</h2>
@@ -24,7 +24,7 @@ const DFDirectoryNotSet: Component = () => {
               <Button
                 variant='primary'
                 onClick={() => {
-                  directoryContext.setManualFolderSelect(true);
+                  directoryContext.activateManualDirectorySelection(true);
                 }}>
                 Set Directory
               </Button>
