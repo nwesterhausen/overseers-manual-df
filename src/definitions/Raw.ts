@@ -1,6 +1,7 @@
 import { AssignBasedOn, GenerateCreatureSearchString } from './Creature';
+import { GenerateInorganicSearchString } from './Inorganic';
 import { GeneratePlantSearchString } from './Plant';
-import { Creature, DFInfoFile, DFPlant, Raw } from './types';
+import { Creature, DFInfoFile, DFInorganic, DFPlant, Raw } from './types';
 
 /**
  * Array.prototype.filter function to only allow valid Raw objects.
@@ -95,6 +96,16 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
 
         // Build a search string for the raw
         rawsSorted[i].searchString = GeneratePlantSearchString(rawsSorted[i] as DFPlant);
+        break;
+      }
+      case 'Inorganic': {
+        // Coerce RAW into Plant based on raw_type
+        const inorganic = rawsSorted[i] as DFInorganic;
+
+        rawsSorted[i].allTags.push(...inorganic.material.tags);
+
+        // Build a search string for the raw
+        rawsSorted[i].searchString = GenerateInorganicSearchString(rawsSorted[i] as DFInorganic);
         break;
       }
       default:

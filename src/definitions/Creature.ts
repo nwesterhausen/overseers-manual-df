@@ -1,4 +1,4 @@
-import { SearchableNames, SimplifyVolume, toTitleCase } from './Utils';
+import { SearchableNames, SimplifyVolume, TransformIntoSearchTermString, toTitleCase } from './Utils';
 import type { BodySizeRange, CasteRange, Creature, MilkableDesc, Raw } from './types';
 
 export type Caste = {
@@ -477,14 +477,7 @@ export const GenerateCreatureSearchString = (creature: Creature): string => {
 
   searchableTerms.push(creature.rawModule);
 
-  return searchableTerms
-    .join(' ')
-    .toLowerCase()
-    .replace(/\s\s+/g, ' ')
-    .split(' ')
-    .filter((v) => v.length > 0)
-    .sort()
-    .join(' ');
+  return TransformIntoSearchTermString(searchableTerms);
 };
 
 const DepthRanges = [
