@@ -1,3 +1,23 @@
+## [0.22.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.21.0...v0.22.0) (2023-01-10)
+
+
+### Features
+
+* ⚡️ improve search string generation ([cfad92b](https://github.com/nwesterhausen/overseers-manual-df/commit/cfad92b0f6cfb5850f2e7ef7eeded13208135d5b))
+* ✨ add 'clear stored data' to settings ([4042157](https://github.com/nwesterhausen/overseers-manual-df/commit/404215753670b89571d4e53ed96c6183fa56ca35))
+* ✨ add quick reference page ([0a240e4](https://github.com/nwesterhausen/overseers-manual-df/commit/0a240e40e7a616d4ff24d429bbfc623ff3db91b7))
+* ✨ add simple description table popup for inorganics ([1845af6](https://github.com/nwesterhausen/overseers-manual-df/commit/1845af64310af4ac48663fc25ff305b7b1928b19))
+* ✨ add some basic info for inorganic raws ([6df8123](https://github.com/nwesterhausen/overseers-manual-df/commit/6df81233d7cdbec9759773ea54e528eb0469f74a))
+* ✨ add some basic settings to settings page ([b2996b4](https://github.com/nwesterhausen/overseers-manual-df/commit/b2996b477d6e9b83b9673d754d773199d472b7f0))
+* ✨ improved search results ([a30588e](https://github.com/nwesterhausen/overseers-manual-df/commit/a30588e2d5018b582a10996b5327c688e914b19f))
+* ⬆️ upgrade to dfraw_json_parser 0.9.2 ([d89ef92](https://github.com/nwesterhausen/overseers-manual-df/commit/d89ef92c5a1e7b922980e8babd09340956fcdb90))
+* 💄 add tabs to search filter panel ([d31b2b9](https://github.com/nwesterhausen/overseers-manual-df/commit/d31b2b99073ab8c945910dc7bd130c5ae800c31f))
+
+
+### Bug Fixes
+
+* 🐛 fix title of reference window ([e8cfa83](https://github.com/nwesterhausen/overseers-manual-df/commit/e8cfa8396941f59e6800f035a51bb059542a9828))
+
 ## [0.21.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.20.2...v0.21.0) (2023-01-08)
 
 
