@@ -94,7 +94,7 @@ export async function get(key: string): Promise<string> {
   }
   if (store.has(key)) {
     console.log(`Retrieve ${key} from store`);
-    let val = await store.get<string>(key);
+    const val = await store.get<string>(key);
     console.log(val);
     return val;
   }
@@ -114,7 +114,7 @@ export async function getSymbol(key: string): Promise<symbol> {
   }
   if (store.has(key)) {
     console.log(`Retrieve ${key} from store`);
-    let val = await store.get<string>(key);
+    const val = await store.get<string>(key);
     let symbolVal = DIR_NONE;
     switch (val) {
       case 'Symbol(df)':
