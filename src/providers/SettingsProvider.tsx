@@ -1,20 +1,18 @@
 import { ParentComponent, createContext, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
-import SettingsModal from '../components/filtering/SettingsModal';
 
-type SettingsStore = [
-  { show: boolean },
-  { handleOpen: () => void; handleClose: () => void; }
-]
+type SettingsStore = [{ show: boolean }, { handleOpen: () => void; handleClose: () => void }];
 
-const SettingsContext = createContext<SettingsStore>([{ show: false }, {
-  handleOpen() {
-    console.log("Un-initialized handleOpen");
+const SettingsContext = createContext<SettingsStore>([
+  { show: false },
+  {
+    handleOpen() {
+      console.log('Un-initialized handleOpen');
+    },
+    handleClose() {
+      console.log('Un-initialized handleClose');
+    },
   },
-  handleClose() {
-    console.log("Un-initialized handleClose");
-  }
-}
 ]);
 
 export const SettingsProvider: ParentComponent = (props) => {
@@ -24,21 +22,16 @@ export const SettingsProvider: ParentComponent = (props) => {
     state,
     {
       handleOpen() {
-        setState({ "show": true });
+        setState({ show: true });
       },
       handleClose() {
-        setState({ "show": false });
-      }
-    }
+        setState({ show: false });
+      },
+    },
   ];
 
-  return (
-    <SettingsContext.Provider value={defaultSettings as SettingsStore}>
-      {props.children}
-      <SettingsModal />
-    </SettingsContext.Provider>
-  )
-}
+  return <SettingsContext.Provider value={defaultSettings as SettingsStore}>{props.children}</SettingsContext.Provider>;
+};
 
 export function useSettingsContext() {
   return useContext(SettingsContext);

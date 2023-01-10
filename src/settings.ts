@@ -1,4 +1,5 @@
 import { Store } from './plugins/store';
+import { DIR_DF, DIR_NONE, DIR_RAWS, DIR_SAVE } from './providers/DirectoryProvider';
 
 const store = new Store('settings.json');
 const CURRENT_VERSION = 2;
@@ -93,6 +94,40 @@ export async function get(key: string): Promise<string> {
   }
   if (store.has(key)) {
     console.log(`Retrieve ${key} from store`);
-    return await store.get<string>(key);
+    let val = await store.get<string>(key);
+    console.log(val);
+    return val;
+  }
+}
+
+/**
+ * Returns the value stored under a key as a symbol if possible.
+ *
+ * If the key is invalid, it returns DIR_NONE.
+ *
+ * @param key - The key to retrieve data from.
+ * @returns The value stored under that key
+ */
+export async function getSymbol(key: string): Promise<symbol> {
+  if (ValidKeys.indexOf(key) === -1) {
+    return DIR_NONE;
+  }
+  if (store.has(key)) {
+    console.log(`Retrieve ${key} from store`);
+    let val = await store.get<string>(key);
+    let symbolVal = DIR_NONE;
+    switch (val) {
+      case 'Symbol(df)':
+        symbolVal = DIR_DF;
+        break;
+      case 'Symbol(saves)':
+        symbolVal = DIR_SAVE;
+        break;
+      case 'Symbol(raws)':
+        symbolVal = DIR_RAWS;
+        break;
+    }
+    console.log(symbolVal);
+    return symbolVal;
   }
 }

@@ -72,3 +72,11 @@
     ),
     linear-gradient(135deg, transparent 0%, transparent 43%, #000 45%, #000 55%, transparent 57%, transparent 100%);
 }
+
+label > p {
+  margin-bottom: 0;
+}
+
+.settings-window > section {
+  margin-bottom: 1rem;
+}
