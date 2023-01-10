@@ -20,7 +20,6 @@ import InorganicDescriptionTable from './InorganicDescriptionTable';
  * @returns Component of creature data for a listing.
  */
 const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
-  const listingId = props.inorganic.objectId + 'listing';
   const title = toTitleCase(props.inorganic.name);
 
   const [showDescription, setShowDescription] = createSignal(false);
@@ -32,7 +31,7 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
   const handleCloseRawDetails = () => setShowRawDetails(false);
 
   return (
-    <Card class='listing-card' id={listingId}>
+    <>
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Subtitle>{props.inorganic.moduleDisplayName}</Card.Subtitle>
@@ -92,7 +91,7 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
       {/* Include modal for "Show All Details" */}
       <Modal
         dialogClass='modal90w'
-        id={`${listingId}-details`}
+        id={`${props.inorganic.objectId}-details`}
         show={showDescription()}
         onHide={handleCloseDescription}>
         <Modal.Header closeButton>
@@ -109,7 +108,11 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
       </Modal>
 
       {/* Include modal for "See Raw Info" */}
-      <Modal dialogClass='modal90w' id={`${listingId}-raws`} show={showRawDetails()} onHide={handleCloseRawDetails}>
+      <Modal
+        dialogClass='modal90w'
+        id={`${props.inorganic.objectId}-raws`}
+        show={showRawDetails()}
+        onHide={handleCloseRawDetails}>
         <Modal.Header closeButton>
           <Modal.Title>{title} Raws</Modal.Title>
         </Modal.Header>
@@ -122,7 +125,7 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </Card>
+    </>
   );
 };
 
