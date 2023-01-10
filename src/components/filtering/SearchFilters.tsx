@@ -1,4 +1,4 @@
-import { Offcanvas } from 'solid-bootstrap';
+import { Offcanvas, Tab, Tabs } from 'solid-bootstrap';
 import { Component } from 'solid-js';
 import { useSearchProvider } from '../../providers/SearchProvider';
 import RawModuleFilter from './RawModuleFilter';
@@ -13,11 +13,16 @@ const SearchFilters: Component = () => {
         <Offcanvas.Title>Additional Filtering Options</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
-        <RawModuleFilter />
-        <br />
-        <TagIncludeFilter />
+        <Tabs defaultActiveKey={'rawModules'}>
+          <Tab title='Raw Modules' eventKey={'rawModules'}>
+            <RawModuleFilter />
+          </Tab>
+          <Tab title='Tags' eventKey={'tags'}>
+            <TagIncludeFilter />
+          </Tab>
+        </Tabs>
       </Offcanvas.Body>
-    </Offcanvas >
+    </Offcanvas>
   );
 };
 
