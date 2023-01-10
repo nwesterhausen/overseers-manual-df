@@ -15,7 +15,7 @@ export type Raw = {
   rawRelativePath: string;
 
   // Added types for this app
-  searchString?: string[];
+  searchString: string;
   rawModuleParents?: string[];
   allTags?: string[];
 };

@@ -2,8 +2,10 @@ import { Button, Form } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
 import { labelForModule } from '../../definitions/Raw';
 import { useRawsProvider } from '../../providers/RawsProvider';
+import { useSearchProvider } from '../../providers/SearchProvider';
 
 const RawModuleFilter: Component = () => {
+  const searchContext = useSearchProvider();
   const rawsContext = useRawsProvider();
 
   return (
@@ -11,29 +13,30 @@ const RawModuleFilter: Component = () => {
       <legend>
         <div class='d-flex'>
           <div>Enabled Raw Modules</div>
-          <div class='ms-auto hstack gap-2'>
-            <Button size='sm' variant='secondary' onClick={rawsContext.addAllRawModuleFilters}>
-              Clear All
-            </Button>
-            <Button size='sm' variant='danger' onClick={rawsContext.removeAllRawModuleFilters}>
-              Reset
-            </Button>
-          </div>
         </div>
       </legend>
+      <div class='m-2 hstack gap-2'>
+        <Button size='sm' variant='secondary' onClick={() => searchContext.addFilteredModule(rawsContext.rawModulesInfo.latest.map(m => m.identifier))}>
+          Clear All
+        </Button>
+        <Button size='sm' variant='danger' onClick={searchContext.removeAllFilteredModules}>
+          Reset
+        </Button>
+      </div>
       <For each={rawsContext.rawModules()}>
-        {(module) => (
+        {(objectId) => (
           <Form.Check
             type='switch'
-            id={`${module}-enabled`}
-            label={labelForModule(rawsContext.rawsInfo().find(v => v.identifier === module), module)}
-            checked={rawsContext.rawModuleFilters().indexOf(module) === -1}
+            id={`${objectId}-enabled`}
+            label={labelForModule(rawsContext.rawModulesInfo.latest.find(v => v.objectId === objectId))}
+            checked={searchContext.filteredModules().indexOf(rawsContext.rawModulesInfo.latest.find(v => v.objectId === objectId).identifier) === -1}
             onChange={(event) => {
               const el = event.target as HTMLInputElement;
+              const module = rawsContext.rawModulesInfo.latest.find(v => v.objectId === objectId);
               if (el.checked) {
-                rawsContext.removeRawModuleFilter(module);
+                searchContext.removeFilteredModule(module.identifier);
               } else {
-                rawsContext.addRawModuleFilter(module);
+                searchContext.addFilteredModule(module.identifier);
               }
             }}
           />

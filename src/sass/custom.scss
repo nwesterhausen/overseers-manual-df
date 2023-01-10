@@ -35,3 +35,40 @@
     margin-right: 0;
   }
 }
+
+.menu-bar {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--bs-secondary-bg);
+  width: calc(100vw);
+}
+
+.main {
+  margin-top: 3.5rem;
+}
+
+.offcanvas {
+  --bs-offcanvas-width: 500px;
+}
+
+#search-box::-webkit-search-cancel-button {
+  opacity: 0.3;
+  position: relative;
+  right: 2px;
+
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 10px;
+  background: linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) 43%,
+      #000 45%,
+      #000 55%,
+      rgba(0, 0, 0, 0) 57%,
+      rgba(0, 0, 0, 0) 100%
+    ),
+    linear-gradient(135deg, transparent 0%, transparent 43%, #000 45%, #000 55%, transparent 57%, transparent 100%);
+}

@@ -1,28 +1,31 @@
 import { Button, Card, Modal, Stack } from 'solid-bootstrap';
-import { Component, createSignal } from 'solid-js';
-import { toTitleCase } from '../definitions/Utils';
-import type { DFPlant } from '../definitions/types';
-import RawJsonTable from './RawsDetailTable';
-import PlantDescriptionTable from './plant/PlantDescriptionTable';
-import PlantProvidesList from './plant/PlantProvidesList';
+import { Component, Show, createSignal } from 'solid-js';
+import { toTitleCase } from '../../definitions/Utils';
+import type { Creature } from '../../definitions/types';
+import RawJsonTable from '../RawsDetailTable';
+import CreatureDescriptionTable from './CreateDescriptionTable';
+import CreatureBadges from './CreatureBadges';
 
 /**
- * Given a Plant, returns a listing entry for it.
+ * Given a Creature, returns a listing entry for it.
  *
- * The BotanicalCard is an card with buttons for showing more data.
+ * The CreatureListing is an accordion with a tabbed interior. The tabs are:
  *
- * - Show All Details:
- *      Gives a description of the plant, followed by its known names and other details.
+ * - Description:
+ *      Gives a description of the creature, followed by its known names and other details.
  *
  * - Raw Details:
- *      Some details on the raw file it was extracted from. 
+ *      Some details on the raw file it was extracted from. This includes
  *
  * @param props - Contains the creature to render details for.
  * @returns Component of creature data for a listing.
  */
-const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
-  const listingId = props.plant.objectId + 'listing';
-  const title = toTitleCase(props.plant.name);
+const CreatureCard: Component<{ creature: Creature }> = (props) => {
+  const listingId = props.creature.objectId + 'listing';
+  const title = props.creature.namesMap["SPECIES"][0]
+    .split(' ')
+    .map((v: string) => toTitleCase(v))
+    .join(' ');
 
   const [showDescription, setShowDescription] = createSignal(false);
   const handleOpenDescription = () => setShowDescription(true);
@@ -35,13 +38,20 @@ const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
   return (
     <Card class='listing-card' id={listingId}>
       <Card.Body>
-        <Card.Title >{title}</Card.Title>
-        <Card.Subtitle>{props.plant.moduleDisplayName}</Card.Subtitle>
+        <Card.Title>{title}</Card.Title>
+        <Card.Subtitle>{props.creature.moduleDisplayName}</Card.Subtitle>
         <Card.Text>
-          <PlantProvidesList plant={props.plant} />
+          <Show
+            when={Object.values(props.creature.descriptions).length > 0}
+            fallback={<p class='text-muted fst-italic'>No description available.</p>}>
+            {Object.values(props.creature.descriptions).join(' ')}
+          </Show>
         </Card.Text>
       </Card.Body>
-      <Card.Footer >
+      <div class='card-badges'>
+        <CreatureBadges creature={props.creature} />
+      </div>
+      <Card.Footer>
         <Stack gap={2}>
           <Button variant='primary' size='sm' onClick={handleOpenDescription}>
             Show All Details
@@ -63,7 +73,9 @@ const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
         <Modal.Header closeButton>
           <Modal.Title>{title} Details</Modal.Title>
         </Modal.Header>
-        <Modal.Body><PlantDescriptionTable plant={props.plant} /></Modal.Body>
+        <Modal.Body>
+          <CreatureDescriptionTable creature={props.creature} />
+        </Modal.Body>
         <Modal.Footer>
           <Button variant='secondary' onClick={handleCloseDescription}>
             Close
@@ -77,7 +89,7 @@ const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
           <Modal.Title>{title} Raws</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <RawJsonTable item={props.plant} />
+          <RawJsonTable item={props.creature} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant='secondary' onClick={handleCloseRawDetails}>
@@ -89,4 +101,4 @@ const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
   );
 };
 
-export default BotanicalCard;
+export default CreatureCard;
