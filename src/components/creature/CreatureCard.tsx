@@ -21,8 +21,7 @@ import CreatureBadges from './CreatureBadges';
  * @returns Component of creature data for a listing.
  */
 const CreatureCard: Component<{ creature: Creature }> = (props) => {
-  const listingId = props.creature.objectId + 'listing';
-  const title = props.creature.namesMap["SPECIES"][0]
+  const title = props.creature.namesMap['SPECIES'][0]
     .split(' ')
     .map((v: string) => toTitleCase(v))
     .join(' ');
@@ -36,7 +35,7 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
   const handleCloseRawDetails = () => setShowRawDetails(false);
 
   return (
-    <Card class='listing-card' id={listingId}>
+    <>
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Subtitle>{props.creature.moduleDisplayName}</Card.Subtitle>
@@ -67,7 +66,7 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
       {/* Include modal for "Show All Details" */}
       <Modal
         dialogClass='modal90w'
-        id={`${listingId}-details`}
+        id={`${props.creature.objectId}-details`}
         show={showDescription()}
         onHide={handleCloseDescription}>
         <Modal.Header closeButton>
@@ -84,7 +83,11 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
       </Modal>
 
       {/* Include modal for "See Raw Info" */}
-      <Modal dialogClass='modal90w' id={`${listingId}-raws`} show={showRawDetails()} onHide={handleCloseRawDetails}>
+      <Modal
+        dialogClass='modal90w'
+        id={`${props.creature.objectId}-raws`}
+        show={showRawDetails()}
+        onHide={handleCloseRawDetails}>
         <Modal.Header closeButton>
           <Modal.Title>{title} Raws</Modal.Title>
         </Modal.Header>
@@ -97,7 +100,7 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </Card>
+    </>
   );
 };
 
