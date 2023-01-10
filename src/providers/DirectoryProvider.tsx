@@ -2,12 +2,18 @@ import { createContextProvider } from '@solid-primitives/context';
 import { OpenDialogOptions, open as tauriOpen } from '@tauri-apps/api/dialog';
 import { Event, listen } from '@tauri-apps/api/event';
 import { readDir } from '@tauri-apps/api/fs';
-import { createEffect, createResource, createSignal } from 'solid-js';
-import { PATH_STRING, PATH_TYPE, get as getFromStore, init as initStore, set as saveToStore } from '../settings';
+import { createResource, createSignal } from 'solid-js';
+import { PATH_STRING, PATH_TYPE, get as getFromStore, init as initStore } from '../settings';
 
 export const DIR_NONE = Symbol('none'),
   DIR_DF = Symbol('df'),
-  DIR_SAVE = Symbol('saves');
+  DIR_SAVE = Symbol('saves'),
+  DIR_RAWS = Symbol('raws');
+
+export interface DirectorySelection {
+  path: string[];
+  type: symbol;
+}
 
 /**
  * Dialog options for the select directory window
@@ -40,23 +46,24 @@ function splitPathAgnostically(path: string): string[] {
 }
 
 export const [DirectoryProvider, useDirectoryProvider] = createContextProvider(() => {
-  // Directory type, so we can be flexible
-  const [directoryType, setDirectoryType] = createSignal<symbol>(DIR_NONE);
   // Signal to open the directory open dialog, change to true to open it
   const [activateManualDirectorySelection, setManualDirectorySelection] = createSignal(false);
-  // Path to the dropped file location
-  const [directoryPath, setDirectoryPath] = createSignal<string[]>([]);
+  // Helper function to reset manual selection
+  const resetManualDirectorySelection = () => setManualDirectorySelection(false);
+
+  // Array to just hold recently selected directories and our evaluations of them
+  const [directoryHistory, setDirectoryHistory] = createSignal<DirectorySelection[]>([]);
+
   // This resource calls the Tauri API to open a file dialog
-  const [manuallySpecifiedPath] = createResource(
+  createResource(
     activateManualDirectorySelection,
-    async (): Promise<string[]> => {
+    async () => {
       try {
         const folderPath = await tauriOpen(openDialogOptions);
-        console.debug(folderPath);
-        if (Array.isArray(folderPath)) {
-          return splitPathAgnostically(folderPath[0]);
-        }
-        return splitPathAgnostically(folderPath);
+        processDirectoryPath(folderPath);
+
+        // Re-arm the directory selection action after 50ms
+        setTimeout(resetManualDirectorySelection, 50);
       } catch (error) {
         console.debug(error);
         setManualDirectorySelection(false);
@@ -68,66 +75,61 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     }
   );
 
-  // When a path is manually specified, update the stored path
-  createEffect(() => setDirectoryPath(manuallySpecifiedPath.latest));
-
-  // Based on the memo changing, we update the save folder path (and save it to our settings storage)
-  createEffect(() => {
-    if (directoryPath().length > 0) {
-      saveToStore(PATH_STRING, directoryPath().join('/')); // Decided to delineate with `/` in the settings file
-      saveToStore(PATH_TYPE, directoryType().toString());
-    }
-    setTimeout(() => {
-      setManualDirectorySelection(false);
-    }, 10);
-  });
-
-  // When we update the save directory, we need to update the list of possible saves
-  createEffect(async () => {
-    console.log('directoryPath effect', directoryPath());
-    refreshValidDirectories(false);
-  });
-
-  // Some extra logging
-  createEffect(() => {
-    console.debug(`Manual folder selection ${activateManualDirectorySelection() ? 'activated' : 'reset'}`);
-  });
-
   // Listen for a file being dropped on the window to change the save location.
   listen('tauri://file-drop', (event: Event<string[]>) => {
     if (event.payload.length > 0) {
       const file = event.payload[0];
       if (file.endsWith('gamelog.txt')) {
-        setDirectoryPath(splitPathAgnostically(file).slice(0, -1));
+        processDirectoryPath(splitPathAgnostically(file).slice(0, -1).join('/'));
       }
     }
   });
 
-  /**
-   * Read the save dir and find any valid save files
-   * @param forced - whether this is a forced refresh or not
-   */
-  const refreshValidDirectories = async (forced: boolean) => {
-    console.debug(`Forced refresh: ${forced}`);
-    if (directoryPath().length > 0) {
-      try {
-        // Use the tauri fs.readDir API
-        const dirContents = await readDir(directoryPath().join('/'), { recursive: true });
+  async function processDirectoryPath(directoryPath: string | string[]) {
+    console.debug(directoryPath);
 
-        console.debug(`Read ${dirContents.length} children of ${directoryPath().join('/')}`);
-
-        const hasGamelogTxt = dirContents.filter((v) => v.name === 'gamelog.txt').length > 0;
-        if (hasGamelogTxt) {
-          console.debug('Matched a gamelog.txt file');
-          setDirectoryType(DIR_DF);
-        } else {
-          setDirectoryType(DIR_NONE);
-        }
-      } catch (e) {
-        console.error(e);
-      }
+    // Split the path into an array of strings
+    let splitPath: string[];
+    if (Array.isArray(directoryPath)) {
+      splitPath = splitPathAgnostically(directoryPath[0]);
+    } else {
+      splitPath = splitPathAgnostically(directoryPath);
     }
-  };
+
+    // If we have a zero length path array, quit early
+    if (splitPath.length === 0) {
+      return;
+    }
+
+    let dirType: symbol = DIR_NONE;
+
+    // Determine what kind of path it is
+    try {
+      // Use the tauri fs.readDir API
+      const dirContents = await readDir(splitPath.join('/'), { recursive: true });
+
+      console.debug(`Read ${dirContents.length} children of ${splitPath.join('/')}`);
+
+      const hasGamelogTxt = dirContents.filter((v) => v.name === 'gamelog.txt').length > 0;
+      if (hasGamelogTxt) {
+        console.debug('Matched a gamelog.txt file');
+        dirType = DIR_DF;
+      } else {
+        dirType = DIR_NONE;
+      }
+    } catch (e) {
+      console.error(e);
+      return;
+    }
+
+
+    // We have to already have determined the path type by here..
+    setDirectoryHistory([{
+      path: splitPath,
+      type: dirType,
+    }, ...directoryHistory()])
+
+  }
 
   // Setting up the settings storage.
   initStore()
@@ -138,18 +140,18 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     // With the save folder, set it as the drag and drop path, since that's the path we set programmatically
     // and let the effects do the rest.
     .then((val) => {
-      if (val.length > 0) {
-        console.log('Setting initial value for directory to', val);
-        setDirectoryPath(splitPathAgnostically(val));
-      }
+      console.log('Setting initial value for directory to', val);
+      const dirPath = splitPathAgnostically(val);
+      setDirectoryHistory([{ path: dirPath, type: DIR_NONE }]);
       return getFromStore(PATH_TYPE);
     })
-    .then((val) => {
-      if (val === DIR_DF.toString()) {
-        setDirectoryType(DIR_DF);
-      } else {
-        setDirectoryType(DIR_NONE);
-        saveToStore(PATH_TYPE, DIR_NONE.toString());
+    .then((dirTypeString) => {
+      let dirType = DIR_NONE;
+      if (dirTypeString === "df") {
+        dirType = DIR_DF;
+      }
+      if (directoryHistory().length > 0 && dirType !== DIR_NONE) {
+        setDirectoryHistory([{ path: directoryHistory()[0].path, type: dirType }]);
       }
     })
     .catch((err) => {
@@ -158,9 +160,7 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     });
 
   return {
-    setManualFolderSelect: setManualDirectorySelection,
-    directoryPath,
-    directoryType,
-    refreshSaveDirs: () => refreshValidDirectories(true),
+    activateManualDirectorySelection: setManualDirectorySelection,
+    directoryHistory,
   };
 });

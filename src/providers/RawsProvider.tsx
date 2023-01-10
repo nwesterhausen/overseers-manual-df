@@ -128,7 +128,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   // Signal no set directory
   createEffect(() => {
-    if (directoryContext.directoryPath().length === 0) {
+    if (directoryContext.directoryHistory().length === 0) {
       setParsingStatus(STS_EMPTY);
     } else {
       setLoadRaws(true);
@@ -136,7 +136,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   });
 
   async function parseRaws() {
-    const dir = directoryContext.directoryPath().join('/');
+    const dir = directoryContext.directoryHistory()[0].path.join('/');
 
     setParsingStatus(STS_PARSING);
 
@@ -179,7 +179,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   }
 
   async function parseRawsInfo(): Promise<DFInfoFile[]> {
-    const dir = directoryContext.directoryPath().join('/');
+    const dir = directoryContext.directoryHistory()[0].path.join('/');
 
     try {
       const raw_file_data: DFInfoFile[] = JSON.parse(await invoke('parse_raws_info_at_game_path', { path: dir }));

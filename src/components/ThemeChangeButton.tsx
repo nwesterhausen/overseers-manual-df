@@ -8,7 +8,7 @@ const ThemeChangeButton: Component = () => {
 
     return (
         <OverlayTrigger placement='auto' overlay={<Tooltip>{`Use ${theme.dark ? 'light' : 'dark'} theme`}</Tooltip>}>
-            <Button class='border-0 p-1' variant='outline-primary' onClick={() => {
+            <Button class='border-0 p-1' variant='outline-secondary' onClick={() => {
                 if (theme.dark) {
                     setLight();
                 } else {
