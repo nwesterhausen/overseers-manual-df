@@ -70,8 +70,8 @@ const MenuBar: Component = () => {
       </div>
 
       <Modal fullscreen onHide={handleCloseHelp} show={showHelp()}>
-        <Modal.Header closeButton>Settings</Modal.Header>
-        <Modal.Body>
+        <Modal.Header closeButton>Quick Game Reference</Modal.Header>
+        <Modal.Body class='px-3'>
           <ZoneOverview />
         </Modal.Body>
       </Modal>
