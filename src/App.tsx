@@ -41,7 +41,6 @@ const App: Component = () => {
       <MenuBar />
       <Container class='p-2 main' fluid>
         <DFDirectoryNotSet />
-        {/*<TagFilterModal /> */}
         <ParsingProgressBar />
         <LoadingRawsProgress />
         {contentToDisplay() ? <></> : <Listings />}
