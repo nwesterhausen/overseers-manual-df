@@ -1,6 +1,7 @@
 import { Component, Match, Switch } from "solid-js";
-import { Creature, DFPlant, Raw } from "../definitions/types";
+import { Creature, DFInorganic, DFPlant, Raw } from "../definitions/types";
 import CreatureCard from "./creature/CreatureCard";
+import InorganicCard from "./inorganic/InorganicCard";
 import BotanicalCard from "./plant/BotanicalCard";
 
 const DynamicCard: Component<{ raw: Raw }> = (props) => {
@@ -11,6 +12,9 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
             </Match>
             <Match when={props.raw.rawType === "Creature"}>
                 <CreatureCard creature={props.raw as Creature} />
+            </Match>
+            <Match when={props.raw.rawType === "Inorganic"}>
+                <InorganicCard inorganic={props.raw as DFInorganic} />
             </Match>
         </Switch>
     )

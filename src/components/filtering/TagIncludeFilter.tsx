@@ -14,14 +14,14 @@ const TagIncludeFilter: Component = () => {
             type='switch'
             id={`${filterTag}-enabled`}
             label={filterTag.description}
-            checked={searchContext.requiredTagFilters().indexOf(filterTag.tag) !== -1}
+            checked={searchContext.requiredTags().indexOf(filterTag.tag) !== -1}
             onChange={(event) => {
               const el = event.target as HTMLInputElement;
               if (el.checked) {
                 console.log(`Adding ${filterTag.tag} to filter list`);
-                searchContext.addRequiredTagFilter(filterTag.tag);
+                searchContext.addRequiredTag(filterTag.tag);
               } else {
-                searchContext.removeRequiredTagFilter(filterTag.tag);
+                searchContext.removeRequiredTag(filterTag.tag);
               }
             }}
           />
