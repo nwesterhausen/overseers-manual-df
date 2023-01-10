@@ -3,6 +3,7 @@ import { Component, For, createSignal } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { DFInorganic } from '../../definitions/types';
 import RawJsonTable from '../RawsDetailTable';
+import InorganicDescriptionTable from './InorganicDescriptionTable';
 
 /**
  * Given a Plant, returns a listing entry for it.
@@ -13,7 +14,7 @@ import RawJsonTable from '../RawsDetailTable';
  *      Gives a description of the plant, followed by its known names and other details.
  *
  * - Raw Details:
- *      Some details on the raw file it was extracted from. 
+ *      Some details on the raw file it was extracted from.
  *
  * @param props - Contains the creature to render details for.
  * @returns Component of creature data for a listing.
@@ -33,31 +34,49 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
   return (
     <Card class='listing-card' id={listingId}>
       <Card.Body>
-        <Card.Title >{title}</Card.Title>
+        <Card.Title>{title}</Card.Title>
         <Card.Subtitle>{props.inorganic.moduleDisplayName}</Card.Subtitle>
         <Card.Text>
           Some simple details:
           <ul>
             <li>Color: {props.inorganic.material.colors.solid}</li>
             <li>Magma Safe: {props.inorganic.magmaSafe ? 'YES' : 'NO'}</li>
-            <li>Smelted into: {props.inorganic.metalOres.length === 0 ? <>Nothing</> :
-              <ul>
-                <For each={props.inorganic.metalOres}>
-                  {(smeltingRoll) => <li>{smeltingRoll.chance}% for {smeltingRoll.result} bar</li>}
-                </For>
-              </ul>
-            }</li>
-            <li>Extracted into: {props.inorganic.threadMetals.length === 0 ? <>Nothing</> :
-              <ul>
-                <For each={props.inorganic.threadMetals}>
-                  {(extractionRoll) => <li>{extractionRoll.chance}% for {extractionRoll.result} thread</li>}
-                </For>
-              </ul>
-            }</li>
+            <li>
+              Smelted into:{' '}
+              {props.inorganic.metalOres.length === 0 ? (
+                <>Nothing</>
+              ) : (
+                <ul>
+                  <For each={props.inorganic.metalOres}>
+                    {(smeltingRoll) => (
+                      <li>
+                        {smeltingRoll.chance}% for {smeltingRoll.result} bar
+                      </li>
+                    )}
+                  </For>
+                </ul>
+              )}
+            </li>
+            <li>
+              Extracted into:{' '}
+              {props.inorganic.threadMetals.length === 0 ? (
+                <>Nothing</>
+              ) : (
+                <ul>
+                  <For each={props.inorganic.threadMetals}>
+                    {(extractionRoll) => (
+                      <li>
+                        {extractionRoll.chance}% for {extractionRoll.result} thread
+                      </li>
+                    )}
+                  </For>
+                </ul>
+              )}
+            </li>
           </ul>
         </Card.Text>
       </Card.Body>
-      <Card.Footer >
+      <Card.Footer>
         <Stack gap={2}>
           <Button variant='primary' size='sm' onClick={handleOpenDescription}>
             Show All Details
@@ -80,7 +99,7 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
           <Modal.Title>{title} Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Here we will include all the nice details..
+          <InorganicDescriptionTable inorganic={props.inorganic} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant='secondary' onClick={handleCloseDescription}>
