@@ -1,6 +1,6 @@
 import { Component, For } from 'solid-js';
 import { useRawsProvider } from '../providers/RawsProvider';
-import CreatureCard from './CreatureCard';
+import CreatureCard from './creature/CreatureCard';
 
 const ListingBestiary: Component = () => {
   const rawsContext = useRawsProvider();

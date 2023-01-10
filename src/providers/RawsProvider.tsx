@@ -1,14 +1,14 @@
+import { create, insertBatch, search } from '@lyrasearch/lyra';
 import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
 import { appWindow } from '@tauri-apps/api/window';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import {
-  RawsMatchingSearchString,
   RawsOnlyWithTagsOrAll,
   RawsOnlyWithoutModules,
-  UniqueSort,
+  UniqueSort
 } from '../definitions/Raw';
-import type { Creature, DFInfoFile, DFPlant, ProgressPayload, Raw } from '../definitions/types';
+import type { DFInfoFile, ProgressPayload, Raw } from '../definitions/types';
 import { useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
 
@@ -18,65 +18,93 @@ export const STS_PARSING = 'Parsing Raws',
   STS_IDLE = 'Idle',
   STS_EMPTY = 'Idle/No Raws';
 
+// Default amount of results to return on no-search term
+const MAX_RESULTS = 50;
+
 export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const directoryContext = useDirectoryProvider();
   const searchContext = useSearchProvider();
+
+  const searchDatabase = create({
+    schema: {
+      identifier: 'string',
+      name: 'string',
+      parentRaw: 'string',
+      rawModule: 'string',
+      rawType: 'string',
+
+      // Added types for this app
+      searchString: 'string',
+    }
+  })
 
   // Signal for setting raw parse status
   const [parsingStatus, setParsingStatus] = createSignal(STS_IDLE);
 
   // Signal for loading raws
   const [loadRaws, setLoadRaws] = createSignal(false);
+
   // Resource for raws
   const [allRawsJsonArray] = createResource(loadRaws, parseRaws, {
     initialValue: [],
   });
+
+  // Resource for accessing the raws via search filtering
+  const searchFilteredRaws = createMemo<Raw[]>(() => {
+
+    /*
+    
+        // Filter by modules first (easiest wide amount to filter). We pre-sort the raws in one step here.
+        const moduleFiltered = RawsOnlyWithoutModules(
+          allRawsJsonArray.latest.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)),
+          searchContext.filteredModules()
+        );
+        // Filter by required tags (somewhat expensive)
+        const tagFiltered = RawsOnlyWithTagsOrAll(moduleFiltered, searchContext.requiredTags());
+        // Filter remaining by search tags (most expensive)
+        const searchFiltered = RawsMatchingSearchString(tagFiltered, searchContext.searchString());
+        */
+
+    console.log(loadRaws());
+
+    const searchResult = search(searchDatabase, {
+      term: searchContext.searchString()
+    });
+
+    const searchFiltered: Raw[] = searchResult.count === 0 ?
+      Object.values(searchDatabase.docs) as Raw[] :
+      searchResult.hits.map(h => h.document as Raw);
+
+    const moduleFiltered = RawsOnlyWithoutModules(searchFiltered, searchContext.filteredModules());
+    const tagFiltered = RawsOnlyWithTagsOrAll(moduleFiltered, searchContext.requiredTags());
+
+    return tagFiltered.filter(r => {
+      if (searchContext.requireCreature() && r.rawType === 'Creature') {
+        return true;
+      }
+      if (searchContext.requirePlant() && r.rawType === 'Plant') {
+        return true;
+      }
+      if (searchContext.requireInorganic() && r.rawType === 'Inorganic') {
+        return true;
+      }
+      return false;
+    }).slice(0, MAX_RESULTS);
+  });
+
   // Resource for raws info files
   const [allRawsInfosJsonArray] = createResource(loadRaws, parseRawsInfo, {
     initialValue: [],
   });
 
   const rawModules = createMemo(() => {
-    const modules = [...new Set(allRawsJsonArray.latest.map((v) => v.rawModule))];
+    const modules = [...new Set(allRawsInfosJsonArray.latest.map((v) => v.objectId))];
     return modules.sort((a, b) => {
-      const nameA = allRawsInfosJsonArray.latest.find((v) => v.identifier === a) || { name: a };
-      const nameB = allRawsInfosJsonArray.latest.find((v) => v.identifier === b) || { name: b };
+      const nameA = allRawsInfosJsonArray.latest.find((v) => v.objectId === a) || { name: a };
+      const nameB = allRawsInfosJsonArray.latest.find((v) => v.objectId === b) || { name: b };
 
       return nameA.name.toLowerCase() < nameB.name.toLowerCase() ? -1 : 1;
     });
-  });
-  const [rawModuleFilters, setRawModuleFilters] = createSignal<string[]>([]);
-
-  const addRawModuleFilter = (module: string) => {
-    if (rawModuleFilters().indexOf(module) === -1) {
-      setRawModuleFilters([...rawModuleFilters(), module]);
-    }
-  };
-  const removeRawModuleFilter = (module: string) => {
-    if (rawModuleFilters().indexOf(module) !== -1) {
-      setRawModuleFilters(rawModuleFilters().filter((v) => v !== module));
-    }
-  };
-  const removeAllRawModuleFilters = () => {
-    setRawModuleFilters([]);
-  };
-  const addAllRawModuleFilters = () => {
-    setRawModuleFilters(rawModules());
-  };
-
-  // Raws after filtering by the search
-  const allRawsJsonSearchFiltered = createMemo(() => {
-    // Filter by modules first (easiest wide amount to filter). We pre-sort the raws in one step here.
-    const moduleFiltered = RawsOnlyWithoutModules(
-      allRawsJsonArray.latest.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)),
-      rawModuleFilters()
-    );
-    // Filter by required tags (somewhat expensive)
-    const tagFiltered = RawsOnlyWithTagsOrAll(moduleFiltered, searchContext.requiredTagFilters());
-    // Filter remaining by search tags (most expensive)
-    const searchFiltered = RawsMatchingSearchString(tagFiltered, searchContext.searchString());
-
-    return searchFiltered;
   });
 
   // Signal for raw parsing progress
@@ -107,14 +135,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     }
   });
 
-  // Provide access to only Creatures
-  const creatureRaws = createMemo(
-    () => allRawsJsonSearchFiltered().filter((x) => x.rawType === 'Creature') as Creature[]
-  );
-  // Provide access to only Creatures
-  const plantRaws = createMemo(() => allRawsJsonSearchFiltered().filter((x) => x.rawType === 'Plant') as DFPlant[]);
-
-  async function parseRaws(): Promise<Raw[]> {
+  async function parseRaws() {
     const dir = directoryContext.directoryPath().join('/');
 
     setParsingStatus(STS_PARSING);
@@ -141,12 +162,15 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         setParsingStatus(STS_IDLE);
       }
 
+      insertBatch(searchDatabase, sortResult);
+
       // Reset the trigger after 50ms
       setTimeout(() => {
         setLoadRaws(false);
       }, 50);
 
-      return sortResult;
+      // return sortResult;
+      return [];
     } catch (e) {
       console.error(e);
       setParsingProgress({ currentModule: '', percentage: 0.0 });
@@ -168,17 +192,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   return {
     parsingStatus,
-    allRawsJsonSearchFiltered,
     setLoadRaws,
     parsingProgress,
-    creatureRaws,
-    plantRaws,
+    rawModulesInfo: allRawsInfosJsonArray,
     rawModules,
-    rawModuleFilters,
-    addRawModuleFilter,
-    removeRawModuleFilter,
-    removeAllRawModuleFilters,
-    addAllRawModuleFilters,
-    rawsInfo: allRawsInfosJsonArray,
+    searchFilteredRaws,
   };
 });

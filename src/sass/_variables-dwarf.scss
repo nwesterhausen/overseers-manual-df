@@ -1,4 +1,10 @@
 [data-bs-theme='dark'] {
   --bs-body-bg: #1c1c1c;
   --bs-body-bg-rgb: #{to-rgb(#1c1c1c)};
+
+  --bs-form-control-bg: #5c5c5c;
+  --bs-form-control-bg: #{to-rgb(#5c5c5c)};
+
+  --bs-form-control-disabled-bg: #3c3c3c;
+  --bs-form-control-disabled-bg-rgb: #{to-rgb(#3c3c3c)};
 }

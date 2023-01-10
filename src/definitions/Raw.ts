@@ -200,7 +200,7 @@ export function RawsMatchingSearchString(rawsArray: Raw[], searchString: string)
  * `labelForModule(rawsContext.rawsInfo.latest.find(v => v.identifier === module), module)`
  */
 export function labelForModule(moduleInfo: DFInfoFile | undefined, moduleId?: string): string {
-  if (typeof moduleId === 'undefined') {
+  if (typeof moduleId !== 'undefined') {
     return moduleId || '';
   }
 
