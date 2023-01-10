@@ -2,8 +2,8 @@ import { createContextProvider } from '@solid-primitives/context';
 import { OpenDialogOptions, open as tauriOpen } from '@tauri-apps/api/dialog';
 import { Event, listen } from '@tauri-apps/api/event';
 import { readDir } from '@tauri-apps/api/fs';
-import { createResource, createSignal } from 'solid-js';
-import { PATH_STRING, PATH_TYPE, get as getFromStore, init as initStore } from '../settings';
+import { createMemo, createResource, createSignal } from 'solid-js';
+import { PATH_STRING, PATH_TYPE, get as getFromStore, getSymbol, init as initStore, set } from '../settings';
 
 export const DIR_NONE = Symbol('none'),
   DIR_DF = Symbol('df'),
@@ -41,7 +41,7 @@ function splitPathAgnostically(path: string): string[] {
     pathDelineation = '\\';
   }
   const pathArr = path.split(pathDelineation);
-  console.debug(`Saving ${pathArr} as path`);
+  console.debug(`Path delineated to [${pathArr.join(', ')}]`);
   return pathArr;
 }
 
@@ -53,6 +53,26 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
 
   // Array to just hold recently selected directories and our evaluations of them
   const [directoryHistory, setDirectoryHistory] = createSignal<DirectorySelection[]>([]);
+  // Helper function to promote an index from directoryHistory to first
+  const promoteDirectoryFromHistory = (index: number) => {
+    if (index > directoryHistory().length) {
+      return;
+    }
+    const [promoted] = directoryHistory().splice(index, 1);
+
+    setDirectoryHistory([promoted, ...directoryHistory()]);
+  };
+  // Helper accessor for 'current' directory
+  const currentDirectory = createMemo(() => {
+    if (directoryHistory().length === 0) {
+      return {
+        path: [],
+        type: DIR_NONE,
+      };
+    }
+
+    return directoryHistory()[0];
+  });
 
   // This resource calls the Tauri API to open a file dialog
   createResource(
@@ -122,13 +142,18 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
       return;
     }
 
-
     // We have to already have determined the path type by here..
-    setDirectoryHistory([{
-      path: splitPath,
-      type: dirType,
-    }, ...directoryHistory()])
+    setDirectoryHistory([
+      {
+        path: splitPath,
+        type: dirType,
+      },
+      ...directoryHistory(),
+    ]);
 
+    // Save to store
+    set(PATH_STRING, splitPath.join('/'));
+    set(PATH_TYPE, dirType.toString());
   }
 
   // Setting up the settings storage.
@@ -143,15 +168,13 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
       console.log('Setting initial value for directory to', val);
       const dirPath = splitPathAgnostically(val);
       setDirectoryHistory([{ path: dirPath, type: DIR_NONE }]);
-      return getFromStore(PATH_TYPE);
+      return getSymbol(PATH_TYPE);
     })
-    .then((dirTypeString) => {
-      let dirType = DIR_NONE;
-      if (dirTypeString === "df") {
-        dirType = DIR_DF;
-      }
+    .then((dirType) => {
       if (directoryHistory().length > 0 && dirType !== DIR_NONE) {
         setDirectoryHistory([{ path: directoryHistory()[0].path, type: dirType }]);
+      } else {
+        console.log('Not updating history from store:', directoryHistory().length, dirType);
       }
     })
     .catch((err) => {
@@ -161,6 +184,8 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
 
   return {
     activateManualDirectorySelection: setManualDirectorySelection,
+    currentDirectory,
     directoryHistory,
+    promoteDirectoryFromHistory,
   };
 });

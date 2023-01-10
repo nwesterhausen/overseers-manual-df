@@ -9,6 +9,7 @@ import MenuBar from './components/MenuBar';
 import ParsingProgressBar from './components/ParsingProgressBar';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import SearchFilters from './components/filtering/SearchFilters';
+import SettingsModal from './components/filtering/SettingsModal';
 import { STS_IDLE, useRawsProvider } from './providers/RawsProvider';
 
 // App name for title
@@ -43,15 +44,12 @@ const App: Component = () => {
         {/*<TagFilterModal /> */}
         <ParsingProgressBar />
         <LoadingRawsProgress />
-        {contentToDisplay() ? (
-          <></>
-        ) : (
-          <Listings />
-        )}
+        {contentToDisplay() ? <></> : <Listings />}
       </Container>
       <ScrollToTopBtn />
 
       <SearchFilters />
+      <SettingsModal />
     </>
   );
 };

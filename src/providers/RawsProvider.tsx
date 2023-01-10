@@ -3,13 +3,9 @@ import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
 import { appWindow } from '@tauri-apps/api/window';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
-import {
-  RawsOnlyWithTagsOrAll,
-  RawsOnlyWithoutModules,
-  UniqueSort
-} from '../definitions/Raw';
+import { RawsOnlyWithTagsOrAll, RawsOnlyWithoutModules, UniqueSort } from '../definitions/Raw';
 import type { DFInfoFile, ProgressPayload, Raw } from '../definitions/types';
-import { useDirectoryProvider } from './DirectoryProvider';
+import { DIR_DF, DIR_NONE, useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
 
 // Statuses for the parsing status
@@ -35,8 +31,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
       // Added types for this app
       searchString: 'string',
-    }
-  })
+    },
+  });
 
   // Signal for setting raw parse status
   const [parsingStatus, setParsingStatus] = createSignal(STS_IDLE);
@@ -44,52 +40,39 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   // Signal for loading raws
   const [loadRaws, setLoadRaws] = createSignal(false);
 
-  // Resource for raws
-  const [allRawsJsonArray] = createResource(loadRaws, parseRaws, {
-    initialValue: [],
-  });
+  // Resource for raws (actually loads raws into the search database)
+  createResource(loadRaws, parseRaws);
 
   // Resource for accessing the raws via search filtering
   const searchFilteredRaws = createMemo<Raw[]>(() => {
-
-    /*
-    
-        // Filter by modules first (easiest wide amount to filter). We pre-sort the raws in one step here.
-        const moduleFiltered = RawsOnlyWithoutModules(
-          allRawsJsonArray.latest.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)),
-          searchContext.filteredModules()
-        );
-        // Filter by required tags (somewhat expensive)
-        const tagFiltered = RawsOnlyWithTagsOrAll(moduleFiltered, searchContext.requiredTags());
-        // Filter remaining by search tags (most expensive)
-        const searchFiltered = RawsMatchingSearchString(tagFiltered, searchContext.searchString());
-        */
-
     console.log(loadRaws());
 
     const searchResult = search(searchDatabase, {
-      term: searchContext.searchString()
+      term: searchContext.searchString(),
     });
 
-    const searchFiltered: Raw[] = searchResult.count === 0 ?
-      Object.values(searchDatabase.docs) as Raw[] :
-      searchResult.hits.map(h => h.document as Raw);
+    const searchFiltered: Raw[] =
+      searchResult.count === 0
+        ? (Object.values(searchDatabase.docs) as Raw[])
+        : searchResult.hits.map((h) => h.document as Raw);
 
     const moduleFiltered = RawsOnlyWithoutModules(searchFiltered, searchContext.filteredModules());
     const tagFiltered = RawsOnlyWithTagsOrAll(moduleFiltered, searchContext.requiredTags());
 
-    return tagFiltered.filter(r => {
-      if (searchContext.requireCreature() && r.rawType === 'Creature') {
-        return true;
-      }
-      if (searchContext.requirePlant() && r.rawType === 'Plant') {
-        return true;
-      }
-      if (searchContext.requireInorganic() && r.rawType === 'Inorganic') {
-        return true;
-      }
-      return false;
-    }).slice(0, MAX_RESULTS);
+    return tagFiltered
+      .filter((r) => {
+        if (searchContext.requireCreature() && r.rawType === 'Creature') {
+          return true;
+        }
+        if (searchContext.requirePlant() && r.rawType === 'Plant') {
+          return true;
+        }
+        if (searchContext.requireInorganic() && r.rawType === 'Inorganic') {
+          return true;
+        }
+        return false;
+      })
+      .slice(0, MAX_RESULTS);
   });
 
   // Resource for raws info files
@@ -109,6 +92,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   // Signal for raw parsing progress
   const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>({ currentModule: '', percentage: 0.0 });
+
+  // Effect to parse raws when directory is changed
+  createEffect(() => {
+    if (directoryContext.currentDirectory().type === DIR_DF) {
+      setLoadRaws(true);
+    }
+  });
 
   // Listen to window events from Tauri
   appWindow
@@ -136,7 +126,17 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   });
 
   async function parseRaws() {
-    const dir = directoryContext.directoryHistory()[0].path.join('/');
+    // Don't parse when set as DIR_NONE
+    if (directoryContext.currentDirectory().type === DIR_NONE) {
+      console.info('Skipped parsing because directory type is DIR_NONE');
+      // Reset the trigger after 50ms
+      setTimeout(() => {
+        setLoadRaws(false);
+      }, 5);
+      return;
+    }
+
+    const dir = directoryContext.currentDirectory().path.join('/');
 
     setParsingStatus(STS_PARSING);
 
@@ -179,7 +179,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   }
 
   async function parseRawsInfo(): Promise<DFInfoFile[]> {
-    const dir = directoryContext.directoryHistory()[0].path.join('/');
+    const dir = directoryContext.currentDirectory().path.join('/');
 
     try {
       const raw_file_data: DFInfoFile[] = JSON.parse(await invoke('parse_raws_info_at_game_path', { path: dir }));
