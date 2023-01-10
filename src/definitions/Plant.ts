@@ -1,7 +1,7 @@
 import { StatesIntoFlatArray } from './Utils';
 import { DFPlant } from './types';
 
-export function GeneratePlantSearchString(plant: DFPlant): string[] {
+export function GeneratePlantSearchString(plant: DFPlant): string {
   let searchableTerms = [...plant.name.split(' ')]; // add name
   searchableTerms = searchableTerms.concat(plant.preferenceStrings); // add preference string
   searchableTerms = searchableTerms.concat(plant.materials.map((m) => m.type)); // add material types
@@ -17,7 +17,8 @@ export function GeneratePlantSearchString(plant: DFPlant): string[] {
     .replace(/\s\s+/g, ' ')
     .split(' ')
     .filter((v) => v.length > 0)
-    .sort();
+    .sort()
+    .join(' ');
 }
 
 const liquidMaterials = ['DrinkPlant', 'Extract'];

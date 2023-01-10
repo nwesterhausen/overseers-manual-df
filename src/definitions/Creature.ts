@@ -385,7 +385,7 @@ const DEFAULT_CREATURE: Partial<Creature> = {
   moduleVersion: '',
   rawType: 'Creature',
   basedOn: '',
-  searchString: [],
+  searchString: '',
   moduleSourceDirectory: '',
   rawModuleParents: [],
   descriptions: {},
@@ -454,7 +454,7 @@ export const PetValueStatus = (creature: Creature): string => {
  * @param creature - Creature to create search terms for
  * @returns An array of strings that can be used to describe the creature
  */
-export const GenerateCreatureSearchString = (creature: Creature): string[] => {
+export const GenerateCreatureSearchString = (creature: Creature): string => {
   let searchableTerms = [
     SearchableNames(creature.namesMap),
     IsEggLayer(creature) ? `eggs ${CondensedEggSize(creature.eggSizes)}` : '',
@@ -483,7 +483,8 @@ export const GenerateCreatureSearchString = (creature: Creature): string[] => {
     .replace(/\s\s+/g, ' ')
     .split(' ')
     .filter((v) => v.length > 0)
-    .sort();
+    .sort()
+    .join(' ');
 };
 
 const DepthRanges = [

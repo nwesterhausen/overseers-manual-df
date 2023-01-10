@@ -1,6 +1,6 @@
 import { Component, For } from 'solid-js';
 import { useRawsProvider } from '../providers/RawsProvider';
-import BotanicalCard from './BotanicalCard';
+import BotanicalCard from './plant/BotanicalCard';
 
 const ListingBotanicals: Component = () => {
   const rawsContext = useRawsProvider();

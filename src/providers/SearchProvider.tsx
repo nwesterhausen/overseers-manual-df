@@ -1,72 +1,115 @@
 import { createContextProvider } from '@solid-primitives/context';
-import { createEffect, createSignal } from 'solid-js';
+import { createMemo, createSignal } from 'solid-js';
 
 export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
   // Signal for the search filter
   const [searchString, setSearchString] = createSignal('');
-  // Signal for the advanced filter options
-  const [showSearchFilters, setShowSearchFilters] = createSignal(false);
-  const handleShowSearchFilters = () => setShowSearchFilters(true);
-  const handleHideSearchFilters = () => setShowSearchFilters(false);
-  const handleToggleSearchFilters = () => setShowSearchFilters(!showSearchFilters());
 
-  // Signal for the tag filter
-  const [showTagFilters, setShowTagFilters] = createSignal(false);
-  const handleShowTagFilters = () => setShowTagFilters(true);
-  const handleHideTagFilters = () => setShowTagFilters(false);
-  const handleToggleTagFilters = () => setShowTagFilters(!showTagFilters());
-
-  // Container for required tags
-  const [requiredTagFilters, setRequiredTagFilters] = createSignal<string[]>([]);
-  const addRequiredTagFilter = (tag: string) => {
-    if (requiredTagFilters().indexOf(tag) === -1) {
-      setRequiredTagFilters([...requiredTagFilters(), tag]);
-    }
-  };
-  const removeRequiredTagFilter = (tag: string) => {
-    if (requiredTagFilters().indexOf(tag) !== -1) {
-      setRequiredTagFilters(requiredTagFilters().filter((v) => v !== tag));
-    }
-  };
-  const removeAllRequiredTagFilters = () => {
-    setRequiredTagFilters([]);
-  }
-  createEffect(() => {
-    if (requiredTagFilters().length === 0) {
-      console.debug("Required tags: None");
+  const [requireCreature, setRequireCreature] = createSignal(true);
+  const handleToggleRequireCreature = (e: Event) => {
+    const element = e.target as HTMLInputElement;
+    if (element.checked) {
+      setRequireCreature(true);
     } else {
-      console.debug(`Required tags: ${requiredTagFilters().join(", ")}`);
+      setRequireCreature(false);
     }
+  }
+  const [requirePlant, setRequirePlant] = createSignal(true);
+  const handleToggleRequirePlant = (e: Event) => {
+    const element = e.target as HTMLInputElement;
+    if (element.checked) {
+      setRequirePlant(true);
+    } else {
+      setRequirePlant(false);
+    }
+  }
+  const [requireInorganic, setRequireInorganic] = createSignal(true);
+  const handleToggleRequireInorganic = (e: Event) => {
+    const element = e.target as HTMLInputElement;
+    if (element.checked) {
+      setRequireInorganic(true);
+    } else {
+      setRequireInorganic(false);
+    }
+  }
+
+  // Required Modules (by objectId)
+  const [filteredModules, setFilteredModules] = createSignal<string[]>([]);
+  const addFilteredModule = (module: string | string[]) => {
+    if (Array.isArray(module)) {
+      setFilteredModules([... new Set([...filteredModules(), ...module])]);
+      return;
+    }
+
+    if (filteredModules().indexOf(module) === -1) {
+      setFilteredModules([...filteredModules(), module]);
+    }
+  };
+  const removeFilteredModule = (module: string) => {
+    if (filteredModules().indexOf(module) !== -1) {
+      setFilteredModules(filteredModules().filter((v) => v !== module));
+    }
+  };
+  const removeAllFilteredModules = () => {
+    setFilteredModules([]);
+  };
+
+  // Required Tags
+  const [requiredTags, setRequiredTags] = createSignal<string[]>([]);
+  const addRequiredTag = (tag: string) => {
+    if (requiredTags().indexOf(tag) === -1) {
+      setRequiredTags([...requiredTags(), tag]);
+    }
+  }
+  const removeRequiredTag = (tag: string) => {
+    if (requiredTags().indexOf(tag) !== -1) {
+      setRequiredTags(requiredTags().filter((v) => v !== tag));
+    }
+  };
+  const removeAllRequiredTags = () => {
+    setRequiredTags([]);
+  };
+
+  const advancedFiltering = createMemo(() => {
+    return requiredTags().length + filteredModules().length > 0;
   })
 
-  // Signal for the tag filter
-  const [showCardDetails, setShowCardDetails] = createSignal(false);
-  const handleShowCardDetails = () => setShowCardDetails(true);
-  const handleHideCardDetails = () => setShowCardDetails(false);
-  const handleToggleCardDetails = () => setShowCardDetails(!showCardDetails());
+  // Advanced Filtering Display Handling
+  const [showAdvancedFilters, setShowAdvancedFilters] = createSignal(false);
+  const handleShowAdvancedFilters = () => setShowAdvancedFilters(true);
+  const handleHideAdvancedFilters = () => setShowAdvancedFilters(false);
+  const handleToggleAdvancedFilters = () => setShowAdvancedFilters(!showAdvancedFilters());
 
   return {
     searchString,
     setSearchString,
-    // Module Filters
-    showSearchFilters,
-    handleHideSearchFilters,
-    handleShowSearchFilters,
-    handleToggleSearchFilters,
-    // Tag filters
-    showTagFilters,
-    handleHideTagFilters,
-    handleShowTagFilters,
-    handleToggleTagFilters,
-    // Tag filters data
-    requiredTagFilters,
-    addRequiredTagFilter,
-    removeRequiredTagFilter,
-    removeAllRequiredTagFilters,
-    // Card Details Restriction
-    showCardDetails,
-    handleHideCardDetails,
-    handleShowCardDetails,
-    handleToggleCardDetails,
+
+    advancedFiltering,
+    // Advanced Filtering Display Handling
+    showAdvancedFilters,
+    handleShowAdvancedFilters,
+    handleHideAdvancedFilters,
+    handleToggleAdvancedFilters,
+
+
+    // Raw Module Filtering
+    filteredModules,
+    addFilteredModule,
+    removeFilteredModule,
+    removeAllFilteredModules,
+
+    // Tag Filtering
+    requiredTags,
+    addRequiredTag,
+    removeRequiredTag,
+    removeAllRequiredTags,
+
+    // Object Type Filtering
+    requireCreature,
+    handleToggleRequireCreature,
+    requirePlant,
+    handleToggleRequirePlant,
+    requireInorganic,
+    handleToggleRequireInorganic,
   };
 });
