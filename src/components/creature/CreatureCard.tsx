@@ -2,7 +2,7 @@ import { Button, Card, Modal, Stack } from 'solid-bootstrap';
 import { Component, Show, createSignal } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { Creature } from '../../definitions/types';
-import RawJsonTable from '../RawsDetailTable';
+import RawJsonTable from '../raws/RawsDetailTable';
 import CreatureDescriptionTable from './CreateDescriptionTable';
 import CreatureBadges from './CreatureBadges';
 

@@ -1,5 +1,5 @@
 import { Component, For, Show, createEffect, createSignal } from 'solid-js';
-import { useRawsProvider } from '../providers/RawsProvider';
+import { useRawsProvider } from '../../providers/RawsProvider';
 import RawModuleInfoTable from './RawModuleInfoTable';
 
 const ParsedModInfo: Component = () => {
@@ -34,7 +34,7 @@ const ParsedModInfo: Component = () => {
             const el = e.target as HTMLSelectElement;
             setSelected(el.value);
           }}>
-          <For each={rawsContext.rawModulesInfo.latest.sort((a, b) => a.displayTitle < b.displayTitle ? -1 : 1)}>
+          <For each={rawsContext.rawModulesInfo.latest.sort((a, b) => (a.displayTitle < b.displayTitle ? -1 : 1))}>
             {(modInfo) => (
               <option value={modInfo.identifier} selected={selected() === modInfo.identifier}>
                 {modInfo.name} v{modInfo.displayedVersion} (from {modInfo.displayedVersion})

@@ -2,7 +2,7 @@ import { Button, Card, Modal, Stack } from 'solid-bootstrap';
 import { Component, createSignal } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { DFPlant } from '../../definitions/types';
-import RawJsonTable from '../RawsDetailTable';
+import RawJsonTable from '../raws/RawsDetailTable';
 import PlantDescriptionTable from './PlantDescriptionTable';
 import PlantProvidesList from './PlantProvidesList';
 

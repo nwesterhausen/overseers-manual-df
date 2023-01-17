@@ -1,12 +1,12 @@
 import { Button, Modal, OverlayTrigger, Tooltip } from 'solid-bootstrap';
 import { IoCogSharp, IoFolderOpenSharp, IoHelpCircleSharp, IoRefreshSharp } from 'solid-icons/io';
 import { Component, createSignal } from 'solid-js';
-import { useDirectoryProvider } from '../providers/DirectoryProvider';
-import { STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../providers/RawsProvider';
-import { useSettingsContext } from '../providers/SettingsProvider';
+import { useDirectoryProvider } from '../../providers/DirectoryProvider';
+import { STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../../providers/RawsProvider';
+import { useSettingsContext } from '../../providers/SettingsProvider';
+import ZoneOverview from '../quickReference/ZoneOverview';
 import SearchBox from './SearchBox';
 import ThemeChangeButton from './ThemeChangeButton';
-import ZoneOverview from './quickReference/ZoneOverview';
 
 const MenuBar: Component = () => {
   const directoryContext = useDirectoryProvider();

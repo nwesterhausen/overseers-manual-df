@@ -5,11 +5,11 @@ import { Component, createEffect, createMemo, createResource } from 'solid-js';
 import DFDirectoryNotSet from './components/DFDirectoryNotSet';
 import Listings from './components/Listings';
 import LoadingRawsProgress from './components/LoadingRawsProgress';
-import MenuBar from './components/MenuBar';
 import ParsingProgressBar from './components/ParsingProgressBar';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import SearchFilters from './components/filtering/SearchFilters';
 import SettingsModal from './components/filtering/SettingsModal';
+import MenuBar from './components/menu/MenuBar';
 import { STS_IDLE, useRawsProvider } from './providers/RawsProvider';
 
 // App name for title

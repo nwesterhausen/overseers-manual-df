@@ -1,6 +1,6 @@
 import { Table } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { DFInfoFile } from '../definitions/types';
+import { DFInfoFile } from '../../definitions/types';
 
 const RawModuleInfoTable: Component<{ module: DFInfoFile }> = (props) => {
   if (!props.module) {
