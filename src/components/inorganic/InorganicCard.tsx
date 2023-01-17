@@ -2,7 +2,7 @@ import { Button, Card, Modal, Stack } from 'solid-bootstrap';
 import { Component, For, createSignal } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { DFInorganic } from '../../definitions/types';
-import RawJsonTable from '../RawsDetailTable';
+import RawJsonTable from '../raws/RawsDetailTable';
 import InorganicDescriptionTable from './InorganicDescriptionTable';
 
 /**

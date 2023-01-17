@@ -1,6 +1,6 @@
 import { Table } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { Raw } from '../definitions/types';
+import { Raw } from '../../definitions/types';
 
 const RawJsonTable: Component<{ item: Raw }> = (props) => {
   return (
