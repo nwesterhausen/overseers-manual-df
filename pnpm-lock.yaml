@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@lyrasearch/lyra': ^0.3.1
+  '@lyrasearch/lyra': ^0.4.0
   '@popperjs/core': ^2.11.6
   '@semantic-release/changelog': ^6.0.2
   '@semantic-release/commit-analyzer': ^9.0.2
@@ -30,7 +30,7 @@ specifiers:
   vite-plugin-solid: ^2.5.0
 
 dependencies:
-  '@lyrasearch/lyra': 0.3.1
+  '@lyrasearch/lyra': 0.4.1
   '@tauri-apps/api': 1.2.0
   solid-js: 1.6.8
 
@@ -672,8 +672,9 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@lyrasearch/lyra/0.3.1:
-    resolution: {integrity: sha512-c0k8R026nfXu/FhA9xgh7jo/+HM4I7XCn5J+us32mQEmqNBmGpD0CEyJ8PiJxmsDapyeYwpMNQgT2lNmnIL86w==}
+  /@lyrasearch/lyra/0.4.1:
+    resolution: {integrity: sha512-ZGy+fD01PB/hmM0xvcSg/C/NQFmen04fLRNtSYPRpYvQelC6jdnhYNIX46qpfSBdxN0I1D0DcR1fmkw7aDLHoA==}
+    engines: {node: '>= 16.0.0'}
     dev: false
 
   /@microsoft/tsdoc-config/0.16.2:
