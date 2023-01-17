@@ -91,7 +91,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   });
 
   // Signal for raw parsing progress
-  const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>({ currentModule: '', percentage: 0.0 });
+  const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>({ currentModule: '', currentTask: '', percentage: 0.0 });
 
   // Effect to parse raws when directory is changed
   createEffect(() => {
@@ -141,17 +141,19 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     setParsingStatus(STS_PARSING);
 
     try {
-      const raw_file_json_string: string = await invoke('parse_raws_at_game_path', { path: dir, window: appWindow });
+      const raw_file_json_string: string = await invoke('parse_all_raws', { gamePath: dir, window: appWindow });
 
       await new Promise((resolve) => setTimeout(resolve, 1));
       const raw_file_data: Raw[][] = await JSON.parse(raw_file_json_string);
       setParsingStatus(STS_LOADING);
 
       await new Promise((resolve) => setTimeout(resolve, 1));
-      setParsingProgress({ currentModule: '', percentage: 0.0 });
+      setParsingProgress({ currentModule: '', currentTask: '', percentage: 0.0 });
 
-      // Flatten the array of arrays
-      const result = raw_file_data.flat();
+      console.log(raw_file_data);
+
+      // Flatten the array of arrays of arrays
+      const result = raw_file_data.flat().flat();
 
       const sortResult = UniqueSort(result);
 
@@ -173,7 +175,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       return [];
     } catch (e) {
       console.error(e);
-      setParsingProgress({ currentModule: '', percentage: 0.0 });
+      setParsingProgress({ currentModule: '', currentTask: '', percentage: 0.0 });
       setParsingStatus(STS_EMPTY);
     }
   }
@@ -182,9 +184,12 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     const dir = directoryContext.currentDirectory().path.join('/');
 
     try {
-      const raw_file_data: DFInfoFile[] = JSON.parse(await invoke('parse_raws_info_at_game_path', { path: dir }));
+      const raw_file_data: DFInfoFile[][] = JSON.parse(await invoke('parse_all_raws_info', { path: dir }));
 
-      return raw_file_data.sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
+      // Filter unknown raw info stuff..
+      const flat_raw_info = raw_file_data.flat().filter(dfi => dfi.identifier !== "unknown");
+
+      return flat_raw_info.sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
     } catch (e) {
       console.error(e);
     }

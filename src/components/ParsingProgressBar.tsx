@@ -16,7 +16,7 @@ const ParsingProgressBar: Component = () => {
   return (
     <Show when={rawsContext.parsingStatus() === STS_PARSING}>
       <Stack class='justify-content-center d-flex' gap={3}>
-        <span>Parsing raw files...</span>
+        <span>{rawsContext.parsingProgress().currentTask}</span>
         <Stack direction='vertical' gap={3}>
           <ProgressBar now={percentage()} animated />
           <p class='text-center'>{`${percentage()}% ...parsing "${current()}"`}</p>
