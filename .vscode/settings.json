@@ -16,6 +16,6 @@
     "-A",
     "clippy::too_many_lines"
   ],
-  "cSpell.words": ["bestiarum", "dfraw", "Ferdinandi", "gamelog", "scrolltop", "vocabulum"],
+  "cSpell.words": ["bestiarum", "dfraw", "Ferdinandi", "gamelog", "lyrasearch", "scrolltop", "vocabulum"],
   "githubPullRequests.ignoredPullRequestBranches": ["main"]
 }

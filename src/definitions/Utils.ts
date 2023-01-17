@@ -36,15 +36,16 @@ export const SimplifyVolume = (volume_cm3: number): string => {
  * @returns String in Title Case
  */
 export const toTitleCase = (str: string): string => {
-  if (str.length <= 1) {
-    return str.toUpperCase();
+  if (typeof str !== 'string') {
+    return '';
   }
 
   // Support strings with spaces, and make our title case very title-y
   if (/\s/.test(str)) {
     return str
-      .split(' ')
-      .map((s) => `${s[0].toUpperCase()}${s.slice(1).toLowerCase()}`)
+      .split(/\s/)
+      .filter((s) => s.length > 0)
+      .map((s) => (s.length > 1 ? `${s[0].toUpperCase()}${s.slice(1).toLowerCase()}` : s.toUpperCase()))
       .join(' ');
   }
 
@@ -187,7 +188,7 @@ const IgnoredSearchTerms = [
   'they',
   'their',
   'with',
-]
+];
 
 export function TransformIntoSearchTermString(searchableTerms: string[]): string {
   const alphaNormalizedTerms = searchableTerms

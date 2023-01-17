@@ -13,6 +13,7 @@ export type Raw = {
   moduleDisplayName: string;
   rawType: string;
   rawRelativePath: string;
+  overwriteRaw: string;
 
   // Added types for this app
   searchString: string;
@@ -169,4 +170,5 @@ export type DFInfoFile = {
 export type ProgressPayload = {
   currentModule: string;
   percentage: number;
+  currentTask: string;
 };
