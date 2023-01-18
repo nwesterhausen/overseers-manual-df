@@ -10,16 +10,17 @@ const ParsingProgressBar: Component = () => {
     }
     return 0;
   });
-  const current = createMemo(() => {
-    return rawsContext.parsingProgress().currentModule;
-  });
   return (
     <Show when={rawsContext.parsingStatus() === STS_PARSING}>
       <Stack class='justify-content-center d-flex' gap={3}>
-        <span>{rawsContext.parsingProgress().currentTask}</span>
+        <div class='row align-items-start'>
+          <div class='col'>{`${rawsContext.parsingProgress().currentTask} ${percentage()}% Completed`}</div>
+          <div class='col'>Location {rawsContext.parsingProgress().currentLocation}</div>
+          <div class='col'>Module {rawsContext.parsingProgress().currentModule}</div>
+          <div class='col'>File {rawsContext.parsingProgress().currentFile}</div>
+        </div>
         <Stack direction='vertical' gap={3}>
           <ProgressBar now={percentage()} animated />
-          <p class='text-center'>{`${percentage()}% ...parsing "${current()}"`}</p>
         </Stack>
       </Stack>
     </Show>
