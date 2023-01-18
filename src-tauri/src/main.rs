@@ -11,14 +11,14 @@ use fern::colors::{Color, ColoredLevelConfig};
 #[allow(clippy::needless_pass_by_value)]
 /// Passthru to parse all raws at game path
 fn parse_all_raws(game_path: &str, window: tauri::window::Window) -> String {
-    dfraw_json_parser::parse_game_raws_with_tauri_emit(&game_path, &window)
+    dfraw_json_parser::parse_game_raws_with_tauri_emit(&game_path, window)
 }
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
 /// Passthru to parse all raws in raw location
 fn parse_raws_in_module_location(module_location: &str, window: tauri::window::Window) -> String {
-    dfraw_json_parser::parse_location_with_tauri_emit(&module_location, &window)
+    dfraw_json_parser::parse_location_with_tauri_emit(&module_location, window)
 }
 
 // #[tauri::command]
