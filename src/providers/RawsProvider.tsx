@@ -91,7 +91,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   });
 
   // Signal for raw parsing progress
-  const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>({ currentModule: '', currentTask: '', percentage: 0.0 });
+  const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>({
+    currentModule: '',
+    currentFile: '',
+    currentLocation: '',
+    currentTask: '',
+    percentage: 0.0,
+  });
 
   // Effect to parse raws when directory is changed
   createEffect(() => {
@@ -148,7 +154,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       setParsingStatus(STS_LOADING);
 
       await new Promise((resolve) => setTimeout(resolve, 1));
-      setParsingProgress({ currentModule: '', currentTask: '', percentage: 0.0 });
+      setParsingProgress({ currentModule: '', currentFile: '', currentLocation: '', currentTask: '', percentage: 0.0 });
 
       console.log(raw_file_data);
 
@@ -175,7 +181,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       return [];
     } catch (e) {
       console.error(e);
-      setParsingProgress({ currentModule: '', currentTask: '', percentage: 0.0 });
+      setParsingProgress({ currentModule: '', currentFile: '', currentLocation: '', currentTask: '', percentage: 0.0 });
       setParsingStatus(STS_EMPTY);
     }
   }
@@ -187,7 +193,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       const raw_file_data: DFInfoFile[][] = JSON.parse(await invoke('parse_all_raws_info', { path: dir }));
 
       // Filter unknown raw info stuff..
-      const flat_raw_info = raw_file_data.flat().filter(dfi => dfi.identifier !== "unknown");
+      const flat_raw_info = raw_file_data.flat().filter((dfi) => dfi.identifier !== 'unknown');
 
       return flat_raw_info.sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
     } catch (e) {

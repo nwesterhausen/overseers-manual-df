@@ -10,7 +10,6 @@ export function GeneratePlantSearchString(plant: DFPlant): string {
   searchableTerms.push(plant.rawModule); // add sourced module
   searchableTerms.push(...plant.allTags); // add all tags
 
-
   return TransformIntoSearchTermString(searchableTerms);
 }
 

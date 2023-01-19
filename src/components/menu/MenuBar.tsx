@@ -1,80 +1,47 @@
-import { Button, Modal, OverlayTrigger, Tooltip } from 'solid-bootstrap';
-import { IoCogSharp, IoFolderOpenSharp, IoHelpCircleSharp, IoRefreshSharp } from 'solid-icons/io';
-import { Component, createSignal } from 'solid-js';
-import { useDirectoryProvider } from '../../providers/DirectoryProvider';
+import { Component, createMemo } from 'solid-js';
 import { STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../../providers/RawsProvider';
-import { useSettingsContext } from '../../providers/SettingsProvider';
-import ZoneOverview from '../quickReference/ZoneOverview';
+import AdvancedFiltersButton from './AdvancedFiltersButton';
+import DisplayStyleButton from './DisplayStyleButton';
+import GameReferenceButton from './GameReferenceButton';
+import OpenSettingsButton from './OpenSettingsButton';
+import RawTypeCheckboxes from './RawTypeCheckboxes';
+import ReloadRawsButton from './ReloadRawsButton';
 import SearchBox from './SearchBox';
+import SetDirectoryButton from './SetDirectoryButton';
+import TagRestrictionButton from './TagRestrictionButton';
 import ThemeChangeButton from './ThemeChangeButton';
 
 const MenuBar: Component = () => {
-  const directoryContext = useDirectoryProvider();
   const rawsContext = useRawsProvider();
-  const [settings, { handleOpen }] = useSettingsContext();
 
-  const [showHelp, setShowHelp] = createSignal(false);
-  const handleCloseHelp = () => setShowHelp(false);
-  const handleOpenHelp = () => setShowHelp(true);
+  const disableButtons = createMemo(() => rawsContext.parsingStatus() !== STS_IDLE);
 
   return (
     <>
       <div class='hstack gap-2 px-2 menu-bar'>
         <div class='me-auto'>
-          <OverlayTrigger
-            placement='auto'
-            overlay={
-              <Tooltip>{directoryContext.directoryHistory().length > 0 ? 'Change ' : 'Set '} game directory</Tooltip>
-            }>
-            <Button
-              class='border-0 p-1'
-              disabled={rawsContext.parsingStatus() === STS_PARSING && rawsContext.parsingStatus() === STS_LOADING}
-              variant='outline-secondary'
-              onClick={() => {
-                directoryContext.activateManualDirectorySelection(true);
-              }}>
-              <IoFolderOpenSharp size={'1.5rem'} />
-            </Button>
-          </OverlayTrigger>
-
-          <OverlayTrigger placement='auto' overlay={<Tooltip id='refresh-button-tooltip'>Re-read Raw Modules</Tooltip>}>
-            <Button
-              class='border-0 p-1'
-              variant='outline-secondary'
-              disabled={rawsContext.parsingStatus() !== STS_IDLE}
-              onClick={() => rawsContext.setLoadRaws(true)}>
-              <IoRefreshSharp size={'1.5rem'} />
-            </Button>
-          </OverlayTrigger>
+          <SetDirectoryButton
+            disabled={rawsContext.parsingStatus() === STS_PARSING && rawsContext.parsingStatus() === STS_LOADING}
+          />
+          <ReloadRawsButton disabled={disableButtons()} />
+          <DisplayStyleButton disabled={disableButtons()} />
         </div>
 
-        <div class='hstack gap-2 px-2'>
-          <SearchBox />
+        <div class='hstack p-2'>
+          <SearchBox disabled={disableButtons()} />
+
+          <RawTypeCheckboxes disabled={disableButtons()} />
+          <TagRestrictionButton disabled={disableButtons()} />
+          <AdvancedFiltersButton disabled={disableButtons()} />
         </div>
 
         <div class='ms-auto'>
-          <OverlayTrigger placement='auto' overlay={<Tooltip>Quick Reference</Tooltip>}>
-            <Button class='border-0 p-1' variant='outline-secondary' onClick={handleOpenHelp}>
-              <IoHelpCircleSharp size={'1.5rem'} />
-            </Button>
-          </OverlayTrigger>
+          <GameReferenceButton disabled={disableButtons()} />
 
           <ThemeChangeButton />
-
-          <OverlayTrigger placement='auto' overlay={<Tooltip>Settings</Tooltip>}>
-            <Button class='border-0 p-1' variant='outline-secondary' onClick={handleOpen}>
-              <IoCogSharp size={'1.5rem'} />
-            </Button>
-          </OverlayTrigger>
+          <OpenSettingsButton />
         </div>
       </div>
-
-      <Modal fullscreen onHide={handleCloseHelp} show={showHelp()}>
-        <Modal.Header closeButton>Quick Game Reference</Modal.Header>
-        <Modal.Body class='px-3'>
-          <ZoneOverview />
-        </Modal.Body>
-      </Modal>
     </>
   );
 };

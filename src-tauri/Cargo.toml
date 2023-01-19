@@ -31,9 +31,9 @@ git = "https://github.com/tauri-apps/tauri-plugin-store"
 [dependencies.dfraw_json_parser]
 # git = "https://github.com/nwesterhausen/dfraw_json_parser"
 # branch = "dev"
-# version = "0.10.0"
+version = "0.10.1"
 features = ["tauri"]
-path = "../../dfraw_json_parser"
+# path = "../../dfraw_json_parser"
 
 [features]
 # by default Tauri runs in production mode
