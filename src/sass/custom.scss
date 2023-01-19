@@ -95,3 +95,15 @@ label > p {
   text-align: left;
   margin-right: 5vw;
 }
+
+.progress-details {
+  padding-left: 1rem;
+  .col {
+    padding-top: 0.25rem;
+    padding-left: 1rem;
+    .badge {
+      font-size: 0.6rem;
+      color: var(--bs-gray-900);
+    }
+  }
+}
