@@ -200,6 +200,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     } catch (e) {
       console.error(e);
     }
+    return [];
   }
 
   return {
