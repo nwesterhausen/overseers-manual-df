@@ -80,3 +80,17 @@ label > p {
 .settings-window > section {
   margin-bottom: 1rem;
 }
+
+.accordion-title {
+  font-size: 1.125rem;
+  &::first-letter {
+    font-weight: bolder;
+  }
+}
+.accordion-description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.75rem;
+  width: 40vw;
+}
