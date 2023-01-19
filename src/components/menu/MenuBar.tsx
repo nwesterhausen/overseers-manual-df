@@ -27,7 +27,6 @@ const MenuBar: Component = () => {
         </div>
 
         <div class='hstack p-2'>
-          <DisplayStyleButton disabled={disableButtons()} />
           <SearchBox disabled={disableButtons()} />
           <RawTypeCheckboxes disabled={disableButtons()} />
           <TagRestrictionButton disabled={disableButtons()} />
@@ -35,6 +34,7 @@ const MenuBar: Component = () => {
         </div>
 
         <div class='ms-auto'>
+          <DisplayStyleButton disabled={disableButtons()} />
           <GameReferenceButton disabled={disableButtons()} />
 
           <ThemeChangeButton />

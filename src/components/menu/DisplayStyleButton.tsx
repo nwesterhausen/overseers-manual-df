@@ -1,5 +1,5 @@
 import { Button, OverlayTrigger, Tooltip } from 'solid-bootstrap';
-import { IoGrid, IoList } from 'solid-icons/io';
+import { HiSolidViewGrid, HiSolidViewList } from 'solid-icons/hi';
 import { Component } from 'solid-js';
 import { useSettingsContext } from '../../providers/SettingsProvider';
 
@@ -18,7 +18,7 @@ const DisplayStyleButton: Component<{ disabled: boolean }> = (props) => {
         onClick={toggleDisplayGrid}
         variant='outline-secondary'
         class='border-0 p-1 ms-1'>
-        {currentSettings.displayStyleGrid ? <IoList size={'1.5rem'} /> : <IoGrid size={'1.5rem'} />}
+        {currentSettings.displayStyleGrid ? <HiSolidViewList size={'1.5rem'} /> : <HiSolidViewGrid size={'1.5rem'} />}
       </Button>
     </OverlayTrigger>
   );
