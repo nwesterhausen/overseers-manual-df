@@ -24,12 +24,11 @@ const MenuBar: Component = () => {
             disabled={rawsContext.parsingStatus() === STS_PARSING && rawsContext.parsingStatus() === STS_LOADING}
           />
           <ReloadRawsButton disabled={disableButtons()} />
-          <DisplayStyleButton disabled={disableButtons()} />
         </div>
 
         <div class='hstack p-2'>
+          <DisplayStyleButton disabled={disableButtons()} />
           <SearchBox disabled={disableButtons()} />
-
           <RawTypeCheckboxes disabled={disableButtons()} />
           <TagRestrictionButton disabled={disableButtons()} />
           <AdvancedFiltersButton disabled={disableButtons()} />
