@@ -96,11 +96,18 @@ const SettingsModal: Component = () => {
         </section>
         <section>
           <legend>Stored Data</legend>
-          <p>The previous used Dwarf Fortress directory is saved in a file on disk to remember the next time you open this app.</p>
-          <Button variant='danger' onClick={async () => {
-            await clear(PATH_STRING);
-            await clear(PATH_TYPE);
-          }}>Clear All Stored Data</Button>
+          <p>
+            The previous used Dwarf Fortress directory is saved in a file on disk to remember the next time you open
+            this app.
+          </p>
+          <Button
+            variant='danger'
+            onClick={async () => {
+              await clear(PATH_STRING);
+              await clear(PATH_TYPE);
+            }}>
+            Clear All Stored Data
+          </Button>
         </section>
         <section>
           <legend>About</legend>

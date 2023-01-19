@@ -1,8 +1,8 @@
-import { Table } from "solid-bootstrap";
-import { Component, For, Show } from "solid-js";
-import { UndergroundDepthDescription } from "../../definitions/Creature";
-import { TickToCalendarConversion } from "../../definitions/Utils";
-import { DFPlant } from "../../definitions/types";
+import { Table } from 'solid-bootstrap';
+import { Component, For, Show } from 'solid-js';
+import { UndergroundDepthDescription } from '../../definitions/Creature';
+import { TickToCalendarConversion } from '../../definitions/Utils';
+import { DFPlant } from '../../definitions/types';
 
 const PlantDescriptionTable: Component<{ plant: DFPlant }> = (props) => {
   return (
@@ -23,7 +23,7 @@ const PlantDescriptionTable: Component<{ plant: DFPlant }> = (props) => {
         <tr>
           <th>Growth Duration</th>
           <td>
-            <Show when={props.plant.growthDuration > 0} fallback="No natural growth">
+            <Show when={props.plant.growthDuration > 0} fallback='No natural growth'>
               Grows in {TickToCalendarConversion(props.plant.growthDuration)} ({props.plant.growthDuration} ticks)
             </Show>
           </td>
@@ -31,7 +31,7 @@ const PlantDescriptionTable: Component<{ plant: DFPlant }> = (props) => {
         <tr>
           <th>Growths</th>
           <td>
-            <Show when={Object.keys(props.plant.growthNames).length > 0} fallback="None">
+            <Show when={Object.keys(props.plant.growthNames).length > 0} fallback='None'>
               <ul>
                 <For each={Object.keys(props.plant.growthNames)}>
                   {(growth) => <li>{props.plant.growthNames[growth].singular}</li>}
