@@ -84,7 +84,7 @@ label > p {
 .accordion-title {
   font-size: 1.125rem;
   &::first-letter {
-    font-weight: bolder;
+    text-shadow: 0 0 2px var(--bs-dark-text);
   }
 }
 .accordion-description {
@@ -92,5 +92,6 @@ label > p {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.75rem;
-  width: 40vw;
+  text-align: left;
+  margin-right: 5vw;
 }

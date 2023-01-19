@@ -38,18 +38,16 @@ const CreatureAccordion: Component<{ creature: Creature }> = (props) => {
     <>
       <Accordion.Header>
         <div class='container-fluid'>
-          <div class='row'>
-            <div class='col-auto'>
-              <span class='accordion-title'>{title}</span>
+          <div>
+            <div>
+              <div class='accordion-title'>{title}</div>
             </div>
-            <div class='col-auto ms-auto me-5'>
-              <span class='accordion-description'>
-                <Show
-                  when={Object.values(props.creature.descriptions).length > 0}
-                  fallback={<p class='text-muted fst-italic'>No description available.</p>}>
-                  {Object.values(props.creature.descriptions).join(' ')}
-                </Show>
-              </span>
+            <div class='accordion-description'>
+              <Show
+                when={Object.values(props.creature.descriptions).length > 0}
+                fallback={<>No description available</>}>
+                {Object.values(props.creature.descriptions).join(' ')}
+              </Show>
             </div>
           </div>
         </div>
