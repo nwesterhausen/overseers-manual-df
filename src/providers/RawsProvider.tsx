@@ -247,7 +247,15 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     if (graphic.graphics.length === 0) {
       return undefined;
     }
-    const sprite = graphic.graphics.find((v) => v.primaryCondition === 'Default' || v.primaryCondition === 'None');
+    const sprite = graphic.graphics.find(
+      (v) =>
+        v.primaryCondition === 'Default' ||
+        v.primaryCondition === 'None' ||
+        v.primaryCondition === 'Shrub' ||
+        v.primaryCondition === 'Crop' ||
+        v.primaryCondition === 'Picked' ||
+        v.primaryCondition === 'Seed'
+    );
     if (typeof sprite === 'undefined') {
       return undefined;
     }
@@ -262,6 +270,9 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       tilePage,
     };
   };
+  const allGraphicsFor = (identifier: string): DFGraphic | undefined => {
+    return parsedRaws.latest.graphics.find((v) => v.targetIdentifier.toLowerCase() === identifier.toLowerCase());
+  };
 
   return {
     parsingStatus,
@@ -271,5 +282,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     rawModules,
     searchFilteredRaws,
     tryGetGraphicFor,
+    allGraphicsFor,
   };
 });
