@@ -47,7 +47,6 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
     if (spriteDetails().graphicFilePath.length > 0) {
       const filePath = [...directoryContext.currentDirectory().path, ...spriteDetails().graphicFilePath].join('/');
       const assetUrl = convertFileSrc(filePath);
-      console.log({ filePath, assetUrl });
       return assetUrl;
     }
     return '';
