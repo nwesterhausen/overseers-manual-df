@@ -10,25 +10,27 @@ const Listings: Component = () => {
   const [settings] = useSettingsContext();
 
   return (
-    <Show
-      when={settings.displayStyleGrid}
-      fallback={
-        <Accordion class='ms-2 me-2'>
+    <>
+      <Show
+        when={settings.displayStyleGrid}
+        fallback={
+          <Accordion class='ms-2 me-2'>
+            <For
+              each={rawsContext.searchFilteredRaws()}
+              fallback={<div class='text-center fst-italic text-muted'>No results</div>}>
+              {(raw) => <DynamicAccordion raw={raw} />}
+            </For>
+          </Accordion>
+        }>
+        <div class='row justify-content-center gap-3'>
           <For
             each={rawsContext.searchFilteredRaws()}
             fallback={<div class='text-center fst-italic text-muted'>No results</div>}>
-            {(raw) => <DynamicAccordion raw={raw} />}
+            {(raw) => <DynamicCard raw={raw} />}
           </For>
-        </Accordion>
-      }>
-      <div class='row justify-content-center gap-3'>
-        <For
-          each={rawsContext.searchFilteredRaws()}
-          fallback={<div class='text-center fst-italic text-muted'>No results</div>}>
-          {(raw) => <DynamicCard raw={raw} />}
-        </For>
-      </div>
-    </Show>
+        </div>
+      </Show>
+    </>
   );
 };
 

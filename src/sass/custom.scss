@@ -107,3 +107,25 @@ label > p {
     }
   }
 }
+
+.sprite-image {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.67rem;
+
+  background-color: var(--bs-secondary-bg);
+  border: solid 2px goldenrod;
+  border-radius: 4px;
+  padding: 2px;
+
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.listing-accordion {
+  position: relative;
+
+  .sprite-image {
+    right: 2.75rem;
+  }
+}

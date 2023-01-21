@@ -202,3 +202,25 @@ export function TransformIntoSearchTermString(searchableTerms: string[]): string
 
   return uniqueSearchTerms.join(' ');
 }
+
+/**
+ * Helper function to turn the path from a drag and dropped file or the manually selected save folder
+ * into an array of directories. This is done pretty crudely, it splits the path based on `/` unless if
+ * finds `\` in the path, then it spits by `\`.
+ *
+ * @param path - path to split
+ * @returns array of directories
+ */
+export function splitPathAgnostically(path: string): string[] {
+  if (!path) {
+    console.debug('Caught an empty path length');
+    return [];
+  }
+  let pathDelineation = '/';
+  if (path.indexOf('\\') !== -1) {
+    pathDelineation = '\\';
+  }
+  const pathArr = path.split(pathDelineation);
+  console.debug(`Path delineated to [${pathArr.join(', ')}]`);
+  return pathArr;
+}

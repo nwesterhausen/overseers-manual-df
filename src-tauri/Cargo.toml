@@ -15,7 +15,7 @@ rust-version = "1.57"
 tauri-build = { version = "1.2", features = [] }
 
 [dependencies]
-tauri = { version = "1.2", features = ["dialog-open", "fs-read-dir", "updater", "window-set-title"] }
+tauri = { version = "1.2", features = ["dialog-open", "fs-read-dir", "protocol-asset", "updater", "window-set-title"] }
 log = "0.4.17"
 chrono = "0.4"
 
@@ -31,9 +31,9 @@ git = "https://github.com/tauri-apps/tauri-plugin-store"
 [dependencies.dfraw_json_parser]
 # git = "https://github.com/nwesterhausen/dfraw_json_parser"
 # branch = "dev"
-version = "0.10.1"
+# version = "0.10.1"
 features = ["tauri"]
-# path = "../../dfraw_json_parser"
+path = "../../dfraw_json_parser"
 
 [features]
 # by default Tauri runs in production mode

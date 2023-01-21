@@ -4,7 +4,7 @@ import { invoke } from '@tauri-apps/api';
 import { appWindow } from '@tauri-apps/api/window';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import { RawsOnlyWithTagsOrAll, RawsOnlyWithoutModules, UniqueSort } from '../definitions/Raw';
-import type { DFInfoFile, ProgressPayload, Raw } from '../definitions/types';
+import type { DFGraphic, DFInfoFile, DFTilePage, ProgressPayload, Raw, SpriteGraphic } from '../definitions/types';
 import { DIR_DF, DIR_NONE, useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
 
@@ -203,6 +203,70 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     return [];
   }
 
+  async function parseRawsGraphics(): Promise<{ graphics: DFGraphic[]; tilePages: DFTilePage[] }> {
+    const dir = [...directoryContext.currentDirectory().path].join('/');
+    const graphics: DFGraphic[] = [];
+    const tilePages: DFTilePage[] = [];
+
+    try {
+      const raw_graphic_data: Raw[][][][] = JSON.parse(await invoke('parse_all_graphics_raws', { path: dir }));
+
+      const flat_raws = raw_graphic_data.flat(5).sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
+
+      flat_raws.forEach((raw) => {
+        if (raw.rawType === 'GraphicsTilePage') {
+          tilePages.push(raw as DFTilePage);
+        } else if (raw.rawType === 'Graphics') {
+          graphics.push(raw as DFGraphic);
+        }
+      });
+    } catch (e) {
+      console.error(e);
+    }
+    console.log(`Parse graphics completed. Graphics: ${graphics.length}, TilePages: ${tilePages.length}`);
+    return {
+      graphics: graphics,
+      tilePages: tilePages,
+    };
+  }
+
+  const loadGraphicRaws = createMemo(() => {
+    if (loadRaws() && allRawsInfosJsonArray.latest.length === 0) {
+      return true;
+    }
+    return allRawsInfosJsonArray.latest.length > 0;
+  });
+  // Resource for raws graphics files
+  const [vanillaRawsGraphics] = createResource(loadGraphicRaws, parseRawsGraphics, {
+    initialValue: { graphics: [], tilePages: [] },
+  });
+
+  const tryGetGraphicFor = (identifier: string): { graphic: SpriteGraphic; tilePage: DFTilePage } | undefined => {
+    const graphic = vanillaRawsGraphics.latest.graphics.find(
+      (v) => v.targetIdentifier.toLowerCase() === identifier.toLowerCase()
+    );
+    if (typeof graphic === 'undefined') {
+      return undefined;
+    }
+    if (graphic.graphics.length === 0) {
+      return undefined;
+    }
+    const sprite = graphic.graphics.find((v) => v.primaryCondition === 'Default' || v.primaryCondition === 'None');
+    if (typeof sprite === 'undefined') {
+      return undefined;
+    }
+    const tilePage = vanillaRawsGraphics.latest.tilePages.find(
+      (v) => v.identifier.toLowerCase() === sprite.tilePageId.toLowerCase()
+    );
+    if (typeof tilePage === 'undefined') {
+      return undefined;
+    }
+    return {
+      graphic: sprite,
+      tilePage,
+    };
+  };
+
   return {
     parsingStatus,
     setLoadRaws,
@@ -210,5 +274,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     rawModulesInfo: allRawsInfosJsonArray,
     rawModules,
     searchFilteredRaws,
+    tryGetGraphicFor,
   };
 });

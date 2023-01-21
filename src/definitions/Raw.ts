@@ -11,7 +11,7 @@ import { Creature, DFInfoFile, DFInorganic, DFPlant, Raw } from './types';
  */
 export const FilterInvalidRaws = (r: Raw): boolean => {
   if (r.name.length === 0) {
-    console.error(`Invalid raw: ${r.identifier} ${r.objectId}`, r);
+    // console.error(`Invalid raw: ${r.identifier} ${r.objectId}`, r);
     return false;
   }
   return true;

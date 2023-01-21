@@ -9,7 +9,7 @@ const DynamicAccordion: Component<{ raw: Raw }> = (props) => {
   const listingId = props.raw.objectId + 'listing';
 
   return (
-    <Accordion.Item eventKey={listingId}>
+    <Accordion.Item class='listing-accordion' eventKey={listingId}>
       <Switch fallback={<p>No match for {props.raw.rawType}</p>}>
         <Match when={props.raw.rawType === 'Plant'}>
           <BotanicalAccordion plant={props.raw as DFPlant} />
