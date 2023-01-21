@@ -3,9 +3,11 @@
     windows_subsystem = "windows"
 )]
 
+use tauri_plugin_log::LogTarget;
 use tauri_plugin_store::PluginBuilder;
+
 // use tauri::{AppHandle, Runtime};
-use fern::colors::{Color, ColoredLevelConfig};
+// use fern::colors::{Color, ColoredLevelConfig};
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
@@ -19,13 +21,6 @@ fn parse_all_raws(game_path: &str, window: tauri::window::Window) -> String {
 /// Passthru to parse all raws in raw location
 fn parse_raws_in_module_location(module_location: &str, window: tauri::window::Window) -> String {
     dfraw_json_parser::parse_location_with_tauri_emit(&module_location, window)
-}
-
-#[tauri::command]
-#[allow(clippy::needless_pass_by_value)]
-/// Passthru to parse all raws in raw location
-fn parse_graphics_raws_in_module_location(module_location: &str) -> String {
-    dfraw_json_parser::parse_graphics_raw_location(&module_location)
 }
 
 // #[tauri::command]
@@ -48,11 +43,6 @@ fn parse_all_raws_info(path: &str) -> String {
     dfraw_json_parser::parse_info_txt_in_game_dir(&path)
 }
 
-#[tauri::command]
-fn parse_all_graphics_raws(path: &str) -> String {
-    dfraw_json_parser::parse_game_graphic_raws(&path)
-}
-
 // #[tauri::command]
 // /// Passthru to parse all info.txt files at location
 // fn parse_raws_info_in_location(path: &str) -> String {
@@ -67,43 +57,32 @@ fn parse_all_graphics_raws(path: &str) -> String {
 
 fn main() {
     // Setup logging
-    // Specify color configuration
-    let colors = ColoredLevelConfig::new()
-        // Specify info as cyan
-        .info(Color::Cyan);
-    // Initialize logger
-    match fern::Dispatch::new()
-        // Perform allocation-free log formatting
-        .format(move |out, message, record| {
-            out.finish(format_args!(
-                "{} [{}] {}",
-                chrono::Local::now().format("%Y-%m-%d %H:%M:%S"),
-                colors.color(record.level()),
-                message
-            ));
-        })
-        // Add blanket level filter -
-        .level(log::LevelFilter::Info)
-        // Output to stdout, files, and other Dispatch configurations
-        .chain(std::io::stdout())
-        // Apply globally
-        .apply()
-    {
-        Ok(logger) => logger,
-        Err(e) => {
-            println!("Unable to start Fern: {:?}", e);
-        }
-    }
+    // // Specify color configuration
+    // let colors = ColoredLevelConfig::new()
+    //     // Specify info as cyan
+    //     .info(Color::Cyan);
 
     // Launch the app
     let app = tauri::Builder::default()
         .plugin(PluginBuilder::default().build())
+        .plugin(
+            tauri_plugin_log::Builder::default()
+                .targets([LogTarget::LogDir, LogTarget::Stdout, LogTarget::Webview])
+                .format(move |out, message, record| {
+                    out.finish(format_args!(
+                        "{} [{}] {}",
+                        chrono::Local::now().format("%Y-%m-%d %H:%M:%S"),
+                        record.level(),
+                        message
+                    ));
+                })
+                .level(log::LevelFilter::Info)
+                .build(),
+        )
         .invoke_handler(tauri::generate_handler![
             parse_all_raws,
             parse_raws_in_module_location,
             parse_all_raws_info,
-            parse_graphics_raws_in_module_location,
-            parse_all_graphics_raws
         ])
         .run(tauri::generate_context!());
 

@@ -8,6 +8,12 @@ import type { DFGraphic, DFInfoFile, DFTilePage, ProgressPayload, Raw, SpriteGra
 import { DIR_DF, DIR_NONE, useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
 
+export interface RawStorage {
+  graphics: DFGraphic[];
+  tilePages: DFTilePage[];
+  raws: Raw[];
+}
+
 // Statuses for the parsing status
 export const STS_PARSING = 'Parsing Raws',
   STS_LOADING = 'Loading Raws',
@@ -41,7 +47,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const [loadRaws, setLoadRaws] = createSignal(false);
 
   // Resource for raws (actually loads raws into the search database)
-  createResource(loadRaws, parseRaws);
+  const [parsedRaws] = createResource(loadRaws, parseRaws, {
+    initialValue: {
+      graphics: [],
+      tilePages: [],
+      objects: [],
+    },
+  });
 
   // Resource for accessing the raws via search filtering
   const searchFilteredRaws = createMemo<Raw[]>(() => {
@@ -147,6 +159,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
     setParsingStatus(STS_PARSING);
 
+    const graphics: DFGraphic[] = [];
+    const tilePages: DFTilePage[] = [];
+    const objectRaws: Raw[] = [];
+
     try {
       const raw_file_json_string: string = await invoke('parse_all_raws', { gamePath: dir, window: appWindow });
 
@@ -157,12 +173,22 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       await new Promise((resolve) => setTimeout(resolve, 1));
       setParsingProgress({ currentModule: '', currentFile: '', currentLocation: '', currentTask: '', percentage: 0.0 });
 
-      console.log(raw_file_data);
+      // Flatten and first-pass sort results by identifier.
+      const raw_array = raw_file_data.flat(5).sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
+      console.log(`Got ${raw_array.length} raws back`);
 
-      // Flatten the array of arrays of arrays
-      const result = raw_file_data.flat().flat();
+      // Extract the graphics and tilepages
+      raw_array.forEach((raw) => {
+        if (raw.rawType === 'GraphicsTilePage') {
+          tilePages.push(raw as DFTilePage);
+        } else if (raw.rawType === 'Graphics') {
+          graphics.push(raw as DFGraphic);
+        } else {
+          objectRaws.push(raw);
+        }
+      });
 
-      const sortResult = UniqueSort(result);
+      const sortResult = UniqueSort(objectRaws);
 
       // Based on the number of results, set raws as EMPTY or IDLE
       if (sortResult.length === 0) {
@@ -172,19 +198,27 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       }
 
       insertBatch(searchDatabase, sortResult);
-
       // Reset the trigger after 50ms
       setTimeout(() => {
         setLoadRaws(false);
       }, 50);
 
-      // return sortResult;
-      return [];
+      return {
+        graphics,
+        tilePages,
+        objects: sortResult,
+      };
     } catch (e) {
       console.error(e);
       setParsingProgress({ currentModule: '', currentFile: '', currentLocation: '', currentTask: '', percentage: 0.0 });
       setParsingStatus(STS_EMPTY);
     }
+
+    return {
+      graphics,
+      tilePages,
+      objects: objectRaws,
+    };
   }
 
   async function parseRawsInfo(): Promise<DFInfoFile[]> {
@@ -203,46 +237,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     return [];
   }
 
-  async function parseRawsGraphics(): Promise<{ graphics: DFGraphic[]; tilePages: DFTilePage[] }> {
-    const dir = [...directoryContext.currentDirectory().path].join('/');
-    const graphics: DFGraphic[] = [];
-    const tilePages: DFTilePage[] = [];
-
-    try {
-      const raw_graphic_data: Raw[][][][] = JSON.parse(await invoke('parse_all_graphics_raws', { path: dir }));
-
-      const flat_raws = raw_graphic_data.flat(5).sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
-
-      flat_raws.forEach((raw) => {
-        if (raw.rawType === 'GraphicsTilePage') {
-          tilePages.push(raw as DFTilePage);
-        } else if (raw.rawType === 'Graphics') {
-          graphics.push(raw as DFGraphic);
-        }
-      });
-    } catch (e) {
-      console.error(e);
-    }
-    console.log(`Parse graphics completed. Graphics: ${graphics.length}, TilePages: ${tilePages.length}`);
-    return {
-      graphics: graphics,
-      tilePages: tilePages,
-    };
-  }
-
-  const loadGraphicRaws = createMemo(() => {
-    if (loadRaws() && allRawsInfosJsonArray.latest.length === 0) {
-      return true;
-    }
-    return allRawsInfosJsonArray.latest.length > 0;
-  });
-  // Resource for raws graphics files
-  const [vanillaRawsGraphics] = createResource(loadGraphicRaws, parseRawsGraphics, {
-    initialValue: { graphics: [], tilePages: [] },
-  });
-
   const tryGetGraphicFor = (identifier: string): { graphic: SpriteGraphic; tilePage: DFTilePage } | undefined => {
-    const graphic = vanillaRawsGraphics.latest.graphics.find(
+    const graphic = parsedRaws.latest.graphics.find(
       (v) => v.targetIdentifier.toLowerCase() === identifier.toLowerCase()
     );
     if (typeof graphic === 'undefined') {
@@ -255,7 +251,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     if (typeof sprite === 'undefined') {
       return undefined;
     }
-    const tilePage = vanillaRawsGraphics.latest.tilePages.find(
+    const tilePage = parsedRaws.latest.tilePages.find(
       (v) => v.identifier.toLowerCase() === sprite.tilePageId.toLowerCase()
     );
     if (typeof tilePage === 'undefined') {
