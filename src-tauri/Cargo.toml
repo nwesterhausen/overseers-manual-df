@@ -19,10 +19,10 @@ tauri = { version = "1.2", features = ["dialog-open", "fs-read-dir", "protocol-a
 log = "0.4.17"
 chrono = "0.4"
 
-[dependencies.fern]
-default-features = false
-version = "0.6"
-features = ["colored"]
+# [dependencies.fern]
+# default-features = false
+# version = "0.6"
+# features = ["colored"]
 
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/tauri-plugin-store"
@@ -34,6 +34,10 @@ git = "https://github.com/tauri-apps/tauri-plugin-store"
 # version = "0.10.1"
 features = ["tauri"]
 path = "../../dfraw_json_parser"
+
+[dependencies.tauri-plugin-log]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "dev"
 
 [features]
 # by default Tauri runs in production mode
