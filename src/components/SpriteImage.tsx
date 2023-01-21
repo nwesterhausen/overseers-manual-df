@@ -4,6 +4,7 @@ import { splitPathAgnostically } from '../definitions/Utils';
 import { Dimensions } from '../definitions/types';
 import { useDirectoryProvider } from '../providers/DirectoryProvider';
 import { useRawsProvider } from '../providers/RawsProvider';
+import { useSettingsContext } from '../providers/SettingsProvider';
 
 export interface SpriteImageProps {
   identifier: string;
@@ -20,6 +21,7 @@ interface SpriteImageDetail {
 const SpriteImage: Component<SpriteImageProps> = (props) => {
   const directoryContext = useDirectoryProvider();
   const rawsContext = useRawsProvider();
+  const [currentSettings] = useSettingsContext();
 
   const spriteDetails = createMemo((): SpriteImageDetail => {
     const result = rawsContext.tryGetGraphicFor(props.identifier);
@@ -79,7 +81,7 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
     //     return `${props.dimensionX - props.offsetX * 32}px ${props.dimensionY - props.offsetY * 32}px`;
   });
   return (
-    <Show when={spriteDetails().graphicFilePath.length > 0}>
+    <Show when={currentSettings.displayGraphics && spriteDetails().graphicFilePath.length > 0}>
       <div class='sprite-image' data-parsed={JSON.stringify(spriteDetails())}>
         <div
           style={{
