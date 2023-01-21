@@ -21,6 +21,13 @@ fn parse_raws_in_module_location(module_location: &str, window: tauri::window::W
     dfraw_json_parser::parse_location_with_tauri_emit(&module_location, window)
 }
 
+#[tauri::command]
+#[allow(clippy::needless_pass_by_value)]
+/// Passthru to parse all raws in raw location
+fn parse_graphics_raws_in_module_location(module_location: &str) -> String {
+    dfraw_json_parser::parse_graphics_raw_location(&module_location)
+}
+
 // #[tauri::command]
 // #[allow(clippy::needless_pass_by_value)]
 // /// Passthru to parse all raws in raw location
@@ -39,6 +46,11 @@ fn parse_raws_in_module_location(module_location: &str, window: tauri::window::W
 /// Passthru to parse all info.txt files at game path
 fn parse_all_raws_info(path: &str) -> String {
     dfraw_json_parser::parse_info_txt_in_game_dir(&path)
+}
+
+#[tauri::command]
+fn parse_all_graphics_raws(path: &str) -> String {
+    dfraw_json_parser::parse_game_graphic_raws(&path)
 }
 
 // #[tauri::command]
@@ -89,7 +101,9 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             parse_all_raws,
             parse_raws_in_module_location,
-            parse_all_raws_info
+            parse_all_raws_info,
+            parse_graphics_raws_in_module_location,
+            parse_all_graphics_raws
         ])
         .run(tauri::generate_context!());
 

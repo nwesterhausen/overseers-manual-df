@@ -46,7 +46,6 @@ const App: Component = () => {
         {contentToDisplay() ? <></> : <Listings />}
       </Container>
       <ScrollToTopBtn />
-
       <SearchFilters />
       <SettingsModal />
     </>

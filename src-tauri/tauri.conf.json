@@ -22,6 +22,10 @@
         "all": false,
         "readDir": true
       },
+      "protocol": {
+        "asset": true,
+        "assetScope": ["**"]
+      },
       "window": {
         "all": false,
         "setTitle": true
@@ -58,7 +62,7 @@
       }
     },
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; img-src 'self' asset:https://*"
     },
     "updater": {
       "active": true,

@@ -2,6 +2,7 @@ import { Accordion, Button, Card, Modal } from 'solid-bootstrap';
 import { Component, Show, createSignal } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { Creature } from '../../definitions/types';
+import SpriteImage from '../SpriteImage';
 import RawJsonTable from '../raws/RawsDetailTable';
 import CreatureDescriptionTable from './CreateDescriptionTable';
 import CreatureBadges from './CreatureBadges';
@@ -37,6 +38,7 @@ const CreatureAccordion: Component<{ creature: Creature }> = (props) => {
   return (
     <>
       <Accordion.Header>
+        <SpriteImage identifier={props.creature.identifier} />
         <div class='container-fluid'>
           <div>
             <div>

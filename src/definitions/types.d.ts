@@ -174,3 +174,31 @@ export type ProgressPayload = {
   currentFile: string;
   currentLocation: string;
 };
+
+export type Dimensions = {
+  x: number;
+  y: number;
+};
+
+export type SpriteGraphic = {
+  primaryCondition: string;
+  tilePageId: string;
+  offset: Dimensions;
+  color: string;
+  largeImage: boolean;
+  offset2: Dimensions;
+  secondaryCondition: string;
+};
+
+export type DFGraphic = {
+  targetIdentifier: string;
+  casteIdentifier: string;
+  kind: string;
+  graphics: SpriteGraphic[];
+} & Raw;
+
+export type DFTilePage = {
+  filePath: string;
+  tileDim: Dimensions;
+  pageDim: Dimensions;
+} & Raw;
