@@ -2,12 +2,12 @@ import { ParentComponent, createContext, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 type SettingsStore = [
-  { show: boolean; displayStyleGrid: boolean },
-  { handleOpen: () => void; handleClose: () => void; toggleDisplayGrid: () => void }
+  { show: boolean; displayStyleGrid: boolean; displayGraphics: boolean },
+  { handleOpen: () => void; handleClose: () => void; toggleDisplayGrid: () => void; toggleDisplayGraphics: () => void }
 ];
 
 const SettingsContext = createContext<SettingsStore>([
-  { show: false, displayStyleGrid: true },
+  { show: false, displayStyleGrid: true, displayGraphics: true },
   {
     handleOpen() {
       console.log('Un-initialized handleOpen');
@@ -18,11 +18,14 @@ const SettingsContext = createContext<SettingsStore>([
     toggleDisplayGrid() {
       console.log('Un-initialized settings provider.');
     },
+    toggleDisplayGraphics() {
+      console.log('Un-initialized settings provider.');
+    },
   },
 ]);
 
 export const SettingsProvider: ParentComponent = (props) => {
-  const [state, setState] = createStore({ show: false, displayStyleGrid: true });
+  const [state, setState] = createStore({ show: false, displayStyleGrid: true, displayGraphics: true });
 
   const defaultSettings = [
     state,
@@ -35,6 +38,9 @@ export const SettingsProvider: ParentComponent = (props) => {
       },
       toggleDisplayGrid() {
         setState({ displayStyleGrid: !state.displayStyleGrid });
+      },
+      toggleDisplayGraphics() {
+        setState({ displayGraphics: !state.displayGraphics });
       },
     },
   ];

@@ -3,6 +3,7 @@ import { STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../../provi
 import AdvancedFiltersButton from './AdvancedFiltersButton';
 import DisplayStyleButton from './DisplayStyleButton';
 import GameReferenceButton from './GameReferenceButton';
+import GraphicsToggleButton from './GraphicsToggleButton';
 import OpenSettingsButton from './OpenSettingsButton';
 import RawTypeCheckboxes from './RawTypeCheckboxes';
 import ReloadRawsButton from './ReloadRawsButton';
@@ -34,6 +35,7 @@ const MenuBar: Component = () => {
         </div>
 
         <div class='ms-auto'>
+          <GraphicsToggleButton disabled={disableButtons()} />
           <DisplayStyleButton disabled={disableButtons()} />
           <GameReferenceButton disabled={disableButtons()} />
 
