@@ -81,6 +81,9 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       setPageNum(page);
     }
   };
+  createEffect(() => {
+    console.log(`Traveling to page ${pageNum()}`);
+  });
   // Resource for accessing the raws via search filtering
   const searchFilteredRaws = createMemo<Raw[]>(() => {
     console.log(loadRaws());
@@ -115,8 +118,12 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       })
       .sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1));
 
-    setTotalPages(Math.ceil(finalResult.length / MAX_RESULTS));
-    console.log({ MAX_RESULTS, total: finalResult.length, pages: totalPages() });
+    setTotalPages(Math.floor(finalResult.length / MAX_RESULTS));
+    console.log({
+      MAX_RESULTS,
+      total: finalResult.length,
+      pages: totalPages(),
+    });
     if (pageNum() > totalPages()) {
       setPageNum(totalPages());
     }
