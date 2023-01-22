@@ -1,3 +1,10 @@
+## [0.23.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.0...v0.23.1) (2023-01-22)
+
+
+### Bug Fixes
+
+* 🐛 fix pagination not working properly ([b994d5a](https://github.com/nwesterhausen/overseers-manual-df/commit/b994d5a197587d1e9c750b52f080384e115a9b92))
+
 ## [0.23.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.22.1...v0.23.0) (2023-01-22)
 
 
