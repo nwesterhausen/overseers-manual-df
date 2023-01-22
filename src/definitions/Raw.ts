@@ -11,7 +11,7 @@ import { Creature, DFInfoFile, DFInorganic, DFPlant, Raw } from './types';
  */
 export const FilterInvalidRaws = (r: Raw): boolean => {
   if (r.name.length === 0) {
-    console.warn(`Invalid raw: ${r.identifier} ${r.objectId}`);
+    // console.error(`Invalid raw: ${r.identifier} ${r.objectId}`, r);
     return false;
   }
   return true;
@@ -42,6 +42,12 @@ export const RawsFirstLetters = (arr: Raw[]): string[] => {
  * Returns a unique and sorted array of raws from raws
  */
 export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
+  if (!Array.isArray(rawsArray)) {
+    console.error('Raws UniqueSort - Cannot sort non-array!');
+    console.debug(rawsArray);
+    return [];
+  }
+
   // Sort all raws by objectId
   const rawsSorted = rawsArray.filter(FilterInvalidRaws).sort((a, b) => (a.objectId < b.objectId ? -1 : 1));
 

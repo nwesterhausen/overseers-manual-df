@@ -80,3 +80,52 @@ label > p {
 .settings-window > section {
   margin-bottom: 1rem;
 }
+
+.accordion-title {
+  font-size: 1.125rem;
+  &::first-letter {
+    text-shadow: 0 0 2px var(--bs-dark-text);
+  }
+}
+.accordion-description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.75rem;
+  text-align: left;
+  margin-right: 5vw;
+}
+
+.progress-details {
+  padding-left: 1rem;
+  .col {
+    padding-top: 0.25rem;
+    padding-left: 1rem;
+    .badge {
+      font-size: 0.6rem;
+      color: var(--bs-gray-900);
+    }
+  }
+}
+
+.sprite-image {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.67rem;
+
+  background-color: var(--bs-secondary-bg);
+  border: solid 2px goldenrod;
+  border-radius: 4px;
+  padding: 2px;
+
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.listing-accordion {
+  position: relative;
+
+  .sprite-image {
+    right: 2.75rem;
+  }
+}

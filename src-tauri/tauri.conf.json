@@ -22,6 +22,10 @@
         "all": false,
         "readDir": true
       },
+      "protocol": {
+        "asset": true,
+        "assetScope": ["**"]
+      },
       "window": {
         "all": false,
         "setTitle": true

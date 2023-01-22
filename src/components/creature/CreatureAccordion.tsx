@@ -1,7 +1,8 @@
-import { Button, Card, Modal, Stack } from 'solid-bootstrap';
+import { Accordion, Button, Card, Modal } from 'solid-bootstrap';
 import { Component, Show, createSignal } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { Creature } from '../../definitions/types';
+import SpriteImage from '../SpriteImage';
 import RawJsonTable from '../raws/RawsDetailTable';
 import CreatureDescriptionTable from './CreateDescriptionTable';
 import CreatureBadges from './CreatureBadges';
@@ -20,7 +21,7 @@ import CreatureBadges from './CreatureBadges';
  * @param props - Contains the creature to render details for.
  * @returns Component of creature data for a listing.
  */
-const CreatureCard: Component<{ creature: Creature }> = (props) => {
+const CreatureAccordion: Component<{ creature: Creature }> = (props) => {
   const title = props.creature.namesMap['SPECIES'][0]
     .split(' ')
     .map((v: string) => toTitleCase(v))
@@ -36,32 +37,51 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
 
   return (
     <>
-      <Card.Body>
-        <Card.Title>{title}</Card.Title>
-        <Card.Subtitle>{props.creature.moduleDisplayName}</Card.Subtitle>
+      <Accordion.Header>
+        <SpriteImage identifier={props.creature.identifier} />
+        <div class='container-fluid'>
+          <div>
+            <div>
+              <div class='accordion-title'>{title}</div>
+            </div>
+            <div class='accordion-description'>
+              <Show
+                when={Object.values(props.creature.descriptions).length > 0}
+                fallback={<>No description available</>}>
+                {Object.values(props.creature.descriptions).join(' ')}
+              </Show>
+            </div>
+          </div>
+        </div>
+      </Accordion.Header>
+      <Accordion.Body>
         <Card.Text>
+          <div class='hstack gap-2'>
+            <div>{props.creature.moduleDisplayName}</div>
+            <CreatureBadges creature={props.creature} />
+          </div>
           <Show
             when={Object.values(props.creature.descriptions).length > 0}
             fallback={<p class='text-muted fst-italic'>No description available.</p>}>
             {Object.values(props.creature.descriptions).join(' ')}
           </Show>
         </Card.Text>
-      </Card.Body>
-      <div class='card-badges'>
-        <CreatureBadges creature={props.creature} />
-      </div>
-      <Card.Footer>
-        <Stack gap={2}>
-          <Button variant='primary' size='sm' onClick={handleOpenDescription}>
-            Show All Details
-          </Button>
-          <a
-            onClick={handleOpenRawDetails}
-            class='text-center text-decoration-none fw-light text-muted indicate-clickable'>
-            See Raw Info
-          </a>
-        </Stack>
-      </Card.Footer>
+        <div class='card-badges'></div>
+        <div class='row'>
+          <div class='col-auto'>
+            <Button variant='primary' size='sm' onClick={handleOpenDescription}>
+              Show All Details
+            </Button>
+          </div>
+          <div class='col-auto ms-auto'>
+            <a
+              onClick={handleOpenRawDetails}
+              class='text-center text-decoration-none fw-light text-muted indicate-clickable'>
+              See Raw Info
+            </a>
+          </div>
+        </div>
+      </Accordion.Body>
 
       {/* Include modal for "Show All Details" */}
       <Modal
@@ -104,4 +124,4 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
   );
 };
 
-export default CreatureCard;
+export default CreatureAccordion;

@@ -13,6 +13,7 @@ export type Raw = {
   moduleDisplayName: string;
   rawType: string;
   rawRelativePath: string;
+  overwriteRaw: string;
 
   // Added types for this app
   searchString: string;
@@ -169,4 +170,35 @@ export type DFInfoFile = {
 export type ProgressPayload = {
   currentModule: string;
   percentage: number;
+  currentTask: string;
+  currentFile: string;
+  currentLocation: string;
 };
+
+export type Dimensions = {
+  x: number;
+  y: number;
+};
+
+export type SpriteGraphic = {
+  primaryCondition: string;
+  tilePageId: string;
+  offset: Dimensions;
+  color: string;
+  largeImage: boolean;
+  offset2: Dimensions;
+  secondaryCondition: string;
+};
+
+export type DFGraphic = {
+  targetIdentifier: string;
+  casteIdentifier: string;
+  kind: string;
+  graphics: SpriteGraphic[];
+} & Raw;
+
+export type DFTilePage = {
+  filePath: string;
+  tileDim: Dimensions;
+  pageDim: Dimensions;
+} & Raw;

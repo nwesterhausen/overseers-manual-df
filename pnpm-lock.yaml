@@ -1,7 +1,6 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@lyrasearch/lyra': ^0.4.0
   '@popperjs/core': ^2.11.6
   '@semantic-release/changelog': ^6.0.2
   '@semantic-release/commit-analyzer': ^9.0.2
@@ -19,6 +18,7 @@ specifiers:
   conventional-changelog-conventionalcommits: ^5.0.0
   eslint: ^8.30.0
   eslint-plugin-tsdoc: ^0.2.17
+  minisearch: ^6.0.0
   prettier: ^2.8.1
   sass: ^1.57.1
   semantic-release: ^20.0.0
@@ -30,8 +30,8 @@ specifiers:
   vite-plugin-solid: ^2.5.0
 
 dependencies:
-  '@lyrasearch/lyra': 0.4.1
   '@tauri-apps/api': 1.2.0
+  minisearch: 6.0.0
   solid-js: 1.6.8
 
 devDependencies:
@@ -671,11 +671,6 @@ packages:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
-
-  /@lyrasearch/lyra/0.4.1:
-    resolution: {integrity: sha512-ZGy+fD01PB/hmM0xvcSg/C/NQFmen04fLRNtSYPRpYvQelC6jdnhYNIX46qpfSBdxN0I1D0DcR1fmkw7aDLHoA==}
-    engines: {node: '>= 16.0.0'}
-    dev: false
 
   /@microsoft/tsdoc-config/0.16.2:
     resolution: {integrity: sha512-OGiIzzoBLgWWR0UdRJX98oYO+XKGf7tiK4Zk6tQ/E4IJqGCe7dvkTvgDZV5cFJUzLGDOjeAXrnZoA6QkVySuxw==}
@@ -2755,6 +2750,10 @@ packages:
   /minimist/1.2.7:
     resolution: {integrity: sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==}
     dev: true
+
+  /minisearch/6.0.0:
+    resolution: {integrity: sha512-N7yUgtH5T9iQfdmzI8Dnke8TK+grccrWUsdiwvalGv04hJggOUI/EpWIEQj3v8t7XSi/kSfQ7GdLAS540+GxpQ==}
+    dev: false
 
   /modify-values/1.0.1:
     resolution: {integrity: sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==}

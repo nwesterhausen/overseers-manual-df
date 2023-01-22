@@ -5,12 +5,13 @@ import { Component, createEffect, createMemo, createResource } from 'solid-js';
 import DFDirectoryNotSet from './components/DFDirectoryNotSet';
 import Listings from './components/Listings';
 import LoadingRawsProgress from './components/LoadingRawsProgress';
-import MenuBar from './components/MenuBar';
 import ParsingProgressBar from './components/ParsingProgressBar';
 import ScrollToTopBtn from './components/ScrollToTopBtn';
 import SearchFilters from './components/filtering/SearchFilters';
 import SettingsModal from './components/filtering/SettingsModal';
-import { STS_IDLE, useRawsProvider } from './providers/RawsProvider';
+import MenuBar from './components/menu/MenuBar';
+import { DIR_NONE, useDirectoryProvider } from './providers/DirectoryProvider';
+import { STS_EMPTY, useRawsProvider } from './providers/RawsProvider';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -19,6 +20,7 @@ const APP_NAME = "Overseer's Reference Manual";
 
 const App: Component = () => {
   const rawsContext = useRawsProvider();
+  const directoryContext = useDirectoryProvider();
 
   // Tauri provides the app version in a promise, so we use a resource for it
   const [appVersion] = createResource(async () => {
@@ -33,20 +35,18 @@ const App: Component = () => {
 
   // Helper boolean to know when to display the page or not
   const contentToDisplay = createMemo(() => {
-    return rawsContext.parsingStatus() !== STS_IDLE;
+    return rawsContext.parsingStatus() !== STS_EMPTY && directoryContext.currentDirectory().type !== DIR_NONE;
   });
 
   return (
     <>
       <MenuBar />
       <Container class='p-2 main' fluid>
-        <DFDirectoryNotSet />
         <ParsingProgressBar />
         <LoadingRawsProgress />
-        {contentToDisplay() ? <></> : <Listings />}
+        {contentToDisplay() ? <Listings /> : <DFDirectoryNotSet />}
       </Container>
       <ScrollToTopBtn />
-
       <SearchFilters />
       <SettingsModal />
     </>
