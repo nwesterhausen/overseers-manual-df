@@ -1,3 +1,28 @@
+## [0.23.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.22.1...v0.23.0) (2023-01-22)
+
+
+### Features
+
+* ✨ add accordion styles for plants, inorganic and creature ([984ebea](https://github.com/nwesterhausen/overseers-manual-df/commit/984ebeab739d2ffc2368faa278b5c7401fc22ea3))
+* ✨ add app logging ([5b0ae28](https://github.com/nwesterhausen/overseers-manual-df/commit/5b0ae2875a868c7ff98b1da8aef0c11bf51eb76d))
+* ✨ add toggle button for displaying graphics ([222055c](https://github.com/nwesterhausen/overseers-manual-df/commit/222055cebbfd76950de2785859f7e04307e85f3a))
+* ✨ add view toggle to menu bar ([744b380](https://github.com/nwesterhausen/overseers-manual-df/commit/744b380c772bad7b955fb6425b1249fe7fe88115))
+* ✨ allow restricting parsed locations ([d403019](https://github.com/nwesterhausen/overseers-manual-df/commit/d403019a3f53b18399a78f4a246afc484197f1da))
+* ✨ display some plant graphics ([de5f2cb](https://github.com/nwesterhausen/overseers-manual-df/commit/de5f2cb4507ed156fe2cbbeba3fbd4fa2c23a5d2))
+* ✨ display sprites if they're defined ([ffd9934](https://github.com/nwesterhausen/overseers-manual-df/commit/ffd99343de71c589179d30c1c1977d4736388e3d))
+* ✨ finish style of view toggle button, improve creature display ([369bdbb](https://github.com/nwesterhausen/overseers-manual-df/commit/369bdbb305cc6a0ad715fcc7f0df23ca37663909))
+* ✨ improve parsing detail display ([daf5cc8](https://github.com/nwesterhausen/overseers-manual-df/commit/daf5cc8bf3c2888481802bfc5cb70cfcb60fc7b4))
+* ✨ improve progress feedback ([67f7833](https://github.com/nwesterhausen/overseers-manual-df/commit/67f783349fae1a7fd39c2fe3efc0b2bbedb7a75e))
+* ✨ improve search, add pagination ([a1724cd](https://github.com/nwesterhausen/overseers-manual-df/commit/a1724cd7b882998d5c34d3a6447fd0545e2e97f0))
+* 💄 firmly display buttons with tooltips instead of text buttons ([f4395e1](https://github.com/nwesterhausen/overseers-manual-df/commit/f4395e135996445b9337a0234065b23490342073))
+
+
+### Bug Fixes
+
+* 🐛 fix no directory set message not appearing ([e6e47ee](https://github.com/nwesterhausen/overseers-manual-df/commit/e6e47ee49c3793b4974f9501e68a97d0ed81c85d))
+* 🚑️ fix issue preventing functionality if no directory set ([f3d2748](https://github.com/nwesterhausen/overseers-manual-df/commit/f3d27482aa6d3cd9b9664929a7a20c43e3bce8b2))
+* **deps:** ⬆️ update dfraw_json_parser to 0.10 ([a6f73d9](https://github.com/nwesterhausen/overseers-manual-df/commit/a6f73d9462fc3021d4e1d77aef4133e03ad38964))
+
 ## [0.22.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.22.0...v0.22.1) (2023-01-17)
 
 
