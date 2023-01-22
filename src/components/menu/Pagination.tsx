@@ -9,11 +9,7 @@ const Pagination: Component = () => {
     }
     const pageArray: number[] = [];
     let firstNumber = 0;
-    if (
-      rawsContext.totalPages() > 10 &&
-      rawsContext.pageNum() + 7 < rawsContext.totalPages() &&
-      rawsContext.pageNum() > 3
-    ) {
+    if (rawsContext.totalPages() > 10 && rawsContext.pageNum() > 3) {
       firstNumber = rawsContext.pageNum() - 3;
     }
     for (let i = firstNumber; i <= 10 + firstNumber && i <= rawsContext.totalPages(); i++) {
