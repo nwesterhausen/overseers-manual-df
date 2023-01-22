@@ -1,3 +1,10 @@
+## [0.22.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.22.0...v0.22.1) (2023-01-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @lyrasearch/lyra to ^0.4.0 ([9fbb9d6](https://github.com/nwesterhausen/overseers-manual-df/commit/9fbb9d69b9288f9323084245001c09d26ee749c9))
+
 ## [0.22.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.21.0...v0.22.0) (2023-01-10)
 
 
