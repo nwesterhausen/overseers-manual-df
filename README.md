@@ -15,15 +15,11 @@ parses the raws themselves (using [dfraw_json_parser](https://github.com/nwester
 
 ![app-screenshot](docs/img/app_inuse.png)
 
+Also has an option to view the raws in an expandable list item form:
+
+![app-screenshot-listings](docs/img/app_inuse_listings.png)
+
 ## Usage
-
-The app saves some data in `...AppData\Roaming\games.nwest.dwarffortress.overseer-manual` (or the equivalent on Linux or
-MacOS) in a file `settings.json`:
-
-| Key            | Description                                                 |
-| -------------- | ----------------------------------------------------------- |
-| `lastSaveUsed` | The most recently used save file                            |
-| `dfSavesPath`  | Path to your Dwarf Fortress save directory (from last time) |
 
 When the app is started for the first time, it presents some instructions:
 
@@ -34,8 +30,4 @@ through.
 
 ## Supported Data
 
-### Bestiary
-
-The bestiary search includes all creatures defined in raws. It cannot include generated creatures because they are not
-exposed in a readable format (since 50.xx release, raws are not stored with saves, and save data is in a special
-format).
+Includes some data about creatures, inorganic materials and plants.
