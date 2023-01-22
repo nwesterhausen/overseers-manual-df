@@ -8,7 +8,7 @@
 
 ![app icon](src-tauri/icons/128x128.png)
 
-This is a app which provides a searchable interface for the your Dwarf Fortress raw files. It's built using
+This is a app which provides a searchable interface for your Dwarf Fortress raw files. It's built using
 [Tauri](https://tauri.studio), [SolidJS](https://www.solidjs.com/),
 [Solid-Boostrap](https://solid-libs.github.io/solid-bootstrap), and some [Rust](https://www.rust-lang.org/) code which
 parses the raws themselves (using [dfraw_json_parser](https://github.com/nwesterhausen/dfraw_json_parser)).
