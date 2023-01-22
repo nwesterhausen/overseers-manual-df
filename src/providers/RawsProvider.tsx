@@ -7,6 +7,7 @@ import { RawsOnlyWithTagsOrAll, RawsOnlyWithoutModules, UniqueSort } from '../de
 import type { DFGraphic, DFInfoFile, DFTilePage, ProgressPayload, Raw, SpriteGraphic } from '../definitions/types';
 import { DIR_DF, DIR_NONE, useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
+import { useSettingsContext } from './SettingsProvider';
 
 export interface RawStorage {
   graphics: DFGraphic[];
@@ -26,6 +27,7 @@ const MAX_RESULTS = 50;
 export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const directoryContext = useDirectoryProvider();
   const searchContext = useSearchProvider();
+  const [settings] = useSettingsContext();
 
   const searchDatabase = new MiniSearch({
     idField: 'objectId',
@@ -198,10 +200,34 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     const objectRaws: Raw[] = [];
 
     try {
-      const raw_file_json_string: string = await invoke('parse_all_raws', { gamePath: dir, window: appWindow });
+      const raw_file_data: Raw[][] = [];
+      if (settings.includeLocationVanilla) {
+        const raw_file_json_string: string = await invoke('parse_raws_in_module_location', {
+          moduleLocation: dir + '/data/vanilla',
+          window: appWindow,
+        });
 
-      await new Promise((resolve) => setTimeout(resolve, 1));
-      const raw_file_data: Raw[][] = await JSON.parse(raw_file_json_string);
+        await new Promise((resolve) => setTimeout(resolve, 1));
+        raw_file_data.push(await JSON.parse(raw_file_json_string));
+      }
+      if (settings.includeLocationMods) {
+        const raw_file_json_string: string = await invoke('parse_raws_in_module_location', {
+          moduleLocation: dir + '/mods',
+          window: appWindow,
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 1));
+        raw_file_data.push(await JSON.parse(raw_file_json_string));
+      }
+      if (settings.includeLocationInstalledMods) {
+        const raw_file_json_string: string = await invoke('parse_raws_in_module_location', {
+          moduleLocation: dir + '/data/installed_mods',
+          window: appWindow,
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 1));
+        raw_file_data.push(await JSON.parse(raw_file_json_string));
+      }
       setParsingStatus(STS_LOADING);
 
       await new Promise((resolve) => setTimeout(resolve, 1));
