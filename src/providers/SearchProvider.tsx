@@ -6,38 +6,23 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
   const [searchString, setSearchString] = createSignal('');
 
   const [requireCreature, setRequireCreature] = createSignal(true);
-  const handleToggleRequireCreature = (e: Event) => {
-    const element = e.target as HTMLInputElement;
-    if (element.checked) {
-      setRequireCreature(true);
-    } else {
-      setRequireCreature(false);
-    }
-  }
+  const handleToggleRequireCreature = () => {
+    setRequireCreature(!requireCreature());
+  };
   const [requirePlant, setRequirePlant] = createSignal(true);
-  const handleToggleRequirePlant = (e: Event) => {
-    const element = e.target as HTMLInputElement;
-    if (element.checked) {
-      setRequirePlant(true);
-    } else {
-      setRequirePlant(false);
-    }
-  }
+  const handleToggleRequirePlant = () => {
+    setRequirePlant(!requirePlant());
+  };
   const [requireInorganic, setRequireInorganic] = createSignal(true);
-  const handleToggleRequireInorganic = (e: Event) => {
-    const element = e.target as HTMLInputElement;
-    if (element.checked) {
-      setRequireInorganic(true);
-    } else {
-      setRequireInorganic(false);
-    }
-  }
+  const handleToggleRequireInorganic = () => {
+    setRequireInorganic(!requireInorganic());
+  };
 
   // Required Modules (by objectId)
   const [filteredModules, setFilteredModules] = createSignal<string[]>([]);
   const addFilteredModule = (module: string | string[]) => {
     if (Array.isArray(module)) {
-      setFilteredModules([... new Set([...filteredModules(), ...module])]);
+      setFilteredModules([...new Set([...filteredModules(), ...module])]);
       return;
     }
 
@@ -60,7 +45,7 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
     if (requiredTags().indexOf(tag) === -1) {
       setRequiredTags([...requiredTags(), tag]);
     }
-  }
+  };
   const removeRequiredTag = (tag: string) => {
     if (requiredTags().indexOf(tag) !== -1) {
       setRequiredTags(requiredTags().filter((v) => v !== tag));
@@ -72,7 +57,7 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
 
   const advancedFiltering = createMemo(() => {
     return requiredTags().length + filteredModules().length > 0;
-  })
+  });
 
   // Advanced Filtering Display Handling
   const [showAdvancedFilters, setShowAdvancedFilters] = createSignal(false);
@@ -90,7 +75,6 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
     handleShowAdvancedFilters,
     handleHideAdvancedFilters,
     handleToggleAdvancedFilters,
-
 
     // Raw Module Filtering
     filteredModules,

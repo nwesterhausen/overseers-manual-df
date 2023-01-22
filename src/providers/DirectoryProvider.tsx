@@ -3,6 +3,7 @@ import { OpenDialogOptions, open as tauriOpen } from '@tauri-apps/api/dialog';
 import { Event, listen } from '@tauri-apps/api/event';
 import { readDir } from '@tauri-apps/api/fs';
 import { createMemo, createResource, createSignal } from 'solid-js';
+import { splitPathAgnostically } from '../definitions/Utils';
 import { PATH_STRING, PATH_TYPE, get as getFromStore, getSymbol, init as initStore, set } from '../settings';
 
 export const DIR_NONE = Symbol('none'),
@@ -23,28 +24,6 @@ const openDialogOptions: OpenDialogOptions = {
   title: 'Select your Dwarf Fortress install Directory',
 };
 
-/**
- * Helper function to turn the path from a drag and dropped file or the manually selected save folder
- * into an array of directories. This is done pretty crudely, it splits the path based on `/` unless if
- * finds `\` in the path, then it spits by `\`.
- *
- * @param path - path to split
- * @returns array of directories
- */
-function splitPathAgnostically(path: string): string[] {
-  if (!path) {
-    console.debug('Caught an empty path length');
-    return [];
-  }
-  let pathDelineation = '/';
-  if (path.indexOf('\\') !== -1) {
-    pathDelineation = '\\';
-  }
-  const pathArr = path.split(pathDelineation);
-  console.debug(`Path delineated to [${pathArr.join(', ')}]`);
-  return pathArr;
-}
-
 export const [DirectoryProvider, useDirectoryProvider] = createContextProvider(() => {
   // Signal to open the directory open dialog, change to true to open it
   const [activateManualDirectorySelection, setManualDirectorySelection] = createSignal(false);
@@ -53,15 +32,7 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
 
   // Array to just hold recently selected directories and our evaluations of them
   const [directoryHistory, setDirectoryHistory] = createSignal<DirectorySelection[]>([]);
-  // Helper function to promote an index from directoryHistory to first
-  const promoteDirectoryFromHistory = (index: number) => {
-    if (index > directoryHistory().length) {
-      return;
-    }
-    const [promoted] = directoryHistory().splice(index, 1);
 
-    setDirectoryHistory([promoted, ...directoryHistory()]);
-  };
   // Helper accessor for 'current' directory
   const currentDirectory = createMemo(() => {
     if (directoryHistory().length === 0) {
@@ -70,7 +41,7 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
         type: DIR_NONE,
       };
     }
-
+    console.info(`Current directory ${directoryHistory()[0].path.join('/')}`);
     return directoryHistory()[0];
   });
 
@@ -185,7 +156,5 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   return {
     activateManualDirectorySelection: setManualDirectorySelection,
     currentDirectory,
-    directoryHistory,
-    promoteDirectoryFromHistory,
   };
 });

@@ -36,15 +36,16 @@ export const SimplifyVolume = (volume_cm3: number): string => {
  * @returns String in Title Case
  */
 export const toTitleCase = (str: string): string => {
-  if (str.length <= 1) {
-    return str.toUpperCase();
+  if (typeof str !== 'string') {
+    return '';
   }
 
   // Support strings with spaces, and make our title case very title-y
   if (/\s/.test(str)) {
     return str
-      .split(' ')
-      .map((s) => `${s[0].toUpperCase()}${s.slice(1).toLowerCase()}`)
+      .split(/\s/)
+      .filter((s) => s.length > 0)
+      .map((s) => (s.length > 1 ? `${s[0].toUpperCase()}${s.slice(1).toLowerCase()}` : s.toUpperCase()))
       .join(' ');
   }
 
@@ -187,7 +188,7 @@ const IgnoredSearchTerms = [
   'they',
   'their',
   'with',
-]
+];
 
 export function TransformIntoSearchTermString(searchableTerms: string[]): string {
   const alphaNormalizedTerms = searchableTerms
@@ -200,4 +201,26 @@ export function TransformIntoSearchTermString(searchableTerms: string[]): string
   const uniqueSearchTerms = [...new Set(alphaNormalizedTerms)];
 
   return uniqueSearchTerms.join(' ');
+}
+
+/**
+ * Helper function to turn the path from a drag and dropped file or the manually selected save folder
+ * into an array of directories. This is done pretty crudely, it splits the path based on `/` unless if
+ * finds `\` in the path, then it spits by `\`.
+ *
+ * @param path - path to split
+ * @returns array of directories
+ */
+export function splitPathAgnostically(path: string): string[] {
+  if (!path) {
+    console.debug('Caught an empty path length');
+    return [];
+  }
+  let pathDelineation = '/';
+  if (path.indexOf('\\') !== -1) {
+    pathDelineation = '\\';
+  }
+  const pathArr = path.split(pathDelineation);
+  console.debug(`Path delineated to [${pathArr.join(', ')}]`);
+  return pathArr;
 }

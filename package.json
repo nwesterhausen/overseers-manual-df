@@ -42,8 +42,8 @@
     "vite-plugin-solid": "^2.5.0"
   },
   "dependencies": {
-    "@lyrasearch/lyra": "^0.4.0",
     "@tauri-apps/api": "1.2.0",
+    "minisearch": "^6.0.0",
     "solid-js": "^1.6.6"
   },
   "prettier": {

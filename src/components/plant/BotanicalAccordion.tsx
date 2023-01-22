@@ -1,4 +1,4 @@
-import { Button, Card, Modal, Stack } from 'solid-bootstrap';
+import { Accordion, Button, Card, Modal, Stack } from 'solid-bootstrap';
 import { Component, createSignal } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { DFPlant } from '../../definitions/types';
@@ -20,7 +20,7 @@ import PlantProvidesList from './PlantProvidesList';
  * @param props - Contains the creature to render details for.
  * @returns Component of creature data for a listing.
  */
-const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
+const BotanicalAccordion: Component<{ plant: DFPlant }> = (props) => {
   const title = toTitleCase(props.plant.name);
 
   const [showDescription, setShowDescription] = createSignal(false);
@@ -33,25 +33,30 @@ const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
 
   return (
     <>
-      <Card.Body>
+      <Accordion.Header>
+        <div class='container-fluid'>
+          <span class='accordion-title'>{title}</span>
+        </div>
+      </Accordion.Header>
+      <Accordion.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Subtitle>{props.plant.moduleDisplayName}</Card.Subtitle>
         <Card.Text>
           <PlantProvidesList plant={props.plant} />
         </Card.Text>
-      </Card.Body>
-      <Card.Footer>
-        <Stack gap={2}>
-          <Button variant='primary' size='sm' onClick={handleOpenDescription}>
-            Show All Details
-          </Button>
-          <a
-            onClick={handleOpenRawDetails}
-            class='text-center text-decoration-none fw-light text-muted indicate-clickable'>
-            See Raw Info
-          </a>
-        </Stack>
-      </Card.Footer>
+        <Card.Footer>
+          <Stack gap={2}>
+            <Button variant='primary' size='sm' onClick={handleOpenDescription}>
+              Show All Details
+            </Button>
+            <a
+              onClick={handleOpenRawDetails}
+              class='text-center text-decoration-none fw-light text-muted indicate-clickable'>
+              See Raw Info
+            </a>
+          </Stack>
+        </Card.Footer>
+      </Accordion.Body>
 
       {/* Include modal for "Show All Details" */}
       <Modal
@@ -94,4 +99,4 @@ const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
   );
 };
 
-export default BotanicalCard;
+export default BotanicalAccordion;

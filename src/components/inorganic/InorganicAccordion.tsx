@@ -1,4 +1,4 @@
-import { Button, Card, Modal, Stack } from 'solid-bootstrap';
+import { Accordion, Button, Card, Modal, Stack } from 'solid-bootstrap';
 import { Component, For, createSignal } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { DFInorganic } from '../../definitions/types';
@@ -19,7 +19,7 @@ import InorganicDescriptionTable from './InorganicDescriptionTable';
  * @param props - Contains the creature to render details for.
  * @returns Component of creature data for a listing.
  */
-const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
+const InorganicAccordion: Component<{ inorganic: DFInorganic }> = (props) => {
   const title = toTitleCase(props.inorganic.name);
 
   const [showDescription, setShowDescription] = createSignal(false);
@@ -32,7 +32,12 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
 
   return (
     <>
-      <Card.Body>
+      <Accordion.Header>
+        <div class='container-fluid'>
+          <span class='accordion-title'>{title}</span>
+        </div>
+      </Accordion.Header>
+      <Accordion.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Subtitle>{props.inorganic.moduleDisplayName}</Card.Subtitle>
         <Card.Text>
@@ -74,19 +79,19 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
             </li>
           </ul>
         </Card.Text>
-      </Card.Body>
-      <Card.Footer>
-        <Stack gap={2}>
-          <Button variant='primary' size='sm' onClick={handleOpenDescription}>
-            Show All Details
-          </Button>
-          <a
-            onClick={handleOpenRawDetails}
-            class='text-center text-decoration-none fw-light text-muted indicate-clickable'>
-            See Raw Info
-          </a>
-        </Stack>
-      </Card.Footer>
+        <Card.Footer>
+          <Stack gap={2}>
+            <Button variant='primary' size='sm' onClick={handleOpenDescription}>
+              Show All Details
+            </Button>
+            <a
+              onClick={handleOpenRawDetails}
+              class='text-center text-decoration-none fw-light text-muted indicate-clickable'>
+              See Raw Info
+            </a>
+          </Stack>
+        </Card.Footer>
+      </Accordion.Body>
 
       {/* Include modal for "Show All Details" */}
       <Modal
@@ -129,4 +134,4 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
   );
 };
 
-export default InorganicCard;
+export default InorganicAccordion;

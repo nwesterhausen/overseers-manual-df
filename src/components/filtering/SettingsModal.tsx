@@ -1,12 +1,15 @@
 import { getTauriVersion } from '@tauri-apps/api/app';
 import { Button, Form, Modal } from 'solid-bootstrap';
-import { Component, For, Show, createResource } from 'solid-js';
+import { Component, Show, createResource } from 'solid-js';
 import { useDirectoryProvider } from '../../providers/DirectoryProvider';
 import { useSettingsContext } from '../../providers/SettingsProvider';
 import { PATH_STRING, PATH_TYPE, clear } from '../../settings';
 
 const SettingsModal: Component = () => {
-  const [settings, { handleClose }] = useSettingsContext();
+  const [
+    settings,
+    { handleClose, toggleIncludeLocationInstalledMods, toggleIncludeLocationMods, toggleIncludeLocationVanilla },
+  ] = useSettingsContext();
   const directoryContext = useDirectoryProvider();
 
   const [appInfo] = createResource(
@@ -24,12 +27,11 @@ const SettingsModal: Component = () => {
       <Modal.Body class='settings-window'>
         <section>
           <legend>Parsing Options</legend>
-          <em>Note: not currently able to be changed.</em>
 
           <Form.Group controlId='settingsEnableVanilla'>
             <Form.Check
-              checked
-              disabled
+              checked={settings.includeLocationVanilla}
+              onClick={toggleIncludeLocationVanilla}
               type='checkbox'
               label={
                 <p>
@@ -41,8 +43,8 @@ const SettingsModal: Component = () => {
 
           <Form.Group controlId='settingsEnableInstalled'>
             <Form.Check
-              checked
-              disabled
+              checked={settings.includeLocationInstalledMods}
+              onClick={toggleIncludeLocationInstalledMods}
               type='checkbox'
               label={
                 <p>
@@ -53,8 +55,8 @@ const SettingsModal: Component = () => {
           </Form.Group>
           <Form.Group controlId='settingsEnableWorkshop'>
             <Form.Check
-              checked
-              disabled
+              checked={settings.includeLocationMods}
+              onClick={toggleIncludeLocationMods}
               type='checkbox'
               label={
                 <p>
@@ -69,38 +71,26 @@ const SettingsModal: Component = () => {
           <p>
             Current Dwarf Fortress Directory:{' '}
             <code>
-              <Show when={directoryContext.directoryHistory().length > 0} fallback='None set'>
+              <Show when={directoryContext.currentDirectory().path.length > 0} fallback='None set'>
                 {directoryContext.currentDirectory().path.join('/')}
               </Show>
             </code>
           </p>
-          <p>
-            <Show when={directoryContext.directoryHistory().length > 1} fallback={<em>No previous directories</em>}>
-              Previous directories:{' '}
-              <ul>
-                <For each={directoryContext.directoryHistory().slice(1, -1)}>
-                  {(dirSelection, index) => (
-                    <li>
-                      {dirSelection.path.join('/')}{' '}
-                      <Button
-                        onClick={() => directoryContext.promoteDirectoryFromHistory(index())}
-                        variant='outline-primary'>
-                        Promote
-                      </Button>
-                    </li>
-                  )}
-                </For>
-              </ul>
-            </Show>
-          </p>
         </section>
         <section>
           <legend>Stored Data</legend>
-          <p>The previous used Dwarf Fortress directory is saved in a file on disk to remember the next time you open this app.</p>
-          <Button variant='danger' onClick={async () => {
-            await clear(PATH_STRING);
-            await clear(PATH_TYPE);
-          }}>Clear All Stored Data</Button>
+          <p>
+            The previous used Dwarf Fortress directory is saved in a file on disk to remember the next time you open
+            this app.
+          </p>
+          <Button
+            variant='danger'
+            onClick={async () => {
+              await clear(PATH_STRING);
+              await clear(PATH_TYPE);
+            }}>
+            Clear All Stored Data
+          </Button>
         </section>
         <section>
           <legend>About</legend>

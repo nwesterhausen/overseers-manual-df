@@ -1,18 +1,18 @@
-import { GenerateMaterialSearchString } from "./Material";
-import { TransformIntoSearchTermString } from "./Utils";
-import { DFInorganic } from "./types";
+import { GenerateMaterialSearchString } from './Material';
+import { TransformIntoSearchTermString } from './Utils';
+import { DFInorganic } from './types';
 
 export function GenerateInorganicSearchString(inorganic: DFInorganic): string {
-    let searchableTerms = [...inorganic.name.split(' ')]; // add name
+  let searchableTerms = [...inorganic.name.split(' ')]; // add name
 
-    searchableTerms.push(GenerateMaterialSearchString(inorganic.material));
+  searchableTerms.push(GenerateMaterialSearchString(inorganic.material));
 
-    searchableTerms.push(inorganic.rawModule); // add sourced module
-    searchableTerms.push(...inorganic.allTags); // add all tags
+  searchableTerms.push(inorganic.rawModule); // add sourced module
+  searchableTerms.push(...inorganic.allTags); // add all tags
 
-    if (inorganic.magmaSafe) {
-        searchableTerms.push('magma-safe magma safe');
-    }
+  if (inorganic.magmaSafe) {
+    searchableTerms.push('magma-safe magma safe');
+  }
 
-    return TransformIntoSearchTermString(searchableTerms);
+  return TransformIntoSearchTermString(searchableTerms);
 }
