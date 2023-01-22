@@ -4,6 +4,7 @@ import { useRawsProvider } from '../providers/RawsProvider';
 import { useSettingsContext } from '../providers/SettingsProvider';
 import DynamicAccordion from './DynamicAccordion';
 import DynamicCard from './DynamicCard';
+import Pagination from './menu/Pagination';
 
 const Listings: Component = () => {
   const rawsContext = useRawsProvider();
@@ -11,6 +12,7 @@ const Listings: Component = () => {
 
   return (
     <>
+      <Pagination />
       <Show
         when={settings.displayStyleGrid}
         fallback={
@@ -30,6 +32,7 @@ const Listings: Component = () => {
           </For>
         </div>
       </Show>
+      <Pagination />
     </>
   );
 };

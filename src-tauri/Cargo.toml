@@ -15,13 +15,7 @@ rust-version = "1.57"
 tauri-build = { version = "1.2", features = [] }
 
 [dependencies]
-tauri = { version = "1.2", features = [
-    "dialog-open",
-    "fs-read-dir",
-    "protocol-asset",
-    "updater",
-    "window-set-title",
-] }
+tauri = { version = "1.2", features = ["dialog-open", "fs-read-dir", "protocol-asset", "updater", "window-set-title"] }
 log = "0.4.17"
 chrono = "0.4"
 
@@ -42,6 +36,10 @@ features = ["tauri"]
 # path = "../../dfraw_json_parser"
 
 [dependencies.tauri-plugin-log]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "dev"
+
+[dependencies.tauri-plugin-window-state]
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "dev"
 

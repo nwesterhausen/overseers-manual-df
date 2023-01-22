@@ -4,7 +4,6 @@
 )]
 
 use tauri_plugin_log::LogTarget;
-use tauri_plugin_store::PluginBuilder;
 
 // use tauri::{AppHandle, Runtime};
 // use fern::colors::{Color, ColoredLevelConfig};
@@ -64,7 +63,9 @@ fn main() {
 
     // Launch the app
     let app = tauri::Builder::default()
-        .plugin(PluginBuilder::default().build())
+        // Add simple storage plugin
+        .plugin(tauri_plugin_store::PluginBuilder::default().build())
+        // Add logging plugin
         .plugin(
             tauri_plugin_log::Builder::default()
                 .targets([LogTarget::LogDir, LogTarget::Stdout, LogTarget::Webview])
@@ -79,6 +80,8 @@ fn main() {
                 .level(log::LevelFilter::Info)
                 .build(),
         )
+        // Add remember window state plugin
+        .plugin(tauri_plugin_window_state::Builder::default().build())
         .invoke_handler(tauri::generate_handler![
             parse_all_raws,
             parse_raws_in_module_location,
