@@ -1,7 +1,7 @@
-import { create, insertBatch, search } from '@lyrasearch/lyra';
 import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
 import { appWindow } from '@tauri-apps/api/window';
+import MiniSearch from 'minisearch';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import { RawsOnlyWithTagsOrAll, RawsOnlyWithoutModules, UniqueSort } from '../definitions/Raw';
 import type { DFGraphic, DFInfoFile, DFTilePage, ProgressPayload, Raw, SpriteGraphic } from '../definitions/types';
@@ -27,16 +27,14 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const directoryContext = useDirectoryProvider();
   const searchContext = useSearchProvider();
 
-  const searchDatabase = create({
-    schema: {
-      identifier: 'string',
-      name: 'string',
-      parentRaw: 'string',
-      rawModule: 'string',
-      rawType: 'string',
-
-      // Added types for this app
-      searchString: 'string',
+  const searchDatabase = new MiniSearch({
+    idField: 'objectId',
+    fields: ['searchString', 'identifier', 'name'],
+    searchOptions: {
+      boost: {
+        name: 2,
+      },
+      fuzzy: true,
     },
   });
 
@@ -55,23 +53,52 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     },
   });
 
+  const [pageNum, setPageNum] = createSignal(1);
+  const [totalPages, setTotalPages] = createSignal(1);
+
+  const nextPage = () => {
+    if (pageNum() >= totalPages()) {
+      setPageNum(totalPages());
+    } else {
+      setPageNum(pageNum() + 1);
+    }
+  };
+  const prevPage = () => {
+    if (pageNum() <= 0) {
+      setPageNum(0);
+    } else {
+      setPageNum(pageNum() - 1);
+    }
+  };
+  const gotoPage = (page: number) => {
+    if (page > totalPages()) {
+      setPageNum(totalPages());
+    } else if (page <= 0) {
+      setPageNum(0);
+    } else {
+      setPageNum(page);
+    }
+  };
   // Resource for accessing the raws via search filtering
   const searchFilteredRaws = createMemo<Raw[]>(() => {
     console.log(loadRaws());
+    if (typeof parsedRaws.latest === 'undefined') {
+      return [];
+    }
 
-    const searchResult = search(searchDatabase, {
-      term: searchContext.searchString(),
-    });
+    let searchFiltered: Raw[] = parsedRaws.latest.objects;
+    if (searchContext.searchString().length !== 0) {
+      const searchResults = searchDatabase.search(searchContext.searchString());
 
-    const searchFiltered: Raw[] =
-      searchResult.count === 0
-        ? (Object.values(searchDatabase.docs) as Raw[])
-        : searchResult.hits.map((h) => h.document as Raw);
+      searchFiltered = parsedRaws.latest.objects.filter(
+        (r) => searchResults.map((v) => v.id).indexOf(r.objectId) !== -1
+      );
+    }
 
     const moduleFiltered = RawsOnlyWithoutModules(searchFiltered, searchContext.filteredModules());
     const tagFiltered = RawsOnlyWithTagsOrAll(moduleFiltered, searchContext.requiredTags());
 
-    return tagFiltered
+    const finalResult = tagFiltered
       .filter((r) => {
         if (searchContext.requireCreature() && r.rawType === 'Creature') {
           return true;
@@ -84,8 +111,15 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         }
         return false;
       })
-      .sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1))
-      .slice(0, MAX_RESULTS);
+      .sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1));
+
+    setTotalPages(Math.ceil(finalResult.length / MAX_RESULTS));
+    console.log({ MAX_RESULTS, total: finalResult.length, pages: totalPages() });
+    if (pageNum() > totalPages()) {
+      setPageNum(totalPages());
+    }
+    const firstResult = pageNum() === 1 ? 0 : pageNum() * MAX_RESULTS;
+    return finalResult.slice(firstResult, firstResult + MAX_RESULTS);
   });
 
   // Resource for raws info files
@@ -197,7 +231,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         setParsingStatus(STS_IDLE);
       }
 
-      insertBatch(searchDatabase, sortResult);
+      searchDatabase
+        .addAllAsync(sortResult)
+        .then(() => console.log('Finished indexing raws into search database.'))
+        .catch(console.error);
       // Reset the trigger after 50ms
       setTimeout(() => {
         setLoadRaws(false);
@@ -250,11 +287,11 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     const sprite = graphic.graphics.find(
       (v) =>
         v.primaryCondition === 'Default' ||
-        v.primaryCondition === 'None' ||
         v.primaryCondition === 'Shrub' ||
         v.primaryCondition === 'Crop' ||
         v.primaryCondition === 'Picked' ||
-        v.primaryCondition === 'Seed'
+        v.primaryCondition === 'Seed' ||
+        v.primaryCondition === 'None'
     );
     if (typeof sprite === 'undefined') {
       return undefined;
@@ -283,5 +320,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     searchFilteredRaws,
     tryGetGraphicFor,
     allGraphicsFor,
+    nextPage,
+    prevPage,
+    pageNum,
+    totalPages,
+    gotoPage,
   };
 });
