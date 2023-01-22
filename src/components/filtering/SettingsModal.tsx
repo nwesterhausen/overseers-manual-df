@@ -6,7 +6,10 @@ import { useSettingsContext } from '../../providers/SettingsProvider';
 import { PATH_STRING, PATH_TYPE, clear } from '../../settings';
 
 const SettingsModal: Component = () => {
-  const [settings, { handleClose }] = useSettingsContext();
+  const [
+    settings,
+    { handleClose, toggleIncludeLocationInstalledMods, toggleIncludeLocationMods, toggleIncludeLocationVanilla },
+  ] = useSettingsContext();
   const directoryContext = useDirectoryProvider();
 
   const [appInfo] = createResource(
@@ -24,12 +27,11 @@ const SettingsModal: Component = () => {
       <Modal.Body class='settings-window'>
         <section>
           <legend>Parsing Options</legend>
-          <em>Note: not currently able to be changed.</em>
 
           <Form.Group controlId='settingsEnableVanilla'>
             <Form.Check
-              checked
-              disabled
+              checked={settings.includeLocationVanilla}
+              onClick={toggleIncludeLocationVanilla}
               type='checkbox'
               label={
                 <p>
@@ -41,8 +43,8 @@ const SettingsModal: Component = () => {
 
           <Form.Group controlId='settingsEnableInstalled'>
             <Form.Check
-              checked
-              disabled
+              checked={settings.includeLocationInstalledMods}
+              onClick={toggleIncludeLocationInstalledMods}
               type='checkbox'
               label={
                 <p>
@@ -53,8 +55,8 @@ const SettingsModal: Component = () => {
           </Form.Group>
           <Form.Group controlId='settingsEnableWorkshop'>
             <Form.Check
-              checked
-              disabled
+              checked={settings.includeLocationMods}
+              onClick={toggleIncludeLocationMods}
               type='checkbox'
               label={
                 <p>
