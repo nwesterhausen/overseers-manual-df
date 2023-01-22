@@ -1,6 +1,6 @@
 import { getTauriVersion } from '@tauri-apps/api/app';
 import { Button, Form, Modal } from 'solid-bootstrap';
-import { Component, For, Show, createResource } from 'solid-js';
+import { Component, Show, createResource } from 'solid-js';
 import { useDirectoryProvider } from '../../providers/DirectoryProvider';
 import { useSettingsContext } from '../../providers/SettingsProvider';
 import { PATH_STRING, PATH_TYPE, clear } from '../../settings';
@@ -71,29 +71,10 @@ const SettingsModal: Component = () => {
           <p>
             Current Dwarf Fortress Directory:{' '}
             <code>
-              <Show when={directoryContext.directoryHistory().length > 0} fallback='None set'>
+              <Show when={directoryContext.currentDirectory().path.length > 0} fallback='None set'>
                 {directoryContext.currentDirectory().path.join('/')}
               </Show>
             </code>
-          </p>
-          <p>
-            <Show when={directoryContext.directoryHistory().length > 1} fallback={<em>No previous directories</em>}>
-              Previous directories:{' '}
-              <ul>
-                <For each={directoryContext.directoryHistory().slice(1, -1)}>
-                  {(dirSelection, index) => (
-                    <li>
-                      {dirSelection.path.join('/')}{' '}
-                      <Button
-                        onClick={() => directoryContext.promoteDirectoryFromHistory(index())}
-                        variant='outline-primary'>
-                        Promote
-                      </Button>
-                    </li>
-                  )}
-                </For>
-              </ul>
-            </Show>
           </p>
         </section>
         <section>

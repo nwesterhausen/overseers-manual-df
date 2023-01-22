@@ -173,7 +173,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   // Signal no set directory
   createEffect(() => {
-    if (directoryContext.directoryHistory().length === 0) {
+    if (directoryContext.currentDirectory().type !== DIR_DF) {
       setParsingStatus(STS_EMPTY);
     } else {
       setLoadRaws(true);
@@ -184,6 +184,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     // Don't parse when set as DIR_NONE
     if (directoryContext.currentDirectory().type === DIR_NONE) {
       console.info('Skipped parsing because directory type is DIR_NONE');
+      setTotalPages(1);
+      setPageNum(1);
       // Reset the trigger after 50ms
       setTimeout(() => {
         setLoadRaws(false);
@@ -257,6 +259,9 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         setParsingStatus(STS_IDLE);
       }
 
+      // Empty search database
+      searchDatabase.removeAll();
+      // Add to database
       searchDatabase
         .addAllAsync(sortResult)
         .then(() => console.log('Finished indexing raws into search database.'))
@@ -285,6 +290,11 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   }
 
   async function parseRawsInfo(): Promise<DFInfoFile[]> {
+    // Don't parse when set as DIR_NONE
+    if (directoryContext.currentDirectory().type === DIR_NONE) {
+      console.info('Skipped parsing module infos because directory type is DIR_NONE');
+      return [];
+    }
     const dir = directoryContext.currentDirectory().path.join('/');
 
     try {

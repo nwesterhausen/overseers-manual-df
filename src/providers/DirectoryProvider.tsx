@@ -32,15 +32,7 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
 
   // Array to just hold recently selected directories and our evaluations of them
   const [directoryHistory, setDirectoryHistory] = createSignal<DirectorySelection[]>([]);
-  // Helper function to promote an index from directoryHistory to first
-  const promoteDirectoryFromHistory = (index: number) => {
-    if (index > directoryHistory().length) {
-      return;
-    }
-    const [promoted] = directoryHistory().splice(index, 1);
 
-    setDirectoryHistory([promoted, ...directoryHistory()]);
-  };
   // Helper accessor for 'current' directory
   const currentDirectory = createMemo(() => {
     if (directoryHistory().length === 0) {
@@ -49,7 +41,7 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
         type: DIR_NONE,
       };
     }
-
+    console.info(`Current directory ${directoryHistory()[0].path.join('/')}`);
     return directoryHistory()[0];
   });
 
@@ -164,7 +156,5 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   return {
     activateManualDirectorySelection: setManualDirectorySelection,
     currentDirectory,
-    directoryHistory,
-    promoteDirectoryFromHistory,
   };
 });
