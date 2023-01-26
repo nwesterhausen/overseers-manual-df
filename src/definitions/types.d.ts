@@ -202,3 +202,18 @@ export type DFTilePage = {
   tileDim: Dimensions;
   pageDim: Dimensions;
 } & Raw;
+
+export type AnnouncementFlag =
+  | 'AdventureDisplay'
+  | 'DwarfDisplay'
+  | 'DoMega'
+  | 'Alert'
+  | 'Pause'
+  | 'Recenter'
+  | 'UnitCombatReport'
+  | 'UnitCombatReportAllActive';
+
+export type DFAnnouncement = {
+  key: string;
+  flags: AnnouncementFlag[];
+};

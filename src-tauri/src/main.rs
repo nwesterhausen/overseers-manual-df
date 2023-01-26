@@ -42,6 +42,17 @@ fn parse_all_raws_info(path: &str) -> String {
     dfraw_json_parser::parse_info_txt_in_game_dir(&path)
 }
 
+#[tauri::command]
+/// Passthru to parse announcement.txt files at game path
+fn parse_announcements_txt(path: &str) -> String {
+    dfraw_json_parser::parse_announcements_txt(&path)
+}
+#[tauri::command]
+/// Passthru to save modified announcements txt file
+fn write_announcements_txt(json_bundle: &str, out_path: &str) {
+    dfraw_json_parser::write_announcements_txt_from_json(&out_path, json_bundle);
+}
+
 // #[tauri::command]
 // /// Passthru to parse all info.txt files at location
 // fn parse_raws_info_in_location(path: &str) -> String {
@@ -86,6 +97,8 @@ fn main() {
             parse_all_raws,
             parse_raws_in_module_location,
             parse_all_raws_info,
+            parse_announcements_txt,
+            write_announcements_txt,
         ])
         .run(tauri::generate_context!());
 
