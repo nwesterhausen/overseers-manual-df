@@ -1,3 +1,10 @@
+## [0.23.4](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.3...v0.23.4) (2023-01-26)
+
+
+### Bug Fixes
+
+* 🔥 remove single tag button (does nothing currently) ([4374c63](https://github.com/nwesterhausen/overseers-manual-df/commit/4374c6356371ebec9e2dae8b18bc0b206773b60b))
+
 ## [0.23.3](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.2...v0.23.3) (2023-01-26)
 
 
