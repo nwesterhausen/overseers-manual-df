@@ -19,6 +19,7 @@ export type Raw = {
   searchString: string;
   rawModuleParents?: string[];
   allTags?: string[];
+  resultScore?: number;
 };
 
 export type BodySizeRange = {
