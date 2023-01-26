@@ -9,7 +9,6 @@ import RawTypeCheckboxes from './RawTypeCheckboxes';
 import ReloadRawsButton from './ReloadRawsButton';
 import SearchBox from './SearchBox';
 import SetDirectoryButton from './SetDirectoryButton';
-import TagRestrictionButton from './TagRestrictionButton';
 import ThemeChangeButton from './ThemeChangeButton';
 
 const MenuBar: Component = () => {
@@ -30,7 +29,7 @@ const MenuBar: Component = () => {
         <div class='hstack p-2'>
           <SearchBox disabled={disableButtons()} />
           <RawTypeCheckboxes disabled={disableButtons()} />
-          <TagRestrictionButton disabled={disableButtons()} />
+          {/* <TagRestrictionButton disabled={disableButtons()} /> */}
           <AdvancedFiltersButton disabled={disableButtons()} />
         </div>
 
