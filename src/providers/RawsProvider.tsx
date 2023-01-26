@@ -31,12 +31,17 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   const searchDatabase = new MiniSearch({
     idField: 'objectId',
-    fields: ['searchString', 'identifier', 'name'],
+    fields: ['name', 'searchString', 'identifier'],
     searchOptions: {
       boost: {
         name: 2,
       },
-      fuzzy: true,
+      fuzzy: false,
+      prefix: true,
+      weights: {
+        prefix: 2,
+        fuzzy: 1,
+      },
     },
   });
 
@@ -66,8 +71,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     }
   };
   const prevPage = () => {
-    if (pageNum() <= 0) {
-      setPageNum(0);
+    if (pageNum() < 1) {
+      setPageNum(1);
     } else {
       setPageNum(pageNum() - 1);
     }
@@ -91,32 +96,65 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       return [];
     }
 
-    let searchFiltered: Raw[] = parsedRaws.latest.objects;
-    if (searchContext.searchString().length !== 0) {
+    // Reset
+    parsedRaws.latest.objects.forEach((r) => {
+      r.resultScore = undefined;
+    });
+
+    let searchFiltered: Raw[] = [];
+    // check if there was something searched for, if there isn't then return all.
+    // otherwise, perform a search and assign resultScore to sort results.
+    if (searchContext.searchString().length === 0) {
+      searchFiltered = parsedRaws.latest.objects;
+    } else {
       const searchResults = searchDatabase.search(searchContext.searchString());
 
-      searchFiltered = parsedRaws.latest.objects.filter(
-        (r) => searchResults.map((v) => v.id).indexOf(r.objectId) !== -1
-      );
+      searchResults.forEach((result) => {
+        const matchingRaw = parsedRaws.latest.objects.find((r) => r.objectId === result.id);
+        if (typeof matchingRaw === 'undefined') {
+          return;
+        }
+        if (typeof result.score !== 'number') {
+          return;
+        }
+        matchingRaw.resultScore = result.score;
+        searchFiltered.push(matchingRaw);
+      });
     }
 
     const moduleFiltered = RawsOnlyWithoutModules(searchFiltered, searchContext.filteredModules());
     const tagFiltered = RawsOnlyWithTagsOrAll(moduleFiltered, searchContext.requiredTags());
 
-    const finalResult = tagFiltered
-      .filter((r) => {
-        if (searchContext.requireCreature() && r.rawType === 'Creature') {
-          return true;
-        }
-        if (searchContext.requirePlant() && r.rawType === 'Plant') {
-          return true;
-        }
-        if (searchContext.requireInorganic() && r.rawType === 'Inorganic') {
-          return true;
-        }
+    const finalResult = tagFiltered.filter((raw, idx, self) => {
+      if (!(self.findIndex((v) => v.identifier === raw.identifier) === idx)) {
         return false;
-      })
-      .sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1));
+      }
+      if (searchContext.requireCreature() && raw.rawType === 'Creature') {
+        return true;
+      }
+      if (searchContext.requirePlant() && raw.rawType === 'Plant') {
+        return true;
+      }
+      if (searchContext.requireInorganic() && raw.rawType === 'Inorganic') {
+        return true;
+      }
+      return false;
+    });
+
+    if (searchContext.searchString().length === 0) {
+      finalResult.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1));
+    } else {
+      finalResult.sort((a, b) => {
+        if (typeof a.resultScore !== 'number') {
+          return 1;
+        }
+
+        if (typeof b.resultScore !== 'number') {
+          return -1;
+        }
+        return a.resultScore > b.resultScore ? -1 : 1;
+      });
+    }
 
     setTotalPages(Math.floor(finalResult.length / MAX_RESULTS));
     console.log({
@@ -124,10 +162,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       total: finalResult.length,
       pages: totalPages(),
     });
-    if (pageNum() > totalPages()) {
-      setPageNum(totalPages());
-    }
-    const firstResult = pageNum() === 1 ? 0 : pageNum() * MAX_RESULTS;
+
+    const firstResult = (pageNum() - 1) * MAX_RESULTS;
     return finalResult.slice(firstResult, firstResult + MAX_RESULTS);
   });
 
