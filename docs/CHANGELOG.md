@@ -1,3 +1,11 @@
+## [0.23.3](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.2...v0.23.3) (2023-01-26)
+
+
+### Bug Fixes
+
+* ⚡️ greatly improve search result accuracy ([a39fdd1](https://github.com/nwesterhausen/overseers-manual-df/commit/a39fdd154bb1e59314c54d3d62c78db03a4a6991))
+* 🐛 pagination accuracy fixed ([a192307](https://github.com/nwesterhausen/overseers-manual-df/commit/a192307cdb9ba05c1df79a3c0995941cd29814d3))
+
 ## [0.23.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.1...v0.23.2) (2023-01-25)
 
 
