@@ -1,3 +1,10 @@
+## [0.23.5](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.4...v0.23.5) (2023-01-27)
+
+
+### Bug Fixes
+
+* ⬆️ fix tauri-plugin-store dependency repo ([e618e4c](https://github.com/nwesterhausen/overseers-manual-df/commit/e618e4c00c9c071e7fa719cb8098815fdd69edfd))
+
 ## [0.23.4](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.3...v0.23.4) (2023-01-26)
 
 
