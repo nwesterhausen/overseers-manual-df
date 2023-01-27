@@ -64,7 +64,7 @@ fn main() {
     // Launch the app
     let app = tauri::Builder::default()
         // Add simple storage plugin
-        .plugin(tauri_plugin_store::PluginBuilder::default().build())
+        .plugin(tauri_plugin_store::Builder::default().build())
         // Add logging plugin
         .plugin(
             tauri_plugin_log::Builder::default()
