@@ -6,7 +6,7 @@ specifiers:
   '@semantic-release/commit-analyzer': ^9.0.2
   '@semantic-release/git': ^10.0.1
   '@semantic-release/npm': ^9.0.1
-  '@solid-primitives/context': ^0.1.2
+  '@solid-primitives/context': ^0.2.0
   '@solid-primitives/scheduled': ^1.2.0
   '@tauri-apps/api': 1.2.0
   '@tauri-apps/cli': 1.2.3
@@ -40,7 +40,7 @@ devDependencies:
   '@semantic-release/commit-analyzer': 9.0.2_semantic-release@20.0.2
   '@semantic-release/git': 10.0.1_semantic-release@20.0.2
   '@semantic-release/npm': 9.0.1_semantic-release@20.0.2
-  '@solid-primitives/context': 0.1.2_solid-js@1.6.8
+  '@solid-primitives/context': 0.2.0_solid-js@1.6.8
   '@solid-primitives/scheduled': 1.2.0_solid-js@1.6.8
   '@tauri-apps/cli': 1.2.3
   '@types/node': 18.11.18
@@ -952,10 +952,10 @@ packages:
       - supports-color
     dev: true
 
-  /@solid-primitives/context/0.1.2_solid-js@1.6.8:
-    resolution: {integrity: sha512-kYnP08rKHgZA7O9azK8Bqo7yzN+2Fh8PHsftsghSAN6MVbH0soTSaBz+Cwx7jsVOJ7X3FRNjTEGIlvq97vfGyw==}
+  /@solid-primitives/context/0.2.0_solid-js@1.6.8:
+    resolution: {integrity: sha512-oYa9Ew5OYJK24c80c7vH8vy2rYa2mrif6IjXIc2TJFjDoNddJDw/u6A8zMCS2IA7D0TuPlYKV+LazY4uJuJTuA==}
     peerDependencies:
-      solid-js: ^1.5.0
+      solid-js: ^1.6.0
     dependencies:
       solid-js: 1.6.8
     dev: true
