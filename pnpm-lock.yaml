@@ -13,7 +13,7 @@ specifiers:
   '@types/node': ^18.11.17
   '@typescript-eslint/eslint-plugin': ^5.47.0
   '@typescript-eslint/parser': ^5.47.0
-  bootstrap: v5.3.0-alpha1
+  bootstrap: 5.3.0-alpha2
   bootswatch: ^5.2.3
   conventional-changelog-conventionalcommits: ^5.0.0
   eslint: ^8.30.0
@@ -46,7 +46,7 @@ devDependencies:
   '@types/node': 18.11.18
   '@typescript-eslint/eslint-plugin': 5.48.0_k73wpmdolxikpyqun3p36akaaq
   '@typescript-eslint/parser': 5.48.0_iukboom6ndih5an6iafl45j2fe
-  bootstrap: 5.3.0-alpha1_@popperjs+core@2.11.6
+  bootstrap: 5.3.0-alpha2_@popperjs+core@2.11.6
   bootswatch: 5.2.3
   conventional-changelog-conventionalcommits: 5.0.0
   eslint: 8.31.0
@@ -1378,8 +1378,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /bootstrap/5.3.0-alpha1_@popperjs+core@2.11.6:
-    resolution: {integrity: sha512-ABZpKK4ObS3kKlIqH+ZVDqoy5t/bhFG0oHTAzByUdon7YIom0lpCeTqRniDzJmbtcWkNe800VVPBiJgxSYTYew==}
+  /bootstrap/5.3.0-alpha2_@popperjs+core@2.11.6:
+    resolution: {integrity: sha512-r1ayh5d56rhwrezVjhM8bt8tiUcdQ8J9JeCwCTAeKSpOrCWH5V5S6XiJ26DqbX7o5QSH5HIKm7W88CKxVjhCVQ==}
     peerDependencies:
       '@popperjs/core': ^2.11.6
     dependencies:
