@@ -1,3 +1,10 @@
+## [0.23.7](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.6...v0.23.7) (2023-05-28)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate log to 0.4.18 ([6876b5f](https://github.com/nwesterhausen/overseers-manual-df/commit/6876b5f9e38613b0094b58364f3f55da540fccc9))
+
 ## [0.23.6](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.5...v0.23.6) (2023-05-04)
 
 
