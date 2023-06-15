@@ -1,3 +1,10 @@
+## [0.23.10](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.9...v0.23.10) (2023-06-15)
+
+
+### Bug Fixes
+
+* pnpm-lock with latest pnpm ([0eedc46](https://github.com/nwesterhausen/overseers-manual-df/commit/0eedc46ea18319f22a024e5d08f5c39e8a1515a9))
+
 ## [0.23.9](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.8...v0.23.9) (2023-06-15)
 
 
