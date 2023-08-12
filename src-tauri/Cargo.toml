@@ -22,7 +22,7 @@ tauri = { version = "1.4", features = [
     "updater",
     "window-set-title",
 ] }
-log = "0.4.19"
+log = "0.4.20"
 chrono = "0.4"
 
 # [dependencies.fern]
