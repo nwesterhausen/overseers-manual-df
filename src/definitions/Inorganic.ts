@@ -3,7 +3,7 @@ import { TransformIntoSearchTermString } from './Utils';
 import { DFInorganic } from './types';
 
 export function GenerateInorganicSearchString(inorganic: DFInorganic): string {
-  let searchableTerms = [...inorganic.name.split(' ')]; // add name
+  const searchableTerms = [...inorganic.name.split(' ')]; // add name
 
   searchableTerms.push(GenerateMaterialSearchString(inorganic.material));
 
