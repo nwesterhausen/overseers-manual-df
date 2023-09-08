@@ -3,6 +3,7 @@
   font-weight: bold;
   margin: 0;
   padding: 0.23rem;
+  border-radius: 4px;
 }
 
 .listing-card {
@@ -44,10 +45,6 @@
   width: calc(100vw);
 }
 
-.main {
-  margin-top: 3.5rem;
-}
-
 .offcanvas {
   --bs-offcanvas-width: 500px;
 }
@@ -61,32 +58,32 @@
   height: 20px;
   width: 20px;
   border-radius: 10px;
-  background: linear-gradient(
-      45deg,
+  background: linear-gradient(45deg,
       rgba(0, 0, 0, 0) 0%,
       rgba(0, 0, 0, 0) 43%,
       #000 45%,
       #000 55%,
       rgba(0, 0, 0, 0) 57%,
-      rgba(0, 0, 0, 0) 100%
-    ),
+      rgba(0, 0, 0, 0) 100%),
     linear-gradient(135deg, transparent 0%, transparent 43%, #000 45%, #000 55%, transparent 57%, transparent 100%);
 }
 
-label > p {
+label>p {
   margin-bottom: 0;
 }
 
-.settings-window > section {
+.settings-window>section {
   margin-bottom: 1rem;
 }
 
 .accordion-title {
   font-size: 1.125rem;
+
   &::first-letter {
     text-shadow: 0 0 2px var(--bs-dark-text);
   }
 }
+
 .accordion-description {
   white-space: nowrap;
   overflow: hidden;
@@ -98,9 +95,11 @@ label > p {
 
 .progress-details {
   padding-left: 1rem;
+
   .col {
     padding-top: 0.25rem;
     padding-left: 1rem;
+
     .badge {
       font-size: 0.6rem;
       color: var(--bs-gray-900);

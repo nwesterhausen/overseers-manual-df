@@ -1,6 +1,5 @@
 import { getVersion } from '@tauri-apps/api/app';
 import { appWindow } from '@tauri-apps/api/window';
-import { Container } from 'solid-bootstrap';
 import { Component, createEffect, createMemo, createResource } from 'solid-js';
 import DFDirectoryNotSet from './components/DFDirectoryNotSet';
 import Listings from './components/Listings';
@@ -41,11 +40,13 @@ const App: Component = () => {
   return (
     <>
       <MenuBar />
-      <Container class='p-2 main' fluid>
-        <ParsingProgressBar />
-        <LoadingRawsProgress />
+      <div class='px-2 main'>
+        <div class='flex justify-center'>
+          <ParsingProgressBar />
+          <LoadingRawsProgress />
+        </div>
         {contentToDisplay() ? <Listings /> : <DFDirectoryNotSet />}
-      </Container>
+      </div>
       <ScrollToTopBtn />
       <SearchFilters />
       <SettingsModal />

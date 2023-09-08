@@ -1,4 +1,3 @@
-import { Button, Stack } from 'solid-bootstrap';
 import { Component } from 'solid-js';
 import { useDirectoryProvider } from '../providers/DirectoryProvider';
 
@@ -6,7 +5,7 @@ const DFDirectoryNotSet: Component = () => {
   const directoryContext = useDirectoryProvider();
 
   return (
-    <Stack gap={2}>
+    <div class='join join-vertical gap-4'>
       <h2>No valid path is set!</h2>
       <p>
         To set the path to your Dwarf Fortress game, drag and drop the <code>gamelog.txt</code> file from the dwarf
@@ -17,16 +16,16 @@ const DFDirectoryNotSet: Component = () => {
         the equivalent of <code>data/saves</code> from the Dwarf Fortress directory (where each subdirectory of the
         chosen directory is a save file).
       </p>
-      <Stack class='p-3' direction='horizontal' gap={3}>
-        <Button
-          variant='primary'
+      <div class='join gap-3 p-3'>
+        <button
+          class='btn btn-primary'
           onClick={() => {
             directoryContext.activateManualDirectorySelection(true);
           }}>
           Set Directory
-        </Button>
-      </Stack>
-    </Stack>
+        </button>
+      </div>
+    </div>
   );
 };
 
