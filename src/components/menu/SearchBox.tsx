@@ -6,10 +6,10 @@ const SearchBox: Component<{ disabled: boolean }> = (props) => {
   const searchContext = useSearchProvider();
 
   return (
-    <div>
+    <div class='form-control'>
       <input
         disabled={props.disabled}
-        class='form-control'
+        class='input input-sm'
         id='search-box'
         type='search'
         placeholder='Type here to search'

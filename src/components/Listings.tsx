@@ -13,7 +13,7 @@ const Listings: Component = () => {
   return (
     <Show
       when={rawsContext.parsingStatus() === STS_IDLE && rawsContext.searchFilteredRaws().length > 0}
-      fallback={<div class='my-5 text-center fst-italic text-muted'>No results</div>}>
+      fallback={<div class='my-5 text-center text-neutral-700'>No results</div>}>
       <Pagination />
       <Show
         when={settings.displayStyleGrid}
@@ -22,7 +22,7 @@ const Listings: Component = () => {
             <For each={rawsContext.searchFilteredRaws()}>{(raw) => <DynamicAccordion raw={raw} />}</For>
           </Accordion>
         }>
-        <div class='row justify-content-center gap-3'>
+        <div class='flex flex-wrap justify-center gap-4'>
           <For each={rawsContext.searchFilteredRaws()}>{(raw) => <DynamicCard raw={raw} />}</For>
         </div>
       </Show>

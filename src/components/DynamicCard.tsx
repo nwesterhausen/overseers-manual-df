@@ -1,4 +1,3 @@
-import { Card } from 'solid-bootstrap';
 import { Component, Match, Switch } from 'solid-js';
 import { Creature, DFInorganic, DFPlant, Raw } from '../definitions/types';
 import SpriteImage from './SpriteImage';
@@ -10,7 +9,7 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
   const listingId = props.raw.objectId + 'listing';
 
   return (
-    <Card class='listing-card' id={listingId}>
+    <div class='card card-compact w-72 bg-neutral/25' id={listingId}>
       <SpriteImage identifier={props.raw.identifier} />
       <Switch fallback={<p>No match for {props.raw.rawType}</p>}>
         <Match when={props.raw.rawType === 'Plant'}>
@@ -23,7 +22,7 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
           <InorganicCard inorganic={props.raw as DFInorganic} />
         </Match>
       </Switch>
-    </Card>
+    </div>
   );
 };
 
