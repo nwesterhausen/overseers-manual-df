@@ -18,7 +18,7 @@ const SettingsModal: Component = () => {
 
       return ' ' + tauriVersion;
     },
-    { initialValue: '' }
+    { initialValue: '' },
   );
 
   return (
@@ -95,7 +95,7 @@ const SettingsModal: Component = () => {
         <section>
           <legend>About</legend>
           <p>
-            This app was made with Tauri{appInfo} and SolidJS. The parsing is accomplished with the{' '}
+            This app was made with Tauri v{appInfo.latest} and SolidJS. The parsing is accomplished with the{' '}
             <code>dfraw_json_parser</code> library.
           </p>
         </section>
