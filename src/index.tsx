@@ -1,6 +1,6 @@
 /* @refresh reload */
 import { render } from 'solid-js/web';
-import './sass/main.scss';
+// import './sass/main.scss';
 
 import App from './App';
 import { DirectoryProvider } from './providers/DirectoryProvider';
@@ -23,5 +23,5 @@ render(
       </ThemeProvider>
     </SettingsProvider>
   ),
-  document.getElementById('root') as HTMLElement
+  document.getElementById('root') as HTMLElement,
 );
