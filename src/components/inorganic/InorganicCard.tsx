@@ -1,5 +1,5 @@
-import { Button, Card, Modal, Stack } from 'solid-bootstrap';
-import { Component, For, createSignal } from 'solid-js';
+import { Card, Modal } from 'solid-bootstrap';
+import { Component, For } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { DFInorganic } from '../../definitions/types';
 import RawJsonTable from '../raws/RawsDetailTable';
@@ -22,18 +22,10 @@ import InorganicDescriptionTable from './InorganicDescriptionTable';
 const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
   const title = toTitleCase(props.inorganic.name);
 
-  const [showDescription, setShowDescription] = createSignal(false);
-  const handleOpenDescription = () => setShowDescription(true);
-  const handleCloseDescription = () => setShowDescription(false);
-
-  const [showRawDetails, setShowRawDetails] = createSignal(false);
-  const handleOpenRawDetails = () => setShowRawDetails(true);
-  const handleCloseRawDetails = () => setShowRawDetails(false);
-
   return (
     <>
-      <Card.Body>
-        <Card.Title>{title}</Card.Title>
+      <div class='card-body'>
+        <div class='card-title'>{title}</div>
         <Card.Subtitle>{props.inorganic.moduleDisplayName}</Card.Subtitle>
         <Card.Text>
           Some simple details:
@@ -74,57 +66,53 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
             </li>
           </ul>
         </Card.Text>
-      </Card.Body>
-      <Card.Footer>
-        <Stack gap={2}>
-          <Button variant='primary' size='sm' onClick={handleOpenDescription}>
-            Show All Details
-          </Button>
-          <a
-            onClick={handleOpenRawDetails}
-            class='text-center text-decoration-none fw-light text-muted indicate-clickable'>
-            See Raw Info
-          </a>
-        </Stack>
-      </Card.Footer>
+      </div>
+      <div class='card-actions'>
+        <button
+          class='btn btn-primary btn-sm'
+          onClick={() => {
+            const dialog = document.getElementById(`${props.inorganic.objectId}-details`) as HTMLDialogElement;
+            dialog?.showModal();
+          }}>
+          Show All Details
+        </button>
+        <button
+          onClick={() => {
+            const dialog = document.getElementById(`${props.inorganic.objectId}-raws`) as HTMLDialogElement;
+            dialog?.showModal();
+          }}
+          class='btn btn-sm btn-ghost'>
+          See Raw Info
+        </button>
+      </div>
 
       {/* Include modal for "Show All Details" */}
-      <Modal
-        dialogClass='modal90w'
-        id={`${props.inorganic.objectId}-details`}
-        show={showDescription()}
-        onHide={handleCloseDescription}>
+      <dialog class='modal' id={`${props.inorganic.objectId}-details`}>
+        <div class='modal-box w-11/12 max-w-5xl'></div>
         <Modal.Header closeButton>
           <Modal.Title>{title} Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <InorganicDescriptionTable inorganic={props.inorganic} />
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant='secondary' onClick={handleCloseDescription}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        <form method='dialog' class='modal-backdrop'>
+          <button>close</button>
+        </form>
+      </dialog>
 
       {/* Include modal for "See Raw Info" */}
-      <Modal
-        dialogClass='modal90w'
-        id={`${props.inorganic.objectId}-raws`}
-        show={showRawDetails()}
-        onHide={handleCloseRawDetails}>
+      <dialog class='modal' id={`${props.inorganic.objectId}-raws`}>
+        <div class='modal-box w-11/12 max-w-5xl'></div>
         <Modal.Header closeButton>
           <Modal.Title>{title} Raws</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <RawJsonTable item={props.inorganic} />
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant='secondary' onClick={handleCloseRawDetails}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        <form method='dialog' class='modal-backdrop'>
+          <button>close</button>
+        </form>
+      </dialog>
     </>
   );
 };

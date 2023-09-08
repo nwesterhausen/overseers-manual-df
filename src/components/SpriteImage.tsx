@@ -81,7 +81,9 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
   });
   return (
     <Show when={currentSettings.displayGraphics && spriteDetails().graphicFilePath.length > 0}>
-      <div class='sprite-image' data-parsed={JSON.stringify(spriteDetails())}>
+      <div
+        class='border-2 rounded-lg border-accent absolute top-2 right-2 bg-black/50'
+        data-parsed={JSON.stringify(spriteDetails())}>
         <div
           style={{
             width: `${dimX()}px`,

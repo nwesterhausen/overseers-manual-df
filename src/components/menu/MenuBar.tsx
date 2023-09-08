@@ -9,7 +9,6 @@ import RawTypeCheckboxes from './RawTypeCheckboxes';
 import ReloadRawsButton from './ReloadRawsButton';
 import SearchBox from './SearchBox';
 import SetDirectoryButton from './SetDirectoryButton';
-import ThemeChangeButton from './ThemeChangeButton';
 
 const MenuBar: Component = () => {
   const rawsContext = useRawsProvider();
@@ -18,28 +17,34 @@ const MenuBar: Component = () => {
 
   return (
     <>
-      <div class='hstack gap-2 px-2 menu-bar'>
+      <div class='navbar'>
         <div class='me-auto'>
-          <SetDirectoryButton
-            disabled={rawsContext.parsingStatus() === STS_PARSING && rawsContext.parsingStatus() === STS_LOADING}
-          />
-          <ReloadRawsButton disabled={disableButtons()} />
+          <div class='join'>
+            <SetDirectoryButton
+              disabled={rawsContext.parsingStatus() === STS_PARSING && rawsContext.parsingStatus() === STS_LOADING}
+            />
+            <ReloadRawsButton disabled={disableButtons()} />
+          </div>
         </div>
 
-        <div class='hstack p-2'>
-          <SearchBox disabled={disableButtons()} />
-          <RawTypeCheckboxes disabled={disableButtons()} />
-          {/* <TagRestrictionButton disabled={disableButtons()} /> */}
-          <AdvancedFiltersButton disabled={disableButtons()} />
+        <div class='mx-auto'>
+          <div class='join'>
+            <SearchBox disabled={disableButtons()} />
+            <RawTypeCheckboxes disabled={disableButtons()} />
+            {/* <TagRestrictionButton disabled={disableButtons()} /> */}
+            <AdvancedFiltersButton disabled={disableButtons()} />
+          </div>
         </div>
 
         <div class='ms-auto'>
-          <GraphicsToggleButton disabled={disableButtons()} />
-          <DisplayStyleButton disabled={disableButtons()} />
-          <GameReferenceButton disabled={disableButtons()} />
+          <div class='join'>
+            <GraphicsToggleButton disabled={disableButtons()} />
+            <DisplayStyleButton disabled={disableButtons()} />
+            <GameReferenceButton disabled={disableButtons()} />
 
-          <ThemeChangeButton />
-          <OpenSettingsButton />
+            {/* <ThemeChangeButton /> */}
+            <OpenSettingsButton />
+          </div>
         </div>
       </div>
     </>

@@ -1,6 +1,5 @@
-import { Button, OverlayTrigger, Tooltip } from 'solid-bootstrap';
-import { Component, createEffect, createSignal } from 'solid-js';
 import { HiSolidChevronDoubleUp } from 'solid-icons/hi';
+import { Component, createEffect, createSignal } from 'solid-js';
 
 const ScrollToTopBtn: Component = () => {
   const [isVisible, setIsVisible] = createSignal(false);
@@ -14,18 +13,17 @@ const ScrollToTopBtn: Component = () => {
     return () => window.removeEventListener('scroll', listenToScroll);
   });
   return (
-    <div class='position-fixed top-0 end-0 me-1 mt-1'>
+    <div class='fixed top-0 end-0 me-1 mt-1'>
       {isVisible() ? (
-        <OverlayTrigger placement='left' overlay={<Tooltip id='scrolltop-tooltip'>Scroll to Top</Tooltip>}>
-          <Button
-            size='sm'
+        <div class='tooltip tooltip-left' data-tip='Scroll to Top'>
+          <button
+            class='btn btn-circle btn-secondary btn-sm'
             onClick={() => {
               window.scrollTo(0, 0);
-            }}
-            variant='outline-secondary'>
+            }}>
             <HiSolidChevronDoubleUp />
-          </Button>
-        </OverlayTrigger>
+          </button>
+        </div>
       ) : (
         ''
       )}

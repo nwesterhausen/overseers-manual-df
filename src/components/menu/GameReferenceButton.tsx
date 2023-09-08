@@ -1,26 +1,33 @@
-import { Button, Modal, OverlayTrigger, Tooltip } from 'solid-bootstrap';
 import { IoHelpCircleSharp } from 'solid-icons/io';
-import { Component, createSignal } from 'solid-js';
+import { Component } from 'solid-js';
 import ZoneOverview from '../quickReference/ZoneOverview';
 
 const GameReferenceButton: Component<{ disabled: boolean }> = (props) => {
-  const [showHelp, setShowHelp] = createSignal(false);
-  const handleCloseHelp = () => setShowHelp(false);
-  const handleOpenHelp = () => setShowHelp(true);
   return (
     <>
-      <OverlayTrigger placement='auto' overlay={<Tooltip>Quick Reference</Tooltip>}>
-        <Button disabled={props.disabled} class='border-0 p-1' variant='outline-secondary' onClick={handleOpenHelp}>
+      <div class='tooltip tooltip-left' data-tip='Open Quick Game Reference'>
+        <button
+          classList={{ disabled: props.disabled }}
+          class='btn btn-sm btn-circle btn-ghost fill-secondary'
+          onClick={() => {
+            const dialog = document.getElementById('_game-ref-dialog') as HTMLDialogElement;
+            dialog?.showModal();
+          }}>
           <IoHelpCircleSharp size={'1.5rem'} />
-        </Button>
-      </OverlayTrigger>
+        </button>
+      </div>
 
-      <Modal fullscreen onHide={handleCloseHelp} show={showHelp()}>
-        <Modal.Header closeButton>Quick Game Reference</Modal.Header>
-        <Modal.Body class='px-3'>
-          <ZoneOverview />
-        </Modal.Body>
-      </Modal>
+      <dialog id='_game-ref-dialog' class='modal'>
+        <div class='modal-box modal90w'>
+          <h3 class='font-bold text-lg'>Quick Game Reference</h3>
+          <p class='py-4'>
+            <ZoneOverview />
+          </p>
+        </div>
+        <form method='dialog' class='modal-backdrop'>
+          <button>close</button>
+        </form>
+      </dialog>
     </>
   );
 };

@@ -1,4 +1,3 @@
-import { ProgressBar } from 'solid-bootstrap';
 import { Component, Show, createMemo } from 'solid-js';
 import { STS_PARSING, useRawsProvider } from '../providers/RawsProvider';
 
@@ -12,9 +11,13 @@ const ParsingProgressBar: Component = () => {
   });
   return (
     <Show when={rawsContext.parsingStatus() === STS_PARSING}>
-      <div class='justify-content-center d-flex vstack'>
-        <div class='mt-3 gap-3 vstack'>
-          <ProgressBar now={percentage()} animated />
+      <div class='w-4/6'>
+        <div class='mt-3 gap-4 join'>
+          <div
+            class='radial-progress bg-primary text-primary-content border-4 border-primary'
+            style={`--value:${percentage()};`}>
+            {percentage()}%
+          </div>
           <div class='row progress-details'>
             <div class='col-auto'>
               <span class='badge bg-primary'>Location</span> {rawsContext.parsingProgress().currentLocation}
