@@ -207,7 +207,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         const progress = payload as ProgressPayload;
         setParsingProgress(progress);
         console.debug(payload);
-      }
+      },
     )
     .then(() => {
       console.log('Listening for progress updates from backend.');
@@ -355,7 +355,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   const tryGetGraphicFor = (identifier: string): { graphic: SpriteGraphic; tilePage: DFTilePage } | undefined => {
     const graphic = parsedRaws.latest.graphics.find(
-      (v) => v.targetIdentifier.toLowerCase() === identifier.toLowerCase()
+      (v) => v.targetIdentifier.toLowerCase() === identifier.toLowerCase(),
     );
     if (typeof graphic === 'undefined') {
       return undefined;
@@ -370,13 +370,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         v.primaryCondition === 'Crop' ||
         v.primaryCondition === 'Picked' ||
         v.primaryCondition === 'Seed' ||
-        v.primaryCondition === 'None'
+        v.primaryCondition === 'None',
     );
     if (typeof sprite === 'undefined') {
       return undefined;
     }
     const tilePage = parsedRaws.latest.tilePages.find(
-      (v) => v.identifier.toLowerCase() === sprite.tilePageId.toLowerCase()
+      (v) => v.identifier.toLowerCase() === sprite.tilePageId.toLowerCase(),
     );
     if (typeof tilePage === 'undefined') {
       return undefined;

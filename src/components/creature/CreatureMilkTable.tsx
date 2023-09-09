@@ -1,4 +1,3 @@
-import { Table } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { CasteRange, MilkableDesc } from '../../definitions/types';
@@ -6,7 +5,7 @@ import type { CasteRange, MilkableDesc } from '../../definitions/types';
 const CreatureMilkTable: Component<{ values: CasteRange<MilkableDesc>; fallbackDesc: string }> = (props) => {
   const values = props.values;
   return (
-    <Table class='m-0 p-0' size='sm' borderless>
+    <table class='table table-xs'>
       <tbody>
         <For each={Object.keys(values)} fallback={<p>{props.fallbackDesc}</p>}>
           {(caste) => (
@@ -19,7 +18,7 @@ const CreatureMilkTable: Component<{ values: CasteRange<MilkableDesc>; fallbackD
           )}
         </For>
       </tbody>
-    </Table>
+    </table>
   );
 };
 

@@ -18,7 +18,7 @@ type SettingsStore = [
     toggleIncludeLocationVanilla: () => void;
     toggleIncludeLocationMods: () => void;
     toggleIncludeLocationInstalledMods: () => void;
-  }
+  },
 ];
 
 const SettingsContext = createContext<SettingsStore>([

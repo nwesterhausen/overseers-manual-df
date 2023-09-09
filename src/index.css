@@ -1,13 +1,7 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-/* Custom tweaks to dark theme to make more "dwarfy" */
-@import './styles/_variables-dwarf';
-
-/* Import Our Custom Styles */
-@import './styles/animations';
-@import './styles/button-links';
-@import './styles/custom';
-@import './styles/modals';
-@import './styles/scrollbar';
+code {
+  font-family: 'Courier New', Courier, monospace;
+}

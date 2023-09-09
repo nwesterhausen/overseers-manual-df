@@ -33,7 +33,7 @@ export const RawsFirstLetters = (arr: Raw[]): string[] => {
           return v.name.charAt(0).toLowerCase();
         }
         return '';
-      })
+      }),
     ),
   ].sort();
 };

@@ -1,4 +1,3 @@
-import { Table } from 'solid-bootstrap';
 import { Component, For, Show } from 'solid-js';
 import { UndergroundDepthDescription } from '../../definitions/Creature';
 import { TickToCalendarConversion } from '../../definitions/Utils';
@@ -6,7 +5,7 @@ import { DFPlant } from '../../definitions/types';
 
 const PlantDescriptionTable: Component<{ plant: DFPlant }> = (props) => {
   return (
-    <Table>
+    <table class='table table-sm'>
       <tbody>
         <tr>
           <th>Likeable Features</th>
@@ -45,7 +44,7 @@ const PlantDescriptionTable: Component<{ plant: DFPlant }> = (props) => {
           <td>{props.plant.value}</td>
         </tr>
       </tbody>
-    </Table>
+    </table>
   );
 };
 
