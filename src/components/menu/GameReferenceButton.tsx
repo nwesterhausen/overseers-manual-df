@@ -18,11 +18,8 @@ const GameReferenceButton: Component<{ disabled: boolean }> = (props) => {
       </div>
 
       <dialog id='_game-ref-dialog' class='modal'>
-        <div class='modal-box modal90w'>
-          <h3 class='font-bold text-lg'>Quick Game Reference</h3>
-          <p class='py-4'>
-            <ZoneOverview />
-          </p>
+        <div class='modal-box w-11/12 max-w-5xl'>
+          <ZoneOverview />
         </div>
         <form method='dialog' class='modal-backdrop'>
           <button>close</button>
