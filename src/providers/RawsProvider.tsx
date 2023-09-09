@@ -45,11 +45,26 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     },
   });
 
+  // Signal for tracking number of mods
+  const [vanillaRawCount, setVanillaRawCount] = createSignal(0);
+  const [installedModRawCount, setInstalledModRawCount] = createSignal(0);
+  const [downloadedModRawCount, setDownloadedModRawCount] = createSignal(0);
+
   // Signal for setting raw parse status
   const [parsingStatus, setParsingStatus] = createSignal(STS_IDLE);
 
   // Signal for loading raws
   const [loadRaws, setLoadRaws] = createSignal(false);
+
+  // Provide "helper" for loading raws
+  function forceLoadRaws() {
+    // Reset total tracked number of raws when loading new ones
+    setVanillaRawCount(0);
+    setInstalledModRawCount(0);
+    setDownloadedModRawCount(0);
+    // Reset loadRaws
+    setLoadRaws(true);
+  }
 
   // Resource for raws (actually loads raws into the search database)
   const [parsedRaws] = createResource(loadRaws, parseRaws, {
@@ -253,7 +268,9 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         });
 
         await new Promise((resolve) => setTimeout(resolve, 1));
-        raw_file_data.push(await JSON.parse(raw_file_json_string));
+        const allVanillaRaws = JSON.parse(await raw_file_json_string);
+        setVanillaRawCount(allVanillaRaws.length);
+        raw_file_data.push(allVanillaRaws);
       }
       if (settings.includeLocationMods) {
         const raw_file_json_string: string = await invoke('parse_raws_in_module_location', {
@@ -263,6 +280,9 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
         await new Promise((resolve) => setTimeout(resolve, 1));
         raw_file_data.push(await JSON.parse(raw_file_json_string));
+        const allDownloadedMods = JSON.parse(await raw_file_json_string);
+        setDownloadedModRawCount(allDownloadedMods.length);
+        raw_file_data.push(allDownloadedMods);
       }
       if (settings.includeLocationInstalledMods) {
         const raw_file_json_string: string = await invoke('parse_raws_in_module_location', {
@@ -271,7 +291,9 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         });
 
         await new Promise((resolve) => setTimeout(resolve, 1));
-        raw_file_data.push(await JSON.parse(raw_file_json_string));
+        const allInstalledMods = JSON.parse(await raw_file_json_string);
+        setInstalledModRawCount(allInstalledMods.length);
+        raw_file_data.push(allInstalledMods);
       }
       setParsingStatus(STS_LOADING);
 
@@ -392,7 +414,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   return {
     parsingStatus,
-    setLoadRaws,
+    forceLoadRaws,
     parsingProgress,
     rawModulesInfo: allRawsInfosJsonArray,
     rawModules,
@@ -404,5 +426,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     pageNum,
     totalPages,
     gotoPage,
+    vanillaRawCount,
+    installedModRawCount,
+    downloadedModRawCount,
   };
 });
