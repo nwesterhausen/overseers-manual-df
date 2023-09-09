@@ -1,76 +1,71 @@
-import { getTauriVersion } from '@tauri-apps/api/app';
-import { Button, Form, Modal } from 'solid-bootstrap';
-import { Component, Show, createResource } from 'solid-js';
+import { Component, Show } from 'solid-js';
 import { useDirectoryProvider } from '../../providers/DirectoryProvider';
 import { useSettingsContext } from '../../providers/SettingsProvider';
 import { PATH_STRING, PATH_TYPE, clear } from '../../settings';
 
 const SettingsModal: Component = () => {
-  const [
-    settings,
-    { handleClose, toggleIncludeLocationInstalledMods, toggleIncludeLocationMods, toggleIncludeLocationVanilla },
-  ] = useSettingsContext();
+  const [settings, { toggleIncludeLocationInstalledMods, toggleIncludeLocationMods, toggleIncludeLocationVanilla }] =
+    useSettingsContext();
   const directoryContext = useDirectoryProvider();
 
-  const [appInfo] = createResource(
-    async (): Promise<string> => {
-      const tauriVersion = await getTauriVersion();
-
-      return ' ' + tauriVersion;
-    },
-    { initialValue: '' },
-  );
-
   return (
-    <Modal fullscreen onHide={handleClose} show={settings.show}>
-      <Modal.Header closeButton>Settings</Modal.Header>
-      <Modal.Body class='settings-window'>
+    <dialog class='modal' id='settingsModal'>
+      <div class='modal-box modal90w'>
+        <h3 class='font-bold text-lg'>Settings</h3>
         <section>
-          <legend>Parsing Options</legend>
-
-          <Form.Group controlId='settingsEnableVanilla'>
-            <Form.Check
-              checked={settings.includeLocationVanilla}
-              onClick={toggleIncludeLocationVanilla}
-              type='checkbox'
-              label={
-                <p>
+          <legend class='font-semibold font-md my-1'>Parsing Options</legend>
+          <div class='flex flex-col'>
+            <div class='form-control'>
+              <label class='cursor-pointer label'>
+                <span class='label-text'>
                   Parse vanilla raw modules from <code>$DF_DIR/data/vanilla</code>
-                </p>
-              }
-            />
-          </Form.Group>
+                </span>
+                <input
+                  type='checkbox'
+                  class='toggle toggle-primary'
+                  name='settingsEnableVanilla'
+                  checked={settings.includeLocationVanilla}
+                  onClick={toggleIncludeLocationVanilla}
+                />
+              </label>
+            </div>
 
-          <Form.Group controlId='settingsEnableInstalled'>
-            <Form.Check
-              checked={settings.includeLocationInstalledMods}
-              onClick={toggleIncludeLocationInstalledMods}
-              type='checkbox'
-              label={
-                <p>
+            <div class='form-control'>
+              <label class='cursor-pointer label'>
+                <span class='label-text'>
                   Parse installed raw modules from <code>$DF_DIR/data/installed_mods</code>
-                </p>
-              }
-            />
-          </Form.Group>
-          <Form.Group controlId='settingsEnableWorkshop'>
-            <Form.Check
-              checked={settings.includeLocationMods}
-              onClick={toggleIncludeLocationMods}
-              type='checkbox'
-              label={
-                <p>
+                </span>
+                <input
+                  type='checkbox'
+                  class='toggle toggle-primary'
+                  name='settingsEnableInstalled'
+                  checked={settings.includeLocationInstalledMods}
+                  onClick={toggleIncludeLocationInstalledMods}
+                />
+              </label>
+            </div>
+
+            <div class='form-control'>
+              <label class='cursor-pointer label'>
+                <span class='label-text'>
                   Parse workshop raw modules from <code>$DF_DIR/mods</code>
-                </p>
-              }
-            />
-          </Form.Group>
+                </span>
+                <input
+                  type='checkbox'
+                  class='toggle toggle-primary'
+                  name='settingsEnableWorkshop'
+                  checked={settings.includeLocationMods}
+                  onClick={toggleIncludeLocationMods}
+                />
+              </label>
+            </div>
+          </div>
         </section>
         <section>
-          <legend>Directories</legend>
-          <p>
+          <legend class='font-semibold font-md my-1'>Directories</legend>
+          <p class='my-2'>
             Current Dwarf Fortress Directory:{' '}
-            <code>
+            <code class='font-bold text-secondary'>
               <Show when={directoryContext.currentDirectory().path.length > 0} fallback='None set'>
                 {directoryContext.currentDirectory().path.join('/')}
               </Show>
@@ -78,29 +73,40 @@ const SettingsModal: Component = () => {
           </p>
         </section>
         <section>
-          <legend>Stored Data</legend>
-          <p>
-            The previous used Dwarf Fortress directory is saved in a file on disk to remember the next time you open
-            this app.
-          </p>
-          <Button
-            variant='danger'
-            onClick={async () => {
-              await clear(PATH_STRING);
-              await clear(PATH_TYPE);
-            }}>
-            Clear All Stored Data
-          </Button>
+          <legend class='font-semibold font-md my-1'>Stored Data</legend>
+          <div class='flex flex-row py-2'>
+            <p class='flex-1'>
+              The previous used Dwarf Fortress directory is saved in a file on disk to remember the next time you open
+              this app.
+            </p>
+            <button
+              class='btn btn-sm btn-error btn-outline self-center'
+              onClick={async () => {
+                await clear(PATH_STRING);
+                await clear(PATH_TYPE);
+              }}>
+              Clear All Stored Data
+            </button>
+          </div>
         </section>
         <section>
-          <legend>About</legend>
-          <p>
-            This app was made with Tauri v{appInfo.latest} and SolidJS. The parsing is accomplished with the{' '}
-            <code>dfraw_json_parser</code> library.
+          <legend class='font-semibold font-md my-1'>About</legend>
+          <p class='my-2'>This app was made with the following open source projects:</p>
+          <div class='join join-vertical gap-1'>
+            <div class='join-item'>Tauri</div>
+            <div class='join-item'>SolidJS</div>
+            <div class='join-item'>TailwindCSS</div>
+            <div class='join-item'>DaisyUI</div>
+          </div>
+          <p class='my-2'>
+            The parsing is accomplished with the <code>dfraw_json_parser</code> library.
           </p>
         </section>
-      </Modal.Body>
-    </Modal>
+      </div>
+      <form method='dialog' class='modal-backdrop'>
+        <button>close</button>
+      </form>
+    </dialog>
   );
 };
 

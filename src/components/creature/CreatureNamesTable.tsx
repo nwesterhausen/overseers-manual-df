@@ -1,4 +1,3 @@
-import { Table } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
 import { CleanName, toTitleCase } from '../../definitions/Utils';
 import type { CasteRange } from '../../definitions/types';
@@ -6,7 +5,7 @@ import type { CasteRange } from '../../definitions/types';
 const CreatureNamesTable: Component<{ names: CasteRange<string[]> }> = (props) => {
   const names = props.names;
   return (
-    <Table class='m-0 p-0' size='sm' borderless>
+    <table class='table table-xs'>
       <tbody>
         <For each={Object.keys(names)} fallback={<p>No name data.</p>}>
           {(caste) =>
@@ -26,7 +25,7 @@ const CreatureNamesTable: Component<{ names: CasteRange<string[]> }> = (props) =
           }
         </For>
       </tbody>
-    </Table>
+    </table>
   );
 };
 

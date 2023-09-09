@@ -1,4 +1,3 @@
-import { Card, Modal } from 'solid-bootstrap';
 import { Component, Show } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { Creature } from '../../definitions/types';
@@ -30,16 +29,16 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
     <>
       <div class='card-body'>
         <div class='card-title'>{title}</div>
-        <Card.Subtitle>{props.creature.moduleDisplayName}</Card.Subtitle>
-        <Card.Text>
+        <div class='text-muted italic text-xs'>{props.creature.moduleDisplayName}</div>
+        <div class='card-badges'>
+          <CreatureBadges creature={props.creature} />
+        </div>
+        <div>
           <Show
             when={Object.values(props.creature.descriptions).length > 0}
             fallback={<p class='text-muted fst-italic'>No description available.</p>}>
             {Object.values(props.creature.descriptions).join(' ')}
           </Show>
-        </Card.Text>
-        <div class='card-badges'>
-          <CreatureBadges creature={props.creature} />
         </div>
       </div>
       <div class='card-actions'>
@@ -64,12 +63,8 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
       {/* Include modal for "Show All Details" */}
       <dialog class='modal' id={`${props.creature.objectId}-details`}>
         <div class='modal-box w-11/12 max-w-5xl'>
-          <Modal.Header closeButton>
-            <Modal.Title>{title} Details</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <CreatureDescriptionTable creature={props.creature} />
-          </Modal.Body>
+          <h3 class='font-bold text-lg'>{title} Details</h3>
+          <CreatureDescriptionTable creature={props.creature} />
         </div>
         <form method='dialog' class='modal-backdrop'>
           <button>close</button>
@@ -79,12 +74,8 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
       {/* Include modal for "See Raw Info" */}
       <dialog class='modal' id={`${props.creature.objectId}-raws`}>
         <div class='modal-box w-11/12 max-w-5xl'>
-          <Modal.Header closeButton>
-            <Modal.Title>{title} Raws</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <RawJsonTable item={props.creature} />
-          </Modal.Body>
+          <h3 class='font-bold text-lg'>{title} Details</h3>
+          <RawJsonTable item={props.creature} />
         </div>
         <form method='dialog' class='modal-backdrop'>
           <button>close</button>

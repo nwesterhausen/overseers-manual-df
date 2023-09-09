@@ -1,4 +1,3 @@
-import { Card, Modal } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { DFInorganic } from '../../definitions/types';
@@ -26,10 +25,10 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
     <>
       <div class='card-body'>
         <div class='card-title'>{title}</div>
-        <Card.Subtitle>{props.inorganic.moduleDisplayName}</Card.Subtitle>
-        <Card.Text>
+        <div class='text-muted italic text-xs'>{props.inorganic.moduleDisplayName}</div>
+        <div>
           Some simple details:
-          <ul>
+          <ul class='list-disc list-inside'>
             <li>Color: {props.inorganic.material.colors.solid}</li>
             <li>Magma Safe: {props.inorganic.magmaSafe ? 'YES' : 'NO'}</li>
             <li>
@@ -65,7 +64,7 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
               )}
             </li>
           </ul>
-        </Card.Text>
+        </div>
       </div>
       <div class='card-actions'>
         <button
@@ -88,13 +87,10 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
 
       {/* Include modal for "Show All Details" */}
       <dialog class='modal' id={`${props.inorganic.objectId}-details`}>
-        <div class='modal-box w-11/12 max-w-5xl'></div>
-        <Modal.Header closeButton>
-          <Modal.Title>{title} Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+        <div class='modal-box w-11/12 max-w-5xl'>
+          <h3 class='font-bold text-lg'>{title} Details</h3>
           <InorganicDescriptionTable inorganic={props.inorganic} />
-        </Modal.Body>
+        </div>
         <form method='dialog' class='modal-backdrop'>
           <button>close</button>
         </form>
@@ -102,13 +98,10 @@ const InorganicCard: Component<{ inorganic: DFInorganic }> = (props) => {
 
       {/* Include modal for "See Raw Info" */}
       <dialog class='modal' id={`${props.inorganic.objectId}-raws`}>
-        <div class='modal-box w-11/12 max-w-5xl'></div>
-        <Modal.Header closeButton>
-          <Modal.Title>{title} Raws</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+        <div class='modal-box w-11/12 max-w-5xl'>
+          <h3 class='font-bold text-lg'>{title} Details</h3>
           <RawJsonTable item={props.inorganic} />
-        </Modal.Body>
+        </div>
         <form method='dialog' class='modal-backdrop'>
           <button>close</button>
         </form>

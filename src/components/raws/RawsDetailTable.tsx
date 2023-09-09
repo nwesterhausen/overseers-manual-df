@@ -1,4 +1,3 @@
-import { Table } from 'solid-bootstrap';
 import { Component } from 'solid-js';
 import { Raw } from '../../definitions/types';
 import { useRawsProvider } from '../../providers/RawsProvider';
@@ -7,7 +6,7 @@ const RawJsonTable: Component<{ item: Raw }> = (props) => {
   const rawsContext = useRawsProvider();
   return (
     <>
-      <Table>
+      <table class='table table-sm'>
         <tbody>
           <tr>
             <th>Identifier</th>
@@ -36,7 +35,7 @@ const RawJsonTable: Component<{ item: Raw }> = (props) => {
             </td>
           </tr>
         </tbody>
-      </Table>
+      </table>
     </>
   );
 };

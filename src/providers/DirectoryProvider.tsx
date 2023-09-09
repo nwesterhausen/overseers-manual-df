@@ -63,7 +63,7 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     },
     {
       initialValue: [],
-    }
+    },
   );
 
   // Listen for a file being dropped on the window to change the save location.
