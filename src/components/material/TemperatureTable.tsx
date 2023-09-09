@@ -1,10 +1,9 @@
-import { Table } from 'solid-bootstrap';
 import { Component, Show } from 'solid-js';
 import { SimpleMaterial } from '../../definitions/types';
 
 const TemperatureTable: Component<{ mat: SimpleMaterial }> = (props) => {
   return (
-    <Table>
+    <table class='table table-xs'>
       <Show when={props.mat.temperatures.ignitionPoint > 0}>
         <tr>
           <th>Ignition Point</th>
@@ -35,7 +34,7 @@ const TemperatureTable: Component<{ mat: SimpleMaterial }> = (props) => {
           <td>{props.mat.temperatures.heatDamagePoint}°U</td>
         </tr>
       </Show>
-    </Table>
+    </table>
   );
 };
 

@@ -107,8 +107,8 @@ export const EggLayingStatus = (creature: Creature): string => {
     if (size > 0) {
       ret.push(
         `${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutchSize[k].join(
-          ' - '
-        )} eggs with volume ${SimplifyVolume(size)}.`
+          ' - ',
+        )} eggs with volume ${SimplifyVolume(size)}.`,
       );
     } else {
       ret.push(`${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutchSize[k].join(' - ')} eggs.`);

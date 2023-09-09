@@ -1,4 +1,3 @@
-import { Card, Modal } from 'solid-bootstrap';
 import { Component } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { DFPlant } from '../../definitions/types';
@@ -26,11 +25,11 @@ const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
   return (
     <>
       <div class='card-body'>
-        <Card.Title>{title}</Card.Title>
-        <Card.Subtitle>{props.plant.moduleDisplayName}</Card.Subtitle>
-        <Card.Text>
+        <div class='card-title'>{title}</div>
+        <div class='text-muted italic text-xs'>{props.plant.moduleDisplayName}</div>
+        <div>
           <PlantProvidesList plant={props.plant} />
-        </Card.Text>
+        </div>
       </div>
       <div class='card-actions'>
         <button
@@ -54,12 +53,8 @@ const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
       {/* Include modal for "Show All Details" */}
       <dialog class='modal' id={`${props.plant.objectId}-details`}>
         <div class='modal-box w-11/12 max-w-5xl'>
-          <Modal.Header closeButton>
-            <Modal.Title>{title} Details</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <PlantDescriptionTable plant={props.plant} />
-          </Modal.Body>
+          <h3 class='font-bold text-lg'>{title} Details</h3>
+          <PlantDescriptionTable plant={props.plant} />
         </div>
         <form method='dialog' class='modal-backdrop'>
           <button>close</button>
@@ -69,12 +64,8 @@ const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
       {/* Include modal for "See Raw Info" */}
       <dialog class='modal' id={`${props.plant.objectId}-raws`}>
         <div class='modal-box w-11/12 max-w-5xl'>
-          <Modal.Header closeButton>
-            <Modal.Title>{title} Raws</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <RawJsonTable item={props.plant} />
-          </Modal.Body>
+          <h3 class='font-bold text-lg'>{title} Details</h3>
+          <RawJsonTable item={props.plant} />
         </div>
         <form method='dialog' class='modal-backdrop'>
           <button>close</button>

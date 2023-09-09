@@ -1,4 +1,3 @@
-import { Stack } from 'solid-bootstrap';
 import { Component, For } from 'solid-js';
 import { ActiveTimeStatus, NoSeasonStatus } from '../../definitions/Creature';
 import { toTitleCase } from '../../definitions/Utils';
@@ -9,14 +8,14 @@ const CreatureActivityDisplay: Component<{ creature: Creature }> = (props) => {
   const dayActivity = CondenseActiveTimes(props.creature.activeTime);
 
   return (
-    <Stack>
+    <div class='join join-vertical'>
       <For each={seasonActivity} fallback={<span>No known seasonal activity</span>}>
         {(activity) => <span>{activity}</span>}
       </For>
       <For each={dayActivity} fallback={<span>No known daily activity</span>}>
         {(activity) => <span>{activity}</span>}
       </For>
-    </Stack>
+    </div>
   );
 };
 

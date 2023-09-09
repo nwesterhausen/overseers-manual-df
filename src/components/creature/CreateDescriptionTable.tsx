@@ -1,4 +1,3 @@
-import { Table } from 'solid-bootstrap';
 import { Component } from 'solid-js';
 import {
   ClusterSizeStatus,
@@ -22,7 +21,7 @@ import CreatureNumberTable from './CreatureNumberTable';
 
 const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
   return (
-    <Table>
+    <table class='table table-sm'>
       <tbody>
         <tr>
           <th>Names</th>
@@ -131,7 +130,7 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
           </td>
         </tr>
       </tbody>
-    </Table>
+    </table>
   );
 };
 

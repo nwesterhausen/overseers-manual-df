@@ -88,9 +88,6 @@ devDependencies:
   semantic-release:
     specifier: ^21.1.1
     version: 21.1.1(typescript@5.2.2)
-  solid-bootstrap:
-    specifier: ^1.0.14
-    version: 1.0.14(solid-js@1.7.11)
   solid-icons:
     specifier: ^1.0.11
     version: 1.0.11(solid-js@1.7.11)
@@ -409,13 +406,6 @@ packages:
       '@babel/plugin-syntax-jsx': 7.22.5(@babel/core@7.22.15)
       '@babel/plugin-transform-modules-commonjs': 7.22.15(@babel/core@7.22.15)
       '@babel/plugin-transform-typescript': 7.22.15(@babel/core@7.22.15)
-    dev: true
-
-  /@babel/runtime@7.22.15:
-    resolution: {integrity: sha512-T0O+aa+4w0u06iNmapipJXMV4HoUir03hpx3/YqXXhu9xim3w+dVphjFWl1OH8NbZHw5Lbm9k45drDkgq2VNNA==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      regenerator-runtime: 0.14.0
     dev: true
 
   /@babel/template@7.22.15:
@@ -1913,13 +1903,6 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       esutils: 2.0.3
-    dev: true
-
-  /dom-helpers@5.2.1:
-    resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
-    dependencies:
-      '@babel/runtime': 7.22.15
-      csstype: 3.1.2
     dev: true
 
   /dot-prop@5.3.0:
@@ -3649,10 +3632,6 @@ packages:
       esprima: 4.0.1
     dev: true
 
-  /regenerator-runtime@0.14.0:
-    resolution: {integrity: sha512-srw17NI0TUWHuGa5CFGGmhfNIeja30WMBfbslPNhf6JrqQlLN5gcrvig1oqPxiVaXb0oW0XRKtH6Nngs5lKCIA==}
-    dev: true
-
   /registry-auth-token@5.0.2:
     resolution: {integrity: sha512-o/3ikDxtXaA59BmZuZrJZDJv8NMDGSj+6j6XaeBmHw8eY1i1qd9+6H+LjVvQXx3HN6aRCGa1cUdJ9RaJZUugnQ==}
     engines: {node: '>=14'}
@@ -3833,28 +3812,6 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /solid-bootstrap-core@1.0.13(solid-js@1.7.11):
-    resolution: {integrity: sha512-MFCMRGYTVTa4XYmotawHVzH6HvDK0or1zWzQLfQuXWY2U4bkjvZBQmUWecvQOIStbm9wPXkqz7WbF2okaMmBEQ==}
-    peerDependencies:
-      solid-js: '>=1.6.0'
-    dependencies:
-      '@popperjs/core': 2.11.8
-      dom-helpers: 5.2.1
-      solid-js: 1.7.11
-      solid-react-transition: 1.0.11(solid-js@1.7.11)
-    dev: true
-
-  /solid-bootstrap@1.0.14(solid-js@1.7.11):
-    resolution: {integrity: sha512-TrgtnF2WyX7nm7qvrZlLnMHfIjqF/gJl1ofcBwUUhD7DsHLmU+3l3K3jpwciBEavbaUsuNuOjrXouT6NLbnPlg==}
-    peerDependencies:
-      solid-js: '>=1.6.0'
-    dependencies:
-      dom-helpers: 5.2.1
-      solid-bootstrap-core: 1.0.13(solid-js@1.7.11)
-      solid-js: 1.7.11
-      solid-react-transition: 1.0.11(solid-js@1.7.11)
-    dev: true
-
   /solid-icons@1.0.11(solid-js@1.7.11):
     resolution: {integrity: sha512-shEL5Otrl73LPZukpanJKi6ISnQhpIvhqqAb8haKyCGrixHOYC6yGfNkSE7jpkKSikZ0rGtSMRiFETRrec2Uzw==}
     engines: {node: '>= 16'}
@@ -3869,14 +3826,6 @@ packages:
     dependencies:
       csstype: 3.1.2
       seroval: 0.5.1
-
-  /solid-react-transition@1.0.11(solid-js@1.7.11):
-    resolution: {integrity: sha512-YMT7z6sOupCicDtX19156vbVOm3vCIgjVhPTybR9gLKiIPrDB2NDVqnQk4kpNCDZTOwSjLTOyUQw0xJnXgDg2A==}
-    peerDependencies:
-      solid-js: '>=1.6.0'
-    dependencies:
-      solid-js: 1.7.11
-    dev: true
 
   /solid-refresh@0.5.3(solid-js@1.7.11):
     resolution: {integrity: sha512-Otg5it5sjOdZbQZJnvo99TEBAr6J7PQ5AubZLNU6szZzg3RQQ5MX04oteBIIGDs0y2Qv8aXKm9e44V8z+UnFdw==}

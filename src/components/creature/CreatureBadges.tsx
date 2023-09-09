@@ -1,4 +1,3 @@
-import { Stack } from 'solid-bootstrap';
 import { Component } from 'solid-js';
 import { CondensedEggSize, FirstPetValue, IsEggLayer } from '../../definitions/Creature';
 import { Creature } from '../../definitions/types';
@@ -7,7 +6,7 @@ import TwoPartBadge from '../TwoPartBadge';
 const CreatureBadges: Component<{ creature: Creature }> = (props) => {
   return (
     <div>
-      <Stack class='d-flex justify-content-center w-100' direction='horizontal' gap={1}>
+      <div class='flex justify-content-center w-100 gap-1'>
         {/* EGG BADGE */}
         {IsEggLayer(props.creature) ? (
           <TwoPartBadge bg='primary' name='Egg' value={'' + CondensedEggSize(props.creature.eggSizes)} />
@@ -59,7 +58,7 @@ const CreatureBadges: Component<{ creature: Creature }> = (props) => {
         ) : (
           <TwoPartBadge bg='primary' name='Civilized' value={''} />
         )}
-      </Stack>
+      </div>
     </div>
   );
 };

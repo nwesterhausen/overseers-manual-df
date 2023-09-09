@@ -1,4 +1,3 @@
-import { Table } from 'solid-bootstrap';
 import { Component } from 'solid-js';
 import { DFInfoFile } from '../../definitions/types';
 
@@ -7,7 +6,7 @@ const RawModuleInfoTable: Component<{ module: DFInfoFile }> = (props) => {
     return <></>;
   }
   return (
-    <Table>
+    <table class='table table-sm'>
       <tbody>
         <tr>
           <th>Name</th>
@@ -32,7 +31,7 @@ const RawModuleInfoTable: Component<{ module: DFInfoFile }> = (props) => {
           <td>{props.module.sourcedDirectory}</td>
         </tr>
       </tbody>
-    </Table>
+    </table>
   );
 };
 
