@@ -1,28 +1,20 @@
-import { Offcanvas, Tab, Tabs } from 'solid-bootstrap';
 import { Component } from 'solid-js';
-import { useSearchProvider } from '../../providers/SearchProvider';
 import RawModuleFilter from './RawModuleFilter';
 import TagIncludeFilter from './TagIncludeFilter';
 
 const SearchFilters: Component = () => {
-  const searchContext = useSearchProvider();
-
   return (
-    <Offcanvas show={searchContext.showAdvancedFilters()} onHide={searchContext.handleHideAdvancedFilters}>
-      <Offcanvas.Header closeButton>
-        <Offcanvas.Title>Additional Filtering Options</Offcanvas.Title>
-      </Offcanvas.Header>
-      <Offcanvas.Body>
-        <Tabs defaultActiveKey={'rawModules'}>
-          <Tab title='Raw Modules' eventKey={'rawModules'}>
-            <RawModuleFilter />
-          </Tab>
-          <Tab title='Tags' eventKey={'tags'}>
-            <TagIncludeFilter />
-          </Tab>
-        </Tabs>
-      </Offcanvas.Body>
-    </Offcanvas>
+    <dialog class='modal' id='searchFilterModal'>
+      <div class='modal-box'>
+        <h3 class='font-bold text-lg'>Additional Filtering Options</h3>
+        <p class='py-4'>Press ESC key or click outside to close</p>
+        <RawModuleFilter />
+        <TagIncludeFilter />
+      </div>
+      <form method='dialog' class='modal-backdrop'>
+        <button>close</button>
+      </form>
+    </dialog>
   );
 };
 
