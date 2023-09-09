@@ -9,7 +9,7 @@ const ReloadRawsButton: Component<{ disabled: boolean }> = (props) => {
       <button
         class='btn btn-sm btn-ghost btn-circle text-secondary'
         classList={{ disabled: props.disabled }}
-        onClick={() => rawsContext.setLoadRaws(true)}>
+        onClick={() => rawsContext.forceLoadRaws()}>
         <IoRefreshSharp size={'1.5rem'} />
       </button>
     </div>
