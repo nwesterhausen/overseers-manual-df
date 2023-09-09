@@ -1,7 +1,6 @@
 import { Component, createMemo } from 'solid-js';
 import { STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../../providers/RawsProvider';
 import AdvancedFiltersButton from './AdvancedFiltersButton';
-import DisplayStyleButton from './DisplayStyleButton';
 import GameReferenceButton from './GameReferenceButton';
 import GraphicsToggleButton from './GraphicsToggleButton';
 import OpenSettingsButton from './OpenSettingsButton';
@@ -39,7 +38,6 @@ const MenuBar: Component = () => {
         <div class='ms-auto'>
           <div class='join'>
             <GraphicsToggleButton disabled={disableButtons()} />
-            <DisplayStyleButton disabled={disableButtons()} />
             <GameReferenceButton disabled={disableButtons()} />
 
             {/* <ThemeChangeButton /> */}
