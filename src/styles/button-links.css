@@ -17,19 +17,15 @@
 
 /* Make the badge float in the top right corner of the button */
 .badge-dot {
-  background-color: var(--bs-info);
+  background-color: var(--bg-info);
   border-radius: 3px;
 
   padding: 3px 3px;
-
-  position: absolute;
-  /* Position the badge within the relatively positioned button */
-  top: 4px;
-  left: 2px;
 }
 
 .search-filters {
   animation: slide-down 0.4s ease;
+
   .hidden-away {
     animation: slide-up-away 0.4s ease;
   }
