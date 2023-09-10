@@ -16,7 +16,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@popperjs/core": "^2.11.8",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^10.0.4",
     "@semantic-release/git": "^10.0.1",
@@ -29,8 +28,6 @@
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "autoprefixer": "^10.4.15",
-    "bootstrap": "5.3.1",
-    "bootswatch": "^5.3.1",
     "conventional-changelog-conventionalcommits": "^7.0.1",
     "daisyui": "^3.7.3",
     "eslint": "^8.48.0",
