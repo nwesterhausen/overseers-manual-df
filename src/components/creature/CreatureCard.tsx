@@ -1,6 +1,7 @@
 import { Component, Show } from 'solid-js';
 import { toTitleCase } from '../../definitions/Utils';
 import type { Creature } from '../../definitions/types';
+import SpriteImage from '../SpriteImage';
 import RawJsonTable from '../raws/RawsDetailTable';
 import CreatureDescriptionTable from './CreateDescriptionTable';
 import CreatureBadges from './CreatureBadges';
@@ -28,8 +29,15 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
   return (
     <>
       <div class='card-body'>
-        <div class='card-title'>{title}</div>
-        <div class='text-muted italic text-xs'>{props.creature.moduleDisplayName}</div>
+        <div class='flex flex-row'>
+          <div class='flex-grow'>
+            <div class='card-title'>{title}</div>
+            <div class='text-muted italic text-xs'>{props.creature.moduleDisplayName}</div>
+          </div>
+          <div class='self-center'>
+            <SpriteImage identifier={props.creature.identifier} />
+          </div>
+        </div>
         <div class='card-badges'>
           <CreatureBadges creature={props.creature} />
         </div>

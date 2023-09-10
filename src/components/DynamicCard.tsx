@@ -1,6 +1,5 @@
 import { Component, Match, Switch } from 'solid-js';
 import { Creature, DFInorganic, DFPlant, Raw } from '../definitions/types';
-import SpriteImage from './SpriteImage';
 import CreatureCard from './creature/CreatureCard';
 import InorganicCard from './inorganic/InorganicCard';
 import BotanicalCard from './plant/BotanicalCard';
@@ -10,7 +9,6 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
 
   return (
     <div class='card card-compact w-72 bg-neutral/25' id={listingId}>
-      <SpriteImage identifier={props.raw.identifier} />
       <Switch fallback={<p>No match for {props.raw.rawType}</p>}>
         <Match when={props.raw.rawType === 'Plant'}>
           <BotanicalCard plant={props.raw as DFPlant} />
