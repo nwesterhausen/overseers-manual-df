@@ -8,6 +8,7 @@ import { useSettingsContext } from '../providers/SettingsProvider';
 
 export interface SpriteImageProps {
   identifier: string;
+  class?: string;
 }
 
 interface SpriteImageDetail {
@@ -82,7 +83,7 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
   return (
     <Show when={currentSettings.displayGraphics && spriteDetails().graphicFilePath.length > 0}>
       <div
-        class='border-2 rounded-lg border-accent absolute top-2 right-2 bg-black/50'
+        class={`border-2 rounded-lg border-accent bg-black/50 ${props.class}`}
         data-parsed={JSON.stringify(spriteDetails())}>
         <div
           style={{
