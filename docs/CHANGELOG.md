@@ -1,3 +1,27 @@
+## [0.24.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.11...v0.24.0) (2023-09-11)
+
+
+### Features
+
+* add daisyui ([719b2f5](https://github.com/nwesterhausen/overseers-manual-df/commit/719b2f5b459eb0a5ecd474b1584e78fa2774df55))
+* add tailwindcss and update lint ([4afb85b](https://github.com/nwesterhausen/overseers-manual-df/commit/4afb85becb532cdc10bde0ebf8acd75655f1af7d))
+* change most solid-bootstrap to daisyui ([5c65942](https://github.com/nwesterhausen/overseers-manual-df/commit/5c6594264ddd172a09f9a560bc19727a910821a1))
+* show totals as they are processed ([7ee9941](https://github.com/nwesterhausen/overseers-manual-df/commit/7ee9941bc9caff5ea232e38e703ea5acede0c36a))
+* switch to daisyui for other filtering ([3cab045](https://github.com/nwesterhausen/overseers-manual-df/commit/3cab0459781f6a9e99b8afde856a6706b139dec2))
+* update game quick reference to daisyUI ([efc04ed](https://github.com/nwesterhausen/overseers-manual-df/commit/efc04edc0b5612b71fa759aaa4bf1cbcbbde4f71))
+
+
+### Bug Fixes
+
+* correct layout of toggles in raw type dropdown ([4be48b7](https://github.com/nwesterhausen/overseers-manual-df/commit/4be48b710b38481082d06a5cbf5582dfb8a82e99))
+* images no longer overlap text ([889aaa6](https://github.com/nwesterhausen/overseers-manual-df/commit/889aaa66c8d84a1e57e60e43147fa3437515f80e))
+* pnpm-lock with latest pnpm ([9dc01f2](https://github.com/nwesterhausen/overseers-manual-df/commit/9dc01f279ded2d9ac864737ddabeee9facd7dd50))
+* reference resource with latest ([1e4612d](https://github.com/nwesterhausen/overseers-manual-df/commit/1e4612df33511528e51a855edd0fcbaa8c7e1bc9))
+* remove accordion display style (for now) ([efb53d2](https://github.com/nwesterhausen/overseers-manual-df/commit/efb53d29a8e675969fcaf6689fc6d617a8f97e21))
+* remove remaining unecessary deps ([d1b5325](https://github.com/nwesterhausen/overseers-manual-df/commit/d1b532570b1533cc253e5e3f9bda2d8b29d598a8))
+* remove solid-bootstrap ([54b99d8](https://github.com/nwesterhausen/overseers-manual-df/commit/54b99d89dcda079fea10d2f4d435f975cfcc143d))
+* update dependencies ([44d37cd](https://github.com/nwesterhausen/overseers-manual-df/commit/44d37cd91488718277abefa058b3db84224c6def))
+
 ## [0.23.11](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.10...v0.23.11) (2023-08-12)
 
 
