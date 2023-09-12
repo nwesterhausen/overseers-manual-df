@@ -21,10 +21,6 @@ Currently it will display (and let you search through):
 
 ![app-screenshot](docs/img/app_inuse.png)
 
-Also has an option to view the raws in an expandable list item form:
-
-![app-screenshot-listings](docs/img/app_inuse_listings.png)
-
 ## Usage
 
 When the app is started for the first time, it presents some instructions:
