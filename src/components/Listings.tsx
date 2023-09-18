@@ -10,8 +10,7 @@ const Listings: Component = () => {
     <Show
       when={rawsContext.parsingStatus() === STS_IDLE && rawsContext.searchFilteredRaws().length > 0}
       fallback={<div class='my-5 text-center text-neutral-700'>No results</div>}>
-      <Pagination />
-      <div class='flex flex-wrap justify-center gap-4'>
+      <div class='flex flex-wrap justify-center gap-4 mb-16'>
         <For each={rawsContext.searchFilteredRaws()}>{(raw) => <DynamicCard raw={raw} />}</For>
       </div>
       <Pagination />
