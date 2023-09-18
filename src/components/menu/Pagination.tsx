@@ -25,52 +25,54 @@ const Pagination: Component = () => {
   });
   return (
     <Show when={rawsContext.totalPages() > 1}>
-      <div class='my-4 flex justify-center'>
-        <div class='join'>
-          <button
-            class='join-item btn btn-xs'
-            classList={{ disabled: rawsContext.pageNum() === 0 }}
-            onClick={rawsContext.prevPage}>
-            «
-          </button>
-          <Show when={showFirstPageAndEllipses()}>
+      <div class='fixed bottom-0 w-full'>
+        <div class='flex justify-center my-2'>
+          <div class='join'>
             <button
               class='join-item btn btn-xs'
-              classList={{ 'btn-primary': rawsContext.pageNum() === 0 }}
-              onClick={() => rawsContext.gotoPage(1)}>
-              1
+              classList={{ disabled: rawsContext.pageNum() === 0 }}
+              onClick={rawsContext.prevPage}>
+              «
             </button>
-            <Show when={rawsContext.pageNum() > 6}>
-              <button class='join-item btn btn-xs btn-disabled'>...</button>
-            </Show>
-          </Show>
-          <For each={pageNumbers()}>
-            {(i) => (
+            <Show when={showFirstPageAndEllipses()}>
               <button
                 class='join-item btn btn-xs'
-                classList={{ 'btn-primary': rawsContext.pageNum() === i }}
-                onClick={() => rawsContext.gotoPage(i)}>
-                {i}
+                classList={{ 'btn-primary': rawsContext.pageNum() === 0 }}
+                onClick={() => rawsContext.gotoPage(1)}>
+                1
               </button>
-            )}
-          </For>
-          <Show when={showLastPageAndEllipses()}>
-            <Show when={pageNumbers()[pageNumbers().length - 1] + 1 < rawsContext.totalPages()}>
-              <button class='join-item btn btn-xs btn-disabled'>...</button>
+              <Show when={rawsContext.pageNum() > 6}>
+                <button class='join-item btn btn-xs btn-disabled'>...</button>
+              </Show>
+            </Show>
+            <For each={pageNumbers()}>
+              {(i) => (
+                <button
+                  class='join-item btn btn-xs'
+                  classList={{ 'btn-primary': rawsContext.pageNum() === i }}
+                  onClick={() => rawsContext.gotoPage(i)}>
+                  {i}
+                </button>
+              )}
+            </For>
+            <Show when={showLastPageAndEllipses()}>
+              <Show when={pageNumbers()[pageNumbers().length - 1] + 1 < rawsContext.totalPages()}>
+                <button class='join-item btn btn-xs btn-disabled'>...</button>
+              </Show>
+              <button
+                class='join-item btn btn-xs'
+                classList={{ disabled: rawsContext.pageNum() === rawsContext.totalPages() }}
+                onClick={() => rawsContext.gotoPage(rawsContext.totalPages())}>
+                {rawsContext.totalPages()}
+              </button>
             </Show>
             <button
               class='join-item btn btn-xs'
               classList={{ disabled: rawsContext.pageNum() === rawsContext.totalPages() }}
-              onClick={() => rawsContext.gotoPage(rawsContext.totalPages())}>
-              {rawsContext.totalPages()}
+              onClick={rawsContext.nextPage}>
+              »
             </button>
-          </Show>
-          <button
-            class='join-item btn btn-xs'
-            classList={{ disabled: rawsContext.pageNum() === rawsContext.totalPages() }}
-            onClick={rawsContext.nextPage}>
-            »
-          </button>
+          </div>
         </div>
       </div>
     </Show>
