@@ -4,6 +4,7 @@ import { createMemo, createSignal } from 'solid-js';
 export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
   // Signal for the search filter
   const [searchString, setSearchString] = createSignal('');
+  const active = createMemo(() => searchString().length > 0);
 
   const [requireCreature, setRequireCreature] = createSignal(true);
   const handleToggleRequireCreature = () => {
@@ -68,6 +69,7 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
   return {
     searchString,
     setSearchString,
+    active,
 
     advancedFiltering,
     // Advanced Filtering Display Handling
