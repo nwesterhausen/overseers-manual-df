@@ -1,5 +1,6 @@
-import { Component, createMemo } from 'solid-js';
+import { Component, Show, createMemo } from 'solid-js';
 import { STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../../providers/RawsProvider';
+import { useSearchProvider } from '../../providers/SearchProvider';
 import AdvancedFiltersButton from './AdvancedFiltersButton';
 import GameReferenceButton from './GameReferenceButton';
 import GraphicsToggleButton from './GraphicsToggleButton';
@@ -11,6 +12,7 @@ import SetDirectoryButton from './SetDirectoryButton';
 
 const MenuBar: Component = () => {
   const rawsContext = useRawsProvider();
+  const searchContext = useSearchProvider();
 
   const disableButtons = createMemo(() => rawsContext.parsingStatus() !== STS_IDLE);
 
@@ -34,7 +36,13 @@ const MenuBar: Component = () => {
             <AdvancedFiltersButton disabled={disableButtons()} />
           </div>
         </div>
-
+        <Show when={searchContext.active()}>
+          <div class='mx-2 text-xs text-accent'>
+            {rawsContext.searchFilteredRaws().length >= 50 ? 'More than ' : ''}
+            {rawsContext.searchFilteredRaws().length} results
+          </div>
+        </Show>
+        <div class='mx-2 text-xs text-info'>{rawsContext.totalRawCount()} raws loaded</div>
         <div class='ms-auto'>
           <div class='join'>
             <GraphicsToggleButton disabled={disableButtons()} />

@@ -187,6 +187,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     initialValue: [],
   });
 
+  const totalRawCount = createMemo(() => {
+    return parsedRaws.latest.objects.length;
+  });
+
   const rawModules = createMemo(() => {
     const modules = [...new Set(allRawsInfosJsonArray.latest.map((v) => v.objectId))];
     return modules.sort((a, b) => {
@@ -429,5 +433,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     vanillaRawCount,
     installedModRawCount,
     downloadedModRawCount,
+    totalRawCount,
   };
 });
