@@ -31,7 +31,7 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
         </tr>
         <tr>
           <th>Likeable Features</th>
-          <td>{props.creature.preferenceStrings.length > 0 ? props.creature.preferenceStrings.join(', ') : 'None'}</td>
+          <td>{props.creature.prefString.length > 0 ? props.creature.prefString.join(', ') : 'None'}</td>
         </tr>
         <tr>
           <th>Life Expectancy</th>

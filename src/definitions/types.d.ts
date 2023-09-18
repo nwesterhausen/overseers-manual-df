@@ -67,7 +67,7 @@ export type Creature = {
   populationRatio: CasteRange<number>;
   milkable: CasteRange<MilkableDesc>;
 
-  preferenceStrings: string[];
+  prefString: string[];
   populationNumber: number[];
 
   descriptions: CasteRange<string>;
@@ -109,7 +109,7 @@ export type SimpleMaterial = {
 // Plant raw definition
 export type DFPlant = {
   name: string;
-  preferenceStrings: string[];
+  prefString: string[];
   value: number;
 
   // Environment Tokens
