@@ -1,3 +1,10 @@
+## [0.25.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.24.0...v0.25.0) (2023-09-18)
+
+
+### Features
+
+* expand settings file to include all options ([9ac2642](https://github.com/nwesterhausen/overseers-manual-df/commit/9ac264223c19f907f6e41181771bc0c2cba45610))
+
 ## [0.24.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.23.11...v0.24.0) (2023-09-11)
 
 
