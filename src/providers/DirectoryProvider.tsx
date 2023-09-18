@@ -136,8 +136,9 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     // With the save folder, set it as the drag and drop path, since that's the path we set programmatically
     // and let the effects do the rest.
     .then((val) => {
-      console.log('Setting initial value for directory to', val);
-      const dirPath = splitPathAgnostically(val);
+      const value = '' + val;
+      console.log('Setting initial value for directory to', value);
+      const dirPath = splitPathAgnostically(value);
       setDirectoryHistory([{ path: dirPath, type: DIR_NONE }]);
       return getSymbol(PATH_TYPE);
     })
