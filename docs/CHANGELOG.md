@@ -1,3 +1,10 @@
+## [0.26.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.25.2...v0.26.0) (2023-09-18)
+
+
+### Features
+
+* include sapling images ([4216369](https://github.com/nwesterhausen/overseers-manual-df/commit/4216369e15be91008aa5e9ec47c276f8bede2463))
+
 ## [0.25.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.25.1...v0.25.2) (2023-09-18)
 
 
