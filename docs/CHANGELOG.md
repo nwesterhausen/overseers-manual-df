@@ -1,3 +1,12 @@
+## [0.25.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.25.0...v0.25.1) (2023-09-18)
+
+
+### Bug Fixes
+
+* display progress for only enabled locations ([f5fbe2d](https://github.com/nwesterhausen/overseers-manual-df/commit/f5fbe2d99797f280e0e604d7ead785561bd3efe8))
+* have a single floating pagination ([5d686d6](https://github.com/nwesterhausen/overseers-manual-df/commit/5d686d6ff744ea29bd9f61d936e33ed6db523411))
+* include total raws in menu bar ([c5e0ff0](https://github.com/nwesterhausen/overseers-manual-df/commit/c5e0ff090f5324aca7da5b04552eae00efaa4386))
+
 ## [0.25.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.24.0...v0.25.0) (2023-09-18)
 
 
