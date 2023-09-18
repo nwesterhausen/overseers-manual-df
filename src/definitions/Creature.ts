@@ -415,7 +415,7 @@ const DEFAULT_CREATURE: Partial<Creature> = {
   lowlightVision: {},
   populationRatio: {},
   milkable: {},
-  preferenceStrings: [],
+  prefString: [],
   populationNumber: [1, 1],
 };
 
@@ -473,7 +473,7 @@ export const GenerateCreatureSearchString = (creature: Creature): string => {
   }
   searchableTerms = searchableTerms.concat(creature.tags);
   searchableTerms = searchableTerms.concat(Object.values(creature.casteTags).flat());
-  searchableTerms = searchableTerms.concat(creature.preferenceStrings);
+  searchableTerms = searchableTerms.concat(creature.prefString);
 
   searchableTerms.push(creature.rawModule);
 

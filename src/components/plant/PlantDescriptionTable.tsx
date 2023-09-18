@@ -9,7 +9,7 @@ const PlantDescriptionTable: Component<{ plant: DFPlant }> = (props) => {
       <tbody>
         <tr>
           <th>Likeable Features</th>
-          <td>{props.plant.preferenceStrings.length > 0 ? props.plant.preferenceStrings.join(', ') : 'None'}</td>
+          <td>{props.plant.prefString.length > 0 ? props.plant.prefString.join(', ') : 'None'}</td>
         </tr>
         <tr>
           <th>Found In</th>

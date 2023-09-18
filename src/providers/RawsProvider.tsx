@@ -396,6 +396,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         v.primaryCondition === 'Crop' ||
         v.primaryCondition === 'Picked' ||
         v.primaryCondition === 'Seed' ||
+        v.primaryCondition === 'Sapling' ||
         v.primaryCondition === 'None',
     );
     if (typeof sprite === 'undefined') {
