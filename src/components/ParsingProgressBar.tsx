@@ -1,8 +1,10 @@
 import { Component, Show, createMemo } from 'solid-js';
 import { STS_PARSING, useRawsProvider } from '../providers/RawsProvider';
+import { useSettingsContext } from '../providers/SettingsProvider';
 
 const ParsingProgressBar: Component = () => {
   const rawsContext = useRawsProvider();
+  const [settings] = useSettingsContext();
   const percentage = createMemo(() => {
     if (rawsContext.parsingStatus() === STS_PARSING) {
       return Math.floor(100 * rawsContext.parsingProgress().percentage);
@@ -32,32 +34,38 @@ const ParsingProgressBar: Component = () => {
             </div>
           </div>
         </div>
-        <div class='basis-1/6'>
-          <div class='stat place-items-center'>
-            <div class='stat-title'>Vanilla Raws</div>
-            <div class='stat-value'>
-              {rawsContext.vanillaRawCount() || <span class='loading loading-ring loading-xs'></span>}
-            </div>
-          </div>
-        </div>
-        <div class='basis-1/6'>
-          <div class='join-item'>
+        <Show when={settings.includeLocationVanilla}>
+          <div class='basis-1/6'>
             <div class='stat place-items-center'>
-              <div class='stat-title'>Downloaded Mods</div>
+              <div class='stat-title'>Vanilla Raws</div>
               <div class='stat-value'>
-                {rawsContext.downloadedModRawCount() || <span class='loading loading-ring loading-xs'></span>}
+                {rawsContext.vanillaRawCount() || <span class='loading loading-ring loading-xs'></span>}
               </div>
             </div>
           </div>
-        </div>
-        <div class='basis-1/6'>
-          <div class='stat place-items-center'>
-            <div class='stat-title'>&quot;Installed&quot; Mods</div>
-            <div class='stat-value'>
-              {rawsContext.installedModRawCount() || <span class='loading loading-ring loading-xs'></span>}
+        </Show>
+        <Show when={settings.includeLocationMods}>
+          <div class='basis-1/6'>
+            <div class='join-item'>
+              <div class='stat place-items-center'>
+                <div class='stat-title'>Downloaded Mods</div>
+                <div class='stat-value'>
+                  {rawsContext.downloadedModRawCount() || <span class='loading loading-ring loading-xs'></span>}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </Show>
+        <Show when={settings.includeLocationInstalledMods}>
+          <div class='basis-1/6'>
+            <div class='stat place-items-center'>
+              <div class='stat-title'>&quot;Installed&quot; Mods</div>
+              <div class='stat-value'>
+                {rawsContext.installedModRawCount() || <span class='loading loading-ring loading-xs'></span>}
+              </div>
+            </div>
+          </div>
+        </Show>
       </div>
     </Show>
   );
