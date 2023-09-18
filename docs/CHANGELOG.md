@@ -1,3 +1,10 @@
+## [0.25.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.25.1...v0.25.2) (2023-09-18)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate dfraw_json_parser to 0.13 ([c953ae4](https://github.com/nwesterhausen/overseers-manual-df/commit/c953ae48c25a305fa0e572edb4a4da5bc8b72df8))
+
 ## [0.25.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.25.0...v0.25.1) (2023-09-18)
 
 
