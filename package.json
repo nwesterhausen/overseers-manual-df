@@ -17,9 +17,9 @@
   "license": "MIT",
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/commit-analyzer": "^10.0.4",
+    "@semantic-release/commit-analyzer": "^11.0.0",
     "@semantic-release/git": "^10.0.1",
-    "@semantic-release/npm": "^10.0.5",
+    "@semantic-release/npm": "^11.0.0",
     "@solid-primitives/context": "^0.2.1",
     "@solid-primitives/scheduled": "^1.4.1",
     "@tailwindcss/typography": "^0.5.10",
