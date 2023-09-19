@@ -9,18 +9,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v2
+        name: Install pnpm
         with:
           version: latest
-      - name: setup node
+
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: latest
           cache: pnpm
+
       - name: process semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm install -g pnpm
           pnpm install
           pnpm semantic-release
