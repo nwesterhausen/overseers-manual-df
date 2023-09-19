@@ -4,7 +4,7 @@
 
 import { UnlistenFn } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/tauri';
-import { appWindow } from '@tauri-apps/api/window';
+import { appWindow } from '@tauri-apps/plugin-window';
 
 interface ChangePayload<T> {
   path: string;

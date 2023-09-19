@@ -15,13 +15,7 @@ rust-version = "1.57"
 tauri-build = { version = "1.4", features = [] }
 
 [dependencies]
-tauri = { version = "1.4", features = [
-    "dialog-open",
-    "fs-read-dir",
-    "protocol-asset",
-    "updater",
-    "window-set-title",
-] }
+tauri = { version = "2.0.0-alpha", features = ["protocol-asset"] }
 log = "0.4.20"
 chrono = "0.4"
 

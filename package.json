@@ -23,7 +23,7 @@
     "@solid-primitives/context": "^0.2.1",
     "@solid-primitives/scheduled": "^1.4.1",
     "@tailwindcss/typography": "^0.5.10",
-    "@tauri-apps/cli": "1.4.0",
+    "@tauri-apps/cli": "2.0.0-alpha.14",
     "@types/node": "^20.6.0",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
@@ -45,6 +45,10 @@
   },
   "dependencies": {
     "@tauri-apps/api": "1.4.0",
+    "@tauri-apps/plugin-app": "2.0.0-alpha.1",
+    "@tauri-apps/plugin-dialog": "2.0.0-alpha.1",
+    "@tauri-apps/plugin-fs": "2.0.0-alpha.1",
+    "@tauri-apps/plugin-window": "2.0.0-alpha.1",
     "minisearch": "^6.1.0",
     "solid-js": "^1.7.11"
   },

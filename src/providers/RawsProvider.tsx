@@ -1,6 +1,6 @@
 import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
-import { appWindow } from '@tauri-apps/api/window';
+import { appWindow } from '@tauri-apps/plugin-window';
 import MiniSearch from 'minisearch';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import { RawsOnlyWithTagsOrAll, RawsOnlyWithoutModules, UniqueSort } from '../definitions/Raw';

@@ -1,5 +1,5 @@
-import { getVersion } from '@tauri-apps/api/app';
-import { appWindow } from '@tauri-apps/api/window';
+import { getVersion } from '@tauri-apps/plugin-app';
+import { appWindow } from '@tauri-apps/plugin-window';
 import { Component, createEffect, createMemo, createResource } from 'solid-js';
 import DFDirectoryNotSet from './components/DFDirectoryNotSet';
 import Listings from './components/Listings';

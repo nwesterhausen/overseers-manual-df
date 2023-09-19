@@ -1,7 +1,7 @@
 import { createContextProvider } from '@solid-primitives/context';
-import { OpenDialogOptions, open as tauriOpen } from '@tauri-apps/api/dialog';
+import { OpenDialogOptions, open as tauriOpen } from '@tauri-apps/plugin-dialog';
 import { Event, listen } from '@tauri-apps/api/event';
-import { readDir } from '@tauri-apps/api/fs';
+import { readDir } from '@tauri-apps/plugin-fs';
 import { createMemo, createResource, createSignal } from 'solid-js';
 import { splitPathAgnostically } from '../definitions/Utils';
 import { PATH_STRING, PATH_TYPE, get as getFromStore, getSymbol, init as initStore, set } from '../settings';
