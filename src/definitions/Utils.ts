@@ -1,4 +1,5 @@
-import type { CasteRange, StateName } from '../definitions/types';
+import { DFCreature } from './DFCreature';
+import { StateName } from './StateName';
 
 export const M3_to_CM3 = 1000000;
 
@@ -55,20 +56,34 @@ export const toTitleCase = (str: string): string => {
 /**
  * Returns a single string containing all provided names.
  *
- * @param names - Either an array of names or a names_map to turn into a searchable name string
+ * @param castes - Either an array of names or a names_map to turn into a searchable name string
  * @returns A string with all names inside of it
  */
-export const SearchableNames = (names: CasteRange<string[]> | string[]): string => {
-  if (Array.isArray(names)) {
-    return names.join(' ');
+export const SearchableNames = (creature: DFCreature): string => {
+  const flatNames: string[] = [];
+
+  if (creature.name.singular.length > 0) {
+    flatNames.push(...creature.name.singular, ...creature.name.plural, ...creature.name.adjective);
   }
-  let flatNames: string[] = [];
-  for (const k of Object.keys(names)) {
-    for (const name of names[k]) {
-      flatNames = flatNames.concat(name.split(' '));
+  if (creature.generalBabyName && creature.generalBabyName.singular.length > 0) {
+    flatNames.push(...creature.generalBabyName.singular, ...creature.generalBabyName.plural);
+  }
+  if (creature.generalChildName && creature.generalChildName.singular.length > 0) {
+    flatNames.push(...creature.generalChildName.singular, ...creature.generalChildName.plural);
+  }
+
+  for (const caste of creature.castes) {
+    if (caste.casteName && caste.casteName.singular.length > 0) {
+      flatNames.push(...caste.casteName.singular, ...caste.casteName.plural);
+    }
+    if (caste.childName && caste.childName.singular.length > 0) {
+      flatNames.push(...caste.childName.singular, ...caste.childName.plural);
+    }
+    if (caste.babyName && caste.babyName.singular.length > 0) {
+      flatNames.push(...caste.babyName.singular, ...caste.babyName.plural);
     }
   }
-  flatNames = flatNames.sort();
+
   const uniqueNames = [...new Set(flatNames)];
   return uniqueNames.join(' ');
 };

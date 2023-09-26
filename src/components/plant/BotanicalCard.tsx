@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
-import { toTitleCase } from '../../definitions/Utils';
-import type { DFPlant } from '../../definitions/types';
-import SpriteImage from '../SpriteImage';
+import { FormatName } from '../../definitions/Creature';
+import { DFPlant } from '../../definitions/DFPlant';
+import { Raw } from '../../definitions/types';
 import RawJsonTable from '../raws/RawsDetailTable';
 import PlantDescriptionTable from './PlantDescriptionTable';
 import PlantProvidesList from './PlantProvidesList';
@@ -21,7 +21,7 @@ import PlantProvidesList from './PlantProvidesList';
  * @returns Component of creature data for a listing.
  */
 const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
-  const title = toTitleCase(props.plant.name);
+  const title = FormatName(props.plant.name);
 
   return (
     <>
@@ -29,11 +29,11 @@ const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
         <div class='flex flex-row'>
           <div class='flex-grow'>
             <div class='card-title'>{title}</div>
-            <div class='text-muted italic text-xs'>{props.plant.moduleDisplayName}</div>
+            <div class='text-muted italic text-xs'>{props.plant.metadata.moduleName}</div>
           </div>
-          <div class='self-center'>
+          {/* <div class='self-center'>
             <SpriteImage identifier={props.plant.identifier} />
-          </div>
+          </div> */}
         </div>
         <div>
           <PlantProvidesList plant={props.plant} />
@@ -73,7 +73,7 @@ const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
       <dialog class='modal' id={`${props.plant.objectId}-raws`}>
         <div class='modal-box w-11/12 max-w-5xl'>
           <h3 class='font-bold text-lg'>{title} Details</h3>
-          <RawJsonTable item={props.plant} />
+          <RawJsonTable item={props.plant as unknown as Raw} />
         </div>
         <form method='dialog' class='modal-backdrop'>
           <button>close</button>

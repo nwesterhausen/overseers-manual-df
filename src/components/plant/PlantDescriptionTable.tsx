@@ -1,7 +1,6 @@
-import { Component, For, Show } from 'solid-js';
+import { Component } from 'solid-js';
 import { UndergroundDepthDescription } from '../../definitions/Creature';
-import { TickToCalendarConversion } from '../../definitions/Utils';
-import { DFPlant } from '../../definitions/types';
+import { DFPlant } from '../../definitions/DFPlant';
 
 const PlantDescriptionTable: Component<{ plant: DFPlant }> = (props) => {
   return (
@@ -9,39 +8,15 @@ const PlantDescriptionTable: Component<{ plant: DFPlant }> = (props) => {
       <tbody>
         <tr>
           <th>Likeable Features</th>
-          <td>{props.plant.prefString.length > 0 ? props.plant.prefString.join(', ') : 'None'}</td>
+          <td>{props.plant.prefStrings ? props.plant.prefStrings.join(', ') : 'None'}</td>
         </tr>
         <tr>
           <th>Found In</th>
-          <td>{props.plant.biomes.length ? props.plant.biomes.join(', ') : 'No natural biomes.'}</td>
+          <td>{props.plant.biomes ? props.plant.biomes.join(', ') : 'No natural biomes.'}</td>
         </tr>
         <tr>
           <th>Inhabited Depth</th>
           <td>{UndergroundDepthDescription(props.plant.undergroundDepth)}</td>
-        </tr>
-        <tr>
-          <th>Growth Duration</th>
-          <td>
-            <Show when={props.plant.growthDuration > 0} fallback='No natural growth'>
-              Grows in {TickToCalendarConversion(props.plant.growthDuration)} ({props.plant.growthDuration} ticks)
-            </Show>
-          </td>
-        </tr>
-        <tr>
-          <th>Growths</th>
-          <td>
-            <Show when={Object.keys(props.plant.growthNames).length > 0} fallback='None'>
-              <ul>
-                <For each={Object.keys(props.plant.growthNames)}>
-                  {(growth) => <li>{props.plant.growthNames[growth].singular}</li>}
-                </For>
-              </ul>
-            </Show>
-          </td>
-        </tr>
-        <tr>
-          <th>Base Value</th>
-          <td>{props.plant.value}</td>
         </tr>
       </tbody>
     </table>

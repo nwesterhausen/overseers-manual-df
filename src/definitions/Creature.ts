@@ -2,6 +2,8 @@ import { CasteTag } from './CasteTag';
 import { DFBodySize } from './DFBodySize';
 import { DFCaste } from './DFCaste';
 import { DFCreature } from './DFCreature';
+import { Name } from './Name';
+import { SingPlurName } from './SingPlurName';
 import { SearchableNames, SimplifyVolume, TransformIntoSearchTermString, toTitleCase } from './Utils';
 import { Raw } from './types';
 
@@ -23,7 +25,7 @@ export function isCreature(raw: Raw | DFCreature): boolean {
  */
 export const IsEggLayer = (creature: DFCreature): boolean => {
   for (const caste of creature.castes) {
-    if (caste.tags.indexOf('LaysEggs') !== -1) {
+    if (caste.tags && caste.tags.indexOf('LaysEggs') !== -1) {
       return true;
     }
   }
@@ -112,6 +114,9 @@ export const LifeExpectancyStatus = (creature: DFCreature): string => {
  * @returns Text to describe the spawning patterns
  */
 export const ClusterSizeStatus = (creature: DFCreature): string => {
+  if (!creature.clusterNumber) {
+    return 'None';
+  }
   const [min, max] = creature.clusterNumber;
   if (min === max) {
     if (max === 0) {
@@ -175,21 +180,22 @@ export const GrownAtStatus = (creature: DFCreature): string => {
  */
 export const ActiveTimeStatus = (caste: DFCaste): string => {
   const strArr: string[] = [];
-
-  if (caste.tags.indexOf('ActiveDiurnal') !== -1) {
-    strArr.push('during the day');
-  }
-  if (caste.tags.indexOf('ActiveNocturnal') !== -1) {
-    strArr.push('at night');
-  }
-  if (caste.tags.indexOf('ActiveCrepuscular') !== -1) {
-    strArr.push('at dawn and dusk');
-  }
-  if (caste.tags.indexOf('ActiveMatutinal') !== -1) {
-    strArr.push('at dawn');
-  }
-  if (caste.tags.indexOf('ActiveVespertine') !== -1) {
-    strArr.push('at evening');
+  if (caste.tags) {
+    if (caste.tags.indexOf('ActiveDiurnal') !== -1) {
+      strArr.push('during the day');
+    }
+    if (caste.tags.indexOf('ActiveNocturnal') !== -1) {
+      strArr.push('at night');
+    }
+    if (caste.tags.indexOf('ActiveCrepuscular') !== -1) {
+      strArr.push('at dawn and dusk');
+    }
+    if (caste.tags.indexOf('ActiveMatutinal') !== -1) {
+      strArr.push('at dawn');
+    }
+    if (caste.tags.indexOf('ActiveVespertine') !== -1) {
+      strArr.push('at evening');
+    }
   }
 
   switch (strArr.length) {
@@ -212,17 +218,19 @@ export const ActiveTimeStatus = (caste: DFCaste): string => {
  */
 export const NoSeasonStatus = (caste: DFCaste): string => {
   const strArr: string[] = [];
-  if (caste.tags.indexOf('NoSpring') !== -1) {
-    strArr.push('in spring');
-  }
-  if (caste.tags.indexOf('NoSummer') !== -1) {
-    strArr.push('in summer');
-  }
-  if (caste.tags.indexOf('NoFall') !== -1) {
-    strArr.push('in autumn');
-  }
-  if (caste.tags.indexOf('NoWinter') !== -1) {
-    strArr.push('in winter');
+  if (caste.tags) {
+    if (caste.tags.indexOf('NoSpring') !== -1) {
+      strArr.push('in spring');
+    }
+    if (caste.tags.indexOf('NoSummer') !== -1) {
+      strArr.push('in summer');
+    }
+    if (caste.tags.indexOf('NoFall') !== -1) {
+      strArr.push('in autumn');
+    }
+    if (caste.tags.indexOf('NoWinter') !== -1) {
+      strArr.push('in winter');
+    }
   }
 
   switch (strArr.length) {
@@ -247,15 +255,16 @@ export const NoSeasonStatus = (caste: DFCaste): string => {
  */
 export const TrainableStatus = (caste: DFCaste): string => {
   const strArr: string[] = [];
-
-  if (caste.tags.indexOf('TrainableHunting') !== -1) {
-    strArr.push('hunting');
-  }
-  if (caste.tags.indexOf('TrainableWar') !== -1) {
-    strArr.push('war');
-  }
-  if (caste.tags.indexOf('Trainable') !== -1) {
-    strArr.push('hunting and war');
+  if (caste.tags) {
+    if (caste.tags.indexOf('TrainableHunting') !== -1) {
+      strArr.push('hunting');
+    }
+    if (caste.tags.indexOf('TrainableWar') !== -1) {
+      strArr.push('war');
+    }
+    if (caste.tags.indexOf('Trainable') !== -1) {
+      strArr.push('hunting and war');
+    }
   }
 
   if (strArr.length) {
@@ -266,7 +275,7 @@ export const TrainableStatus = (caste: DFCaste): string => {
 
 export const PopulationNumberStatus = (creature: DFCreature): string => {
   let descriptor = 'alone.';
-  if (creature.populationNumber[0] !== creature.populationNumber[1]) {
+  if (creature.populationNumber && creature.populationNumber[0] !== creature.populationNumber[1]) {
     descriptor = `in groups of ${creature.populationNumber[0]} to ${creature.populationNumber[1]}.`;
   }
   return `They live in the world ${descriptor}`;
@@ -294,15 +303,15 @@ export const IsGnawer = (creature: DFCreature): boolean => {
 
 export const HasCasteTag = (creature: DFCreature, tag: CasteTag): boolean => {
   for (const caste of creature.castes) {
-    if (caste.tags.indexOf(tag) !== -1) {
+    if (caste.tags && caste.tags.indexOf(tag) !== -1) {
       return true;
     }
   }
   return false;
 };
 
-export const FormatName = (creature: DFCreature): string => {
-  return toTitleCase(creature.name.singular);
+export const FormatName = (name: Name | SingPlurName): string => {
+  return toTitleCase(name.singular);
 };
 
 export const FormatDescription = (creature: DFCreature): string => {
@@ -356,13 +365,13 @@ export const CreatureIntelligenceSummary = (creature: DFCreature): string => {
   const ret: string[] = [];
 
   for (const caste of creature.castes) {
-    if (caste.tags.indexOf('Intelligent') !== -1) {
+    if (caste.tags && caste.tags.indexOf('Intelligent') !== -1) {
       ret.push('intelligent');
     }
-    if (caste.tags.indexOf('CanLearn') !== -1) {
+    if (caste.tags && caste.tags.indexOf('CanLearn') !== -1) {
       ret.push('learns');
     }
-    if (caste.tags.indexOf('CanSpeak') !== -1) {
+    if (caste.tags && caste.tags.indexOf('CanSpeak') !== -1) {
       ret.push('speaks');
     }
   }
@@ -385,12 +394,15 @@ export const GenerateCreatureSearchString = (creature: DFCreature): string => {
     IsEggLayer(creature) ? `eggs ${CondensedEggSize(creature)}` : '',
     Object.values(creature.castes.map((v) => v.description)).join(' '),
     Object.values(creature.castes.map((v) => v.tags)).join(' '),
-    creature.tags.indexOf('LocalPopsProduceHeroes') === -1 ? '' : 'playable',
-    creature.tags.indexOf('LocalPopsControllable') === -1 ? '' : 'civilized',
     FirstPetValue(creature) > 0 ? `pet value ${FirstPetValue(creature)}` : '',
     FirstDifficulty(creature) > 0 ? `difficulty ${FirstDifficulty(creature)}` : '',
     CreatureIntelligenceSummary(creature),
   ];
+
+  if (creature.tags) {
+    searchableTerms.push(creature.tags.indexOf('LocalPopsProduceHeroes') === -1 ? '' : 'playable');
+    searchableTerms.push(creature.tags.indexOf('LocalPopsControllable') === -1 ? '' : 'civilized');
+  }
 
   searchableTerms = searchableTerms.concat(creature.tags);
   searchableTerms = searchableTerms.concat(creature.prefStrings);
@@ -414,6 +426,7 @@ const DepthRanges = [
  * @returns string describing what depths they are found at
  */
 export const UndergroundDepthDescription = (depth_range: number[]): string => {
+  return 'TODO';
   const topLevel = depth_range[0];
   const bottomLevel = depth_range[1];
   if (topLevel === bottomLevel) {

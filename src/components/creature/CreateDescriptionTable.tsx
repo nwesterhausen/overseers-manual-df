@@ -16,7 +16,6 @@ import CreatureBodySizeTable from './CreatureBodySizeTable';
 import CreatureGrazerTable from './CreatureGrazerTable';
 import CreatureMilkTable from './CreatureMilkTable';
 import CreatureNamesTable from './CreatureNamesTable';
-import CreatureNumberTable from './CreatureNumberTable';
 
 const CreatureDescriptionTable: Component<{ creature: DFCreature }> = (props) => {
   return (
@@ -25,7 +24,7 @@ const CreatureDescriptionTable: Component<{ creature: DFCreature }> = (props) =>
         <tr>
           <th>Names</th>
           <td>
-            <CreatureNamesTable names={props.creature} />
+            <CreatureNamesTable castes={props.creature.castes} />
           </td>
         </tr>
         <tr>
@@ -42,7 +41,7 @@ const CreatureDescriptionTable: Component<{ creature: DFCreature }> = (props) =>
         </tr>
         <tr>
           <th>Found In</th>
-          <td>{props.creature.biomes.length ? props.creature.biomes.join(', ') : 'No natural biomes.'}</td>
+          <td>{props.creature.biomes ? props.creature.biomes.join(', ') : 'No natural biomes.'}</td>
         </tr>
         <tr>
           <th>Inhabited Depth</th>
@@ -88,7 +87,7 @@ const CreatureDescriptionTable: Component<{ creature: DFCreature }> = (props) =>
                   {(caste) => (
                     <tr>
                       <td>{toTitleCase(caste.identifier)}</td>
-                      <td>{caste.tags.join(', ')}</td>
+                      <td>{caste.tags ? caste.tags.join(', ') : 'None'}</td>
                     </tr>
                   )}
                 </For>
@@ -101,39 +100,15 @@ const CreatureDescriptionTable: Component<{ creature: DFCreature }> = (props) =>
           <td>{PetValueStatus(props.creature)}</td>
         </tr>
         <tr>
-          <th>Difficulty</th>
-          <td>
-            <CreatureNumberTable values={props.creature} fallbackDesc='Mundane/no difficulty' />
-          </td>
-        </tr>
-        <tr>
-          <th>Lowlight Vision</th>
-          <td>
-            <CreatureNumberTable values={props.creature} fallbackDesc='No low light visibility' />
-          </td>
-        </tr>
-        <tr>
-          <th>Grass Trampling</th>
-          <td>
-            <CreatureNumberTable values={props.creature} fallbackDesc='Does not trample grass' />
-          </td>
-        </tr>
-        <tr>
           <th>Grazer</th>
           <td>
             <CreatureGrazerTable castes={props.creature.castes} fallbackDesc='Does not graze' />
           </td>
         </tr>
         <tr>
-          <th>Population Ratio</th>
-          <td>
-            <CreatureNumberTable values={props.creature.populationNumber} fallbackDesc='No data available' />
-          </td>
-        </tr>
-        <tr>
           <th>Milk Production</th>
           <td>
-            <CreatureMilkTable values={props.creature} fallbackDesc='None' />
+            <CreatureMilkTable values={props.creature.castes} fallbackDesc='None' />
           </td>
         </tr>
       </tbody>

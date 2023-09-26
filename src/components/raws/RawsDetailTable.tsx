@@ -14,7 +14,11 @@ const RawJsonTable: Component<{ item: Raw }> = (props) => {
           </tr>
           <tr>
             <th>Raw file</th>
-            <td>{props.item.parentRaw}</td>
+            <td>{props.item.metadata.rawIdentifier}</td>
+          </tr>
+          <tr>
+            <th>Raw file exact path</th>
+            <th>{props.item.metadata.rawFilePath}</th>
           </tr>
           <tr>
             <th>ObjectID</th>
@@ -26,14 +30,14 @@ const RawJsonTable: Component<{ item: Raw }> = (props) => {
               <pre class='p-1 text-muted'>{JSON.stringify(props.item, null, 2)}</pre>
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <th>Graphics Raws</th>
             <td>
               <pre class='p-1 text-muted'>
                 {JSON.stringify(rawsContext.allGraphicsFor(props.item.identifier), null, 2)}
               </pre>
             </td>
-          </tr>
+          </tr> */}
         </tbody>
       </table>
     </>

@@ -23,23 +23,24 @@ const RawModuleFilter: Component = () => {
         </div>
       </div>
       <For each={rawsContext.rawModules()}>
-        {(objectId) => (
+        {(identifier) => (
           <div>
             <label class='label cursor-pointer'>
               <span class='label-text'>
-                {labelForModule(rawsContext.rawModulesInfo.latest.find((v) => v.objectId === objectId))}
+                {labelForModule(rawsContext.rawModulesInfo.latest.find((v) => v.identifier === identifier))}
               </span>
               <input
                 type='checkbox'
-                id={`${objectId}-enabled`}
+                id={`${identifier}-enabled`}
                 checked={
                   searchContext
                     .filteredModules()
-                    .indexOf(rawsContext.rawModulesInfo.latest.find((v) => v.objectId === objectId).identifier) === -1
+                    .indexOf(rawsContext.rawModulesInfo.latest.find((v) => v.identifier === identifier).identifier) ===
+                  -1
                 }
                 onChange={(event) => {
                   const el = event.target as HTMLInputElement;
-                  const module = rawsContext.rawModulesInfo.latest.find((v) => v.objectId === objectId);
+                  const module = rawsContext.rawModulesInfo.latest.find((v) => v.identifier === identifier);
                   if (el.checked) {
                     searchContext.removeFilteredModule(module.identifier);
                   } else {

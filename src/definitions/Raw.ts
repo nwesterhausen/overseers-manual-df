@@ -1,7 +1,9 @@
-import { AssignBasedOn, GenerateCreatureSearchString } from './Creature';
-import { GenerateInorganicSearchString } from './Inorganic';
+import { GenerateCreatureSearchString } from './Creature';
+import { DFCreature } from './DFCreature';
+import { DFPlant } from './DFPlant';
+import { ModuleInfoFile } from './ModuleInfoFile';
 import { GeneratePlantSearchString } from './Plant';
-import { Creature, DFInfoFile, DFInorganic, DFPlant, Raw } from './types';
+import { Raw } from './types';
 
 /**
  * Array.prototype.filter function to only allow valid Raw objects.
@@ -10,8 +12,11 @@ import { Creature, DFInfoFile, DFInorganic, DFPlant, Raw } from './types';
  * @returns True if the element is valid Raw
  */
 export const FilterInvalidRaws = (r: Raw): boolean => {
-  if (!r.name || r.name.length === 0) {
+  if (!r.name || r.name.singular.length === 0 || !r.identifier || r.identifier.length === 0) {
     console.error(`Invalid raw: ${r.identifier} ${r.objectId}`, r);
+    return false;
+  }
+  if (!r.metadata) {
     return false;
   }
   return true;
@@ -29,8 +34,8 @@ export const RawsFirstLetters = (arr: Raw[]): string[] => {
   return [
     ...new Set(
       arr.map((v: Raw) => {
-        if (v.name && v.name.length) {
-          return v.name.charAt(0).toLowerCase();
+        if (v.name && v.name.singular.length > 0) {
+          return v.name.singular.charAt(0).toLowerCase();
         }
         return '';
       }),
@@ -58,64 +63,28 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
       continue;
     }
 
-    if (!rawsSorted[i].rawModuleParents) {
-      // Initialize raw_module_parents
-      rawsSorted[i].rawModuleParents = [rawsSorted[i].moduleSourceDirectory];
-    }
     // Initialized all_tags field
-    console.debug(`Sorting ${rawsSorted[i].rawType} ${rawsSorted[i].name}`);
+    console.debug(`Sorting ${rawsSorted[i].metadata.objectType} ${rawsSorted[i].name.singular}`);
+    console.debug(rawsSorted[i]);
 
-    rawsSorted[i].allTags = [...rawsSorted[i].tags];
-
-    switch (rawsSorted[i].rawType) {
+    switch (rawsSorted[i].metadata.objectType) {
       case 'Creature': {
-        // Coerce RAW into Creature based on raw_type
-        const creature = rawsSorted[i] as Creature;
-        // If its based on another raw, find it and apply it
-        if (creature.basedOn && creature.basedOn.length) {
-          const matches = rawsSorted.filter((c) => c.objectId === creature.basedOn);
-          if (matches.length === 1) {
-            rawsSorted[i] = AssignBasedOn(creature, matches[0] as Creature);
-          } else {
-            console.warn(`${matches.length} matches for 'based_on':${creature.basedOn}`);
-            if (matches.length > 1) {
-              rawsSorted[i] = AssignBasedOn(creature, matches[0] as Creature);
-            }
-          }
-        }
-        // Append all caste tags to all_tags
-        for (const caste of Object.keys(creature.casteTags)) {
-          rawsSorted[i].allTags.push(...creature.casteTags[caste]);
-        }
         // Build a search string for the raw
-        rawsSorted[i].searchString = GenerateCreatureSearchString(rawsSorted[i] as Creature);
+        rawsSorted[i].searchString = GenerateCreatureSearchString(rawsSorted[i] as unknown as DFCreature);
         break;
       }
       case 'Plant': {
-        // Coerce RAW into Plant based on raw_type
-        const plant = rawsSorted[i] as DFPlant;
-
-        // Append all material tags to all_tags
-        for (const material of Object.keys(plant.materials)) {
-          rawsSorted[i].allTags.push(...plant.materials[material].tags);
-        }
-
         // Build a search string for the raw
-        rawsSorted[i].searchString = GeneratePlantSearchString(rawsSorted[i] as DFPlant);
+        rawsSorted[i].searchString = GeneratePlantSearchString(rawsSorted[i] as unknown as DFPlant);
         break;
       }
       case 'Inorganic': {
-        // Coerce RAW into Plant based on raw_type
-        const inorganic = rawsSorted[i] as DFInorganic;
-
-        rawsSorted[i].allTags.push(...inorganic.material.tags);
-
         // Build a search string for the raw
-        rawsSorted[i].searchString = GenerateInorganicSearchString(rawsSorted[i] as DFInorganic);
+        // rawsSorted[i].searchString = GenerateInorganicSearchString(rawsSorted[i] as DFInorganic);
         break;
       }
       default:
-        console.error(`Unhandled raw type ${rawsSorted[i].rawType}!`);
+        console.error(`Unhandled raw type ${rawsSorted[i].metadata.objectType}!`);
     }
   }
 
@@ -128,9 +97,9 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
     if (raw) {
       // Check if the array of module_parents exists or not first
       if (Array.isArray(raw.rawModuleParents)) {
-        raw.rawModuleParents.push(current.moduleSourceDirectory);
+        raw.rawModuleParents.push(current.metadata.rawModuleLocation);
       } else {
-        raw.rawModuleParents = [current.moduleSourceDirectory];
+        raw.rawModuleParents = [current.metadata.rawModuleLocation];
       }
 
       return res;
@@ -150,7 +119,7 @@ export function RawsOnlyWithoutModules(rawsArray: Raw[], requiredModules: string
     return rawsArray;
   }
 
-  return rawsArray.filter((v) => requiredModules.indexOf(v.rawModule) === -1);
+  return rawsArray.filter((v) => requiredModules.indexOf(v.metadata.moduleName) === -1);
 }
 
 export function RawsOnlyWithTagsOrAll(rawsArray: Raw[], allowedTags: string[]): Raw[] {
@@ -162,9 +131,31 @@ export function RawsOnlyWithTagsOrAll(rawsArray: Raw[], allowedTags: string[]): 
   console.log(`restricting to raws with tags ${allowedTags.join(' & ')}`);
 
   return rawsArray.filter((v) => {
-    if (typeof v.allTags === 'undefined') {
-      return false;
+    switch (v.metadata.objectType) {
+      case 'Creature': {
+        const creature = v as unknown as DFCreature;
+        if (creature.tags.filter((w) => allowedTags.indexOf(w) !== -1).length > 0) {
+          return true;
+        }
+        for (const caste of creature.castes) {
+          if (caste.tags.filter((w) => allowedTags.indexOf(w) !== -1).length > 0) {
+            return true;
+          }
+        }
+        break;
+      }
+      case 'Inorganic': {
+        break;
+      }
+      case 'Plant': {
+        break;
+      }
+      default: {
+        // Ignore other types for now.
+        break;
+      }
     }
+
     return v.allTags.filter((w) => allowedTags.indexOf(w) !== -1).length > 0;
   });
 }
@@ -216,10 +207,13 @@ export function RawsMatchingSearchString(rawsArray: Raw[], searchString: string)
  * Example usage:
  * `labelForModule(rawsContext.rawsInfo.latest.find(v => v.identifier === module), module)`
  */
-export function labelForModule(moduleInfo: DFInfoFile | undefined, moduleId?: string): string {
+export function labelForModule(moduleInfo: ModuleInfoFile | undefined, moduleId?: string): string {
   if (typeof moduleId !== 'undefined') {
     return moduleId || '';
   }
+  if (typeof moduleInfo === 'undefined') {
+    return 'unknown (undefined)';
+  }
 
-  return `${moduleInfo.name} v${moduleInfo.displayedVersion}`;
+  return `${moduleInfo.name || 'unknown'} v${moduleInfo.displayedVersion || '?'}`;
 }

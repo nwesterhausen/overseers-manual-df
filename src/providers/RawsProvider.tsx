@@ -3,15 +3,17 @@ import { invoke } from '@tauri-apps/api';
 import { appWindow } from '@tauri-apps/api/window';
 import MiniSearch from 'minisearch';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
+import { ModuleInfoFile } from '../definitions/ModuleInfoFile';
+import { ProgressPayload } from '../definitions/ProgressPayload';
 import { RawsOnlyWithTagsOrAll, RawsOnlyWithoutModules, UniqueSort } from '../definitions/Raw';
-import type { DFGraphic, DFInfoFile, DFTilePage, ProgressPayload, Raw, SpriteGraphic } from '../definitions/types';
+import type { Raw } from '../definitions/types';
 import { DIR_DF, DIR_NONE, useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
 import { useSettingsContext } from './SettingsProvider';
 
 export interface RawStorage {
-  graphics: DFGraphic[];
-  tilePages: DFTilePage[];
+  // graphics: DFGraphic[];
+  // tilePages: DFTilePage[];
   raws: Raw[];
 }
 
@@ -69,8 +71,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   // Resource for raws (actually loads raws into the search database)
   const [parsedRaws] = createResource(loadRaws, parseRaws, {
     initialValue: {
-      graphics: [],
-      tilePages: [],
+      // graphics: [],
+      // tilePages: [],
       objects: [],
     },
   });
@@ -144,20 +146,20 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       if (!(self.findIndex((v) => v.identifier === raw.identifier) === idx)) {
         return false;
       }
-      if (searchContext.requireCreature() && raw.rawType === 'Creature') {
+      if (searchContext.requireCreature() && raw.metadata.objectType === 'Creature') {
         return true;
       }
-      if (searchContext.requirePlant() && raw.rawType === 'Plant') {
+      if (searchContext.requirePlant() && raw.metadata.objectType === 'Plant') {
         return true;
       }
-      if (searchContext.requireInorganic() && raw.rawType === 'Inorganic') {
+      if (searchContext.requireInorganic() && raw.metadata.objectType === 'Inorganic') {
         return true;
       }
       return false;
     });
 
     if (searchContext.searchString().length === 0) {
-      finalResult.sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1));
+      finalResult.sort((a, b) => (a.name.singular.toLowerCase() < b.name.singular.toLowerCase() ? -1 : 1));
     } else {
       finalResult.sort((a, b) => {
         if (typeof a.resultScore !== 'number') {
@@ -192,10 +194,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   });
 
   const rawModules = createMemo(() => {
-    const modules = [...new Set(allRawsInfosJsonArray.latest.map((v) => v.objectId))];
+    const modules = [...new Set(allRawsInfosJsonArray.latest.map((v) => v.identifier))];
     return modules.sort((a, b) => {
-      const nameA = allRawsInfosJsonArray.latest.find((v) => v.objectId === a) || { name: a };
-      const nameB = allRawsInfosJsonArray.latest.find((v) => v.objectId === b) || { name: b };
+      const nameA = allRawsInfosJsonArray.latest.find((v) => v.identifier === a) || { name: a };
+      const nameB = allRawsInfosJsonArray.latest.find((v) => v.identifier === b) || { name: b };
 
       return nameA.name.toLowerCase() < nameB.name.toLowerCase() ? -1 : 1;
     });
@@ -259,8 +261,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
     setParsingStatus(STS_PARSING);
 
-    const graphics: DFGraphic[] = [];
-    const tilePages: DFTilePage[] = [];
+    // const graphics: DFGraphic[] = [];
+    // const tilePages: DFTilePage[] = [];
     const objectRaws: Raw[] = [];
 
     try {
@@ -312,10 +314,9 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
       // Extract the graphics and tilepages
       raw_array.forEach((raw) => {
-        if (raw.rawType === 'GraphicsTilePage') {
-          tilePages.push(raw as DFTilePage);
-        } else if (raw.rawType === 'Graphics') {
-          graphics.push(raw as DFGraphic);
+        if (raw.metadata && raw.metadata.objectType === 'Graphics') {
+          // graphics.push(raw as DFGraphic);
+          console.debug('Found graphic', raw.identifier);
         } else {
           objectRaws.push(raw);
         }
@@ -343,8 +344,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       }, 50);
 
       return {
-        graphics,
-        tilePages,
+        // graphics,
+        // tilePages,
         objects: sortResult,
       };
     } catch (e) {
@@ -354,13 +355,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     }
 
     return {
-      graphics,
-      tilePages,
+      // graphics,
+      // tilePages,
       objects: objectRaws,
     };
   }
 
-  async function parseRawsInfo(): Promise<DFInfoFile[]> {
+  async function parseRawsInfo(): Promise<ModuleInfoFile[]> {
     // Don't parse when set as DIR_NONE
     if (directoryContext.currentDirectory().type === DIR_NONE) {
       console.info('Skipped parsing module infos because directory type is DIR_NONE');
@@ -369,7 +370,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     const dir = directoryContext.currentDirectory().path.join('/');
 
     try {
-      const raw_file_data: DFInfoFile[][] = JSON.parse(await invoke('parse_all_raws_info', { path: dir }));
+      const raw_file_data: ModuleInfoFile[] = JSON.parse(await invoke('parse_all_raws_info', { path: dir }));
 
       // Filter unknown raw info stuff..
       const flat_raw_info = raw_file_data.flat().filter((dfi) => dfi.identifier !== 'unknown');
@@ -381,43 +382,43 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     return [];
   }
 
-  const tryGetGraphicFor = (identifier: string): { graphic: SpriteGraphic; tilePage: DFTilePage } | undefined => {
-    const graphic = parsedRaws.latest.graphics.find(
-      (v) => v.targetIdentifier.toLowerCase() === identifier.toLowerCase(),
-    );
-    if (typeof graphic === 'undefined') {
-      return undefined;
-    }
-    if (graphic.graphics.length === 0) {
-      return undefined;
-    }
-    const sprite = graphic.graphics.find(
-      (v) =>
-        v.primaryCondition === 'Default' ||
-        v.primaryCondition === 'Shrub' ||
-        v.primaryCondition === 'Crop' ||
-        v.primaryCondition === 'Picked' ||
-        v.primaryCondition === 'Seed' ||
-        v.primaryCondition === 'Sapling' ||
-        v.primaryCondition === 'None',
-    );
-    if (typeof sprite === 'undefined') {
-      return undefined;
-    }
-    const tilePage = parsedRaws.latest.tilePages.find(
-      (v) => v.identifier.toLowerCase() === sprite.tilePageId.toLowerCase(),
-    );
-    if (typeof tilePage === 'undefined') {
-      return undefined;
-    }
-    return {
-      graphic: sprite,
-      tilePage,
-    };
-  };
-  const allGraphicsFor = (identifier: string): DFGraphic | undefined => {
-    return parsedRaws.latest.graphics.find((v) => v.targetIdentifier.toLowerCase() === identifier.toLowerCase());
-  };
+  // const tryGetGraphicFor = (identifier: string): { graphic: SpriteGraphic; tilePage: DFTilePage } | undefined => {
+  //   const graphic = parsedRaws.latest.graphics.find(
+  //     (v) => v.targetIdentifier.toLowerCase() === identifier.toLowerCase(),
+  //   );
+  //   if (typeof graphic === 'undefined') {
+  //     return undefined;
+  //   }
+  //   if (graphic.graphics.length === 0) {
+  //     return undefined;
+  //   }
+  //   const sprite = graphic.graphics.find(
+  //     (v) =>
+  //       v.primaryCondition === 'Default' ||
+  //       v.primaryCondition === 'Shrub' ||
+  //       v.primaryCondition === 'Crop' ||
+  //       v.primaryCondition === 'Picked' ||
+  //       v.primaryCondition === 'Seed' ||
+  //       v.primaryCondition === 'Sapling' ||
+  //       v.primaryCondition === 'None',
+  //   );
+  //   if (typeof sprite === 'undefined') {
+  //     return undefined;
+  //   }
+  //   const tilePage = parsedRaws.latest.tilePages.find(
+  //     (v) => v.identifier.toLowerCase() === sprite.tilePageId.toLowerCase(),
+  //   );
+  //   if (typeof tilePage === 'undefined') {
+  //     return undefined;
+  //   }
+  //   return {
+  //     graphic: sprite,
+  //     tilePage,
+  //   };
+  // };
+  // const allGraphicsFor = (identifier: string): DFGraphic | undefined => {
+  //   return parsedRaws.latest.graphics.find((v) => v.targetIdentifier.toLowerCase() === identifier.toLowerCase());
+  // };
 
   return {
     parsingStatus,
@@ -426,8 +427,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     rawModulesInfo: allRawsInfosJsonArray,
     rawModules,
     searchFilteredRaws,
-    tryGetGraphicFor,
-    allGraphicsFor,
+    // tryGetGraphicFor,
+    // allGraphicsFor,
     nextPage,
     prevPage,
     pageNum,

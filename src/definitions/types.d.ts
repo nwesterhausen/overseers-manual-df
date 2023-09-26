@@ -1,19 +1,14 @@
+import { Name } from './Name';
+import { RawMetadata } from './RawMetadata';
+
 /**
  * The common similarities amongst all raw definitions.
  */
 export type Raw = {
   objectId: string;
+  name: Name;
   identifier: string;
-  name: string;
-  parentRaw: string;
-  tags: string[];
-  rawModule: string;
-  moduleVersion: string;
-  moduleSourceDirectory: string;
-  moduleDisplayName: string;
-  rawType: string;
-  rawRelativePath: string;
-  overwriteRaw: string;
+  metadata: RawMetadata;
 
   // Added types for this app
   searchString: string;

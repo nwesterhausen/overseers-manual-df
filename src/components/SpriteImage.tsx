@@ -1,11 +1,14 @@
 import { convertFileSrc } from '@tauri-apps/api/tauri';
 import { Component, Show, createMemo } from 'solid-js';
 import { splitPathAgnostically } from '../definitions/Utils';
-import { Dimensions } from '../definitions/types';
 import { useDirectoryProvider } from '../providers/DirectoryProvider';
 import { useRawsProvider } from '../providers/RawsProvider';
 import { useSettingsContext } from '../providers/SettingsProvider';
 
+interface Dimensions {
+  x: number;
+  y: number;
+}
 export interface SpriteImageProps {
   identifier: string;
   class?: string;
@@ -25,7 +28,8 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
   const [currentSettings] = useSettingsContext();
 
   const spriteDetails = createMemo((): SpriteImageDetail => {
-    const result = rawsContext.tryGetGraphicFor(props.identifier);
+    // const result = rawsContext.tryGetGraphicFor(props.identifier);
+    const result = undefined;
     if (typeof result === 'undefined') {
       return {
         graphicFilePath: [],

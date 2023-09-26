@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
 import { FormatDescription, FormatName } from '../../definitions/Creature';
 import { DFCreature } from '../../definitions/DFCreature';
-import SpriteImage from '../SpriteImage';
+import { Raw } from '../../definitions/types';
 import RawJsonTable from '../raws/RawsDetailTable';
 import CreatureDescriptionTable from './CreateDescriptionTable';
 import CreatureBadges from './CreatureBadges';
@@ -21,7 +21,7 @@ import CreatureBadges from './CreatureBadges';
  * @returns Component of creature data for a listing.
  */
 const CreatureCard: Component<{ creature: DFCreature }> = (props) => {
-  const title = FormatName(props.creature);
+  const title = FormatName(props.creature.name);
   return (
     <>
       <div class='card-body'>
@@ -32,9 +32,9 @@ const CreatureCard: Component<{ creature: DFCreature }> = (props) => {
               {props.creature.metadata.moduleName} {props.creature.metadata.moduleVersion}
             </div>
           </div>
-          <div class='self-center'>
+          {/* <div class='self-center'>
             <SpriteImage identifier={props.creature.identifier} />
-          </div>
+          </div> */}
         </div>
         <div class='card-badges'>
           <CreatureBadges creature={props.creature} />
@@ -75,7 +75,7 @@ const CreatureCard: Component<{ creature: DFCreature }> = (props) => {
       <dialog class='modal' id={`${props.creature.objectId}-raws`}>
         <div class='modal-box w-11/12 max-w-5xl'>
           <h3 class='font-bold text-lg'>{title} Details</h3>
-          <RawJsonTable item={props.creature} />
+          <RawJsonTable item={props.creature as unknown as Raw} />
         </div>
         <form method='dialog' class='modal-backdrop'>
           <button>close</button>

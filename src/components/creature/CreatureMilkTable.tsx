@@ -1,20 +1,21 @@
-import { Component, For } from 'solid-js';
+import { Component, For, Show } from 'solid-js';
+import { DFCaste } from '../../definitions/DFCaste';
 import { toTitleCase } from '../../definitions/Utils';
-import type { CasteRange, MilkableDesc } from '../../definitions/types';
 
-const CreatureMilkTable: Component<{ values: CasteRange<MilkableDesc>; fallbackDesc: string }> = (props) => {
-  const values = props.values;
+const CreatureMilkTable: Component<{ values: DFCaste[]; fallbackDesc: string }> = (props) => {
   return (
     <table class='table table-xs'>
       <tbody>
-        <For each={Object.keys(values)} fallback={<p>{props.fallbackDesc}</p>}>
+        <For each={props.values} fallback={<p>{props.fallbackDesc}</p>}>
           {(caste) => (
-            <tr>
-              <td>{toTitleCase(caste)}</td>
-              <td>
-                Produces {values[caste].material} every {values[caste].frequency} ticks
-              </td>
-            </tr>
+            <Show when={caste.milkable}>
+              <tr>
+                <td>{toTitleCase(caste.identifier)}</td>
+                <td>
+                  Produces {caste.milkable.material} every {caste.milkable.frequency} ticks
+                </td>
+              </tr>
+            </Show>
           )}
         </For>
       </tbody>

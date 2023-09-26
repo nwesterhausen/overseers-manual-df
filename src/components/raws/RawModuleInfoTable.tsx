@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
-import { DFInfoFile } from '../../definitions/types';
+import { ModuleInfoFile } from '../../definitions/ModuleInfoFile';
 
-const RawModuleInfoTable: Component<{ module: DFInfoFile }> = (props) => {
+const RawModuleInfoTable: Component<{ module: ModuleInfoFile }> = (props) => {
   if (!props.module) {
     return <></>;
   }
@@ -28,7 +28,7 @@ const RawModuleInfoTable: Component<{ module: DFInfoFile }> = (props) => {
         </tr>
         <tr>
           <th>Found in</th>
-          <td>{props.module.sourcedDirectory}</td>
+          <td>{props.module.location}</td>
         </tr>
       </tbody>
     </table>
