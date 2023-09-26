@@ -1,33 +1,7 @@
+import { DFBodySize } from './DFBodySize';
+import { DFCreature } from './DFCreature';
 import { SearchableNames, SimplifyVolume, TransformIntoSearchTermString, toTitleCase } from './Utils';
-import type { BodySizeRange, CasteRange, Creature, MilkableDesc, Raw } from './types';
-
-export type Caste = {
-  name: string;
-  tags: string[];
-  clutch_size: number[];
-  litter_size: number[];
-  max_age: number[];
-  active_time: number;
-  curious_beast: number;
-  no_season: number;
-  trainable: number;
-  baby: number;
-  child: number;
-  difficulty: number;
-  egg_size: number;
-  grass_trample: number;
-  grazer: number;
-  low_light_vision: number;
-  pet_value: number;
-  pop_ratio: number;
-  baby_name: string[];
-  caste_name: string[];
-  child_name: string[];
-  description: string;
-  creature_class: string[];
-  body_size: BodySizeRange[];
-  milkable: MilkableDesc;
-};
+import { Raw } from './types';
 
 /**
  * Returns true if the raw is a Creature raw.
@@ -35,8 +9,8 @@ export type Caste = {
  * @param raw - The parsed raw to check.
  * @returns True if the raw is a creature.
  */
-export function isCreature(raw: Raw | Creature): boolean {
-  return (<Creature>raw).biomes !== undefined;
+export function isCreature(raw: Raw | DFCreature): boolean {
+  return (<DFCreature>raw).biomes !== undefined;
 }
 
 /**
@@ -45,9 +19,9 @@ export function isCreature(raw: Raw | Creature): boolean {
  * @param creature - Creature to check for egg laying tag
  * @returns true if one caste of this creature lays eggs
  */
-export const IsEggLayer = (creature: Creature): boolean => {
-  for (const casteTags of Object.values(creature.casteTags)) {
-    if (casteTags.indexOf('LaysEggs') !== -1) {
+export const IsEggLayer = (creature: DFCreature): boolean => {
+  for (const caste of creature.castes) {
+    if (caste.tags.indexOf('LaysEggs') !== -1) {
       return true;
     }
   }
@@ -60,10 +34,10 @@ export const IsEggLayer = (creature: Creature): boolean => {
  * @param creature - Creature to get pet value from
  * @returns pet value of first encountered value or 0
  */
-export const FirstPetValue = (creature: Creature): number => {
-  for (const petValue of Object.values(creature.petValue)) {
-    if (petValue > 0) {
-      return petValue;
+export const FirstPetValue = (creature: DFCreature): number => {
+  for (const caste of creature.castes) {
+    if (caste.petValue > 0) {
+      return caste.petValue;
     }
   }
   return 0;
@@ -75,10 +49,10 @@ export const FirstPetValue = (creature: Creature): number => {
  * @param creature - Creature to get difficulty value from
  * @returns difficulty value of first encountered value or 0
  */
-export const FirstDifficulty = (creature: Creature): number => {
-  for (const difficulty of Object.values(creature.difficulty)) {
-    if (difficulty > 0) {
-      return difficulty;
+export const FirstDifficulty = (creature: DFCreature): number => {
+  for (const caste of creature.castes) {
+    if (caste.difficulty > 0) {
+      return caste.difficulty;
     }
   }
   return 0;
@@ -90,28 +64,20 @@ export const FirstDifficulty = (creature: Creature): number => {
  * @param creature - Creature to get the egg-laying status for.
  * @returns Text to describe the egg-laying of the creature.
  */
-export const EggLayingStatus = (creature: Creature): string => {
+export const EggLayingStatus = (creature: DFCreature): string => {
   if (!IsEggLayer(creature)) {
     return "Doesn't lay eggs.";
   }
-  const size = CondensedEggSize(creature.eggSizes);
-  const keys = Object.keys(creature.clutchSize);
-  if (keys.length === 0) {
-    if (size > 0) {
-      return `Lays an unknown quantity of eggs with volume ${SimplifyVolume(size)}.`;
-    }
-    return 'Lays an unknown quantity of eggs.';
-  }
   const ret: string[] = [];
-  for (const k in creature.clutchSize) {
-    if (size > 0) {
+  for (const caste of creature.castes) {
+    if (caste.eggSize > 0) {
       ret.push(
-        `${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutchSize[k].join(
-          ' - ',
-        )} eggs with volume ${SimplifyVolume(size)}.`,
+        `${toTitleCase(caste.identifier)}s lay ${caste.clutchSize.join(' - ')} eggs with volume ${SimplifyVolume(
+          caste.eggSize,
+        )}.`,
       );
     } else {
-      ret.push(`${k[0]}${k.slice(1).toLowerCase()}s lay ${creature.clutchSize[k].join(' - ')} eggs.`);
+      ret.push(`${toTitleCase(caste.identifier)}s lay ${caste.clutchSize.join(' - ')} eggs.`);
     }
   }
   return ret.join(' ');
@@ -123,18 +89,17 @@ export const EggLayingStatus = (creature: Creature): string => {
  * @param creature - Creature to get the life expectancy of.
  * @returns Text to describe the life expectancy of the creature.
  */
-export const LifeExpectancyStatus = (creature: Creature): string => {
-  const keys = Object.keys(creature.maxAge);
-  if (keys.length === 0) {
-    return 'Lives indefinitely.';
-  }
-  if (keys.length === 1) {
-    return `Live ${creature.maxAge[keys[0]].join(' - ')} years.`;
-  }
+export const LifeExpectancyStatus = (creature: DFCreature): string => {
   const ret: string[] = [];
-  for (const c in creature.maxAge) {
-    ret.push(`${c} lives ${creature.maxAge[c].join(' - ')} years.`);
+  for (const caste of creature.castes) {
+    if (caste.maxAge && caste.maxAge.length > 1 && caste.maxAge[0] > 0 && caste.maxAge[1] > 0) {
+      ret.push(`${caste} lives ${caste.maxAge.join(' - ')} years.`);
+    }
   }
+  if (ret.length === 0) {
+    return 'No known life expectancy.';
+  }
+
   return ret.join(' ');
 };
 
@@ -144,8 +109,8 @@ export const LifeExpectancyStatus = (creature: Creature): string => {
  * @param creature - Creature to get the spawning group size of
  * @returns Text to describe the spawning patterns
  */
-export const ClusterSizeStatus = (creature: Creature): string => {
-  const [min, max] = creature.clusterRange;
+export const ClusterSizeStatus = (creature: DFCreature): string => {
+  const [min, max] = creature.clusterNumber;
   if (min === max) {
     if (max === 0) {
       return 'They do not normally appear.';
@@ -164,18 +129,18 @@ export const ClusterSizeStatus = (creature: Creature): string => {
  * @param size - The body size range to turn into a string
  * @returns Text to describe the body size range value
  */
-export const BodySizeStatus = (size: BodySizeRange): string => {
+export const BodySizeStatus = (size: DFBodySize): string => {
   if (size.years === 0) {
     if (size.days === 0) {
-      return `${SimplifyVolume(size.size_cm3)} at birth`;
+      return `${SimplifyVolume(size.sizeCm3)} at birth`;
     } else {
-      return `${SimplifyVolume(size.size_cm3)} at ${size.days} days;`;
+      return `${SimplifyVolume(size.sizeCm3)} at ${size.days} days;`;
     }
   }
   if (size.days === 0) {
-    return `${SimplifyVolume(size.size_cm3)} at ${size.years} years`;
+    return `${SimplifyVolume(size.sizeCm3)} at ${size.years} years`;
   }
-  return `${SimplifyVolume(size.size_cm3)} at ${size.years} years, ${size.days} days`;
+  return `${SimplifyVolume(size.sizeCm3)} at ${size.years} years, ${size.days} days`;
 };
 
 /**
@@ -184,15 +149,14 @@ export const BodySizeStatus = (size: BodySizeRange): string => {
  * @param grown_data - Age for each caste to reach adulthood as CasteRange
  * @returns Text to describe how the creature reaches adulthood
  */
-export const GrownAtStatus = (grown_data: CasteRange<number>): string => {
-  const castes = Object.keys(grown_data);
+export const GrownAtStatus = (creature: DFCreature): string => {
   const sts: string[] = [];
-  for (const caste of castes) {
-    if (grown_data[caste] > 0) {
-      if (caste === 'ALL') {
-        sts.push(`They reach adulthood at ${grown_data[caste]} years.`);
+  for (const caste of creature.castes) {
+    if (caste.child) {
+      if (caste.identifier === 'ALL') {
+        sts.push(`They reach adulthood at ${caste.child} years.`);
       } else {
-        sts.push(`${caste[0]}${caste.slice(1).toLowerCase()}s reach adulthood at ${grown_data[caste]} years.`);
+        sts.push(`${toTitleCase(caste.identifier)}s reach adulthood at ${caste.child} years.`);
       }
     }
   }
@@ -203,63 +167,29 @@ export const GrownAtStatus = (grown_data: CasteRange<number>): string => {
 };
 
 /**
- * Returns the first-encountered egg size in the caste mapping for egg sizes.
+ * Returns a string describing the active time from tags
  *
- * @remarks This should not just pick the first one and return, it should smartly provide answers by caste.
- * @param sizes - Caste mapping of the egg size
- * @returns The first encountered egg size
- */
-export const CondensedEggSize = (sizes: CasteRange<number>): number => {
-  const castes = Object.keys(sizes);
-  if (castes.length >= 1) {
-    return sizes[castes[0]];
-  }
-  return 0;
-};
-
-/**
- * Returns the first-encountered clutch range as an average.
- *
- * @remarks This should not just pick the first one and return, it should smartly provide answers by caste.
- * @param clutch_size - Caste mapping of the clutch size
- * @returns Average clutch size for first encountered clutch range
- */
-export const AverageClutchSize = (clutch_size: CasteRange<number[]>): number => {
-  const castes = Object.keys(clutch_size);
-  if (castes.length === 1) {
-    const [min, max] = clutch_size[castes[0]];
-    return Math.floor((min + max) / 2);
-  }
-  return 0;
-};
-
-/**
- * Returns a string describing the active time represented by the bitmask.
- *
- *
- * active time:
- *      diurnal & nocturnal & crepuscular & matutinal & vespertine = 31
- *
- * @param activeTimeBitmask - The 8-bit bitmask for active time
  * @returns String describing the caste's active time
  */
-export const ActiveTimeStatus = (activeTimeBitmask: number): string => {
+export const ActiveTimeStatus = (creature: DFCreature): string => {
   const strArr: string[] = [];
-  // Bitmask math/tests
-  if (activeTimeBitmask & ACTIVE_DIURNAL) {
-    strArr.push('during the day');
-  }
-  if (activeTimeBitmask & ACTIVE_NOCTURNAL) {
-    strArr.push('during the night');
-  }
-  if (activeTimeBitmask & ACTIVE_CREPUSCULAR) {
-    strArr.push('at twilight');
-  }
-  if (activeTimeBitmask & ACTIVE_MATUTINAL) {
-    strArr.push('at dawn');
-  }
-  if (activeTimeBitmask & ACTIVE_VESPERTINE) {
-    strArr.push('at evening');
+
+  for (const caste of creature.castes) {
+    if (caste.tags.indexOf('ActiveDiurnal') !== -1) {
+      strArr.push('during the day');
+    }
+    if (caste.tags.indexOf('ActiveNocturnal') !== -1) {
+      strArr.push('at night');
+    }
+    if (caste.tags.indexOf('ActiveCrepuscular') !== -1) {
+      strArr.push('at dawn and dusk');
+    }
+    if (caste.tags.indexOf('ActiveMatutinal') !== -1) {
+      strArr.push('at dawn');
+    }
+    if (caste.tags.indexOf('ActiveVespertine') !== -1) {
+      strArr.push('at evening');
+    }
   }
 
   switch (strArr.length) {
@@ -274,36 +204,28 @@ export const ActiveTimeStatus = (activeTimeBitmask: number): string => {
   }
 };
 
-const ACTIVE_DIURNAL = 1, // 0000 0001
-  ACTIVE_NOCTURNAL = 2, // 0000 0010
-  ACTIVE_CREPUSCULAR = 4, // 0000 0100
-  ACTIVE_MATUTINAL = 8, // 0000 1000
-  ACTIVE_VESPERTINE = 16; // 0001 0000
-
 /**
- * Returns a string describing the active seasons represented by the bitmask.
+ * Returns a string describing the active seasons represented by the caste tags.
  *
  *
- * "no" season (creature does not appear):
- *      NO_SPRING & NO_SUMMER & NO_AUTUMN & NO_WINTER = 15
- *
- * @param noSeasonBitmask - The 8-bit bitmask for active time
  * @returns String describing the caste's active seasons
  */
-export const NoSeasonStatus = (noSeasonBitmask: number): string => {
+export const NoSeasonStatus = (creature: DFCreature): string => {
   const strArr: string[] = [];
-  // Bitmask math/tests
-  if (!(noSeasonBitmask & NO_SPRING)) {
-    strArr.push('spring');
-  }
-  if (!(noSeasonBitmask & NO_SUMMER)) {
-    strArr.push('summer');
-  }
-  if (!(noSeasonBitmask & NO_FALL)) {
-    strArr.push('autumn');
-  }
-  if (!(noSeasonBitmask & NO_WINTER)) {
-    strArr.push('winter');
+
+  for (const caste of creature.castes) {
+    if (caste.tags.indexOf('NoSpring') !== -1) {
+      strArr.push('in spring');
+    }
+    if (caste.tags.indexOf('NoSummer') !== -1) {
+      strArr.push('in summer');
+    }
+    if (caste.tags.indexOf('NoFall') !== -1) {
+      strArr.push('in autumn');
+    }
+    if (caste.tags.indexOf('NoWinter') !== -1) {
+      strArr.push('in winter');
+    }
   }
 
   switch (strArr.length) {
@@ -318,29 +240,27 @@ export const NoSeasonStatus = (noSeasonBitmask: number): string => {
   }
 };
 
-const NO_SPRING = 1, // 0001
-  NO_SUMMER = 2, // 0010
-  NO_FALL = 4, // 0100
-  NO_WINTER = 8; // 1000
-
 /**
- * Returns a string describing the trainability represented by the bitmask.
+ * Returns a string describing the trainability
  *
  *
  * trainable:
- *      war & hunting = 3
  *
- * @param trainableBitmask - The 8-bit bitmask for trainable
  * @returns String describing the caste's trainability
  */
-export const TrainableStatus = (trainableBitmask: number): string => {
+export const TrainableStatus = (creature: DFCreature): string => {
   const strArr: string[] = [];
-  // Bitmask math/tests
-  if (trainableBitmask & TRAINABLE_HUNTING) {
-    strArr.push('hunting');
-  }
-  if (trainableBitmask & TRAINABLE_WAR) {
-    strArr.push('war');
+
+  for (const caste of creature.castes) {
+    if (caste.tags.indexOf('TrainableHunting') !== -1) {
+      strArr.push('hunting');
+    }
+    if (caste.tags.indexOf('TrainableWar') !== -1) {
+      strArr.push('war');
+    }
+    if (caste.tags.indexOf('Trainable') !== -1) {
+      strArr.push('hunting and war');
+    }
   }
 
   if (strArr.length) {
@@ -349,77 +269,7 @@ export const TrainableStatus = (trainableBitmask: number): string => {
   return 'Not trainable.';
 };
 
-const TRAINABLE_HUNTING = 1, // 0001
-  TRAINABLE_WAR = 2; // 0010
-
-/**
- * Returns a creature which has its missing values completed from the based on creature.
- *
- * @param creature - creature which has the 'based_on' token set
- * @param basedOn - creature that is basis for the other
- * @returns A modified creature with any missing values filled in from the based on creature
- */
-export const AssignBasedOn = (creature: Creature, basedOn: Creature): Creature => {
-  // Special cases handled here before we go through any other keys that might be "default"
-  if (creature.creatureClass.ALL && creature.creatureClass.ALL.length > 1 && basedOn.creatureClass.ALL.length > 1) {
-    creature.creatureClass.ALL = [...new Set(creature.creatureClass.ALL.concat(basedOn.creatureClass.ALL))];
-  }
-
-  // Go through all keys and assign if they are empty or defaults
-  for (const key of Object.keys(DEFAULT_CREATURE)) {
-    if (JSON.stringify(creature[key]) === JSON.stringify(DEFAULT_CREATURE[key])) {
-      //  && (JSON.stringify(basedOn[key]) !== JSON.stringify(DEFAULT_CREATURE[key]))) {
-      console.debug(`${key} being assigned for ${creature.identifier} from ${basedOn.identifier}`);
-      creature[key] = basedOn[key];
-    }
-  }
-
-  return creature;
-};
-
-const DEFAULT_CREATURE: Partial<Creature> = {
-  objectId: '',
-  identifier: '',
-  name: '',
-  rawModule: '',
-  moduleVersion: '',
-  rawType: 'Creature',
-  basedOn: '',
-  searchString: '',
-  moduleSourceDirectory: '',
-  rawModuleParents: [],
-  descriptions: {},
-  parentRaw: '',
-  maxAge: {},
-  clutchSize: {},
-  biomes: [],
-  clusterRange: [],
-  undergroundDepth: [],
-  bodySize: {},
-  grownAt: {},
-  eggSizes: {},
-  petValue: {},
-  intelligence: {},
-  flier: {},
-  gnawer: {},
-  trainable: {},
-  activeTime: {},
-  inactiveSeason: {},
-  creatureClass: {},
-  namesMap: {},
-  tags: [],
-  casteTags: {},
-  difficulty: {},
-  grassTrample: {},
-  grazer: {},
-  lowlightVision: {},
-  populationRatio: {},
-  milkable: {},
-  prefString: [],
-  populationNumber: [1, 1],
-};
-
-export const PopulationNumberStatus = (creature: Creature): string => {
+export const PopulationNumberStatus = (creature: DFCreature): string => {
   let descriptor = 'alone.';
   if (creature.populationNumber[0] !== creature.populationNumber[1]) {
     descriptor = `in groups of ${creature.populationNumber[0]} to ${creature.populationNumber[1]}.`;
@@ -433,13 +283,13 @@ export const PopulationNumberStatus = (creature: Creature): string => {
  * @param creature - Creature to get the pet value for.
  * @returns Text to describe the pet value of the creature.
  */
-export const PetValueStatus = (creature: Creature): string => {
+export const PetValueStatus = (creature: DFCreature): string => {
   const ret: string[] = [];
-  for (const c in creature.petValue) {
-    if (c === 'ALL' || c === 'SPECIES') {
-      ret.push(`Worth ${creature.petValue.ALL} as a pet.`);
+  for (const caste of creature.castes) {
+    if (caste.identifier === 'ALL' || caste.identifier === 'SPECIES') {
+      ret.push(`Worth ${caste.petValue} as a pet.`);
     } else {
-      ret.push(`${toTitleCase(c)}s worth ${creature.petValue[c]} as a pet.`);
+      ret.push(`${toTitleCase(caste.identifier)}s worth ${caste.petValue} as a pet.`);
     }
   }
   if (ret.length === 0) {
@@ -448,34 +298,61 @@ export const PetValueStatus = (creature: Creature): string => {
   return ret.join(' ');
 };
 
+export const CondensedEggSize = (creature: DFCreature): string => {
+  const ret: string[] = [];
+  for (const caste of creature.castes) {
+    if (caste.eggSize > 0) {
+      ret.push(`${SimplifyVolume(caste.eggSize)}`);
+    }
+  }
+  if (ret.length === 0) {
+    return '';
+  }
+  return ret.join(' ');
+};
+
+export const CreatureIntelligenceSummary = (creature: DFCreature): string => {
+  const ret: string[] = [];
+
+  for (const caste of creature.castes) {
+    if (caste.tags.indexOf('Intelligent') !== -1) {
+      ret.push('intelligent');
+    }
+    if (caste.tags.indexOf('CanLearn') !== -1) {
+      ret.push('learns');
+    }
+    if (caste.tags.indexOf('CanSpeak') !== -1) {
+      ret.push('speaks');
+    }
+  }
+
+  if (ret.length === 0) {
+    return '';
+  }
+  return ret.join(' and ');
+};
+
 /**
  * Returns an array of search terms that describe the creature.
  *
  * @param creature - Creature to create search terms for
  * @returns An array of strings that can be used to describe the creature
  */
-export const GenerateCreatureSearchString = (creature: Creature): string => {
+export const GenerateCreatureSearchString = (creature: DFCreature): string => {
   let searchableTerms = [
-    SearchableNames(creature.namesMap),
-    IsEggLayer(creature) ? `eggs ${CondensedEggSize(creature.eggSizes)}` : '',
-    Object.values(creature.descriptions).join(' '),
-    creature.flier ? 'flier' : '',
-    creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? '' : 'playable',
-    creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? '' : 'civilized',
-    creature.gnawer ? 'gnawer' : '',
+    SearchableNames(creature),
+    IsEggLayer(creature) ? `eggs ${CondensedEggSize(creature)}` : '',
+    Object.values(creature.castes.map((v) => v.description)).join(' '),
+    Object.values(creature.castes.map((v) => v.tags)).join(' '),
+    creature.tags.indexOf('LocalPopsProduceHeroes') === -1 ? '' : 'playable',
+    creature.tags.indexOf('LocalPopsControllable') === -1 ? '' : 'civilized',
     FirstPetValue(creature) > 0 ? `pet value ${FirstPetValue(creature)}` : '',
     FirstDifficulty(creature) > 0 ? `difficulty ${FirstDifficulty(creature)}` : '',
+    CreatureIntelligenceSummary(creature),
   ];
-  if (creature.intelligence.ALL) {
-    searchableTerms.push(creature.intelligence.ALL[0] && creature.intelligence.ALL[1] ? 'intelligent' : '');
-    searchableTerms.push(creature.intelligence.ALL[0] ? 'learns' : '');
-    searchableTerms.push(creature.intelligence.ALL[1] ? 'speaks' : '');
-  }
-  searchableTerms = searchableTerms.concat(creature.tags);
-  searchableTerms = searchableTerms.concat(Object.values(creature.casteTags).flat());
-  searchableTerms = searchableTerms.concat(creature.prefString);
 
-  searchableTerms.push(creature.rawModule);
+  searchableTerms = searchableTerms.concat(creature.tags);
+  searchableTerms = searchableTerms.concat(creature.prefStrings);
 
   return TransformIntoSearchTermString(searchableTerms);
 };

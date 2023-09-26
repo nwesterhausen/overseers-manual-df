@@ -225,7 +225,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       ({ event, payload }) => {
         const progress = payload as ProgressPayload;
         setParsingProgress(progress);
-        console.debug(payload);
+        // console.debug(payload);
       },
     )
     .then(() => {
@@ -272,10 +272,11 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         });
 
         await new Promise((resolve) => setTimeout(resolve, 1));
-        const allVanillaRaws = JSON.parse(await raw_file_json_string);
+        const allVanillaRaws = JSON.parse(raw_file_json_string);
         setVanillaRawCount(allVanillaRaws.length);
         raw_file_data.push(allVanillaRaws);
       }
+
       if (settings.includeLocationMods) {
         const raw_file_json_string: string = await invoke('parse_raws_in_module_location', {
           moduleLocation: dir + '/mods',
@@ -288,6 +289,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         setDownloadedModRawCount(allDownloadedMods.length);
         raw_file_data.push(allDownloadedMods);
       }
+
       if (settings.includeLocationInstalledMods) {
         const raw_file_json_string: string = await invoke('parse_raws_in_module_location', {
           moduleLocation: dir + '/data/installed_mods',
