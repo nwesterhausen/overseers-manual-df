@@ -1,42 +1,43 @@
 import { Component } from 'solid-js';
-import { CondensedEggSize, FirstPetValue, IsEggLayer } from '../../definitions/Creature';
-import { Creature } from '../../definitions/types';
+import {
+  CanLearn,
+  CanSpeak,
+  CondensedEggSize,
+  FirstPetValue,
+  HasIntelligence,
+  IsEggLayer,
+  IsFlier,
+  IsGnawer,
+} from '../../definitions/Creature';
+import { DFCreature } from '../../definitions/DFCreature';
 import TwoPartBadge from '../TwoPartBadge';
 
-const CreatureBadges: Component<{ creature: Creature }> = (props) => {
+const CreatureBadges: Component<{ creature: DFCreature }> = (props) => {
   return (
     <div>
       <div class='flex justify-content-center w-100 gap-1'>
         {/* EGG BADGE */}
         {IsEggLayer(props.creature) ? (
-          <TwoPartBadge bg='primary' name='Egg' value={'' + CondensedEggSize(props.creature.eggSizes)} />
+          <TwoPartBadge bg='primary' name='Egg' value={'' + CondensedEggSize(props.creature)} />
         ) : (
           <></>
         )}
 
         {/* FLIER BADGE */}
-        {props.creature.flier.ALL ? <TwoPartBadge bg='primary' name='Flier' value={''} /> : <></>}
+        {IsFlier(props.creature) ? <TwoPartBadge bg='primary' name='Flier' value={''} /> : <></>}
 
         {/* INTELLIGENCE BADGE */}
-        {props.creature.intelligence.ALL && props.creature.intelligence.ALL[0] && props.creature.intelligence.ALL[1] ? (
+        {HasIntelligence(props.creature) ? (
           <TwoPartBadge bg='primary' name='Intelligent' value={''} />
         ) : (
           <>
-            {props.creature.intelligence.ALL && props.creature.intelligence.ALL[0] ? (
-              <TwoPartBadge bg='primary' name='Learns' value={''} />
-            ) : (
-              <></>
-            )}
-            {props.creature.intelligence.ALL && props.creature.intelligence.ALL[1] ? (
-              <TwoPartBadge bg='primary' name='Speaks' value={''} />
-            ) : (
-              <></>
-            )}
+            {CanLearn(props.creature) ? <TwoPartBadge bg='primary' name='Learns' value={''} /> : <></>}
+            {CanSpeak(props.creature) ? <TwoPartBadge bg='primary' name='Speaks' value={''} /> : <></>}
           </>
         )}
 
         {/* GNAWER BADGE */}
-        {props.creature.gnawer.ALL ? <TwoPartBadge bg='primary' name='Gnawer' value={''} /> : <></>}
+        {IsGnawer(props.creature) ? <TwoPartBadge bg='primary' name='Gnawer' value={''} /> : <></>}
 
         {/* PET VALUE BADGE */}
         {FirstPetValue(props.creature) > 0 ? (
@@ -46,14 +47,14 @@ const CreatureBadges: Component<{ creature: Creature }> = (props) => {
         )}
 
         {/* PLAYABLE BADGE */}
-        {props.creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? (
+        {props.creature.tags.indexOf('LocalPopsProduceHeroes') === -1 ? (
           <></>
         ) : (
           <TwoPartBadge bg='primary' name='Playable' value={''} />
         )}
 
         {/* CIVILIZED BADGE */}
-        {props.creature.tags.indexOf('LOCAL_POPS_CONTROLLABLE') === -1 ? (
+        {props.creature.tags.indexOf('LocalPopsControllable') === -1 ? (
           <></>
         ) : (
           <TwoPartBadge bg='primary' name='Civilized' value={''} />

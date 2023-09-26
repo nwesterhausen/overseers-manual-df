@@ -1,4 +1,6 @@
+import { CasteTag } from './CasteTag';
 import { DFBodySize } from './DFBodySize';
+import { DFCaste } from './DFCaste';
 import { DFCreature } from './DFCreature';
 import { SearchableNames, SimplifyVolume, TransformIntoSearchTermString, toTitleCase } from './Utils';
 import { Raw } from './types';
@@ -171,25 +173,23 @@ export const GrownAtStatus = (creature: DFCreature): string => {
  *
  * @returns String describing the caste's active time
  */
-export const ActiveTimeStatus = (creature: DFCreature): string => {
+export const ActiveTimeStatus = (caste: DFCaste): string => {
   const strArr: string[] = [];
 
-  for (const caste of creature.castes) {
-    if (caste.tags.indexOf('ActiveDiurnal') !== -1) {
-      strArr.push('during the day');
-    }
-    if (caste.tags.indexOf('ActiveNocturnal') !== -1) {
-      strArr.push('at night');
-    }
-    if (caste.tags.indexOf('ActiveCrepuscular') !== -1) {
-      strArr.push('at dawn and dusk');
-    }
-    if (caste.tags.indexOf('ActiveMatutinal') !== -1) {
-      strArr.push('at dawn');
-    }
-    if (caste.tags.indexOf('ActiveVespertine') !== -1) {
-      strArr.push('at evening');
-    }
+  if (caste.tags.indexOf('ActiveDiurnal') !== -1) {
+    strArr.push('during the day');
+  }
+  if (caste.tags.indexOf('ActiveNocturnal') !== -1) {
+    strArr.push('at night');
+  }
+  if (caste.tags.indexOf('ActiveCrepuscular') !== -1) {
+    strArr.push('at dawn and dusk');
+  }
+  if (caste.tags.indexOf('ActiveMatutinal') !== -1) {
+    strArr.push('at dawn');
+  }
+  if (caste.tags.indexOf('ActiveVespertine') !== -1) {
+    strArr.push('at evening');
   }
 
   switch (strArr.length) {
@@ -210,22 +210,19 @@ export const ActiveTimeStatus = (creature: DFCreature): string => {
  *
  * @returns String describing the caste's active seasons
  */
-export const NoSeasonStatus = (creature: DFCreature): string => {
+export const NoSeasonStatus = (caste: DFCaste): string => {
   const strArr: string[] = [];
-
-  for (const caste of creature.castes) {
-    if (caste.tags.indexOf('NoSpring') !== -1) {
-      strArr.push('in spring');
-    }
-    if (caste.tags.indexOf('NoSummer') !== -1) {
-      strArr.push('in summer');
-    }
-    if (caste.tags.indexOf('NoFall') !== -1) {
-      strArr.push('in autumn');
-    }
-    if (caste.tags.indexOf('NoWinter') !== -1) {
-      strArr.push('in winter');
-    }
+  if (caste.tags.indexOf('NoSpring') !== -1) {
+    strArr.push('in spring');
+  }
+  if (caste.tags.indexOf('NoSummer') !== -1) {
+    strArr.push('in summer');
+  }
+  if (caste.tags.indexOf('NoFall') !== -1) {
+    strArr.push('in autumn');
+  }
+  if (caste.tags.indexOf('NoWinter') !== -1) {
+    strArr.push('in winter');
   }
 
   switch (strArr.length) {
@@ -248,19 +245,17 @@ export const NoSeasonStatus = (creature: DFCreature): string => {
  *
  * @returns String describing the caste's trainability
  */
-export const TrainableStatus = (creature: DFCreature): string => {
+export const TrainableStatus = (caste: DFCaste): string => {
   const strArr: string[] = [];
 
-  for (const caste of creature.castes) {
-    if (caste.tags.indexOf('TrainableHunting') !== -1) {
-      strArr.push('hunting');
-    }
-    if (caste.tags.indexOf('TrainableWar') !== -1) {
-      strArr.push('war');
-    }
-    if (caste.tags.indexOf('Trainable') !== -1) {
-      strArr.push('hunting and war');
-    }
+  if (caste.tags.indexOf('TrainableHunting') !== -1) {
+    strArr.push('hunting');
+  }
+  if (caste.tags.indexOf('TrainableWar') !== -1) {
+    strArr.push('war');
+  }
+  if (caste.tags.indexOf('Trainable') !== -1) {
+    strArr.push('hunting and war');
   }
 
   if (strArr.length) {
@@ -275,6 +270,52 @@ export const PopulationNumberStatus = (creature: DFCreature): string => {
     descriptor = `in groups of ${creature.populationNumber[0]} to ${creature.populationNumber[1]}.`;
   }
   return `They live in the world ${descriptor}`;
+};
+
+export const IsFlier = (creature: DFCreature): boolean => {
+  return HasCasteTag(creature, 'Flier');
+};
+
+export const HasIntelligence = (creature: DFCreature): boolean => {
+  return HasCasteTag(creature, 'Intelligent');
+};
+
+export const CanLearn = (creature: DFCreature): boolean => {
+  return HasCasteTag(creature, 'CanLearn');
+};
+
+export const CanSpeak = (creature: DFCreature): boolean => {
+  return HasCasteTag(creature, 'CanSpeak');
+};
+
+export const IsGnawer = (creature: DFCreature): boolean => {
+  return HasCasteTag(creature, 'Gnawer');
+};
+
+export const HasCasteTag = (creature: DFCreature, tag: CasteTag): boolean => {
+  for (const caste of creature.castes) {
+    if (caste.tags.indexOf(tag) !== -1) {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const FormatName = (creature: DFCreature): string => {
+  return toTitleCase(creature.name.singular);
+};
+
+export const FormatDescription = (creature: DFCreature): string => {
+  const strArr: string[] = [];
+  for (const caste of creature.castes) {
+    if (caste.description) {
+      strArr.push(caste.description);
+    }
+  }
+  if (strArr.length === 0) {
+    return 'No description available.';
+  }
+  return strArr.join(' ');
 };
 
 /**

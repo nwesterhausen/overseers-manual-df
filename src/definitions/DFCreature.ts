@@ -7,6 +7,7 @@ import type { RawMetadata } from './RawMetadata';
 import type { SingPlurName } from './SingPlurName';
 
 export interface DFCreature {
+  gnawer: any;
   metadata: RawMetadata;
   identifier: string;
   castes: Array<DFCaste>;

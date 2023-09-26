@@ -1,23 +1,20 @@
 import { Component, For } from 'solid-js';
 import { BodySizeStatus } from '../../definitions/Creature';
-import type { BodySizeRange, CasteRange } from '../../definitions/types';
+import { DFCaste } from '../../definitions/DFCaste';
+import { toTitleCase } from '../../definitions/Utils';
 
-const CreatureBodySizeTable: Component<{ bodySize: CasteRange<BodySizeRange[]> }> = (props) => {
-  const castes = Object.keys(props.bodySize);
+const CreatureBodySizeTable: Component<{ castes: DFCaste[] }> = (props) => {
   return (
     <table class='table table-xs'>
       <tbody>
-        <For each={castes} fallback={<p>No body size data.</p>}>
+        <For each={props.castes} fallback={<p>No body size data.</p>}>
           {(caste) =>
-            props.bodySize[caste].length ? (
+            caste.bodySize && caste.bodySize.length > 0 ? (
               <tr>
-                <td>
-                  {caste[0]}
-                  {caste.slice(1).toLowerCase()}
-                </td>
+                <td>{toTitleCase(caste.identifier)}</td>
                 <td>
                   <div class='join join-vertical gap-0'>
-                    <For each={props.bodySize[caste]}>{(size) => <span>{BodySizeStatus(size)}</span>}</For>
+                    <For each={caste.bodySize}>{(size) => <span>{BodySizeStatus(size)}</span>}</For>
                   </div>
                 </td>
               </tr>

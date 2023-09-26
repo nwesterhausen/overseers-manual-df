@@ -1,6 +1,6 @@
-import { Component, Show } from 'solid-js';
-import { toTitleCase } from '../../definitions/Utils';
-import type { Creature } from '../../definitions/types';
+import { Component } from 'solid-js';
+import { FormatDescription, FormatName } from '../../definitions/Creature';
+import { DFCreature } from '../../definitions/DFCreature';
 import SpriteImage from '../SpriteImage';
 import RawJsonTable from '../raws/RawsDetailTable';
 import CreatureDescriptionTable from './CreateDescriptionTable';
@@ -20,19 +20,17 @@ import CreatureBadges from './CreatureBadges';
  * @param props - Contains the creature to render details for.
  * @returns Component of creature data for a listing.
  */
-const CreatureCard: Component<{ creature: Creature }> = (props) => {
-  const title = props.creature.namesMap['SPECIES'][0]
-    .split(' ')
-    .map((v: string) => toTitleCase(v))
-    .join(' ');
-
+const CreatureCard: Component<{ creature: DFCreature }> = (props) => {
+  const title = FormatName(props.creature);
   return (
     <>
       <div class='card-body'>
         <div class='flex flex-row'>
           <div class='flex-grow'>
             <div class='card-title'>{title}</div>
-            <div class='text-muted italic text-xs'>{props.creature.moduleDisplayName}</div>
+            <div class='text-muted italic text-xs'>
+              {props.creature.metadata.moduleName} {props.creature.metadata.moduleVersion}
+            </div>
           </div>
           <div class='self-center'>
             <SpriteImage identifier={props.creature.identifier} />
@@ -41,13 +39,7 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
         <div class='card-badges'>
           <CreatureBadges creature={props.creature} />
         </div>
-        <div>
-          <Show
-            when={Object.values(props.creature.descriptions).length > 0}
-            fallback={<p class='text-muted fst-italic'>No description available.</p>}>
-            {Object.values(props.creature.descriptions).join(' ')}
-          </Show>
-        </div>
+        <div>{FormatDescription(props.creature)}</div>
       </div>
       <div class='card-actions'>
         <button
