@@ -6,4 +6,28 @@ import type { DFTile } from "./DFTile";
 import type { Name } from "./Name";
 import type { SingPlurName } from "./SingPlurName";
 
-export interface DFCaste { identifier: string, tags: Array<CasteTag>, description: string, babyName: SingPlurName, casteName: Name, childName: SingPlurName, clutchSize: Array<number>, litterSize: Array<number>, maxAge: Array<number>, baby: number, child: number, difficulty: number, eggSize: number, grassTrample: number, grazer: number, lowLightVision: number, petValue: number, popRatio: number, changeBodySizePercentage: number, creatureClass: Array<string>, bodySize: Array<DFBodySize>, milkable: DFMilkable, tile: DFTile, }
+export interface DFCaste {
+  identifier: string;
+  tags: Array<CasteTag>;
+  description: string;
+  babyName: SingPlurName;
+  casteName: Name;
+  childName: SingPlurName;
+  clutchSize: Array<number>;
+  litterSize: Array<number>;
+  maxAge: Array<number>;
+  baby: number;
+  child: number;
+  difficulty: number;
+  eggSize: number;
+  grassTrample: number;
+  grazer: number;
+  lowLightVision: number;
+  petValue: number;
+  popRatio: number;
+  changeBodySizePercentage: number;
+  creatureClass: Array<string>;
+  bodySize: Array<DFBodySize>;
+  milkable: DFMilkable;
+  tile: DFTile;
+}

@@ -3,4 +3,14 @@ import type { Name } from "./Name";
 import type { PlantTag } from "./PlantTag";
 import type { RawMetadata } from "./RawMetadata";
 
-export interface DFPlant { metadata: RawMetadata, identifier: string, objectId: string, name: Name, prefStrings: Array<string>, tags: Array<PlantTag>, undergroundDepth: Array<number>, frequency: number, biomes: Array<string>, }
+export interface DFPlant {
+  metadata: RawMetadata;
+  identifier: string;
+  objectId: string;
+  name: Name;
+  prefStrings: Array<string>;
+  tags: Array<PlantTag>;
+  undergroundDepth: Array<number>;
+  frequency: number;
+  biomes: Array<string>;
+}
