@@ -1,4 +1,4 @@
-import { Component } from 'solid-js';
+import { Component, Show } from 'solid-js';
 import {
   CanLearn,
   CanSpeak,
@@ -46,19 +46,21 @@ const CreatureBadges: Component<{ creature: DFCreature }> = (props) => {
           <></>
         )}
 
-        {/* PLAYABLE BADGE */}
-        {props.creature.tags.indexOf('LocalPopsProduceHeroes') === -1 ? (
-          <></>
-        ) : (
-          <TwoPartBadge bg='primary' name='Playable' value={''} />
-        )}
+        <Show when={Array.isArray(props.creature.tags) && props.creature.tags.length > 0}>
+          {/* PLAYABLE BADGE */}
+          {props.creature.tags.indexOf('LocalPopsProduceHeroes') === -1 ? (
+            <></>
+          ) : (
+            <TwoPartBadge bg='primary' name='Playable' value={''} />
+          )}
 
-        {/* CIVILIZED BADGE */}
-        {props.creature.tags.indexOf('LocalPopsControllable') === -1 ? (
-          <></>
-        ) : (
-          <TwoPartBadge bg='primary' name='Civilized' value={''} />
-        )}
+          {/* CIVILIZED BADGE */}
+          {props.creature.tags.indexOf('LocalPopsControllable') === -1 ? (
+            <></>
+          ) : (
+            <TwoPartBadge bg='primary' name='Civilized' value={''} />
+          )}
+        </Show>
       </div>
     </div>
   );

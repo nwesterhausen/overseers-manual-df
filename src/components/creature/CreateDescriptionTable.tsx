@@ -1,4 +1,4 @@
-import { Component, For } from 'solid-js';
+import { Component, For, Show } from 'solid-js';
 import {
   ClusterSizeStatus,
   EggLayingStatus,
@@ -29,7 +29,13 @@ const CreatureDescriptionTable: Component<{ creature: DFCreature }> = (props) =>
         </tr>
         <tr>
           <th>Likeable Features</th>
-          <td>{props.creature.prefStrings.length > 0 ? props.creature.prefStrings.join(', ') : 'None'}</td>
+          <td>
+            <Show
+              when={Array.isArray(props.creature.prefStrings) && props.creature.prefStrings.length > 0}
+              fallback='None'>
+              {props.creature.prefStrings.join(', ')}
+            </Show>
+          </td>
         </tr>
         <tr>
           <th>Life Expectancy</th>
@@ -77,22 +83,24 @@ const CreatureDescriptionTable: Component<{ creature: DFCreature }> = (props) =>
         <tr>
           <th>Tags</th>
           <td>
-            <table class='table table-xs'>
-              <tbody>
-                <tr>
-                  <td>Creature Tags</td>
-                  <td>{props.creature.tags.join(', ')}</td>
-                </tr>
-                <For each={props.creature.castes}>
-                  {(caste) => (
-                    <tr>
-                      <td>{toTitleCase(caste.identifier)}</td>
-                      <td>{caste.tags ? caste.tags.join(', ') : 'None'}</td>
-                    </tr>
-                  )}
-                </For>
-              </tbody>
-            </table>
+            <Show when={Array.isArray(props.creature.tags) && props.creature.tags.length > 0} fallback='None'>
+              <table class='table table-xs'>
+                <tbody>
+                  <tr>
+                    <td>Creature Tags</td>
+                    <td>{props.creature.tags.join(', ')}</td>
+                  </tr>
+                  <For each={props.creature.castes}>
+                    {(caste) => (
+                      <tr>
+                        <td>{toTitleCase(caste.identifier)}</td>
+                        <td>{caste.tags ? caste.tags.join(', ') : 'None'}</td>
+                      </tr>
+                    )}
+                  </For>
+                </tbody>
+              </table>
+            </Show>
           </td>
         </tr>
         <tr>

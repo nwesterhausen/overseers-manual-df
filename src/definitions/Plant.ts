@@ -6,7 +6,9 @@ export function GeneratePlantSearchString(plant: DFPlant): string {
   searchableTerms = searchableTerms.concat(plant.prefStrings); // add preference string
 
   searchableTerms.push(plant.metadata.moduleName); // add sourced module
-  searchableTerms.push(...plant.tags); // add all tags
+  if (Array.isArray(plant.tags)) {
+    searchableTerms.push(...plant.tags); // add all tags
+  }
 
   return TransformIntoSearchTermString(searchableTerms);
 }

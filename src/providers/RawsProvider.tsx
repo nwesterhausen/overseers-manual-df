@@ -48,9 +48,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   });
 
   // Signal for tracking number of mods
-  const [vanillaRawCount, setVanillaRawCount] = createSignal(0);
-  const [installedModRawCount, setInstalledModRawCount] = createSignal(0);
-  const [downloadedModRawCount, setDownloadedModRawCount] = createSignal(0);
+  const [creatureRawCount, setCreatureCount] = createSignal(0);
+  const [plantRawCount, setPlantCount] = createSignal(0);
+  const [inorganicRawCount, setInorganicCount] = createSignal(0);
+  const [materialTemplateRawCount, setMaterialTemplateCount] = createSignal(0);
 
   // Signal for setting raw parse status
   const [parsingStatus, setParsingStatus] = createSignal(STS_IDLE);
@@ -61,9 +62,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   // Provide "helper" for loading raws
   function forceLoadRaws() {
     // Reset total tracked number of raws when loading new ones
-    setVanillaRawCount(0);
-    setInstalledModRawCount(0);
-    setDownloadedModRawCount(0);
+    setCreatureCount(0);
+    setInorganicCount(0);
+    setPlantCount(0);
+    setMaterialTemplateCount(0);
     // Reset loadRaws
     setLoadRaws(true);
   }
@@ -159,7 +161,12 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     });
 
     if (searchContext.searchString().length === 0) {
-      finalResult.sort((a, b) => (a.name.singular.toLowerCase() < b.name.singular.toLowerCase() ? -1 : 1));
+      finalResult.sort((a, b) => {
+        if (!a.name || !b.name) {
+          return a.identifier < b.identifier ? -1 : 1;
+        }
+        return a.name.singular.toLowerCase() < b.name.singular.toLowerCase() ? -1 : 1;
+      });
     } else {
       finalResult.sort((a, b) => {
         if (typeof a.resultScore !== 'number') {
@@ -210,6 +217,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     currentLocation: '',
     currentTask: '',
     percentage: 0.0,
+    runningTotal: 0,
   });
 
   // Effect to parse raws when directory is changed
@@ -267,50 +275,46 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
     try {
       const raw_file_data: Raw[][] = [];
-      if (settings.includeLocationVanilla) {
-        const raw_file_json_string: string = await invoke('parse_raws_in_module_location', {
-          moduleLocation: dir + '/data/vanilla',
-          window: appWindow,
-        });
+      const raw_file_json_string: string = await invoke('parse_all_raws', {
+        gamePath: dir,
+        window: appWindow,
+        includeVanilla: settings.includeLocationVanilla,
+        includeInstalledMods: settings.includeLocationInstalledMods,
+        includeDownloadedMods: settings.includeLocationMods,
+      });
 
-        await new Promise((resolve) => setTimeout(resolve, 1));
-        const allVanillaRaws = JSON.parse(raw_file_json_string);
-        setVanillaRawCount(allVanillaRaws.length);
-        raw_file_data.push(allVanillaRaws);
-      }
+      await new Promise((resolve) => setTimeout(resolve, 1));
+      raw_file_data.push(JSON.parse(raw_file_json_string));
 
-      if (settings.includeLocationMods) {
-        const raw_file_json_string: string = await invoke('parse_raws_in_module_location', {
-          moduleLocation: dir + '/mods',
-          window: appWindow,
-        });
-
-        await new Promise((resolve) => setTimeout(resolve, 1));
-        raw_file_data.push(await JSON.parse(raw_file_json_string));
-        const allDownloadedMods = JSON.parse(await raw_file_json_string);
-        setDownloadedModRawCount(allDownloadedMods.length);
-        raw_file_data.push(allDownloadedMods);
-      }
-
-      if (settings.includeLocationInstalledMods) {
-        const raw_file_json_string: string = await invoke('parse_raws_in_module_location', {
-          moduleLocation: dir + '/data/installed_mods',
-          window: appWindow,
-        });
-
-        await new Promise((resolve) => setTimeout(resolve, 1));
-        const allInstalledMods = JSON.parse(await raw_file_json_string);
-        setInstalledModRawCount(allInstalledMods.length);
-        raw_file_data.push(allInstalledMods);
-      }
       setParsingStatus(STS_LOADING);
 
       await new Promise((resolve) => setTimeout(resolve, 1));
-      setParsingProgress({ currentModule: '', currentFile: '', currentLocation: '', currentTask: '', percentage: 0.0 });
+      setParsingProgress({
+        currentModule: '',
+        currentFile: '',
+        currentLocation: '',
+        currentTask: '',
+        percentage: 0.0,
+        runningTotal: 0,
+      });
 
       // Flatten and first-pass sort results by identifier.
       const raw_array = raw_file_data.flat(5).sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
+      const summary = {};
+      for (const raw of raw_array) {
+        if (raw.type in summary) {
+          summary[raw.type] += 1;
+        } else {
+          summary[raw.type] = 1;
+        }
+      }
       console.log(`Got ${raw_array.length} raws back`);
+      console.log(`Summary: `, summary);
+
+      setCreatureCount(summary['Creature'] || 0);
+      setPlantCount(summary['Plant'] || 0);
+      setInorganicCount(summary['Inorganic'] || 0);
+      setMaterialTemplateCount(summary['Material'] || 0);
 
       // Extract the graphics and tilepages
       raw_array.forEach((raw) => {
@@ -350,7 +354,14 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       };
     } catch (e) {
       console.error(e);
-      setParsingProgress({ currentModule: '', currentFile: '', currentLocation: '', currentTask: '', percentage: 0.0 });
+      setParsingProgress({
+        currentModule: '',
+        currentFile: '',
+        currentLocation: '',
+        currentTask: '',
+        percentage: 0.0,
+        runningTotal: 0,
+      });
       setParsingStatus(STS_EMPTY);
     }
 
@@ -434,9 +445,10 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     pageNum,
     totalPages,
     gotoPage,
-    vanillaRawCount,
-    installedModRawCount,
-    downloadedModRawCount,
+    creatureRawCount,
+    plantRawCount,
+    inorganicRawCount,
+    materialTemplateRawCount,
     totalRawCount,
   };
 });

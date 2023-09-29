@@ -3,40 +3,58 @@
     windows_subsystem = "windows"
 )]
 
+use dfraw_json_parser::{
+    options::{ParserOptions, ParsingJob},
+    parser::raw_locations::RawModuleLocation,
+};
 use tauri_plugin_log::LogTarget;
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
 /// Passthru to parse all raws at game path
-fn parse_all_raws(game_path: &str, window: tauri::window::Window) -> String {
-    dfraw_json_parser::parse_game_raws_with_tauri_emit(&game_path, window)
-}
+fn parse_all_raws(
+    game_path: &str,
+    window: tauri::window::Window,
+    include_vanilla: bool,
+    include_installed_mods: bool,
+    include_downloaded_mods: bool,
+) -> String {
+    let mut options = ParserOptions::new(game_path);
+    options.attach_metadata_to_raws();
 
-#[tauri::command]
-#[allow(clippy::needless_pass_by_value)]
-/// Passthru to parse all raws in raw location
-fn parse_raws_in_module_location(module_location: &str, window: tauri::window::Window) -> String {
-    dfraw_json_parser::parse_location_with_tauri_emit(&module_location, window)
+    let mut locations: Vec<RawModuleLocation> = Vec::new();
+    if include_vanilla {
+        locations.push(RawModuleLocation::Vanilla);
+    }
+    if include_installed_mods {
+        locations.push(RawModuleLocation::InstalledMods);
+    }
+    if include_downloaded_mods {
+        locations.push(RawModuleLocation::Mods);
+    }
+
+    if locations.is_empty() {
+        return String::from("[]");
+    }
+    if locations.len() == 1usize {
+        options.set_job(ParsingJob::SingleLocation);
+    }
+    options.set_locations_to_parse(locations);
+
+    log::error!("Calling parse_all_raws\n{:#?}", options);
+    dfraw_json_parser::parse_with_tauri_emit(&options, window)
 }
 
 #[tauri::command]
 /// Passthru to parse all info.txt files at game path
 fn parse_all_raws_info(path: &str) -> String {
-    dfraw_json_parser::parse_info_txt_in_game_dir(&path)
-}
+    let mut options = ParserOptions::new(path);
+    options.set_job(ParsingJob::AllModuleInfoFiles);
+    options.attach_metadata_to_raws();
 
-#[tauri::command]
-#[allow(clippy::needless_pass_by_value)]
-/// Passthru to parse all raws in raw location
-fn parse_raws_in_locations(module_locations: Vec<String>, window: tauri::window::Window) -> String {
-    let mut results: Vec<String> = vec![];
-    for module_location in module_locations {
-        let cloned_window = window.clone();
-        results.push(dfraw_json_parser::parse_location_with_tauri_emit(
-            &module_location,
-            cloned_window,
-        ));
-    }
+    log::error!("Calling parse_all_raws_info\n{:#?}", options);
+    let results = dfraw_json_parser::parse_info_modules_to_json(&options);
+    log::info!("Got {} results", results.len());
     format!("[{}]", results.join(","))
 }
 
@@ -64,9 +82,7 @@ fn main() {
         .plugin(tauri_plugin_window_state::Builder::default().build())
         .invoke_handler(tauri::generate_handler![
             parse_all_raws,
-            parse_raws_in_module_location,
             parse_all_raws_info,
-            parse_raws_in_locations,
         ])
         .run(tauri::generate_context!());
 

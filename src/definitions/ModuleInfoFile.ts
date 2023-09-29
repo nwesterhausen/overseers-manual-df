@@ -3,6 +3,7 @@ import type { RawModuleLocation } from "./RawModuleLocation";
 
 export interface ModuleInfoFile {
   identifier: string;
+  objectId: string;
   location: RawModuleLocation;
   parentDirectory: string;
   numericVersion: number;

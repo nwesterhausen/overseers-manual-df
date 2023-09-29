@@ -37,31 +37,9 @@ const ParsingProgressBar: Component = () => {
         <Show when={settings.includeLocationVanilla}>
           <div class='basis-1/6'>
             <div class='stat place-items-center'>
-              <div class='stat-title'>Vanilla Raws</div>
+              <div class='stat-title'>Parsed Raws</div>
               <div class='stat-value'>
-                {rawsContext.vanillaRawCount() || <span class='loading loading-ring loading-xs'></span>}
-              </div>
-            </div>
-          </div>
-        </Show>
-        <Show when={settings.includeLocationMods}>
-          <div class='basis-1/6'>
-            <div class='join-item'>
-              <div class='stat place-items-center'>
-                <div class='stat-title'>Downloaded Mods</div>
-                <div class='stat-value'>
-                  {rawsContext.downloadedModRawCount() || <span class='loading loading-ring loading-xs'></span>}
-                </div>
-              </div>
-            </div>
-          </div>
-        </Show>
-        <Show when={settings.includeLocationInstalledMods}>
-          <div class='basis-1/6'>
-            <div class='stat place-items-center'>
-              <div class='stat-title'>&quot;Installed&quot; Mods</div>
-              <div class='stat-value'>
-                {rawsContext.installedModRawCount() || <span class='loading loading-ring loading-xs'></span>}
+                {rawsContext.parsingProgress().runningTotal || <span class='loading loading-ring loading-xs'></span>}
               </div>
             </div>
           </div>

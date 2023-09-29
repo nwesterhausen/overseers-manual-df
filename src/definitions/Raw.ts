@@ -12,11 +12,12 @@ import { Raw } from './types';
  * @returns True if the element is valid Raw
  */
 export const FilterInvalidRaws = (r: Raw): boolean => {
-  if (!r.name || r.name.singular.length === 0 || !r.identifier || r.identifier.length === 0) {
-    console.error(`Invalid raw: ${r.identifier} ${r.objectId}`, r);
+  if (!r.identifier || r.identifier.length === 0) {
+    console.error(`Invalid raw (identifier): ${r.identifier} ${r.objectId}`, r);
     return false;
   }
   if (!r.metadata) {
+    console.error(`Invalid raw (metadata): ${r.identifier} ${r.objectId}`, r);
     return false;
   }
   return true;
@@ -63,9 +64,13 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
       continue;
     }
 
-    // Initialized all_tags field
-    console.debug(`Sorting ${rawsSorted[i].metadata.objectType} ${rawsSorted[i].name.singular}`);
-    console.debug(rawsSorted[i]);
+    // // Initialized all_tags field
+    // console.debug(
+    //   `Sorting ${rawsSorted[i].metadata.objectType} ${
+    //     rawsSorted[i].name ? rawsSorted[i].name.singular : rawsSorted[i].identifier
+    //   }`,
+    // );
+    // console.debug(rawsSorted[i]);
 
     switch (rawsSorted[i].metadata.objectType) {
       case 'Creature': {
@@ -83,31 +88,18 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
         // rawsSorted[i].searchString = GenerateInorganicSearchString(rawsSorted[i] as DFInorganic);
         break;
       }
+      case 'MaterialTemplate': {
+        // Build a search string for the raw
+        // rawsSorted[i].searchString = GenerateMaterialTemplateSearchString(rawsSorted[i] as DFMaterialTemplate);
+        break;
+      }
       default:
         console.error(`Unhandled raw type ${rawsSorted[i].metadata.objectType}!`);
     }
   }
 
   // Unique values only
-  const uniqResult = rawsSorted.reduce((res: Raw[], current) => {
-    // Check if we already have one with that identifier
-    const raw = res.find((v) => v.identifier === current.identifier);
-
-    // If the identifier exists in our results array, we already have it entered. We can append our source to it.
-    if (raw) {
-      // Check if the array of module_parents exists or not first
-      if (Array.isArray(raw.rawModuleParents)) {
-        raw.rawModuleParents.push(current.metadata.rawModuleLocation);
-      } else {
-        raw.rawModuleParents = [current.metadata.rawModuleLocation];
-      }
-
-      return res;
-    } else {
-      // If we didn't find it, append it
-      return [...res, current];
-    }
-  }, [] as Raw[]);
+  const uniqResult = allowOnlyUniqueObjectId(rawsSorted);
 
   // Return the sorted and unique result
   return uniqResult;
@@ -216,4 +208,21 @@ export function labelForModule(moduleInfo: ModuleInfoFile | undefined, moduleId?
   }
 
   return `${moduleInfo.name || 'unknown'} v${moduleInfo.displayedVersion || '?'}`;
+}
+
+function allowOnlyUniqueObjectId(rawsArray: Raw[]): Raw[] {
+  const seen = new Set();
+  const unique: Raw[] = [];
+  for (const raw of rawsArray) {
+    // Skip those with tags "DoesNotExist"
+    if (Array.isArray(raw.tags) && raw.tags.indexOf('DoesNotExist') !== -1) {
+      continue;
+    }
+
+    if (!seen.has(raw.objectId)) {
+      unique.push(raw);
+      seen.add(raw.objectId);
+    }
+  }
+  return unique;
 }

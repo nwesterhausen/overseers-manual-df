@@ -10,7 +10,7 @@ export type PlantTag =
   | "Biome"
   | "Frequency"
   | "UseMaterialTemplate"
-  | "BasicMat"
+  | "BasicMaterial"
   | "UseMaterial"
   | "Material"
   | "PrefString"
