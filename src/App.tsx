@@ -41,17 +41,18 @@ const App: Component = () => {
 
   return (
     <>
-      <MenuBar />
-      <div class='px-2 main'>
-        <div class='flex justify-center'>
-          <ParsingProgressBar />
-          <LoadingRawsProgress />
+      <MenuBar>
+        <div class='px-2 main'>
+          <div class='flex justify-center'>
+            <ParsingProgressBar />
+            <LoadingRawsProgress />
+          </div>
+          {contentToDisplay() ? <Listings /> : <DFDirectoryNotSet />}
         </div>
-        {contentToDisplay() ? <Listings /> : <DFDirectoryNotSet />}
-      </div>
-      <ScrollToTopBtn />
-      <SearchFilters />
-      <SettingsModal />
+        <ScrollToTopBtn />
+        <SearchFilters />
+        <SettingsModal />
+      </MenuBar>
     </>
   );
 };

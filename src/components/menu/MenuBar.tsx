@@ -1,7 +1,9 @@
-import { Component, Show, createMemo } from 'solid-js';
+import { ParentComponent, Show, createMemo } from 'solid-js';
 import { STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../../providers/RawsProvider';
 import { useSearchProvider } from '../../providers/SearchProvider';
 import AdvancedFiltersButton from './AdvancedFiltersButton';
+import AppDrawerButton from './AppDrawerButton';
+import AppDrawerContent from './AppDrawerContent';
 import GameReferenceButton from './GameReferenceButton';
 import GraphicsToggleButton from './GraphicsToggleButton';
 import OpenSettingsButton from './OpenSettingsButton';
@@ -10,7 +12,7 @@ import ReloadRawsButton from './ReloadRawsButton';
 import SearchBox from './SearchBox';
 import SetDirectoryButton from './SetDirectoryButton';
 
-const MenuBar: Component = () => {
+const MenuBar: ParentComponent = (props) => {
   const rawsContext = useRawsProvider();
   const searchContext = useSearchProvider();
 
@@ -21,6 +23,7 @@ const MenuBar: Component = () => {
       <div class='navbar'>
         <div class='me-auto'>
           <div class='join'>
+            <AppDrawerButton />
             <SetDirectoryButton
               disabled={rawsContext.parsingStatus() === STS_PARSING && rawsContext.parsingStatus() === STS_LOADING}
             />
@@ -52,6 +55,14 @@ const MenuBar: Component = () => {
             <OpenSettingsButton />
           </div>
         </div>
+      </div>
+      <div class='drawer'>
+        <input id='my-drawer' type='checkbox' class='drawer-toggle' />
+        <div class='drawer-content'>
+          {/* Page content here */}
+          {props.children}
+        </div>
+        <AppDrawerContent />
       </div>
     </>
   );
