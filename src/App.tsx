@@ -1,5 +1,5 @@
-import { getVersion } from '@tauri-apps/api/app';
-import { appWindow } from '@tauri-apps/api/window';
+import { getVersion } from '@tauri-apps/plugin-app';
+import { getCurrent } from '@tauri-apps/plugin-window';
 import { Component, createEffect, createMemo, createResource } from 'solid-js';
 import DFDirectoryNotSet from './components/DFDirectoryNotSet';
 import Listings from './components/Listings';
@@ -18,6 +18,8 @@ const APP_NAME = "Overseer's Reference Manual";
 // const APP_REPO = "https://github.com/nwesterhausen/overseers-manual-df"
 
 const App: Component = () => {
+  const appWindow = getCurrent();
+
   const rawsContext = useRawsProvider();
   const directoryContext = useDirectoryProvider();
 

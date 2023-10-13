@@ -1,7 +1,7 @@
 import { createContextProvider } from '@solid-primitives/context';
-import { OpenDialogOptions, open as tauriOpen } from '@tauri-apps/api/dialog';
 import { Event, listen } from '@tauri-apps/api/event';
-import { readDir } from '@tauri-apps/api/fs';
+import { OpenDialogOptions, open as tauriOpen } from '@tauri-apps/plugin-dialog';
+import { readDir } from '@tauri-apps/plugin-fs';
 import { createMemo, createResource, createSignal } from 'solid-js';
 import { splitPathAgnostically } from '../lib/Utils';
 import { PATH_STRING, PATH_TYPE, get as getFromStore, getSymbol, init as initStore, set } from '../settings';
@@ -20,7 +20,6 @@ export interface DirectorySelection {
  * Dialog options for the select directory window
  */
 const openDialogOptions: OpenDialogOptions = {
-  directory: true,
   title: 'Select your Dwarf Fortress install Directory',
 };
 
@@ -50,7 +49,11 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     activateManualDirectorySelection,
     async () => {
       try {
-        const folderPath = await tauriOpen(openDialogOptions);
+        const folderPath = await tauriOpen({
+          ...openDialogOptions,
+          multiple: false,
+          directory: true,
+        });
         processDirectoryPath(folderPath);
 
         // Re-arm the directory selection action after 50ms

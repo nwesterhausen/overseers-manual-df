@@ -1,6 +1,6 @@
 import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api';
-import { appWindow } from '@tauri-apps/api/window';
+import { getCurrent } from '@tauri-apps/plugin-window';
 import MiniSearch from 'minisearch';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import { ModuleInfoFile } from '../definitions/ModuleInfoFile';
@@ -27,6 +27,8 @@ export const STS_PARSING = 'Parsing Raws',
 const MAX_RESULTS = 50;
 
 export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
+  const appWindow = getCurrent();
+
   const directoryContext = useDirectoryProvider();
   const searchContext = useSearchProvider();
   const [settings] = useSettingsContext();

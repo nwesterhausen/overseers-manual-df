@@ -10,27 +10,19 @@
     "productName": "overseers-manual-df",
     "version": "../package.json"
   },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "dialog": {
-        "all": false,
-        "open": true
-      },
-      "fs": {
-        "scope": ["**"],
-        "all": false,
-        "readDir": true
-      },
-      "protocol": {
-        "asset": true,
-        "assetScope": ["**"]
-      },
-      "window": {
-        "all": false,
-        "setTitle": true
-      }
+  "plugins": {
+    "fs": {
+      "scope": [
+        "**"
+      ]
     },
+    "updater": {
+      "endpoints": [
+        "https://tauri-update-server.nwest.workers.dev/v1/{{target}}/{{arch}}/{{current_version}}"
+      ]
+    }
+  },
+  "tauri": {
     "bundle": {
       "active": true,
       "category": "Reference",
@@ -39,9 +31,14 @@
         "depends": []
       },
       "externalBin": [],
-      "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
       "identifier": "games.nwest.dwarffortress.overseer-manual",
-      "shortDescription": "Overseer's Reference Manual for Dwarf Fortress",
       "longDescription": "A utility to make it easier to get details about the creatures and other things represented in raws for your Dwarf Fortress saves.",
       "macOS": {
         "entitlements": null,
@@ -51,7 +48,12 @@
         "signingIdentity": null
       },
       "resources": [],
+      "shortDescription": "Overseer's Reference Manual for Dwarf Fortress",
       "targets": "all",
+      "updater": {
+        "active": true,
+        "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEE2QjA3NUFBMzhGNEVFNTkKUldSWjd2UTRxbld3cHVxZzh5OTBJNDE3bU5pT3pneGtpUjVjVXhMTmZ4NDZmaHVHQ0srK3E2QzQK"
+      },
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
@@ -62,13 +64,13 @@
       }
     },
     "security": {
+      "assetProtocol": {
+        "enable": true,
+        "scope": [
+          "**"
+        ]
+      },
       "csp": null
-    },
-    "updater": {
-      "active": true,
-      "dialog": true,
-      "endpoints": ["https://tauri-update-server.nwest.workers.dev/v1/{{target}}/{{arch}}/{{current_version}}"],
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEE2QjA3NUFBMzhGNEVFNTkKUldSWjd2UTRxbld3cHVxZzh5OTBJNDE3bU5pT3pneGtpUjVjVXhMTmZ4NDZmaHVHQ0srK3E2QzQK"
     },
     "windows": [
       {

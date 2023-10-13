@@ -3,22 +3,18 @@
 // SPDX-License-Identifier: MIT
 
 import { UnlistenFn } from '@tauri-apps/api/event';
-import { invoke } from '@tauri-apps/api/tauri';
-import { appWindow } from '@tauri-apps/api/window';
-
-interface ChangePayload<T> {
-  path: string;
-  key: string;
-  value: T | null;
-}
+import { Store as TauriStore } from '@tauri-apps/plugin-store';
 
 /**
  * A key-value store persisted by the backend layer.
  */
 export class Store {
   path: string;
+  _store: TauriStore;
+
   constructor(path: string) {
     this.path = path;
+    this._store = new TauriStore(path);
   }
 
   /**
@@ -29,11 +25,7 @@ export class Store {
    * @returns
    */
   set(key: string, value: unknown): Promise<void> {
-    return invoke<void>('plugin:store|set', {
-      path: this.path,
-      key,
-      value,
-    });
+    return this._store.set(key, value);
   }
 
   /**
@@ -43,10 +35,7 @@ export class Store {
    * @returns
    */
   get<T>(key: string): Promise<T | null> {
-    return invoke('plugin:store|get', {
-      path: this.path,
-      key,
-    });
+    return this._store.get(key);
   }
 
   /**
@@ -56,10 +45,7 @@ export class Store {
    * @returns
    */
   has(key: string): Promise<boolean> {
-    return invoke('plugin:store|has', {
-      path: this.path,
-      key,
-    });
+    return this._store.has(key);
   }
 
   /**
@@ -69,10 +55,7 @@ export class Store {
    * @returns
    */
   delete(key: string): Promise<boolean> {
-    return invoke('plugin:store|delete', {
-      path: this.path,
-      key,
-    });
+    return this._store.delete(key);
   }
 
   /**
@@ -82,9 +65,7 @@ export class Store {
    * @returns
    */
   clear(): Promise<void> {
-    return invoke('plugin:store|clear', {
-      path: this.path,
-    });
+    return this._store.clear();
   }
 
   /**
@@ -94,9 +75,7 @@ export class Store {
    * @returns
    */
   reset(): Promise<void> {
-    return invoke('plugin:store|reset', {
-      path: this.path,
-    });
+    return this._store.reset();
   }
 
   /**
@@ -105,9 +84,7 @@ export class Store {
    * @returns
    */
   keys(): Promise<string[]> {
-    return invoke('plugin:store|keys', {
-      path: this.path,
-    });
+    return this._store.keys();
   }
 
   /**
@@ -116,9 +93,7 @@ export class Store {
    * @returns
    */
   values(): Promise<string[]> {
-    return invoke('plugin:store|values', {
-      path: this.path,
-    });
+    return this._store.values();
   }
 
   /**
@@ -127,9 +102,7 @@ export class Store {
    * @returns
    */
   entries<T>(): Promise<[key: string, value: T][]> {
-    return invoke('plugin:store|entries', {
-      path: this.path,
-    });
+    return this._store.entries();
   }
 
   /**
@@ -137,10 +110,8 @@ export class Store {
    *
    * @returns
    */
-  length(): Promise<string[]> {
-    return invoke('plugin:store|length', {
-      path: this.path,
-    });
+  length(): Promise<number> {
+    return this._store.length();
   }
 
   /**
@@ -152,9 +123,7 @@ export class Store {
    * @returns
    */
   load(): Promise<void> {
-    return invoke('plugin:store|load', {
-      path: this.path,
-    });
+    return this._store.reset();
   }
 
   /**
@@ -165,9 +134,7 @@ export class Store {
    * @returns
    */
   save(): Promise<void> {
-    return invoke('plugin:store|save', {
-      path: this.path,
-    });
+    return this._store.save();
   }
 
   /**
@@ -177,11 +144,7 @@ export class Store {
    * @returns A promise resolving to a function to unlisten to the event.
    */
   onKeyChange<T>(key: string, cb: (value: T | null) => void): Promise<UnlistenFn> {
-    return appWindow.listen<ChangePayload<T>>('store://change', (event) => {
-      if (event.payload.path === this.path && event.payload.key === key) {
-        cb(event.payload.value);
-      }
-    });
+    return this._store.onKeyChange<T>(key, cb);
   }
 
   /**
@@ -189,11 +152,7 @@ export class Store {
    * @param cb -
    * @returns A promise resolving to a function to unlisten to the event.
    */
-  onChange(cb: (key: string, value: unknown) => void): Promise<UnlistenFn> {
-    return appWindow.listen<ChangePayload<unknown>>('store://change', (event) => {
-      if (event.payload.path === this.path) {
-        cb(event.payload.key, event.payload.value);
-      }
-    });
+  onChange<T>(cb: (key: string, value: unknown) => void): Promise<UnlistenFn> {
+    return this._store.onChange<T>(cb);
   }
 }
