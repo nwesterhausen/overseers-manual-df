@@ -1,4 +1,4 @@
-import { Plant } from './Plant';
+import { Plant } from '../definitions/Plant';
 import { TransformIntoSearchTermString } from './Utils';
 
 export function GeneratePlantSearchString(plant: Plant): string {

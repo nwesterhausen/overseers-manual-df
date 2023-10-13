@@ -1,5 +1,5 @@
 import { Component, For } from 'solid-js';
-import { labelForModule } from '../../definitions/Raw';
+import { labelForModule } from '../../lib/Raw';
 import { useRawsProvider } from '../../providers/RawsProvider';
 import { useSearchProvider } from '../../providers/SearchProvider';
 

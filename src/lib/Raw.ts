@@ -1,9 +1,9 @@
-import { Creature } from './Creature';
+import { Creature } from '../definitions/Creature';
+import { ModuleInfoFile } from '../definitions/ModuleInfoFile';
+import { Plant } from '../definitions/Plant';
+import { Raw } from '../definitions/types';
 import { GenerateCreatureSearchString } from './CreatureUtil';
-import { ModuleInfoFile } from './ModuleInfoFile';
-import { Plant } from './Plant';
 import { GeneratePlantSearchString } from './PlantUtil';
-import { Raw } from './types';
 
 /**
  * Array.prototype.filter function to only allow valid Raw objects.

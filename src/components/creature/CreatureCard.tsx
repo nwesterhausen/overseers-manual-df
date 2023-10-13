@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
 import { Creature } from '../../definitions/Creature';
-import { FormatDescription, FormatName } from '../../definitions/CreatureUtil';
 import { Raw } from '../../definitions/types';
+import { FormatDescription, FormatName } from '../../lib/CreatureUtil';
 import RawJsonTable from '../raws/RawsDetailTable';
 import CreatureDescriptionTable from './CreateDescriptionTable';
 import CreatureBadges from './CreatureBadges';

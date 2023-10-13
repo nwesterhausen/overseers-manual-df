@@ -1,7 +1,7 @@
 import { Component, For } from 'solid-js';
 import { Creature } from '../../definitions/Creature';
-import { ActiveTimeStatus, NoSeasonStatus } from '../../definitions/CreatureUtil';
-import { toTitleCase } from '../../definitions/Utils';
+import { ActiveTimeStatus, NoSeasonStatus } from '../../lib/CreatureUtil';
+import { toTitleCase } from '../../lib/Utils';
 
 const CreatureActivityDisplay: Component<{ creature: Creature }> = (props) => {
   const seasonActivity = CondenseInactiveSeasons(props.creature);
@@ -24,8 +24,10 @@ export default CreatureActivityDisplay;
 const CondenseInactiveSeasons = (creature: Creature): string[] => {
   // Multiple sets of season activity based on caste
   const strArr: string[] = [];
-  for (const caste of creature.castes) {
-    strArr.push(`${toTitleCase(caste.identifier)}: ${NoSeasonStatus(caste)}`);
+  if (Array.isArray(creature.castes)) {
+    for (const caste of creature.castes) {
+      strArr.push(`${toTitleCase(caste.identifier)}: ${NoSeasonStatus(caste)}`);
+    }
   }
   return strArr;
 };
@@ -33,8 +35,10 @@ const CondenseInactiveSeasons = (creature: Creature): string[] => {
 const CondenseActiveTimes = (creature: Creature): string[] => {
   // Multiple sets of season activity based on caste
   const strArr: string[] = [];
-  for (const caste of creature.castes) {
-    strArr.push(`${toTitleCase(caste.identifier)}: ${ActiveTimeStatus(caste)}`);
+  if (Array.isArray(creature.castes)) {
+    for (const caste of creature.castes) {
+      strArr.push(`${toTitleCase(caste.identifier)}: ${ActiveTimeStatus(caste)}`);
+    }
   }
   return strArr;
 };

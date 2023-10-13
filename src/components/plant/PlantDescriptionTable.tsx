@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
-import { UndergroundDepthDescription } from '../../definitions/CreatureUtil';
 import { Plant } from '../../definitions/Plant';
+import { UndergroundDepthDescription } from '../../lib/CreatureUtil';
 
 const PlantDescriptionTable: Component<{ plant: Plant }> = (props) => {
   return (

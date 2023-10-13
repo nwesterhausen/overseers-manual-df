@@ -1,6 +1,6 @@
 import { Component, For, Show } from 'solid-js';
 import { Caste } from '../../definitions/Caste';
-import { toTitleCase } from '../../definitions/Utils';
+import { toTitleCase } from '../../lib/Utils';
 
 const CreatureMilkTable: Component<{ values: Caste[]; fallbackDesc: string }> = (props) => {
   return (

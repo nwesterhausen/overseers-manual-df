@@ -1,6 +1,6 @@
 import { Component, For, Show } from 'solid-js';
 import { Caste } from '../../definitions/Caste';
-import { toTitleCase } from '../../definitions/Utils';
+import { toTitleCase } from '../../lib/Utils';
 
 function rawToTiles(grazeVal: number): number {
   const mathTile = 20000 / grazeVal;

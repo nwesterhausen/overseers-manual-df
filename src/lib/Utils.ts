@@ -1,5 +1,5 @@
-import { Creature } from './Creature';
-import { StateName } from './StateName';
+import { Creature } from '../definitions/Creature';
+import { StateName } from '../definitions/StateName';
 
 export const M3_to_CM3 = 1000000;
 
@@ -66,7 +66,7 @@ export const toTitleCase = (str: string): string => {
 export const SearchableNames = (creature: Creature): string => {
   const flatNames: string[] = [];
 
-  if (creature.name.singular.length > 0) {
+  if (creature.name && creature.name.singular.length > 0) {
     flatNames.push(...creature.name.singular, ...creature.name.plural, ...creature.name.adjective);
   }
   if (creature.generalBabyName && creature.generalBabyName.singular.length > 0) {
@@ -76,15 +76,17 @@ export const SearchableNames = (creature: Creature): string => {
     flatNames.push(...creature.generalChildName.singular, ...creature.generalChildName.plural);
   }
 
-  for (const caste of creature.castes) {
-    if (caste.casteName && caste.casteName.singular.length > 0) {
-      flatNames.push(...caste.casteName.singular, ...caste.casteName.plural);
-    }
-    if (caste.childName && caste.childName.singular.length > 0) {
-      flatNames.push(...caste.childName.singular, ...caste.childName.plural);
-    }
-    if (caste.babyName && caste.babyName.singular.length > 0) {
-      flatNames.push(...caste.babyName.singular, ...caste.babyName.plural);
+  if (Array.isArray(creature.castes)) {
+    for (const caste of creature.castes) {
+      if (caste.casteName && caste.casteName.singular.length > 0) {
+        flatNames.push(...caste.casteName.singular, ...caste.casteName.plural);
+      }
+      if (caste.childName && caste.childName.singular.length > 0) {
+        flatNames.push(...caste.childName.singular, ...caste.childName.plural);
+      }
+      if (caste.babyName && caste.babyName.singular.length > 0) {
+        flatNames.push(...caste.babyName.singular, ...caste.babyName.plural);
+      }
     }
   }
 

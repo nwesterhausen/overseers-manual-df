@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
-import { FormatName } from '../../definitions/CreatureUtil';
 import { Plant } from '../../definitions/Plant';
 import { Raw } from '../../definitions/types';
+import { FormatName } from '../../lib/CreatureUtil';
 import RawJsonTable from '../raws/RawsDetailTable';
 import PlantDescriptionTable from './PlantDescriptionTable';
 import PlantProvidesList from './PlantProvidesList';

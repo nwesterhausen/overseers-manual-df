@@ -9,7 +9,7 @@ import {
   IsEggLayer,
   IsFlier,
   IsGnawer,
-} from '../../definitions/CreatureUtil';
+} from '../../lib/CreatureUtil';
 import TwoPartBadge from '../TwoPartBadge';
 
 const CreatureBadges: Component<{ creature: Creature }> = (props) => {

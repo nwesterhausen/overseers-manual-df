@@ -1,11 +1,11 @@
-import { BodySize } from './BodySize';
-import { Caste } from './Caste';
-import { CasteTag } from './CasteTag';
-import { Creature } from './Creature';
-import { Name } from './Name';
-import { SingPlurName } from './SingPlurName';
+import { BodySize } from '../definitions/BodySize';
+import { Caste } from '../definitions/Caste';
+import { CasteTag } from '../definitions/CasteTag';
+import { Creature } from '../definitions/Creature';
+import { Name } from '../definitions/Name';
+import { SingPlurName } from '../definitions/SingPlurName';
+import { Raw } from '../definitions/types';
 import { SearchableNames, SimplifyVolume, TransformIntoSearchTermString, toTitleCase } from './Utils';
-import { Raw } from './types';
 
 /**
  * Returns true if the raw is a Creature raw.
@@ -24,6 +24,10 @@ export function isCreature(raw: Raw | Creature): boolean {
  * @returns true if one caste of this creature lays eggs
  */
 export const IsEggLayer = (creature: Creature): boolean => {
+  if (!Array.isArray(creature.castes)) {
+    return false;
+  }
+
   for (const caste of creature.castes) {
     if (caste.tags && caste.tags.indexOf('LaysEggs') !== -1) {
       return true;
@@ -39,6 +43,9 @@ export const IsEggLayer = (creature: Creature): boolean => {
  * @returns pet value of first encountered value or 0
  */
 export const FirstPetValue = (creature: Creature): number => {
+  if (!Array.isArray(creature.castes)) {
+    return 0;
+  }
   for (const caste of creature.castes) {
     if (caste.petValue > 0) {
       return caste.petValue;
@@ -54,6 +61,9 @@ export const FirstPetValue = (creature: Creature): number => {
  * @returns difficulty value of first encountered value or 0
  */
 export const FirstDifficulty = (creature: Creature): number => {
+  if (!Array.isArray(creature.castes)) {
+    return 0;
+  }
   for (const caste of creature.castes) {
     if (caste.difficulty > 0) {
       return caste.difficulty;
@@ -95,9 +105,11 @@ export const EggLayingStatus = (creature: Creature): string => {
  */
 export const LifeExpectancyStatus = (creature: Creature): string => {
   const ret: string[] = [];
-  for (const caste of creature.castes) {
-    if (caste.maxAge && caste.maxAge.length > 1 && caste.maxAge[0] > 0 && caste.maxAge[1] > 0) {
-      ret.push(`${caste} lives ${caste.maxAge.join(' - ')} years.`);
+  if (Array.isArray(creature.castes)) {
+    for (const caste of creature.castes) {
+      if (caste.maxAge && caste.maxAge.length > 1 && caste.maxAge[0] > 0 && caste.maxAge[1] > 0) {
+        ret.push(`${caste} lives ${caste.maxAge.join(' - ')} years.`);
+      }
     }
   }
   if (ret.length === 0) {
@@ -158,12 +170,14 @@ export const BodySizeStatus = (size: BodySize): string => {
  */
 export const GrownAtStatus = (creature: Creature): string => {
   const sts: string[] = [];
-  for (const caste of creature.castes) {
-    if (caste.child) {
-      if (caste.identifier === 'ALL') {
-        sts.push(`They reach adulthood at ${caste.child} years.`);
-      } else {
-        sts.push(`${toTitleCase(caste.identifier)}s reach adulthood at ${caste.child} years.`);
+  if (Array.isArray(creature.castes)) {
+    for (const caste of creature.castes) {
+      if (caste.child) {
+        if (caste.identifier === 'ALL') {
+          sts.push(`They reach adulthood at ${caste.child} years.`);
+        } else {
+          sts.push(`${toTitleCase(caste.identifier)}s reach adulthood at ${caste.child} years.`);
+        }
       }
     }
   }
@@ -302,6 +316,9 @@ export const IsGnawer = (creature: Creature): boolean => {
 };
 
 export const HasCasteTag = (creature: Creature, tag: CasteTag): boolean => {
+  if (!Array.isArray(creature.castes)) {
+    return false;
+  }
   for (const caste of creature.castes) {
     if (caste.tags && caste.tags.indexOf(tag) !== -1) {
       return true;
@@ -311,14 +328,19 @@ export const HasCasteTag = (creature: Creature, tag: CasteTag): boolean => {
 };
 
 export const FormatName = (name: Name | SingPlurName): string => {
+  if (typeof name === 'undefined') {
+    return 'Unknown';
+  }
   return toTitleCase(name.singular);
 };
 
 export const FormatDescription = (creature: Creature): string => {
   const strArr: string[] = [];
-  for (const caste of creature.castes) {
-    if (caste.description) {
-      strArr.push(caste.description);
+  if (Array.isArray(creature.castes)) {
+    for (const caste of creature.castes) {
+      if (caste.description) {
+        strArr.push(caste.description);
+      }
     }
   }
   if (strArr.length === 0) {
@@ -335,11 +357,13 @@ export const FormatDescription = (creature: Creature): string => {
  */
 export const PetValueStatus = (creature: Creature): string => {
   const ret: string[] = [];
-  for (const caste of creature.castes) {
-    if (caste.identifier === 'ALL' || caste.identifier === 'SPECIES') {
-      ret.push(`Worth ${caste.petValue} as a pet.`);
-    } else {
-      ret.push(`${toTitleCase(caste.identifier)}s worth ${caste.petValue} as a pet.`);
+  if (Array.isArray(creature.castes)) {
+    for (const caste of creature.castes) {
+      if (caste.identifier === 'ALL' || caste.identifier === 'SPECIES') {
+        ret.push(`Worth ${caste.petValue} as a pet.`);
+      } else {
+        ret.push(`${toTitleCase(caste.identifier)}s worth ${caste.petValue} as a pet.`);
+      }
     }
   }
   if (ret.length === 0) {
@@ -350,9 +374,11 @@ export const PetValueStatus = (creature: Creature): string => {
 
 export const CondensedEggSize = (creature: Creature): string => {
   const ret: string[] = [];
-  for (const caste of creature.castes) {
-    if (caste.eggSize > 0) {
-      ret.push(`${SimplifyVolume(caste.eggSize)}`);
+  if (Array.isArray(creature.castes)) {
+    for (const caste of creature.castes) {
+      if (caste.eggSize > 0) {
+        ret.push(`${SimplifyVolume(caste.eggSize)}`);
+      }
     }
   }
   if (ret.length === 0) {
@@ -364,15 +390,17 @@ export const CondensedEggSize = (creature: Creature): string => {
 export const CreatureIntelligenceSummary = (creature: Creature): string => {
   const ret: string[] = [];
 
-  for (const caste of creature.castes) {
-    if (caste.tags && caste.tags.indexOf('Intelligent') !== -1) {
-      ret.push('intelligent');
-    }
-    if (caste.tags && caste.tags.indexOf('CanLearn') !== -1) {
-      ret.push('learns');
-    }
-    if (caste.tags && caste.tags.indexOf('CanSpeak') !== -1) {
-      ret.push('speaks');
+  if (Array.isArray(creature.castes)) {
+    for (const caste of creature.castes) {
+      if (caste.tags && caste.tags.indexOf('Intelligent') !== -1) {
+        ret.push('intelligent');
+      }
+      if (caste.tags && caste.tags.indexOf('CanLearn') !== -1) {
+        ret.push('learns');
+      }
+      if (caste.tags && caste.tags.indexOf('CanSpeak') !== -1) {
+        ret.push('speaks');
+      }
     }
   }
 
@@ -392,8 +420,6 @@ export const GenerateCreatureSearchString = (creature: Creature): string => {
   let searchableTerms = [
     SearchableNames(creature),
     IsEggLayer(creature) ? `eggs ${CondensedEggSize(creature)}` : '',
-    Object.values(creature.castes.map((v) => v.description)).join(' '),
-    Object.values(creature.castes.map((v) => v.tags)).join(' '),
     FirstPetValue(creature) > 0 ? `pet value ${FirstPetValue(creature)}` : '',
     FirstDifficulty(creature) > 0 ? `difficulty ${FirstDifficulty(creature)}` : '',
     CreatureIntelligenceSummary(creature),
@@ -402,6 +428,11 @@ export const GenerateCreatureSearchString = (creature: Creature): string => {
   if (creature.tags) {
     searchableTerms.push(creature.tags.indexOf('LocalPopsProduceHeroes') === -1 ? '' : 'playable');
     searchableTerms.push(creature.tags.indexOf('LocalPopsControllable') === -1 ? '' : 'civilized');
+  }
+
+  if (Array.isArray(creature.castes)) {
+    searchableTerms.push(Object.values(creature.castes.map((v) => v.description)).join(' '));
+    searchableTerms.push(Object.values(creature.castes.map((v) => v.tags)).join(' '));
   }
 
   searchableTerms = searchableTerms.concat(creature.tags);

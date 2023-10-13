@@ -1,7 +1,7 @@
 import { Component, For, Show } from 'solid-js';
 import { Caste } from '../../definitions/Caste';
-import { FormatName } from '../../definitions/CreatureUtil';
-import { toTitleCase } from '../../definitions/Utils';
+import { FormatName } from '../../lib/CreatureUtil';
+import { toTitleCase } from '../../lib/Utils';
 
 const CreatureNamesTable: Component<{ castes: Caste[] }> = (props) => {
   return (

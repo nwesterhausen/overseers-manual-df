@@ -1,7 +1,7 @@
 import { Component, For } from 'solid-js';
 import { Caste } from '../../definitions/Caste';
-import { BodySizeStatus } from '../../definitions/CreatureUtil';
-import { toTitleCase } from '../../definitions/Utils';
+import { BodySizeStatus } from '../../lib/CreatureUtil';
+import { toTitleCase } from '../../lib/Utils';
 
 const CreatureBodySizeTable: Component<{ castes: Caste[] }> = (props) => {
   return (
