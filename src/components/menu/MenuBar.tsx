@@ -1,16 +1,17 @@
 import { ParentComponent, Show, createMemo } from 'solid-js';
-import { STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../../providers/RawsProvider';
+import { STS_IDLE, useRawsProvider } from '../../providers/RawsProvider';
 import { useSearchProvider } from '../../providers/SearchProvider';
+import ScrollToTopBtn from '../ScrollToTopBtn';
+import SearchFilters from '../filtering/SearchFilters';
+import SettingsModal from '../filtering/SettingsModal';
 import AdvancedFiltersButton from './AdvancedFiltersButton';
 import AppDrawerButton from './AppDrawerButton';
 import AppDrawerContent from './AppDrawerContent';
-import GameReferenceButton from './GameReferenceButton';
 import GraphicsToggleButton from './GraphicsToggleButton';
 import OpenSettingsButton from './OpenSettingsButton';
 import RawTypeCheckboxes from './RawTypeCheckboxes';
 import ReloadRawsButton from './ReloadRawsButton';
 import SearchBox from './SearchBox';
-import SetDirectoryButton from './SetDirectoryButton';
 
 const MenuBar: ParentComponent = (props) => {
   const rawsContext = useRawsProvider();
@@ -24,9 +25,6 @@ const MenuBar: ParentComponent = (props) => {
         <div class='me-auto'>
           <div class='join'>
             <AppDrawerButton />
-            <SetDirectoryButton
-              disabled={rawsContext.parsingStatus() === STS_PARSING && rawsContext.parsingStatus() === STS_LOADING}
-            />
             <ReloadRawsButton disabled={disableButtons()} />
           </div>
         </div>
@@ -49,7 +47,6 @@ const MenuBar: ParentComponent = (props) => {
         <div class='ms-auto'>
           <div class='join'>
             <GraphicsToggleButton disabled={disableButtons()} />
-            <GameReferenceButton disabled={disableButtons()} />
 
             {/* <ThemeChangeButton /> */}
             <OpenSettingsButton />
@@ -63,6 +60,10 @@ const MenuBar: ParentComponent = (props) => {
           {props.children}
         </div>
         <AppDrawerContent />
+        <ScrollToTopBtn />
+        {/*  MODALS  */}
+        <SettingsModal />
+        <SearchFilters />
       </div>
     </>
   );
