@@ -1,8 +1,8 @@
 import { Component } from 'solid-js';
-import { UndergroundDepthDescription } from '../../definitions/Creature';
-import { DFPlant } from '../../definitions/DFPlant';
+import { UndergroundDepthDescription } from '../../definitions/CreatureUtil';
+import { Plant } from '../../definitions/Plant';
 
-const PlantDescriptionTable: Component<{ plant: DFPlant }> = (props) => {
+const PlantDescriptionTable: Component<{ plant: Plant }> = (props) => {
   return (
     <table class='table table-sm'>
       <tbody>

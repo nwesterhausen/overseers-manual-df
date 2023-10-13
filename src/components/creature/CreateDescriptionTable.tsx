@@ -1,4 +1,5 @@
 import { Component, For, Show } from 'solid-js';
+import { Creature } from '../../definitions/Creature';
 import {
   ClusterSizeStatus,
   EggLayingStatus,
@@ -8,8 +9,7 @@ import {
   PopulationNumberStatus,
   TrainableStatus,
   UndergroundDepthDescription,
-} from '../../definitions/Creature';
-import { DFCreature } from '../../definitions/DFCreature';
+} from '../../definitions/CreatureUtil';
 import { toTitleCase } from '../../definitions/Utils';
 import CreatureActivityDisplay from './CreatureActivityDisplay';
 import CreatureBodySizeTable from './CreatureBodySizeTable';
@@ -17,7 +17,7 @@ import CreatureGrazerTable from './CreatureGrazerTable';
 import CreatureMilkTable from './CreatureMilkTable';
 import CreatureNamesTable from './CreatureNamesTable';
 
-const CreatureDescriptionTable: Component<{ creature: DFCreature }> = (props) => {
+const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
   return (
     <table class='table table-sm'>
       <tbody>

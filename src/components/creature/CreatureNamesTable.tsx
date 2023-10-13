@@ -1,9 +1,9 @@
 import { Component, For, Show } from 'solid-js';
-import { FormatName } from '../../definitions/Creature';
-import { DFCaste } from '../../definitions/DFCaste';
+import { Caste } from '../../definitions/Caste';
+import { FormatName } from '../../definitions/CreatureUtil';
 import { toTitleCase } from '../../definitions/Utils';
 
-const CreatureNamesTable: Component<{ castes: DFCaste[] }> = (props) => {
+const CreatureNamesTable: Component<{ castes: Caste[] }> = (props) => {
   return (
     <table class='table table-xs'>
       <tbody>

@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
-import { FormatName } from '../../definitions/Creature';
-import { DFPlant } from '../../definitions/DFPlant';
+import { FormatName } from '../../definitions/CreatureUtil';
+import { Plant } from '../../definitions/Plant';
 import { Raw } from '../../definitions/types';
 import RawJsonTable from '../raws/RawsDetailTable';
 import PlantDescriptionTable from './PlantDescriptionTable';
@@ -20,7 +20,7 @@ import PlantProvidesList from './PlantProvidesList';
  * @param props - Contains the creature to render details for.
  * @returns Component of creature data for a listing.
  */
-const BotanicalCard: Component<{ plant: DFPlant }> = (props) => {
+const BotanicalCard: Component<{ plant: Plant }> = (props) => {
   const title = FormatName(props.plant.name);
 
   return (

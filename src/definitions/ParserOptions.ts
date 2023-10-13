@@ -13,4 +13,5 @@ export interface ParserOptions {
   job: ParsingJob;
   serializeResultToJson: boolean;
   outputPath: string;
+  outputToFile: boolean;
 }

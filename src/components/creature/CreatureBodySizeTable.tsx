@@ -1,9 +1,9 @@
 import { Component, For } from 'solid-js';
-import { BodySizeStatus } from '../../definitions/Creature';
-import { DFCaste } from '../../definitions/DFCaste';
+import { Caste } from '../../definitions/Caste';
+import { BodySizeStatus } from '../../definitions/CreatureUtil';
 import { toTitleCase } from '../../definitions/Utils';
 
-const CreatureBodySizeTable: Component<{ castes: DFCaste[] }> = (props) => {
+const CreatureBodySizeTable: Component<{ castes: Caste[] }> = (props) => {
   return (
     <table class='table table-xs'>
       <tbody>

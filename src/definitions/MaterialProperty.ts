@@ -69,4 +69,12 @@ export type MaterialProperty =
   | "SoapLevel"
   | "Syndrome"
   | "Antler"
+  | "Hair"
+  | "Feather"
+  | "Scale"
+  | "Hoof"
+  | "Chitin"
+  | "Cartilage"
+  | "NervousTissue"
+  | "MeatCategory"
   | "Unknown";

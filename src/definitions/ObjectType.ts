@@ -41,4 +41,6 @@ export type ObjectType =
   | "Music"
   | "Sound"
   | "Interaction"
-  | "Unknown";
+  | "Unknown"
+  | "SelectCreature"
+  | "CreatureCaste";

@@ -1,4 +1,4 @@
-import { DFCreature } from './DFCreature';
+import { Creature } from './Creature';
 import { StateName } from './StateName';
 
 export const M3_to_CM3 = 1000000;
@@ -63,7 +63,7 @@ export const toTitleCase = (str: string): string => {
  * @param castes - Either an array of names or a names_map to turn into a searchable name string
  * @returns A string with all names inside of it
  */
-export const SearchableNames = (creature: DFCreature): string => {
+export const SearchableNames = (creature: Creature): string => {
   const flatNames: string[] = [];
 
   if (creature.name.singular.length > 0) {

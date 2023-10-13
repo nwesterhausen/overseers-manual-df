@@ -1,8 +1,8 @@
 import { Component, For, Show } from 'solid-js';
-import { DFCaste } from '../../definitions/DFCaste';
+import { Caste } from '../../definitions/Caste';
 import { toTitleCase } from '../../definitions/Utils';
 
-const CreatureMilkTable: Component<{ values: DFCaste[]; fallbackDesc: string }> = (props) => {
+const CreatureMilkTable: Component<{ values: Caste[]; fallbackDesc: string }> = (props) => {
   return (
     <table class='table table-xs'>
       <tbody>

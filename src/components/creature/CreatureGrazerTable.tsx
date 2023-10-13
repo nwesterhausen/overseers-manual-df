@@ -1,5 +1,5 @@
 import { Component, For, Show } from 'solid-js';
-import { DFCaste } from '../../definitions/DFCaste';
+import { Caste } from '../../definitions/Caste';
 import { toTitleCase } from '../../definitions/Utils';
 
 function rawToTiles(grazeVal: number): number {
@@ -8,7 +8,7 @@ function rawToTiles(grazeVal: number): number {
   return parseFloat(mathTile.toFixed(1));
 }
 
-const CreatureGrazerTable: Component<{ castes: DFCaste[]; fallbackDesc: string }> = (props) => {
+const CreatureGrazerTable: Component<{ castes: Caste[]; fallbackDesc: string }> = (props) => {
   return (
     <table class='table table-xs'>
       <tbody>

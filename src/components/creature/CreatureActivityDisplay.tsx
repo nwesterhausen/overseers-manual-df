@@ -1,9 +1,9 @@
 import { Component, For } from 'solid-js';
-import { ActiveTimeStatus, NoSeasonStatus } from '../../definitions/Creature';
-import { DFCreature } from '../../definitions/DFCreature';
+import { Creature } from '../../definitions/Creature';
+import { ActiveTimeStatus, NoSeasonStatus } from '../../definitions/CreatureUtil';
 import { toTitleCase } from '../../definitions/Utils';
 
-const CreatureActivityDisplay: Component<{ creature: DFCreature }> = (props) => {
+const CreatureActivityDisplay: Component<{ creature: Creature }> = (props) => {
   const seasonActivity = CondenseInactiveSeasons(props.creature);
   const dayActivity = CondenseActiveTimes(props.creature);
 
@@ -21,7 +21,7 @@ const CreatureActivityDisplay: Component<{ creature: DFCreature }> = (props) => 
 
 export default CreatureActivityDisplay;
 
-const CondenseInactiveSeasons = (creature: DFCreature): string[] => {
+const CondenseInactiveSeasons = (creature: Creature): string[] => {
   // Multiple sets of season activity based on caste
   const strArr: string[] = [];
   for (const caste of creature.castes) {
@@ -30,7 +30,7 @@ const CondenseInactiveSeasons = (creature: DFCreature): string[] => {
   return strArr;
 };
 
-const CondenseActiveTimes = (creature: DFCreature): string[] => {
+const CondenseActiveTimes = (creature: Creature): string[] => {
   // Multiple sets of season activity based on caste
   const strArr: string[] = [];
   for (const caste of creature.castes) {

@@ -1,4 +1,5 @@
 import { Component, Show } from 'solid-js';
+import { Creature } from '../../definitions/Creature';
 import {
   CanLearn,
   CanSpeak,
@@ -8,11 +9,10 @@ import {
   IsEggLayer,
   IsFlier,
   IsGnawer,
-} from '../../definitions/Creature';
-import { DFCreature } from '../../definitions/DFCreature';
+} from '../../definitions/CreatureUtil';
 import TwoPartBadge from '../TwoPartBadge';
 
-const CreatureBadges: Component<{ creature: DFCreature }> = (props) => {
+const CreatureBadges: Component<{ creature: Creature }> = (props) => {
   return (
     <div>
       <div class='flex justify-content-center w-100 gap-1'>

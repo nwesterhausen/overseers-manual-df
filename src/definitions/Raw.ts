@@ -1,8 +1,8 @@
-import { GenerateCreatureSearchString } from './Creature';
-import { DFCreature } from './DFCreature';
-import { DFPlant } from './DFPlant';
+import { Creature } from './Creature';
+import { GenerateCreatureSearchString } from './CreatureUtil';
 import { ModuleInfoFile } from './ModuleInfoFile';
-import { GeneratePlantSearchString } from './Plant';
+import { Plant } from './Plant';
+import { GeneratePlantSearchString } from './PlantUtil';
 import { Raw } from './types';
 
 /**
@@ -75,12 +75,12 @@ export const UniqueSort = (rawsArray: Raw[]): Raw[] => {
     switch (rawsSorted[i].metadata.objectType) {
       case 'Creature': {
         // Build a search string for the raw
-        rawsSorted[i].searchString = GenerateCreatureSearchString(rawsSorted[i] as unknown as DFCreature);
+        rawsSorted[i].searchString = GenerateCreatureSearchString(rawsSorted[i] as unknown as Creature);
         break;
       }
       case 'Plant': {
         // Build a search string for the raw
-        rawsSorted[i].searchString = GeneratePlantSearchString(rawsSorted[i] as unknown as DFPlant);
+        rawsSorted[i].searchString = GeneratePlantSearchString(rawsSorted[i] as unknown as Plant);
         break;
       }
       case 'Inorganic': {
@@ -125,7 +125,7 @@ export function RawsOnlyWithTagsOrAll(rawsArray: Raw[], allowedTags: string[]): 
   return rawsArray.filter((v) => {
     switch (v.metadata.objectType) {
       case 'Creature': {
-        const creature = v as unknown as DFCreature;
+        const creature = v as unknown as Creature;
         if (creature.tags.filter((w) => allowedTags.indexOf(w) !== -1).length > 0) {
           return true;
         }
