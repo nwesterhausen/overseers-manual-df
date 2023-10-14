@@ -3,8 +3,11 @@ import { invoke } from '@tauri-apps/api';
 import { getCurrent } from '@tauri-apps/plugin-window';
 import MiniSearch from 'minisearch';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
+import { Graphic } from '../definitions/Graphic';
 import { ModuleInfoFile } from '../definitions/ModuleInfoFile';
 import { ProgressPayload } from '../definitions/ProgressPayload';
+import { SpriteGraphic } from '../definitions/SpriteGraphic';
+import { TilePage } from '../definitions/TilePage';
 import type { Raw } from '../definitions/types';
 import { RawsOnlyWithTagsOrAll, RawsOnlyWithoutModules, UniqueSort } from '../lib/Raw';
 import { DIR_DF, DIR_NONE, useDirectoryProvider } from './DirectoryProvider';
@@ -12,8 +15,8 @@ import { useSearchProvider } from './SearchProvider';
 import { useSettingsContext } from './SettingsProvider';
 
 export interface RawStorage {
-  // graphics: DFGraphic[];
-  // tilePages: DFTilePage[];
+  graphics: Graphic[];
+  tilePages: TilePage[];
   raws: Raw[];
 }
 
@@ -54,6 +57,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const [plantRawCount, setPlantCount] = createSignal(0);
   const [inorganicRawCount, setInorganicCount] = createSignal(0);
   const [materialTemplateRawCount, setMaterialTemplateCount] = createSignal(0);
+  const [graphicCount, setGraphicCount] = createSignal(0);
 
   // Signal for setting raw parse status
   const [parsingStatus, setParsingStatus] = createSignal(STS_IDLE);
@@ -68,6 +72,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     setInorganicCount(0);
     setPlantCount(0);
     setMaterialTemplateCount(0);
+    setGraphicCount(0);
     // Reset loadRaws
     setLoadRaws(true);
   }
@@ -75,8 +80,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   // Resource for raws (actually loads raws into the search database)
   const [parsedRaws] = createResource(loadRaws, parseRaws, {
     initialValue: {
-      // graphics: [],
-      // tilePages: [],
+      graphics: [],
+      tilePages: [],
       objects: [],
     },
   });
@@ -267,16 +272,20 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       return;
     }
 
+    // Grab directory
     const dir = directoryContext.currentDirectory().path.join('/');
-
+    // Update parsing status
     setParsingStatus(STS_PARSING);
 
-    // const graphics: DFGraphic[] = [];
-    // const tilePages: DFTilePage[] = [];
+    // Lists to hold the raws we parse
+    const graphics: Graphic[] = [];
+    const tilePages: TilePage[] = [];
     const objectRaws: Raw[] = [];
 
     try {
       const raw_file_data: Raw[][] = [];
+      // See the function in dfraw_json_parser/src/lib.rs for more info
+      // The function in our lib.rs simply passes this through (more or less)
       const raw_file_json_string: string = await invoke('parse_all_raws', {
         gamePath: dir,
         window: appWindow,
@@ -285,12 +294,19 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         includeDownloadedMods: settings.includeLocationMods,
       });
 
+      // Wait for 1ms to allow the progress bar to update (hack)
       await new Promise((resolve) => setTimeout(resolve, 1));
+
+      // Parse the JSON string into an array of objects and append to our temp list
       raw_file_data.push(JSON.parse(raw_file_json_string));
 
+      // Update parsing status
       setParsingStatus(STS_LOADING);
 
+      // Wait for 1ms to allow the progress bar to update (hack)
       await new Promise((resolve) => setTimeout(resolve, 1));
+
+      // Update parsing status (reset it)
       setParsingProgress({
         currentModule: '',
         currentFile: '',
@@ -310,18 +326,32 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
           summary[raw.type] = 1;
         }
       }
+
+      // Update the counts
+      if (typeof summary['Creature'] === 'number' && !isNaN(summary['Creature'])) {
+        setCreatureCount(summary['Creature']);
+      }
+      if (typeof summary['Plant'] === 'number' && !isNaN(summary['Plant'])) {
+        setPlantCount(summary['Plant']);
+      }
+      if (typeof summary['Inorganic'] === 'number' && !isNaN(summary['Inorganic'])) {
+        setInorganicCount(summary['Inorganic']);
+      }
+      if (typeof summary['Material'] === 'number' && !isNaN(summary['Material'])) {
+        setMaterialTemplateCount(summary['Material']);
+      }
+      if (typeof summary['Graphics'] === 'number' && !isNaN(summary['Graphics'])) {
+        setGraphicCount(summary['Graphics']);
+      }
+
+      // Log some info
       console.log(`Got ${raw_array.length} raws back`);
       console.log(`Summary: `, summary);
-
-      setCreatureCount(summary['Creature'] || 0);
-      setPlantCount(summary['Plant'] || 0);
-      setInorganicCount(summary['Inorganic'] || 0);
-      setMaterialTemplateCount(summary['Material'] || 0);
 
       // Extract the graphics and tilepages
       raw_array.forEach((raw) => {
         if (raw.metadata && raw.metadata.objectType === 'Graphics') {
-          // graphics.push(raw as DFGraphic);
+          graphics.push(raw as unknown as Graphic);
           console.debug('Found graphic', raw.identifier);
         } else {
           objectRaws.push(raw);
@@ -350,8 +380,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       }, 50);
 
       return {
-        // graphics,
-        // tilePages,
+        graphics,
+        tilePages,
         objects: sortResult,
       };
     } catch (e) {
@@ -368,8 +398,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     }
 
     return {
-      // graphics,
-      // tilePages,
+      graphics,
+      tilePages,
       objects: objectRaws,
     };
   }
@@ -395,43 +425,42 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     return [];
   }
 
-  // const tryGetGraphicFor = (identifier: string): { graphic: SpriteGraphic; tilePage: DFTilePage } | undefined => {
-  //   const graphic = parsedRaws.latest.graphics.find(
-  //     (v) => v.targetIdentifier.toLowerCase() === identifier.toLowerCase(),
-  //   );
-  //   if (typeof graphic === 'undefined') {
-  //     return undefined;
-  //   }
-  //   if (graphic.graphics.length === 0) {
-  //     return undefined;
-  //   }
-  //   const sprite = graphic.graphics.find(
-  //     (v) =>
-  //       v.primaryCondition === 'Default' ||
-  //       v.primaryCondition === 'Shrub' ||
-  //       v.primaryCondition === 'Crop' ||
-  //       v.primaryCondition === 'Picked' ||
-  //       v.primaryCondition === 'Seed' ||
-  //       v.primaryCondition === 'Sapling' ||
-  //       v.primaryCondition === 'None',
-  //   );
-  //   if (typeof sprite === 'undefined') {
-  //     return undefined;
-  //   }
-  //   const tilePage = parsedRaws.latest.tilePages.find(
-  //     (v) => v.identifier.toLowerCase() === sprite.tilePageId.toLowerCase(),
-  //   );
-  //   if (typeof tilePage === 'undefined') {
-  //     return undefined;
-  //   }
-  //   return {
-  //     graphic: sprite,
-  //     tilePage,
-  //   };
-  // };
-  // const allGraphicsFor = (identifier: string): DFGraphic | undefined => {
-  //   return parsedRaws.latest.graphics.find((v) => v.targetIdentifier.toLowerCase() === identifier.toLowerCase());
-  // };
+  const tryGetGraphicFor = (identifier: string): { graphic: SpriteGraphic; tilePage: TilePage } | undefined => {
+    const graphic = parsedRaws.latest.graphics.find(
+      (graphic) => graphic.identifier.toLowerCase() === identifier.toLowerCase(),
+    );
+    if (typeof graphic === 'undefined') {
+      return undefined;
+    }
+    if (graphic.sprites.length === 0) {
+      return undefined;
+    }
+    const sprite = graphic.sprites.find(
+      (spriteGraphic) =>
+        spriteGraphic.primaryCondition === 'Default' ||
+        spriteGraphic.primaryCondition === 'Shrub' ||
+        spriteGraphic.primaryCondition === 'Crop' ||
+        spriteGraphic.primaryCondition === 'Picked' ||
+        spriteGraphic.primaryCondition === 'Seed' ||
+        spriteGraphic.primaryCondition === 'None',
+    );
+    if (typeof sprite === 'undefined') {
+      return undefined;
+    }
+    const tilePage = parsedRaws.latest.tilePages.find(
+      (tilePage) => tilePage.identifier.toLowerCase() === sprite.tilePageId.toLowerCase(),
+    );
+    if (typeof tilePage === 'undefined') {
+      return undefined;
+    }
+    return {
+      graphic: sprite,
+      tilePage,
+    };
+  };
+  const allGraphicsFor = (identifier: string): Graphic | undefined => {
+    return parsedRaws.latest.graphics.find((graphic) => graphic.identifier.toLowerCase() === identifier.toLowerCase());
+  };
 
   return {
     parsingStatus,
@@ -440,8 +469,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     rawModulesInfo: allRawsInfosJsonArray,
     rawModules,
     searchFilteredRaws,
-    // tryGetGraphicFor,
-    // allGraphicsFor,
+    tryGetGraphicFor,
+    allGraphicsFor,
     nextPage,
     prevPage,
     pageNum,
@@ -451,6 +480,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     plantRawCount,
     inorganicRawCount,
     materialTemplateRawCount,
+    graphicCount,
     totalRawCount,
   };
 });

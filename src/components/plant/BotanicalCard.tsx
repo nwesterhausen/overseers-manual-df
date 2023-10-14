@@ -2,6 +2,7 @@ import { Component } from 'solid-js';
 import { Plant } from '../../definitions/Plant';
 import { Raw } from '../../definitions/types';
 import { FormatName } from '../../lib/CreatureUtil';
+import SpriteImage from '../SpriteImage';
 import RawJsonTable from '../raws/RawsDetailTable';
 import PlantDescriptionTable from './PlantDescriptionTable';
 import PlantProvidesList from './PlantProvidesList';
@@ -31,9 +32,9 @@ const BotanicalCard: Component<{ plant: Plant }> = (props) => {
             <div class='card-title'>{title}</div>
             <div class='text-muted italic text-xs'>{props.plant.metadata.moduleName}</div>
           </div>
-          {/* <div class='self-center'>
+          <div class='self-center'>
             <SpriteImage identifier={props.plant.identifier} />
-          </div> */}
+          </div>
         </div>
         <div>
           <PlantProvidesList plant={props.plant} />

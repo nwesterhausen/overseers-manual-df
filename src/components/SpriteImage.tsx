@@ -28,8 +28,7 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
   const [currentSettings] = useSettingsContext();
 
   const spriteDetails = createMemo((): SpriteImageDetail => {
-    // const result = rawsContext.tryGetGraphicFor(props.identifier);
-    const result = undefined;
+    const result = rawsContext.tryGetGraphicFor(props.identifier);
     if (typeof result === 'undefined') {
       return {
         graphicFilePath: [],
@@ -40,7 +39,7 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
       };
     }
     return {
-      graphicFilePath: splitPathAgnostically(result.tilePage.filePath),
+      graphicFilePath: splitPathAgnostically(result.tilePage.file),
       offset: result.graphic.offset,
       offset2: result.graphic.offset2,
       tileDim: result.tilePage.tileDim,
@@ -82,7 +81,6 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
     return `${spriteDetails().pageDim.x - (offsetX() + 1) * spriteDetails().tileDim.x + dimX()}px ${
       spriteDetails().pageDim.y - (offsetY() + 1) * spriteDetails().tileDim.y + dimY()
     }px`;
-    //     return `${props.dimensionX - props.offsetX * 32}px ${props.dimensionY - props.offsetY * 32}px`;
   });
   return (
     <Show when={currentSettings.displayGraphics && spriteDetails().graphicFilePath.length > 0}>

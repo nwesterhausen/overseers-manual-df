@@ -9,5 +9,4 @@ export interface RawMetadata {
   rawIdentifier: string;
   objectType: ObjectType;
   rawModuleLocation: RawModuleLocation;
-  hidden: boolean;
 }

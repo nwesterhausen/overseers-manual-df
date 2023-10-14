@@ -2,6 +2,7 @@ import { Component } from 'solid-js';
 import { Creature } from '../../definitions/Creature';
 import { Raw } from '../../definitions/types';
 import { FormatDescription, FormatName } from '../../lib/CreatureUtil';
+import SpriteImage from '../SpriteImage';
 import RawJsonTable from '../raws/RawsDetailTable';
 import CreatureDescriptionTable from './CreateDescriptionTable';
 import CreatureBadges from './CreatureBadges';
@@ -32,9 +33,9 @@ const CreatureCard: Component<{ creature: Creature }> = (props) => {
               {props.creature.metadata.moduleName} {props.creature.metadata.moduleVersion}
             </div>
           </div>
-          {/* <div class='self-center'>
+          <div class='self-center'>
             <SpriteImage identifier={props.creature.identifier} />
-          </div> */}
+          </div>
         </div>
         <div class='card-badges'>
           <CreatureBadges creature={props.creature} />

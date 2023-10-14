@@ -11,4 +11,7 @@ export interface SpriteGraphic {
   largeImage: boolean;
   offset2: Dimensions;
   secondaryCondition: Condition;
+  colorPalletSwap: number;
+  targetIdentifier: string;
+  extraDescriptor: string;
 }
