@@ -24,8 +24,6 @@ jobs:
 
       - name: Create Fake .env File (dotenvy_macro requirement)
         run: |
-          pwd
-          ls -1
           touch src-tauri/.env
           echo APTABASE_KEY={{ secrets.APTABASE_KEY }} >> .env
           
