@@ -1,3 +1,10 @@
+## [0.26.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.26.0...v0.26.1) (2023-09-30)
+
+
+### Bug Fixes
+
+* **deps:** update tauri monorepo to v1.5.0 ([7965be2](https://github.com/nwesterhausen/overseers-manual-df/commit/7965be20e066489bf36be266b31dfa7241bc9078))
+
 ## [0.26.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.25.2...v0.26.0) (2023-09-18)
 
 
