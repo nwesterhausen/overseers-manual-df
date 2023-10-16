@@ -5,7 +5,9 @@ import MiniSearch from 'minisearch';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import { Graphic } from '../definitions/Graphic';
 import { ModuleInfoFile } from '../definitions/ModuleInfoFile';
+import { ParserOptions } from '../definitions/ParserOptions';
 import { ProgressPayload } from '../definitions/ProgressPayload';
+import { RawModuleLocation } from '../definitions/RawModuleLocation';
 import { SpriteGraphic } from '../definitions/SpriteGraphic';
 import { TilePage } from '../definitions/TilePage';
 import type { Raw } from '../definitions/types';
@@ -283,22 +285,77 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     const objectRaws: Raw[] = [];
 
     try {
-      const raw_file_data: Raw[][] = [];
       // See the function in dfraw_json_parser/src/lib.rs for more info
       // The function in our lib.rs simply passes this through (more or less)
-      const raw_file_json_string: string = await invoke('parse_all_raws', {
-        gamePath: dir,
+
+      /*
+      let mut options = ParserOptions::new(game_path);
+    options.attach_metadata_to_raws();
+
+    let mut locations: Vec<RawModuleLocation> = Vec::new();
+    if include_vanilla {
+        locations.push(RawModuleLocation::Vanilla);
+    }
+    if include_installed_mods {
+        locations.push(RawModuleLocation::InstalledMods);
+    }
+    if include_downloaded_mods {
+        locations.push(RawModuleLocation::Mods);
+    }
+
+    if locations.is_empty() {
+        return Vec::new();
+    }
+    if locations.len() == 1usize {
+        options.set_job(ParsingJob::SingleLocation);
+    }
+    options.set_locations_to_parse(locations);
+
+    log::error!("Calling parse_all_raws\n{:#?}", options);
+      */
+
+      const parsingOptions: ParserOptions = {
+        targetPath: dir,
+        attachMetadataToRaws: true,
+        skipApplyCopyTagsFrom: false,
+        skipApplyCreatureVariations: false,
+        rawsToParse: [],
+        locationsToParse: [],
+        job: 'All',
+        serializeResultToJson: false,
+        outputPath: '',
+        outputToFile: false,
+      };
+
+      const locationsToParse: RawModuleLocation[] = [];
+      if (settings.includeLocationVanilla) {
+        locationsToParse.push('Vanilla');
+      }
+      if (settings.includeLocationInstalledMods) {
+        locationsToParse.push('InstalledMods');
+      }
+      if (settings.includeLocationMods) {
+        locationsToParse.push('Mods');
+      }
+      // Shortcut the parsing if there are no locations to parse
+      if (locationsToParse.length === 0) {
+        return {
+          graphics,
+          tilePages,
+          objects: [],
+        };
+      }
+      // Update the job if there is only one location to parse
+      if (locationsToParse.length === 1) {
+        parsingOptions.job = 'SingleLocation';
+      }
+      const returned_raw_file_data: Raw[][] = await invoke('parse_all_raws', {
+        options: parsingOptions,
         window: appWindow,
-        includeVanilla: settings.includeLocationVanilla,
-        includeInstalledMods: settings.includeLocationInstalledMods,
-        includeDownloadedMods: settings.includeLocationMods,
       });
 
       // Wait for 1ms to allow the progress bar to update (hack)
       await new Promise((resolve) => setTimeout(resolve, 1));
-
-      // Parse the JSON string into an array of objects and append to our temp list
-      raw_file_data.push(JSON.parse(raw_file_json_string));
 
       // Update parsing status
       setParsingStatus(STS_LOADING);
@@ -317,7 +374,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       });
 
       // Flatten and first-pass sort results by identifier.
-      const raw_array = raw_file_data.flat(5).sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
+      const raw_array = returned_raw_file_data.flat(5).sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
       const summary = {};
       for (const raw of raw_array) {
         if (raw.type in summary) {
@@ -413,7 +470,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     const dir = directoryContext.currentDirectory().path.join('/');
 
     try {
-      const raw_file_data: ModuleInfoFile[] = JSON.parse(await invoke('parse_all_raws_info', { path: dir }));
+      const raw_file_data: ModuleInfoFile[] = await invoke('parse_all_raws_info', { path: dir });
 
       // Filter unknown raw info stuff..
       const flat_raw_info = raw_file_data.flat().filter((dfi) => dfi.identifier !== 'unknown');

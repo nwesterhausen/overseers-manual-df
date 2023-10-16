@@ -12,6 +12,17 @@ import { GeneratePlantSearchString } from './PlantUtil';
  * @returns True if the element is valid Raw
  */
 export const FilterInvalidRaws = (r: Raw): boolean => {
+  if (!r) {
+    console.error('Invalid raw (undefined/null)', r);
+    return false;
+  }
+  if (!r.type || r.type === 'SelectCreature') {
+    // SelectCreature comes back with raws without an identifier, so we skip those
+    // here to avoid log spamming. It's possible we revisit this in the future, but
+    // the ideal solution is to provide the "select creature" changes as children
+    // on the parent creature.
+    return false;
+  }
   if (!r.identifier || r.identifier.length === 0) {
     console.error(`Invalid raw (identifier): ${r.identifier} ${r.objectId}`, r);
     return false;
