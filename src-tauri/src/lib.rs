@@ -1,12 +1,19 @@
+use tauri_plugin_aptabase::EventTracker;
 use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
+
+use dotenvy_macro::dotenv;
 
 mod parsing;
 mod search_handler;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
+/// This function sets up and runs a Rust application using the Tauri framework, with various plugins
+/// and event handlers.
+/// # Panics
+/// This function will panic if the Tauri app fails to build or run.
 pub fn run() {
-    // Launch the app
-    let app = tauri::Builder::default()
+    #[allow(clippy::expect_used)]
+    tauri::Builder::default()
         // Add logging plugin
         .plugin(
             tauri_plugin_log::Builder::default()
@@ -43,15 +50,23 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         // Add simple storage plugin
         .plugin(tauri_plugin_store::Builder::default().build())
+        // Add aptabase plugin
+        .plugin(tauri_plugin_aptabase::Builder::new(dotenv!("APTABASE_KEY")).build())
         // Add invoke handlers
         .invoke_handler(tauri::generate_handler![
             parsing::passthrough::parse_all_raws,
             parsing::passthrough::parse_all_raws_info,
         ])
-        .run(tauri::generate_context!());
-
-    match app {
-        Ok(app) => app,
-        Err(error) => println!("{:?}", error),
-    }
+        .build(tauri::generate_context!())
+        .expect("Error when building tauir app")
+        .run(|handler, event| match event {
+            tauri::RunEvent::Exit { .. } => {
+                handler.track_event("app_exited", None);
+                handler.flush_events_blocking();
+            }
+            tauri::RunEvent::Ready { .. } => {
+                handler.track_event("app_started", None);
+            }
+            _ => {}
+        });
 }

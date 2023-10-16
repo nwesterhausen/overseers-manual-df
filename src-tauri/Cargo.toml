@@ -16,6 +16,7 @@ tauri-build = { version = "2.0.0-alpha.9", features = [] }
 
 [dependencies]
 chrono = "0.4"
+dotenvy_macro = "0.15.7"
 log = "0.4.20"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -64,6 +65,9 @@ branch = "v2"
 [dependencies.tauri-plugin-dialog]
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v2"
+
+[dependencies.tauri-plugin-aptabase]
+path = "../../tauri-plugin-aptabase"
 
 [features]
 # by default Tauri runs in production mode
