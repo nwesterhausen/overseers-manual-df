@@ -58,7 +58,7 @@ pub fn run() {
             parsing::passthrough::parse_all_raws_info,
         ])
         .build(tauri::generate_context!())
-        .expect("Error when building tauir app")
+        .expect("Error when building tauri app")
         .run(|handler, event| match event {
             tauri::RunEvent::Exit { .. } => {
                 handler.track_event("app_exited", None);
