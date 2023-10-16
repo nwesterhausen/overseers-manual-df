@@ -25,7 +25,7 @@ jobs:
       - name: Create Fake .env File (dotenvy_macro requirement)
         run: |
           touch src-tauri/.env
-          echo APTABASE_KEY={{ secrets.APTABASE_KEY }} >> src-tauri/.env
+          echo APTABASE_KEY=${{ secrets.APTABASE_KEY }} >> src-tauri/.env
           
       - name: Install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
