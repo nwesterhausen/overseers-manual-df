@@ -776,6 +776,7 @@ checksum = "6a1abaf4d861455be59f64fd2b55606cb151fce304ede7165f410243ce96bde6"
 [[package]]
 name = "dfraw_json_parser"
 version = "0.13.0"
+source = "git+https://github.com/nwesterhausen/dfraw_json_parser?branch=dev#46a60aa73dc70842143e3f94911eeb5c29cdd276"
 dependencies = [
  "encoding_rs",
  "encoding_rs_io",
@@ -3682,6 +3683,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-aptabase"
 version = "0.4.1"
+source = "git+https://github.com/nwesterhausen/tauri-plugin-aptabase?branch=tauri-v2#77b3aeff685bfe574e47c635c536e0ca9c2d4db0"
 dependencies = [
  "futures",
  "log",
