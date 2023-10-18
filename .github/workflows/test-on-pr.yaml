@@ -26,7 +26,7 @@ jobs:
         run: |
           touch src-tauri/.env
           echo APTABASE_KEY=${{ secrets.APTABASE_KEY }} >> src-tauri/.env
-          
+
       - name: Install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
         # You can remove libayatana-appindicator3-dev if you don't use the system tray feature.
