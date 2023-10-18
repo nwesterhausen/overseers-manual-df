@@ -67,9 +67,8 @@ git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v2"
 
 [dependencies.tauri-plugin-aptabase]
-# path = "../../tauri-plugin-aptabase"
-git = "https://github.com/nwesterhausen/tauri-plugin-aptabase"
-branch = "tauri-v2"
+git = "https://github.com/aptabase/tauri-plugin-aptabase"
+branch = "v2"
 
 [features]
 # by default Tauri runs in production mode
