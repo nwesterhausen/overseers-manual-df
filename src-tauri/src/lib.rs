@@ -1,3 +1,5 @@
+use std::sync::Mutex;
+
 use tauri_plugin_aptabase::EventTracker;
 use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
 
@@ -14,6 +16,10 @@ mod search_handler;
 pub fn run() {
     #[allow(clippy::expect_used)]
     tauri::Builder::default()
+        // Set up shared state
+        .manage(search_handler::prepare::Storage {
+            store: Mutex::default(),
+        })
         // Add logging plugin
         .plugin(
             tauri_plugin_log::Builder::default()
@@ -56,6 +62,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             parsing::passthrough::parse_all_raws,
             parsing::passthrough::parse_all_raws_info,
+            search_handler::prepare::parse_and_store_raws,
+            search_handler::search::search_raws,
         ])
         .build(tauri::generate_context!())
         .expect("Error when building tauri app")

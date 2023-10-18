@@ -776,7 +776,6 @@ checksum = "6a1abaf4d861455be59f64fd2b55606cb151fce304ede7165f410243ce96bde6"
 [[package]]
 name = "dfraw_json_parser"
 version = "0.13.0"
-source = "git+https://github.com/nwesterhausen/dfraw_json_parser?branch=dev#46a60aa73dc70842143e3f94911eeb5c29cdd276"
 dependencies = [
  "encoding_rs",
  "encoding_rs_io",
@@ -2394,6 +2393,8 @@ dependencies = [
  "tauri-plugin-log",
  "tauri-plugin-store",
  "tauri-plugin-window",
+ "ts-rs",
+ "typetag",
 ]
 
 [[package]]
