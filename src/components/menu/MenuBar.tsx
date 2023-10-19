@@ -39,11 +39,11 @@ const MenuBar: ParentComponent = (props) => {
         </div>
         <Show when={searchContext.active()}>
           <div class='mx-2 text-xs text-accent'>
-            {rawsContext.searchFilteredRaws().length >= 50 ? 'More than ' : ''}
-            {rawsContext.searchFilteredRaws().length} results
+            {rawsContext.parsedRaws.latest.results.length >= 50 ? 'More than ' : ''}
+            {rawsContext.parsedRaws.latest.results.length} results
           </div>
         </Show>
-        <div class='mx-2 text-xs text-info'>{rawsContext.totalRawCount()} raws loaded</div>
+        <div class='mx-2 text-xs text-info'>{rawsContext.parsedRaws.latest.totalResults} raws loaded</div>
         <div class='ms-auto'>
           <div class='join'>
             <GraphicsToggleButton disabled={disableButtons()} />

@@ -49,6 +49,7 @@
     "@tauri-apps/plugin-app": "2.0.0-alpha.1",
     "@tauri-apps/plugin-dialog": "2.0.0-alpha.1",
     "@tauri-apps/plugin-fs": "2.0.0-alpha.1",
+    "@tauri-apps/plugin-log": "2.0.0-alpha.1",
     "@tauri-apps/plugin-store": "2.0.0-alpha.1",
     "@tauri-apps/plugin-window": "2.0.0-alpha.1",
     "minisearch": "^6.1.0",

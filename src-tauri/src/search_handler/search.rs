@@ -8,8 +8,10 @@ use super::{options::SearchOptions, prepare::Storage, results::SearchResults};
 #[allow(clippy::needless_pass_by_value)]
 pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> SearchResults {
     if storage.store.lock().unwrap().is_empty() {
+        log::error!("No raws in storage, returning empty search results");
         return SearchResults::default();
     }
+    log::error!("Processing search with options: {:#?}", search_options);
     // Retrieve the raws from the storage
     // Filter the raws by the search options
     let filtered_raws: Vec<_> = storage.store.lock().unwrap()

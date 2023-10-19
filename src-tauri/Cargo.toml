@@ -47,26 +47,12 @@ features = ["tauri"]
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v2"
 
-# Todo: un-remove this when it's fixed
-# Current issue is from the window-state plugin library
-#1 |     TauriApi(#[from] tauri::api::Error),
-#  |                             ^^^ could not find `api` in `tauri`
 [dependencies.tauri-plugin-window-state]
-git = "https://github.com/tauri-apps/plugins-workspace"
-branch = "v2"
-
-# Used to provide the tauri window api to the frontend.
-[dependencies.tauri-plugin-window]
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v2"
 
 # Used to provide the tauri fs api to the frontend.
 [dependencies.tauri-plugin-fs]
-git = "https://github.com/tauri-apps/plugins-workspace"
-branch = "v2"
-
-# Used to provide the tauri app api to the frontend.
-[dependencies.tauri-plugin-app]
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v2"
 

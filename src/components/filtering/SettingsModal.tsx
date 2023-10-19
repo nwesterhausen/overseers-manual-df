@@ -1,7 +1,6 @@
 import { Component, Show } from 'solid-js';
 import { useDirectoryProvider } from '../../providers/DirectoryProvider';
 import { useSettingsContext } from '../../providers/SettingsProvider';
-import { PATH_STRING, PATH_TYPE, clear } from '../../settings';
 
 const SettingsModal: Component = () => {
   const [settings, { toggleIncludeLocationInstalledMods, toggleIncludeLocationMods, toggleIncludeLocationVanilla }] =
@@ -82,8 +81,7 @@ const SettingsModal: Component = () => {
             <button
               class='btn btn-sm btn-error btn-outline self-center'
               onClick={async () => {
-                await clear(PATH_STRING);
-                await clear(PATH_TYPE);
+                directoryContext.resetDirectory();
               }}>
               Clear All Stored Data
             </button>

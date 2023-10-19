@@ -1,7 +1,10 @@
 import { createContextProvider } from '@solid-primitives/context';
 import { createMemo, createSignal } from 'solid-js';
+import { SearchOptions } from '../definitions/SearchOptions';
+import { useSettingsContext } from './SettingsProvider';
 
 export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
+  const [settings] = useSettingsContext();
   // Signal for the search filter
   const [searchString, setSearchString] = createSignal('');
   const active = createMemo(() => searchString().length > 0);
@@ -66,10 +69,32 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
   const handleHideAdvancedFilters = () => setShowAdvancedFilters(false);
   const handleToggleAdvancedFilters = () => setShowAdvancedFilters(!showAdvancedFilters());
 
+  const searchOptions = createMemo<SearchOptions>(() => {
+    const options: SearchOptions = {
+      limit: settings.resultsPerPage,
+      page: settings.currentPage,
+      objectTypes: [],
+      query: searchString(),
+    };
+    if (requireCreature()) {
+      options.objectTypes.push('Creature');
+    }
+    if (requirePlant()) {
+      options.objectTypes.push('Plant');
+    }
+    if (requireInorganic()) {
+      options.objectTypes.push('Inorganic');
+    }
+
+    // Todo: include advanced filtering options (modules and tags) once supported by the backend
+
+    return options;
+  });
+
   return {
-    searchString,
     setSearchString,
     active,
+    searchOptions,
 
     advancedFiltering,
     // Advanced Filtering Display Handling

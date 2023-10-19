@@ -10,6 +10,11 @@ import { SearchProvider } from './providers/SearchProvider';
 import { SettingsProvider } from './providers/SettingsProvider';
 import { ThemeProvider } from './providers/ThemeProvider';
 
+import { attachConsole } from '@tauri-apps/plugin-log';
+
+// Attach our console to the tauri logs
+attachConsole().catch(console.error);
+
 render(
   () => (
     <Router>

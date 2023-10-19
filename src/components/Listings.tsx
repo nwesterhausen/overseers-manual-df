@@ -8,10 +8,10 @@ const Listings: Component = () => {
 
   return (
     <Show
-      when={rawsContext.parsingStatus() === STS_IDLE && rawsContext.searchFilteredRaws().length > 0}
+      when={rawsContext.parsingStatus() === STS_IDLE && rawsContext.parsedRaws.latest.results.length > 0}
       fallback={<div class='my-5 text-center text-neutral-700'>No results</div>}>
       <div class='flex flex-wrap justify-center gap-4 mb-16'>
-        <For each={rawsContext.searchFilteredRaws()}>{(raw) => <DynamicCard raw={raw} />}</For>
+        <For each={rawsContext.parsedRaws.latest.results}>{(raw) => <DynamicCard raw={raw} />}</For>
       </div>
       <Pagination />
     </Show>
