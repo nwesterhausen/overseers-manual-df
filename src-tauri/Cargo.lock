@@ -283,6 +283,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9ba43ea6f343b788c8764558649e08df62f86c6ef251fdaeb1ffd010a9ae50a2"
 
 [[package]]
+name = "bincode"
+version = "1.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b1f45e9417d87227c7a56d22e471c6206462cba514c7590c09aff4cf6d1ddcad"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "bitflags"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2394,6 +2403,7 @@ dependencies = [
  "tauri-plugin-log",
  "tauri-plugin-store",
  "tauri-plugin-window",
+ "tauri-plugin-window-state",
  "ts-rs",
  "typetag",
 ]
@@ -3695,7 +3705,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-app"
 version = "2.0.0-alpha.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1240631840060f98b493c3cd01120ac2b65e88f2"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5de23e79f9880921b62e4b7a8819bc0dbc833216"
 dependencies = [
  "tauri",
 ]
@@ -3722,7 +3732,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-dialog"
 version = "2.0.0-alpha.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1240631840060f98b493c3cd01120ac2b65e88f2"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5de23e79f9880921b62e4b7a8819bc0dbc833216"
 dependencies = [
  "glib",
  "log",
@@ -3739,7 +3749,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-fs"
 version = "2.0.0-alpha.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1240631840060f98b493c3cd01120ac2b65e88f2"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5de23e79f9880921b62e4b7a8819bc0dbc833216"
 dependencies = [
  "anyhow",
  "glob",
@@ -3752,7 +3762,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-log"
 version = "2.0.0-alpha.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1240631840060f98b493c3cd01120ac2b65e88f2"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5de23e79f9880921b62e4b7a8819bc0dbc833216"
 dependencies = [
  "android_logger",
  "byte-unit",
@@ -3772,7 +3782,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-store"
 version = "2.0.0-alpha.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1240631840060f98b493c3cd01120ac2b65e88f2"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5de23e79f9880921b62e4b7a8819bc0dbc833216"
 dependencies = [
  "log",
  "serde",
@@ -3784,9 +3794,23 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-window"
 version = "2.0.0-alpha.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1240631840060f98b493c3cd01120ac2b65e88f2"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5de23e79f9880921b62e4b7a8819bc0dbc833216"
 dependencies = [
  "serde",
+ "tauri",
+ "thiserror",
+]
+
+[[package]]
+name = "tauri-plugin-window-state"
+version = "2.0.0-alpha.2"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5de23e79f9880921b62e4b7a8819bc0dbc833216"
+dependencies = [
+ "bincode",
+ "bitflags 2.4.1",
+ "log",
+ "serde",
+ "serde_json",
  "tauri",
  "thiserror",
 ]

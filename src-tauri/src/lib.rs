@@ -48,6 +48,8 @@ pub fn run() {
         )
         // Add app plugin
         .plugin(tauri_plugin_app::init())
+        // Add window-state plugin
+        .plugin(tauri_plugin_window_state::Builder::default().build())
         // Add fs plugin
         .plugin(tauri_plugin_fs::init())
         // Add window plugin
