@@ -29,11 +29,11 @@ features = [
 ]
 
 [dependencies.dfraw_json_parser]
-# git = "https://github.com/nwesterhausen/dfraw_json_parser"
-# branch = "dev"
-# version = "0.13"
+git = "https://github.com/nwesterhausen/dfraw_json_parser"
+branch = "dev"
+# version = "0.14"
 features = ["tauri"]
-path = "../../dfraw_json_parser"
+# path = "../../dfraw_json_parser"
 
 [dependencies.tauri-plugin-log]
 git = "https://github.com/tauri-apps/plugins-workspace"
