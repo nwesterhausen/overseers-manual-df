@@ -1,7 +1,7 @@
 use dfraw_json_parser::{
     options::ParserOptions,
     parser::{
-        creature::raw::Creature, helpers::clone_raw_vector::clone_raw_object_box,
+        creature::raw::Creature, helpers::clone_raw_object_box::clone_raw_object_box,
         inorganic::raw::Inorganic, object_types::ObjectType, plant::raw::Plant, raws::RawObject,
         searchable::get_search_string,
     },
@@ -17,7 +17,10 @@ pub struct Storage {
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
 pub fn parse_and_store_raws(options: ParserOptions, window: Window, storage: State<Storage>) {
-    log::error!("Parsing raws with options: {:#?}", options);
+    log::info!(
+        "parse_and_store_raws: parsing raws with options\n{:#?}",
+        options
+    );
     // Get the raws with given options (and progress)
     let raws_vec = dfraw_json_parser::parse_with_tauri_emit(&options, window);
     // Store the raws in the storage, after clearing it
@@ -30,6 +33,8 @@ pub fn parse_and_store_raws(options: ParserOptions, window: Window, storage: Sta
 }
 
 fn update_search_lookup(storage: &State<Storage>) {
+    #[allow(clippy::unwrap_used)]
+    let prev_length = storage.search_lookup.lock().unwrap().len();
     // Clear the search lookup table
     #[allow(clippy::unwrap_used)]
     storage.search_lookup.lock().unwrap().clear();
@@ -75,4 +80,13 @@ fn update_search_lookup(storage: &State<Storage>) {
             .unwrap()
             .push((search_string, index));
     }
+
+    #[allow(clippy::unwrap_used)]
+    let current_length = storage.search_lookup.lock().unwrap().len();
+
+    log::info!(
+        "update_search_lookup: Search Tables Updates. Previous: {} entries Current: {} entries",
+        prev_length,
+        current_length,
+    );
 }

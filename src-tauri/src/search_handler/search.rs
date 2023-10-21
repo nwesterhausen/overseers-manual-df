@@ -1,4 +1,7 @@
-use dfraw_json_parser::parser::{helpers::clone_raw_vector, raws::RawObject};
+use dfraw_json_parser::parser::{
+    helpers::{clone_raw_object_box, clone_raw_vector},
+    raws::RawObject,
+};
 use tauri::State;
 
 use super::{options::SearchOptions, prepare::Storage, results::SearchResults};
@@ -8,10 +11,13 @@ use super::{options::SearchOptions, prepare::Storage, results::SearchResults};
 pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> SearchResults {
     #[allow(clippy::unwrap_used)]
     if storage.store.lock().unwrap().is_empty() {
-        log::warn!("No raws in storage, returning empty search results");
+        log::info!("search_raws: No raws in storage, returning empty search results");
         return SearchResults::default();
     }
-    log::info!("Processing search with options: {:#?}", search_options);
+    log::info!(
+        "search_raws: Processing search with options:\n{:#?}",
+        search_options
+    );
 
     // Utilize the search_lookup table to find raws with matching indexes.
     // First we can compare the search query to the search lookup table to get a list of indexes.
@@ -20,7 +26,7 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
 
     // If the search query is empty, we should be returning all raws
     if search_options.query.is_empty() {
-        log::info!("Search query is empty, returning all raws");
+        log::info!("search_raws: Search query is empty, returning all raws");
         #[allow(clippy::unwrap_used)]
         let mut all_raws: Vec<Box<dyn RawObject>> = storage
             .store
@@ -33,7 +39,7 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
                     .iter()
                     .any(|object_type| raw.get_type() == object_type)
             })
-            .map(clone_raw_vector::clone_raw_object_box)
+            .map(clone_raw_object_box::clone_raw_object_box)
             .collect();
 
         all_raws.sort_by(|a, b| {
@@ -99,7 +105,7 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
             }
             None
         })
-        .map(clone_raw_vector::clone_raw_object_box)
+        .map(clone_raw_object_box::clone_raw_object_box)
         .collect();
 
     // Sort the filtered raws by raw name
@@ -118,7 +124,13 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
     );
 
     let total_pages = get_total_pages(limited_raws.len(), search_options.limit);
-
+    log::info!(
+        "search_raws: search returned {} results ({} pages total). Returning Page#{} with {} results",
+        filtered_raws.len(),
+        total_pages,
+        search_options.page,
+        limited_raws.len()
+    );
     SearchResults {
         // Return the limited raws
         results: limited_raws,

@@ -163,7 +163,15 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         attachMetadataToRaws: true,
         skipApplyCopyTagsFrom: false,
         skipApplyCreatureVariations: false,
-        rawsToParse: [],
+        rawsToParse: [
+          'Creature',
+          'Plant',
+          'Inorganic',
+          'Entity',
+          // Include graphics details
+          'Graphics',
+          'TilePage',
+        ],
         locationsToParse: [],
         job: 'All',
         serializeResultToJson: false,

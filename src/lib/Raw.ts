@@ -2,6 +2,7 @@ import { ModuleInfoFile } from '../definitions/ModuleInfoFile';
 import { Name } from '../definitions/Name';
 import { SingPlurName } from '../definitions/SingPlurName';
 import { Raw } from '../definitions/types';
+import { toTitleCase } from './Utils';
 
 /**
  * Helper to display the "NAME vVERSION" for a module, or just the module if there isn't module info available.
@@ -30,9 +31,9 @@ export function labelForModule(moduleInfo: ModuleInfoFile | undefined, moduleId?
 export function nameForRaw(raw: Raw): string {
   const namedRaw = raw as unknown as { name?: string | Name | SingPlurName };
   if (typeof namedRaw.name === 'string') {
-    return namedRaw.name;
+    return toTitleCase(namedRaw.name);
   } else if (typeof namedRaw.name === 'object') {
-    return namedRaw.name.singular || namedRaw.name.plural || raw.identifier;
+    return toTitleCase(namedRaw.name.singular || namedRaw.name.plural || raw.identifier);
   }
-  return raw.identifier;
+  return toTitleCase(raw.identifier);
 }

@@ -10,9 +10,12 @@ pub fn parse_all_raws_info(path: &str) -> Vec<ModuleInfoFile> {
     options.set_job(ParsingJob::AllModuleInfoFiles);
     options.attach_metadata_to_raws();
 
-    log::error!("Calling parse_all_raws_info\n{:#?}", options);
+    log::info!("parse_all_raws_info: options provided\n{:#?}", options);
     let results = dfraw_json_parser::parse_info_modules(&options);
-    log::info!("Got {} results", results.len());
+    log::info!(
+        "parse_all_raws_info: {} module info files returned",
+        results.len()
+    );
 
     results
 }

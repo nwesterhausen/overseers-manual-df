@@ -42,11 +42,11 @@ pub fn run() {
                 .targets([
                     Target::new(TargetKind::Webview),
                     Target::new(TargetKind::LogDir {
-                        file_name: Some("webview".into()),
+                        file_name: Some("webview.log".into()),
                     })
                     .filter(|metadata| metadata.target() == WEBVIEW_TARGET),
                     Target::new(TargetKind::LogDir {
-                        file_name: Some("rust".into()),
+                        file_name: Some("rust.log".into()),
                     })
                     .filter(|metadata| metadata.target() != WEBVIEW_TARGET),
                 ])
@@ -78,6 +78,7 @@ pub fn run() {
             parsing::passthrough::parse_all_raws_info,
             search_handler::prepare::parse_and_store_raws,
             search_handler::search::search_raws,
+            search_handler::util::get_search_string_for_object,
         ])
         .build(tauri::generate_context!())
         .expect("Error when building tauri app")

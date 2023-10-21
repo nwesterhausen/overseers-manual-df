@@ -21,6 +21,10 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
   const handleToggleRequireInorganic = () => {
     setRequireInorganic(!requireInorganic());
   };
+  const [requireEntity, setRequireEntity] = createSignal(true);
+  const handleToggleRequireEntity = () => {
+    setRequireEntity(!requireEntity());
+  };
 
   // Required Modules (by objectId)
   const [filteredModules, setFilteredModules] = createSignal<string[]>([]);
@@ -85,6 +89,9 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
     if (requireInorganic()) {
       options.objectTypes.push('Inorganic');
     }
+    if (requireEntity()) {
+      options.objectTypes.push('Entity');
+    }
 
     // Todo: include advanced filtering options (modules and tags) once supported by the backend
 
@@ -122,5 +129,7 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
     handleToggleRequirePlant,
     requireInorganic,
     handleToggleRequireInorganic,
+    requireEntity,
+    handleToggleRequireEntity,
   };
 });
