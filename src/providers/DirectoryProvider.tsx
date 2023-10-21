@@ -2,7 +2,7 @@ import { createContextProvider } from '@solid-primitives/context';
 import { Event, listen } from '@tauri-apps/api/event';
 import { OpenDialogOptions, open as tauriOpen } from '@tauri-apps/plugin-dialog';
 import { readDir } from '@tauri-apps/plugin-fs';
-import { createMemo, createResource, createSignal } from 'solid-js';
+import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import { splitPathAgnostically } from '../lib/Utils';
 import { useSettingsContext } from './SettingsProvider';
 
@@ -34,13 +34,17 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
   // Array to just hold recently selected directories and our evaluations of them
   const [directoryHistory, setDirectoryHistory] = createSignal<DirectorySelection[]>([]);
 
-  // Set initial directory from settings
-  setDirectoryHistory([
-    {
-      path: settings.directoryPath.split('/'),
-      type: DIR_DF,
-    },
-  ]);
+  createEffect(() => {
+    if (settings.directoryPath !== '' && directoryHistory().length === 0) {
+      // Set initial directory from settings
+      setDirectoryHistory([
+        {
+          path: settings.directoryPath.split('/'),
+          type: DIR_DF,
+        },
+      ]);
+    }
+  });
 
   // Helper accessor for 'current' directory
   const currentDirectory = createMemo(() => {

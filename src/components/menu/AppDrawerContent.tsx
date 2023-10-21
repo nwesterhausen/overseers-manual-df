@@ -1,5 +1,5 @@
 import { A } from '@solidjs/router';
-import { getTauriVersion, getVersion } from '@tauri-apps/plugin-app';
+import { getTauriVersion, getVersion } from '@tauri-apps/api/app';
 import { Component, createResource } from 'solid-js';
 import { useDirectoryProvider } from '../../providers/DirectoryProvider';
 

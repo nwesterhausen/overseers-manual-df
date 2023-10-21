@@ -1,4 +1,4 @@
-import { convertFileSrc } from '@tauri-apps/api/tauri';
+import { convertFileSrc } from '@tauri-apps/api/primitives';
 import { Component, Show, createMemo } from 'solid-js';
 import { splitPathAgnostically } from '../lib/Utils';
 import { useDirectoryProvider } from '../providers/DirectoryProvider';

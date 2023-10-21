@@ -37,47 +37,6 @@ type SettingsStore = [
 ];
 
 const tauriSettingsStore = new TauriStore('settings.json');
-const loadedSettings = { ...SETTINGS_DEFAULTS };
-
-// Attempt to load the settings from disk
-tauriSettingsStore.load().then(async () => {
-  // If the settings file does not exist, create it
-  if (!(await tauriSettingsStore.get('layoutAsGrid'))) {
-    await tauriSettingsStore.set('layoutAsGrid', SETTINGS_DEFAULTS.layoutAsGrid);
-  } else {
-    loadedSettings.layoutAsGrid = await tauriSettingsStore.get('layoutAsGrid');
-  }
-  if (!(await tauriSettingsStore.get('displayGraphics'))) {
-    await tauriSettingsStore.set('displayGraphics', SETTINGS_DEFAULTS.displayGraphics);
-  } else {
-    loadedSettings.displayGraphics = await tauriSettingsStore.get('displayGraphics');
-  }
-  if (!(await tauriSettingsStore.get('includeLocationVanilla'))) {
-    await tauriSettingsStore.set('includeLocationVanilla', SETTINGS_DEFAULTS.includeLocationVanilla);
-  } else {
-    loadedSettings.includeLocationVanilla = await tauriSettingsStore.get('includeLocationVanilla');
-  }
-  if (!(await tauriSettingsStore.get('includeLocationMods'))) {
-    await tauriSettingsStore.set('includeLocationMods', SETTINGS_DEFAULTS.includeLocationMods);
-  } else {
-    loadedSettings.includeLocationMods = await tauriSettingsStore.get('includeLocationMods');
-  }
-  if (!(await tauriSettingsStore.get('includeLocationInstalledMods'))) {
-    await tauriSettingsStore.set('includeLocationInstalledMods', SETTINGS_DEFAULTS.includeLocationInstalledMods);
-  } else {
-    loadedSettings.includeLocationInstalledMods = await tauriSettingsStore.get('includeLocationInstalledMods');
-  }
-  if (!(await tauriSettingsStore.get('resultsPerPage'))) {
-    await tauriSettingsStore.set('resultsPerPage', SETTINGS_DEFAULTS.resultsPerPage);
-  } else {
-    loadedSettings.resultsPerPage = await tauriSettingsStore.get('resultsPerPage');
-  }
-  if (!(await tauriSettingsStore.get('directoryPath'))) {
-    await tauriSettingsStore.set('directoryPath', SETTINGS_DEFAULTS.directoryPath);
-  } else {
-    loadedSettings.directoryPath = await tauriSettingsStore.get('directoryPath');
-  }
-});
 
 const SettingsContext = createContext<SettingsStore>([
   {
@@ -113,7 +72,55 @@ const SettingsContext = createContext<SettingsStore>([
 
 export const SettingsProvider: ParentComponent = (props) => {
   const [state, setState] = createStore({
-    ...loadedSettings,
+    ...SETTINGS_DEFAULTS,
+  });
+
+  // Attempt to load the settings from disk
+  tauriSettingsStore.load().then(async () => {
+    console.log('Loading settings from disk.');
+    // If the settings file does not exist, create it
+    if (typeof (await tauriSettingsStore.get('layoutAsGrid')) === 'undefined') {
+      await tauriSettingsStore.set('layoutAsGrid', SETTINGS_DEFAULTS.layoutAsGrid);
+    } else {
+      setState({ layoutAsGrid: await tauriSettingsStore.get('layoutAsGrid') });
+      console.log('Loaded layoutAsGrid', state.layoutAsGrid);
+    }
+    if (typeof (await tauriSettingsStore.get('displayGraphics')) === 'undefined') {
+      await tauriSettingsStore.set('displayGraphics', SETTINGS_DEFAULTS.displayGraphics);
+    } else {
+      setState({ displayGraphics: await tauriSettingsStore.get('displayGraphics') });
+      console.log('Loaded displayGraphics', state.displayGraphics);
+    }
+    if (typeof (await tauriSettingsStore.get('includeLocationVanilla')) === 'undefined') {
+      await tauriSettingsStore.set('includeLocationVanilla', SETTINGS_DEFAULTS.includeLocationVanilla);
+    } else {
+      setState({ includeLocationVanilla: await tauriSettingsStore.get('includeLocationVanilla') });
+      console.log('Loaded includeLocationVanilla', state.includeLocationVanilla);
+    }
+    if (typeof (await tauriSettingsStore.get('includeLocationMods')) === 'undefined') {
+      await tauriSettingsStore.set('includeLocationMods', SETTINGS_DEFAULTS.includeLocationMods);
+    } else {
+      setState({ includeLocationMods: await tauriSettingsStore.get('includeLocationMods') });
+      console.log('Loaded includeLocationMods', state.includeLocationMods);
+    }
+    if (typeof (await tauriSettingsStore.get('includeLocationInstalledMods')) === 'undefined') {
+      await tauriSettingsStore.set('includeLocationInstalledMods', SETTINGS_DEFAULTS.includeLocationInstalledMods);
+    } else {
+      setState({ includeLocationInstalledMods: await tauriSettingsStore.get('includeLocationInstalledMods') });
+      console.log('Loaded includeLocationInstalledMods', state.includeLocationInstalledMods);
+    }
+    if (typeof (await tauriSettingsStore.get('resultsPerPage')) === 'undefined') {
+      await tauriSettingsStore.set('resultsPerPage', SETTINGS_DEFAULTS.resultsPerPage);
+    } else {
+      setState({ resultsPerPage: await tauriSettingsStore.get('resultsPerPage') });
+      console.log('Loaded resultsPerPage', state.resultsPerPage);
+    }
+    if (typeof (await tauriSettingsStore.get('directoryPath')) === 'undefined') {
+      await tauriSettingsStore.set('directoryPath', SETTINGS_DEFAULTS.directoryPath);
+    } else {
+      setState({ directoryPath: await tauriSettingsStore.get('directoryPath') });
+      console.log('Loaded directoryPath', state.directoryPath);
+    }
   });
 
   // Signal to indicate if settings have changed (requiring a flush to disk)

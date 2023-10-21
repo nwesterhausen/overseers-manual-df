@@ -7,12 +7,12 @@ license = "MIT"
 repository = "github.com:nwesterhausen/overseers-manual-df.git"
 default-run = "overseers-manual-tauriapp"
 edition = "2021"
-rust-version = "1.57"
+rust-version = "1.70"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "2.0.0-alpha", features = [] }
+tauri-build = { version = "2.0.0-alpha.10", features = [] }
 
 [dependencies]
 # A nice time library
@@ -29,7 +29,7 @@ serde_json = "1.0"
 typetag = "0.2"
 
 [dependencies.tauri]
-version = "2.0.0-alpha"
+version = "2.0.0-alpha.16"
 features = [
     "protocol-asset",
 ]
@@ -65,6 +65,9 @@ branch = "v2"
 [dependencies.tauri-plugin-dialog]
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v2"
+
+[target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies]
+tauri-plugin-updater = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
 
 # Used to collect anonymized usage data about app usage
 # and active versions.

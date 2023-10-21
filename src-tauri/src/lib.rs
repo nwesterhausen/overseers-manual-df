@@ -1,5 +1,6 @@
 use std::sync::Mutex;
 
+use tauri::Manager;
 use tauri_plugin_aptabase::EventTracker;
 use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
 
@@ -16,9 +17,23 @@ mod search_handler;
 pub fn run() {
     #[allow(clippy::expect_used)]
     tauri::Builder::default()
+        // Add updater
+        .setup(|app| {
+            // Use the updater plugin only on desktop platforms (Windows, Linux, macOS)
+            #[cfg(desktop)]
+            app.handle()
+                .plugin(tauri_plugin_updater::Builder::new().build())?;
+            // Open the dev tools automatically when debugging the application
+            #[cfg(debug_assertions)]
+            if let Some(main_window) = app.get_window("main") {
+                main_window.open_devtools();
+            };
+            Ok(())
+        })
         // Set up shared state
         .manage(search_handler::prepare::Storage {
             store: Mutex::default(),
+            search_lookup: Mutex::default(),
         })
         // Add logging plugin
         .plugin(
@@ -46,14 +61,12 @@ pub fn run() {
                 .level(log::LevelFilter::Info)
                 .build(),
         )
-        // Add app plugin
-        .plugin(tauri_plugin_app::init())
         // Add window-state plugin
         .plugin(tauri_plugin_window_state::Builder::default().build())
         // Add fs plugin
         .plugin(tauri_plugin_fs::init())
         // Add window plugin
-        .plugin(tauri_plugin_window::init())
+        // .plugin(tauri_plugin_window::init())
         // Add window plugin
         .plugin(tauri_plugin_dialog::init())
         // Add simple storage plugin

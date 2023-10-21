@@ -1,6 +1,6 @@
 import { createContextProvider } from '@solid-primitives/context';
-import { invoke } from '@tauri-apps/api';
-import { getCurrent } from '@tauri-apps/plugin-window';
+import { invoke } from '@tauri-apps/api/primitives';
+import { getCurrent } from '@tauri-apps/api/window';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import { Graphic } from '../definitions/Graphic';
 import { ModuleInfoFile } from '../definitions/ModuleInfoFile';
@@ -9,6 +9,7 @@ import { ProgressPayload } from '../definitions/ProgressPayload';
 import { SearchResults } from '../definitions/SearchResults';
 import { SpriteGraphic } from '../definitions/SpriteGraphic';
 import { TilePage } from '../definitions/TilePage';
+import { DIR_NONE, useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
 import { useSettingsContext } from './SettingsProvider';
 
@@ -40,6 +41,7 @@ const emptyParsingStatus: ProgressPayload = {
 export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   const appWindow = getCurrent();
 
+  const directoryContext = useDirectoryProvider();
   const searchContext = useSearchProvider();
   const [settings, { setCurrentResultsPage }] = useSettingsContext();
 
@@ -187,6 +189,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         parsingOptions.job = 'SingleLocation';
       }
 
+      console.log('Parsing options', parsingOptions);
+
       // Have the backend parse the raws
       await invoke('parse_and_store_raws', {
         options: parsingOptions,
@@ -252,6 +256,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     identifier.toLowerCase();
     return undefined;
   };
+
+  // We can check if the directory is valid and if so, load the raws
+  createEffect(() => {
+    if (directoryContext.currentDirectory().type !== DIR_NONE) {
+      forceLoadRaws();
+    }
+  });
 
   return {
     parsingStatus,
