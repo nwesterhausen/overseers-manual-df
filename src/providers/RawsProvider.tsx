@@ -202,7 +202,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       // Have the backend parse the raws
       await invoke('parse_and_store_raws', {
         options: parsingOptions,
-        window: appWindow,
       });
 
       // Wait for 1ms to allow the progress bar to update (hack)

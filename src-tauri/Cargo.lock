@@ -373,6 +373,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "built"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "38d17f4d6e4dc36d1a02fbedc2753a096848e7c1b0772f7654eab8e2c927dd53"
+dependencies = [
+ "cargo-lock",
+ "chrono",
+ "git2",
+]
+
+[[package]]
 name = "bumpalo"
 version = "3.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -453,6 +464,18 @@ dependencies = [
  "glib-sys",
  "libc",
  "system-deps",
+]
+
+[[package]]
+name = "cargo-lock"
+version = "9.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e11c675378efb449ed3ce8de78d75d0d80542fc98487c26aba28eb3b82feac72"
+dependencies = [
+ "semver",
+ "serde",
+ "toml 0.7.8",
+ "url",
 ]
 
 [[package]]
@@ -1467,6 +1490,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "git2"
+version = "0.18.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fbf97ba92db08df386e10c8ede66a2a0369bd277090afd8710e19e38de9ec0cd"
+dependencies = [
+ "bitflags 2.4.1",
+ "libc",
+ "libgit2-sys",
+ "log",
+ "url",
+]
+
+[[package]]
 name = "glib"
 version = "0.16.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2025,6 +2061,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a08173bc88b7955d1b3145aa561539096c421ac8debde8cbc3612ec635fee29b"
 
 [[package]]
+name = "libgit2-sys"
+version = "0.16.1+1.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f2a2bb3680b094add03bb3732ec520ece34da31a8cd2d633d1389d0f0fb60d0c"
+dependencies = [
+ "cc",
+ "libc",
+ "libz-sys",
+ "pkg-config",
+]
+
+[[package]]
 name = "libloading"
 version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2032,6 +2080,18 @@ checksum = "b67380fd3b2fbe7527a606e18729d21c6f3951633d0500574c4dc22d2d638b9f"
 dependencies = [
  "cfg-if",
  "winapi",
+]
+
+[[package]]
+name = "libz-sys"
+version = "1.1.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d97137b25e321a73eef1418d1d5d2eda4d77e12813f8e6dead84bc52c5870a7b"
+dependencies = [
+ "cc",
+ "libc",
+ "pkg-config",
+ "vcpkg",
 ]
 
 [[package]]
@@ -2489,6 +2549,7 @@ checksum = "b15813163c1d831bf4a13c3610c05c0d03b39feb07f7e09fa234dac9b15aaf39"
 name = "overseers-manual-tauriapp"
 version = "0.1.1"
 dependencies = [
+ "built",
  "chrono",
  "dfraw_json_parser",
  "dotenvy_macro",
@@ -3851,7 +3912,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-dialog"
 version = "2.0.0-alpha.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5c137365c60790e8d4037d449e8237aa3fffdab0"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#beb6b139eb669dc0346b3de919aed024f649b9d2"
 dependencies = [
  "glib",
  "log",
@@ -3868,7 +3929,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-fs"
 version = "2.0.0-alpha.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5c137365c60790e8d4037d449e8237aa3fffdab0"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#beb6b139eb669dc0346b3de919aed024f649b9d2"
 dependencies = [
  "anyhow",
  "glob",
@@ -3881,7 +3942,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-log"
 version = "2.0.0-alpha.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5c137365c60790e8d4037d449e8237aa3fffdab0"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#beb6b139eb669dc0346b3de919aed024f649b9d2"
 dependencies = [
  "android_logger",
  "byte-unit",
@@ -3901,7 +3962,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-store"
 version = "2.0.0-alpha.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5c137365c60790e8d4037d449e8237aa3fffdab0"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#beb6b139eb669dc0346b3de919aed024f649b9d2"
 dependencies = [
  "log",
  "serde",
@@ -3913,7 +3974,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-updater"
 version = "2.0.0-alpha.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5c137365c60790e8d4037d449e8237aa3fffdab0"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#beb6b139eb669dc0346b3de919aed024f649b9d2"
 dependencies = [
  "base64",
  "dirs-next",
@@ -3939,7 +4000,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-window-state"
 version = "2.0.0-alpha.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#5c137365c60790e8d4037d449e8237aa3fffdab0"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#beb6b139eb669dc0346b3de919aed024f649b9d2"
 dependencies = [
  "bincode",
  "bitflags 2.4.1",

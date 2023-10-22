@@ -6,6 +6,7 @@ use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
 
 use dotenvy_macro::dotenv;
 
+mod info;
 mod parsing;
 mod search_handler;
 
@@ -66,8 +67,6 @@ pub fn run() {
         // Add fs plugin
         .plugin(tauri_plugin_fs::init())
         // Add window plugin
-        // .plugin(tauri_plugin_window::init())
-        // Add window plugin
         .plugin(tauri_plugin_dialog::init())
         // Add simple storage plugin
         .plugin(tauri_plugin_store::Builder::default().build())
@@ -79,6 +78,7 @@ pub fn run() {
             search_handler::prepare::parse_and_store_raws,
             search_handler::search::search_raws,
             search_handler::util::get_search_string_for_object,
+            info::get_build_info,
         ])
         .build(tauri::generate_context!())
         .expect("Error when building tauri app")

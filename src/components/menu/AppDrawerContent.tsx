@@ -1,9 +1,27 @@
 import { A } from '@solidjs/router';
 import { getTauriVersion, getVersion } from '@tauri-apps/api/app';
-import { Component, createResource } from 'solid-js';
+import { invoke } from '@tauri-apps/api/primitives';
+import { Component, createMemo, createResource } from 'solid-js';
+import { Info } from '../../definitions/Info';
 import { useDirectoryProvider } from '../../providers/DirectoryProvider';
 
 const AppDrawerContent: Component = () => {
+  const [buildInfo] = createResource<Info>(
+    async () => {
+      return await invoke('get_build_info');
+    },
+    {
+      initialValue: {
+        buildTime: '',
+        gitCommitHash: '',
+        dependencies: [],
+        inDebug: false,
+        optimizationLevel: '',
+        rustVersion: '',
+        version: '',
+      },
+    },
+  );
   const [appVersion] = createResource(
     async () => {
       return await getVersion();
@@ -20,6 +38,16 @@ const AppDrawerContent: Component = () => {
       initialValue: '2.0.0',
     },
   );
+  const dfrawJsonVersion = createMemo(() => {
+    if (buildInfo.latest.dependencies.length > 0) {
+      // dependencies are laid out in Array of Array[2] where [0] is the name and [1] is the version
+      const dfrawJsonDep = buildInfo.latest.dependencies.find((dep) => dep[0] === 'dfraw_json_parser');
+      if (dfrawJsonDep) {
+        return dfrawJsonDep[1];
+      }
+    }
+    return 'unknown';
+  });
   const directoryContext = useDirectoryProvider();
   return (
     <div class='drawer-side'>
@@ -76,6 +104,16 @@ const AppDrawerContent: Component = () => {
         <li>
           <div class='menu-item'>
             Built with Tauri <span class='text-accent'>{tauriVersion.latest}</span>
+          </div>
+        </li>
+        <li>
+          <div class='menu-item'>
+            Using dfraw_json_parser <span class='text-accent'>{dfrawJsonVersion()}</span>
+          </div>
+        </li>
+        <li>
+          <div class='menu-item'>
+            Commit <span class='text-secondary'>{buildInfo.latest.gitCommitHash}</span>
           </div>
         </li>
       </ul>
