@@ -1,17 +1,13 @@
+import { A } from '@solidjs/router';
 import { IoCogSharp } from 'solid-icons/io';
 import { Component } from 'solid-js';
 
 const OpenSettingsButton: Component = () => {
   return (
     <div class='tooltip tooltip-left' data-tip='Open Settings'>
-      <button
-        class='btn btn-sm btn-circle btn-ghost fill-secondary'
-        onClick={() => {
-          const dialog = document.getElementById('settingsModal') as HTMLDialogElement;
-          dialog.showModal();
-        }}>
+      <A class='btn btn-sm btn-circle btn-ghost fill-secondary' href='/settings'>
         <IoCogSharp size={'1.5rem'} />
-      </button>
+      </A>
     </div>
   );
 };

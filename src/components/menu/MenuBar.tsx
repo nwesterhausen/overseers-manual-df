@@ -3,7 +3,6 @@ import { STS_IDLE, useRawsProvider } from '../../providers/RawsProvider';
 import { useSearchProvider } from '../../providers/SearchProvider';
 import ScrollToTopBtn from '../ScrollToTopBtn';
 import SearchFilters from '../filtering/SearchFilters';
-import SettingsModal from '../filtering/SettingsModal';
 import AdvancedFiltersButton from './AdvancedFiltersButton';
 import AppDrawerButton from './AppDrawerButton';
 import AppDrawerContent from './AppDrawerContent';
@@ -62,7 +61,6 @@ const MenuBar: ParentComponent = (props) => {
         <AppDrawerContent />
         <ScrollToTopBtn />
         {/*  MODALS  */}
-        <SettingsModal />
         <SearchFilters />
       </div>
     </>
