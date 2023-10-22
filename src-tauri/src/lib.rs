@@ -9,6 +9,7 @@ use dotenvy_macro::dotenv;
 mod info;
 mod parsing;
 mod search_handler;
+pub mod tracking;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 /// This function sets up and runs a Rust application using the Tauri framework, with various plugins

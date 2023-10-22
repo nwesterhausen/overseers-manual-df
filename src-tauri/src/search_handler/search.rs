@@ -26,6 +26,7 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
 
     // If the search query is empty, we should be returning all raws
     if search_options.query.is_empty() {
+        let start = std::time::Instant::now();
         log::info!("search_raws: Search query is empty, returning all raws");
         #[allow(clippy::unwrap_used)]
         let mut all_raws: Vec<Box<dyn RawObject>> = storage
@@ -53,6 +54,16 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
             search_options.limit,
             search_options.page,
         );
+        let duration = start.elapsed();
+
+        log::info!(
+            "search_raws: search returned {}/{} results in {}. Returning Page#{} with {} results",
+            all_raws.len(),
+            get_total_pages(all_raws.len(), search_options.limit),
+            format!("{duration:?}"),
+            search_options.page,
+            limited_raws.len()
+        );
 
         return SearchResults {
             results: limited_raws,
@@ -61,7 +72,7 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
             total_pages: get_total_pages(all_raws.len(), search_options.limit),
         };
     }
-
+    let start = std::time::Instant::now();
     // Retrieve the indexes from the search lookup table
     // Filter the indexes by the search query
     #[allow(clippy::unwrap_used)]
@@ -124,10 +135,13 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
     );
 
     let total_pages = get_total_pages(limited_raws.len(), search_options.limit);
+    let duration = start.elapsed();
+
     log::info!(
-        "search_raws: search returned {} results ({} pages total). Returning Page#{} with {} results",
+        "search_raws: search returned {}/{} results in {}. Returning Page#{} with {} results",
         filtered_raws.len(),
-        total_pages,
+        get_total_pages(filtered_raws.len(), search_options.limit),
+        format!("{duration:?}"),
         search_options.page,
         limited_raws.len()
     );
