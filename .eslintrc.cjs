@@ -5,7 +5,7 @@ module.exports = {
   overrides: [
     {
       // typescript
-      files: ['*.ts', '*.tsx'],
+      files: ['src/**/*.ts', 'src/**/*.tsx'],
       plugins: ['@typescript-eslint', 'eslint-plugin-tsdoc'],
       extends: ['plugin:@typescript-eslint/eslint-recommended', 'plugin:@typescript-eslint/recommended'],
       rules: {

@@ -11,5 +11,5 @@
     "noEmit": true,
     "isolatedModules": true
   },
-  "exclude": ["src-taurui/**/*", "node_modules/**/*", "dist/**/*"]
+  "exclude": ["src-tauri/**/*", "node_modules/**/*", "dist/**/*"]
 }
