@@ -1,5 +1,5 @@
 use std::sync::Mutex;
-
+#[cfg(debug_assertions)]
 use tauri::Manager;
 use tauri_plugin_aptabase::EventTracker;
 use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
