@@ -1,0 +1,97 @@
+[build]
+beforeBuildCommand = "pnpm build"
+beforeDevCommand = "pnpm dev"
+devPath = "http://localhost:5173"
+distDir = "../dist"
+
+[package]
+productName = "overseers-manual-df"
+version = "../package.json"
+
+[plugins.fs]
+scope = ["**"]
+
+[plugins.updater]
+endpoints = [
+  "https://overseers-manual-df.updates.nwest.one/v1/{{target}}/{{arch}}/{{current_version}}",
+]
+
+[tauri.bundle]
+active = true
+category = "Reference"
+copyright = "© 2023, Nicholas Westerhausen"
+externalBin = []
+icon = [
+  "icons/32x32.png",
+  "icons/128x128.png",
+  "icons/128x128@2x.png",
+  "icons/icon.icns",
+  "icons/icon.ico",
+]
+identifier = "one.nwest.games.dwarffortress.overseers-manual"
+longDescription = """
+Overseer's Reference manual will parse the vanilla and any downloaded raws to provide a way to look through 
+the various creatures, plants, inorganic objects, and many other things in the game. It reads both object and
+graphics raws, and when it can, it will display images for the objects it lists.
+
+In terms of functionality, you can filter by type of object or by where the raw was loaded from (vanilla or mod
+or even a specific module). You can also search for specific objects by name or id. All objects will let you
+view the entire parsed raw (as formatted JSON) and they also have a few properties like file path and id which
+can help you narrow down exactly where it came from.
+
+You can also search for specific properties of objects. For example, you can search for all creatures that lay
+eggs or are trainable. Future "tag-specific" searches will be added as well.
+
+In the future, hopefully it will support all the types of raws. For now, it just supports a few basic ones:
+
+- Creatures
+- Plants
+- Inorganic Objects
+
+And there is limited support for:
+
+- Materials
+- Syndromes
+- CreatureVariations
+- Entities
+
+For more on what parsing is supported and how, see the related project `dfraw_json_parser`.
+"""
+resources = []
+shortDescription = "A utility to browse the things represented in Dwarf Fortress raws"
+targets = "all"
+
+[tauri.bundle.deb]
+depends = []
+
+[tauri.bundle.macOS]
+exceptionDomain = ""
+frameworks = []
+
+[tauri.bundle.updater]
+active = true
+pubkey = "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU1REM2MTc2RjQxRDI0QgpSV1JMMGtGdkY4WmRCYnh5TXFCZmlqY0FONHFWRXhVZlNhSDhwL3RUb3Y2MzkrZFBYYThvWHppcgo="
+
+[tauri.bundle.windows]
+digestAlgorithm = "sha256"
+timestampUrl = ""
+
+[tauri.bundle.windows.webviewInstallMode]
+type = "skip"
+
+[tauri.bundle.windows.wix]
+template = "custom.wxs"
+
+[tauri.security]
+csp = "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost"
+
+[tauri.security.assetProtocol]
+enable = true
+scope = ["**"]
+
+[[tauri.windows]]
+fullscreen = false
+height = 640
+resizable = true
+title = "Overseer's Reference Manual"
+width = 944

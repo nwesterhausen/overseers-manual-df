@@ -8,11 +8,13 @@ repository = "github.com:nwesterhausen/overseers-manual-df.git"
 default-run = "overseers-manual-tauriapp"
 edition = "2021"
 rust-version = "1.70"
+keywords = ["tauri", "dwarf_fortress", "gaming", "utility"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[build-dependencies]
-tauri-build = { version = "2.0.0-alpha.10", features = [] }
+[build-dependencies.tauri-build]
+version = "2.0.0-alpha.10"
+features = ['config-toml']
 
 [build-dependencies.built]
 version = "0.7"
@@ -25,8 +27,6 @@ chrono = "0.4"
 dotenvy_macro = "0.15.7"
 # Used for logging
 log = "0.4.20"
-# Required for adding invoke commands to tauri app
-serde = { version = "1.0", features = ["derive"] }
 # Part of the TS_RS requirements, also used in our custom commands
 serde_json = "1.0"
 # Part of the TS_RS requirements.
@@ -34,9 +34,12 @@ typetag = "0.2"
 
 [dependencies.tauri]
 version = "2.0.0-alpha.16"
-features = [
-    "protocol-asset",
-]
+features = ["protocol-asset"]
+
+# Required for adding invoke commands to tauri app
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
 
 # Used to parse the raw files into json
 [dependencies.dfraw_json_parser]
