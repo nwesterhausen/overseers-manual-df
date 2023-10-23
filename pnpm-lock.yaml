@@ -26,9 +26,6 @@ dependencies:
   '@tauri-apps/plugin-window-state':
     specifier: github:tauri-apps/tauri-plugin-window-state#v2
     version: github.com/tauri-apps/tauri-plugin-window-state/8a80c16860d8094a7231f3de068eee545d7d890c
-  minisearch:
-    specifier: ^6.1.0
-    version: 6.1.0
   solid-js:
     specifier: ^1.8.3
     version: 1.8.3
@@ -2862,10 +2859,6 @@ packages:
   /minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
     dev: true
-
-  /minisearch@6.1.0:
-    resolution: {integrity: sha512-PNxA/X8pWk+TiqPbsoIYH0GQ5Di7m6326/lwU/S4mlo4wGQddIcf/V//1f9TB0V4j59b57b+HZxt8h3iMROGvg==}
-    dev: false
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
