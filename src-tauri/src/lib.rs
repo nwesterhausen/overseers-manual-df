@@ -1,3 +1,4 @@
+use state::Storage;
 use std::sync::Mutex;
 #[cfg(debug_assertions)]
 use tauri::Manager;
@@ -6,9 +7,11 @@ use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
 
 use dotenvy_macro::dotenv;
 
+mod graphics;
 mod info;
 mod parsing;
 mod search_handler;
+pub mod state;
 pub mod tracking;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -33,9 +36,11 @@ pub fn run() {
             Ok(())
         })
         // Set up shared state
-        .manage(search_handler::prepare::Storage {
+        .manage(Storage {
             store: Mutex::default(),
             search_lookup: Mutex::default(),
+            graphics_store: Mutex::default(),
+            tile_page_store: Mutex::default(),
         })
         // Add logging plugin
         .plugin(
@@ -80,6 +85,7 @@ pub fn run() {
             search_handler::search::search_raws,
             search_handler::util::get_search_string_for_object,
             info::get_build_info,
+            graphics::search::get_graphics_for_identifier,
         ])
         .build(tauri::generate_context!())
         .expect("Error when building tauri app")

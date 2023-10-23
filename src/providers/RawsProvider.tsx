@@ -2,13 +2,10 @@ import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api/primitives';
 import { getCurrent } from '@tauri-apps/api/window';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
-import { Graphic } from '../definitions/Graphic';
 import { ModuleInfoFile } from '../definitions/ModuleInfoFile';
 import { ParserOptions } from '../definitions/ParserOptions';
 import { ProgressPayload } from '../definitions/ProgressPayload';
 import { SearchResults } from '../definitions/SearchResults';
-import { SpriteGraphic } from '../definitions/SpriteGraphic';
-import { TilePage } from '../definitions/TilePage';
 import { DIR_NONE, useDirectoryProvider } from './DirectoryProvider';
 import { useSearchProvider } from './SearchProvider';
 import { useSettingsContext } from './SettingsProvider';
@@ -197,8 +194,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         parsingOptions.job = 'SingleLocation';
       }
 
-      console.log('Parsing options', parsingOptions);
-
       // Have the backend parse the raws
       await invoke('parse_and_store_raws', {
         options: parsingOptions,
@@ -228,10 +223,14 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   async function updateDisplayedRaws(): Promise<SearchResults> {
     // Get the raws that we care about (page 1 basically)
-    return await invoke('search_raws', {
+    const results = (await invoke('search_raws', {
       window: appWindow,
       searchOptions: searchContext.searchOptions(),
-    });
+    })) as SearchResults;
+    if (results.totalPages < settings.currentPage) {
+      setCurrentResultsPage(results.totalPages);
+    }
+    return results;
   }
 
   async function parseRawsInfo(): Promise<ModuleInfoFile[]> {
@@ -253,17 +252,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     return [];
   }
 
-  const tryGetGraphicFor = (identifier: string): { graphic: SpriteGraphic; tilePage: TilePage } | undefined => {
-    // Todo: replace with a tauri invoke to get the graphic...
-    identifier.toLowerCase();
-    return undefined;
-  };
-  const allGraphicsFor = (identifier: string): Graphic | undefined => {
-    // Todo: replace with a tauri invoke to get all the graphic...
-    identifier.toLowerCase();
-    return undefined;
-  };
-
   // We can check if the directory is valid and if so, load the raws
   createEffect(() => {
     if (directoryContext.currentDirectory().type !== DIR_NONE) {
@@ -277,8 +265,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     parsingProgress,
     rawModulesInfo: allRawsInfosJsonArray,
     rawModules,
-    tryGetGraphicFor,
-    allGraphicsFor,
     nextPage,
     prevPage,
     gotoPage,

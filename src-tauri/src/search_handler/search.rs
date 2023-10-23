@@ -6,7 +6,9 @@ use dfraw_json_parser::parser::{
 };
 use tauri::State;
 
-use super::{options::SearchOptions, prepare::Storage, results::SearchResults};
+use crate::state::Storage;
+
+use super::{options::SearchOptions, results::SearchResults};
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value, clippy::module_name_repetitions)]

@@ -20,7 +20,7 @@ const MenuBar: ParentComponent = (props) => {
 
   return (
     <>
-      <div class='navbar'>
+      <div class='navbar rounded-lg shadow-slate-500 shadow-inner mb-2'>
         <div class='me-auto'>
           <div class='join'>
             <AppDrawerButton />

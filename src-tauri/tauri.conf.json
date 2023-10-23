@@ -58,14 +58,14 @@
         "enable": true,
         "scope": ["**"]
       },
-      "csp": null
+      "csp": "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost"
     },
     "windows": [
       {
         "fullscreen": false,
         "height": 640,
         "resizable": true,
-        "title": "Overseer's Reference Manual for Dwarf Fortress",
+        "title": "Overseer's Reference Manual",
         "width": 944
       }
     ]

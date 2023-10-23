@@ -1,22 +1,21 @@
 use dfraw_json_parser::{
     options::ParserOptions,
     parser::{
-        creature::raw::Creature, helpers::clone_raw_object_box::clone_raw_object_box,
-        inorganic::raw::Inorganic, object_types::ObjectType, plant::raw::Plant, raws::RawObject,
+        creature::raw::Creature,
+        graphics::{raw::Graphic, tile_page::TilePage},
+        helpers::clone_raw_object_box::clone_raw_object_box,
+        inorganic::raw::Inorganic,
+        object_types::ObjectType,
+        plant::raw::Plant,
+        raws::RawObject,
         searchable::get_search_string,
     },
 };
 use serde_json::json;
-use std::sync::Mutex;
 use tauri::{AppHandle, State, Window};
 use tauri_plugin_aptabase::EventTracker;
 
-use crate::tracking::ParseAndStoreRaws;
-
-pub struct Storage {
-    pub store: Mutex<Vec<Box<dyn RawObject>>>,
-    pub search_lookup: Mutex<Vec<(String, usize)>>,
-}
+use crate::{state::Storage, tracking::ParseAndStoreRaws};
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
@@ -35,6 +34,34 @@ pub fn parse_and_store_raws(
     let raws_vec = dfraw_json_parser::parse_with_tauri_emit(&options, window);
     let total_raws = raws_vec.len();
     let duration = start.elapsed();
+
+    let count_creatures = raws_vec
+        .as_slice()
+        .iter()
+        .filter(|raw| raw.get_type() == &ObjectType::Creature)
+        .count();
+    let count_plants = raws_vec
+        .as_slice()
+        .iter()
+        .filter(|raw| raw.get_type() == &ObjectType::Plant)
+        .count();
+    let count_inorganics = raws_vec
+        .as_slice()
+        .iter()
+        .filter(|raw| raw.get_type() == &ObjectType::Inorganic)
+        .count();
+
+    let count_graphics = raws_vec
+        .as_slice()
+        .iter()
+        .filter(|raw| raw.get_type() == &ObjectType::Graphics)
+        .count();
+    let count_tile_pages = raws_vec
+        .as_slice()
+        .iter()
+        .filter(|raw| raw.get_type() == &ObjectType::TilePage)
+        .count();
+
     let start2 = std::time::Instant::now();
     // Store the raws in the storage, after clearing it
     #[allow(clippy::unwrap_used)]
@@ -55,6 +82,7 @@ pub fn parse_and_store_raws(
         options.raws_to_parse,
         options.locations_to_parse,
     );
+    log::info!("parse_and_store_raws: Creatures: {}, Plants: {}, Inorganics: {}, Graphics: {}, Tile Pages: {}", count_creatures, count_plants, count_inorganics,  count_graphics, count_tile_pages);
     app_handle.track_event(
         "parse_and_store_raws",
         Some(
@@ -71,6 +99,12 @@ pub fn parse_and_store_raws(
 
     // Update the search lookup table
     update_search_lookup(&storage);
+
+    // Update the graphics store
+    update_graphics_store(&storage);
+
+    // Update the tile page store
+    update_tile_page_store(&storage);
 }
 
 #[allow(clippy::needless_pass_by_value)]
@@ -142,6 +176,80 @@ fn update_search_lookup(storage: &State<Storage>) {
         format!("{:?}", reset_duration),
         format!("{:?}", clone_duration),
         format!("{:?}", filter_duration),
+        format!("{:?}", duration),
+    );
+}
+
+#[allow(clippy::needless_pass_by_value)]
+fn update_graphics_store(storage: &State<Storage>) {
+    let start = std::time::Instant::now();
+    // Get only the graphics raws and store them in the graphics store
+    #[allow(clippy::unwrap_used)]
+    let graphics = storage
+        .store
+        .lock()
+        .unwrap()
+        .iter()
+        .filter(|raw| raw.get_type() == &ObjectType::Graphics)
+        .map(|r| r.as_any().downcast_ref::<Graphic>().unwrap().clone())
+        .collect::<Vec<Graphic>>();
+
+    // Clear the graphics store
+    #[allow(clippy::unwrap_used)]
+    storage.graphics_store.lock().unwrap().clear();
+
+    let total_graphics = graphics.len();
+    // Insert the graphics into the graphics store
+    for graphic in graphics {
+        #[allow(clippy::unwrap_used)]
+        storage
+            .graphics_store
+            .lock()
+            .unwrap()
+            .insert(graphic.get_identifier().to_string(), graphic.clone());
+    }
+    let duration = start.elapsed();
+
+    log::info!(
+        "update_graphics_store: Graphics Store Updated. Total: {} entries in {}",
+        total_graphics,
+        format!("{:?}", duration),
+    );
+}
+
+#[allow(clippy::needless_pass_by_value)]
+fn update_tile_page_store(storage: &State<Storage>) {
+    let start = std::time::Instant::now();
+    // Get only the tile pages raws and store them in the tile page store
+    #[allow(clippy::unwrap_used)]
+    let tile_pages = storage
+        .store
+        .lock()
+        .unwrap()
+        .iter()
+        .filter(|raw| raw.get_type() == &ObjectType::TilePage)
+        .map(|r| r.as_any().downcast_ref::<TilePage>().unwrap().clone())
+        .collect::<Vec<TilePage>>();
+
+    // Clear the tile page store
+    #[allow(clippy::unwrap_used)]
+    storage.tile_page_store.lock().unwrap().clear();
+
+    let total_tile_pages = tile_pages.len();
+    // Insert the tile pages into the tile page store
+    for tile_page in tile_pages {
+        #[allow(clippy::unwrap_used)]
+        storage
+            .tile_page_store
+            .lock()
+            .unwrap()
+            .insert(tile_page.get_identifier().to_string(), tile_page.clone());
+    }
+    let duration = start.elapsed();
+
+    log::info!(
+        "update_tile_page_store: Tile Page Store Updated. Total: {} entries in {}",
+        total_tile_pages,
         format!("{:?}", duration),
     );
 }

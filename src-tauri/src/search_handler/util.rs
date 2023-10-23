@@ -4,7 +4,7 @@ use dfraw_json_parser::parser::{
 };
 use tauri::State;
 
-use super::prepare::Storage;
+use crate::state::Storage;
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]

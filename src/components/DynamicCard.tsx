@@ -51,9 +51,9 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
               </div>
             </Show>
           </div>
-        </div>
-        <div class='self-center'>
-          <SpriteImage identifier={props.raw.identifier} />
+          <div class='self-center'>
+            <SpriteImage identifier={props.raw.identifier} />
+          </div>
         </div>
         <Switch fallback={<></>}>
           <Match when={props.raw.metadata.objectType === 'Plant'}>
