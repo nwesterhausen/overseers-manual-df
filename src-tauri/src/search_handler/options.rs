@@ -1,4 +1,4 @@
-use dfraw_json_parser::parser::object_types::ObjectType;
+use dfraw_json_parser::parser::{object_types::ObjectType, raw_locations::RawModuleLocation};
 use serde::{Deserialize, Serialize};
 
 #[derive(ts_rs::TS)]
@@ -20,4 +20,12 @@ pub struct SearchOptions {
     /// Search query
     /// Default: ""
     pub query: String,
+    /// Locations to include in the search results
+    /// Default: All locations
+    pub locations: Vec<RawModuleLocation>,
+    /// Some specific tags we want to allow searching for as toggles.
+    /// Default: false ; Requires creatures
+    pub only_egg_layers: bool,
+    /// Default: false ; Requires creatures
+    pub show_does_not_exist: bool,
 }

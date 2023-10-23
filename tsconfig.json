@@ -10,5 +10,6 @@
     "types": ["vite/client"],
     "noEmit": true,
     "isolatedModules": true
-  }
+  },
+  "exclude": ["src-taurui/**/*", "node_modules/**/*", "dist/**/*"]
 }

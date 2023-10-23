@@ -9,6 +9,15 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
   const [searchString, setSearchString] = createSignal('');
   const active = createMemo(() => searchString().length > 0);
 
+  const [showDoesNotExist, setShowDoesNotExist] = createSignal(false);
+  const handleToggleShowDoesNotExist = () => {
+    setShowDoesNotExist(!showDoesNotExist());
+  };
+  const [onlyEggLayers, setOnlyEggLayers] = createSignal(false);
+  const handleToggleOnlyEggLayers = () => {
+    setOnlyEggLayers(!onlyEggLayers());
+  };
+
   const [requireCreature, setRequireCreature] = createSignal(true);
   const handleToggleRequireCreature = () => {
     setRequireCreature(!requireCreature());
@@ -79,6 +88,9 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
       page: settings.currentPage,
       objectTypes: [],
       query: searchString(),
+      locations: [],
+      onlyEggLayers: onlyEggLayers(),
+      showDoesNotExist: showDoesNotExist(),
     };
     if (requireCreature()) {
       options.objectTypes.push('Creature');
@@ -131,5 +143,11 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
     handleToggleRequireInorganic,
     requireEntity,
     handleToggleRequireEntity,
+
+    // Other Filtering
+    showDoesNotExist,
+    handleToggleShowDoesNotExist,
+    onlyEggLayers,
+    handleToggleOnlyEggLayers,
   };
 });

@@ -154,4 +154,8 @@ export type EntityToken =
   | "TissueStyle"
   | "TissueStyleMaintainLength"
   | "TissueStylePreferredShaping"
-  | "Unknown";
+  | "Unknown"
+  | "WoodPref"
+  | "UndeadCandidate"
+  | "CutEntity"
+  | "SelectEntity";

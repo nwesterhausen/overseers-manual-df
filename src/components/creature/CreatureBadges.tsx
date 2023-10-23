@@ -16,6 +16,13 @@ const CreatureBadges: Component<{ creature: Creature }> = (props) => {
   return (
     <div>
       <div class='flex justify-content-center w-100 gap-1'>
+        {props.creature.tags && props.creature.tags.indexOf('DoesNotExist') === -1 ? (
+          <></>
+        ) : (
+          <div class='absolute top-1 end-1 opacity-50 rounded'>
+            <TwoPartBadge bg='info' name='Does not exist' value={''} />
+          </div>
+        )}
         {/* EGG BADGE */}
         {IsEggLayer(props.creature) ? (
           <TwoPartBadge bg='primary' name='Egg' value={'' + CondensedEggSize(props.creature)} />

@@ -33,7 +33,7 @@ export function nameForRaw(raw: Raw): string {
   if (typeof namedRaw.name === 'string') {
     return toTitleCase(namedRaw.name);
   } else if (typeof namedRaw.name === 'object') {
-    return toTitleCase(namedRaw.name.singular || namedRaw.name.plural || raw.identifier);
+    return toTitleCase(namedRaw.name.singular || namedRaw.name.plural || raw.identifier.replace(/_/g, ' '));
   }
-  return toTitleCase(raw.identifier);
+  return toTitleCase(raw.identifier.replace(/_/g, ' '));
 }
