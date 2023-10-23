@@ -12,14 +12,10 @@
   },
   "plugins": {
     "fs": {
-      "scope": [
-        "**"
-      ]
+      "scope": ["**"]
     },
     "updater": {
-      "endpoints": [
-        "https://tauri-update-server.nwest.workers.dev/v1/{{target}}/{{arch}}/{{current_version}}"
-      ]
+      "endpoints": ["https://tauri-update-server.nwest.workers.dev/v1/{{target}}/{{arch}}/{{current_version}}"]
     }
   },
   "tauri": {
@@ -31,13 +27,7 @@
         "depends": []
       },
       "externalBin": [],
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
+      "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
       "identifier": "games.nwest.dwarffortress.overseer-manual",
       "longDescription": "A utility to make it easier to get details about the creatures and other things represented in raws for your Dwarf Fortress saves.",
       "macOS": {
@@ -52,7 +42,7 @@
       "targets": "all",
       "updater": {
         "active": true,
-        "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEE2QjA3NUFBMzhGNEVFNTkKUldSWjd2UTRxbld3cHVxZzh5OTBJNDE3bU5pT3pneGtpUjVjVXhMTmZ4NDZmaHVHQ0srK3E2QzQK"
+        "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU1REM2MTc2RjQxRDI0QgpSV1JMMGtGdkY4WmRCYnh5TXFCZmlqY0FONHFWRXhVZlNhSDhwL3RUb3Y2MzkrZFBYYThvWHppcgo="
       },
       "windows": {
         "certificateThumbprint": null,
@@ -66,9 +56,7 @@
     "security": {
       "assetProtocol": {
         "enable": true,
-        "scope": [
-          "**"
-        ]
+        "scope": ["**"]
       },
       "csp": null
     },
