@@ -51,7 +51,6 @@
     "@tauri-apps/plugin-log": "github:tauri-apps/tauri-plugin-log#v2",
     "@tauri-apps/plugin-store": "github:tauri-apps/tauri-plugin-store#v2",
     "@tauri-apps/plugin-window-state": "github:tauri-apps/tauri-plugin-window-state#v2",
-    "minisearch": "^6.1.0",
     "solid-js": "^1.8.3"
   },
   "prettier": {
