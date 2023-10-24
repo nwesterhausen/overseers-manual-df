@@ -1,47 +1,44 @@
-import { Component, For, Show } from 'solid-js';
-import { UndergroundDepthDescription } from '../../definitions/Creature';
-import { TickToCalendarConversion } from '../../definitions/Utils';
-import { DFPlant } from '../../definitions/types';
+import { invoke } from '@tauri-apps/api/primitives';
+import { Component, For, Show, createResource } from 'solid-js';
+import { Plant } from '../../definitions/Plant';
+import { UndergroundDepthDescription } from '../../lib/CreatureUtil';
 
-const PlantDescriptionTable: Component<{ plant: DFPlant }> = (props) => {
+const PlantDescriptionTable: Component<{ plant: Plant }> = (props) => {
+  const [biomes] = createResource(
+    async () => {
+      if (!props.plant.biomes) {
+        return [];
+      }
+      const biomes = [];
+      for (const biome of props.plant.biomes) {
+        biomes.push(await invoke('get_biome_description', { biomeToken: biome }));
+      }
+      return biomes;
+    },
+    {
+      initialValue: [],
+    },
+  );
   return (
     <table class='table table-sm'>
       <tbody>
         <tr>
           <th>Likeable Features</th>
-          <td>{props.plant.prefString.length > 0 ? props.plant.prefString.join(', ') : 'None'}</td>
+          <td>{props.plant.prefStrings ? props.plant.prefStrings.join(', ') : 'None'}</td>
         </tr>
         <tr>
           <th>Found In</th>
-          <td>{props.plant.biomes.length ? props.plant.biomes.join(', ') : 'No natural biomes.'}</td>
-        </tr>
-        <tr>
-          <th>Inhabited Depth</th>
-          <td>{UndergroundDepthDescription(props.plant.undergroundDepth)}</td>
-        </tr>
-        <tr>
-          <th>Growth Duration</th>
           <td>
-            <Show when={props.plant.growthDuration > 0} fallback='No natural growth'>
-              Grows in {TickToCalendarConversion(props.plant.growthDuration)} ({props.plant.growthDuration} ticks)
-            </Show>
-          </td>
-        </tr>
-        <tr>
-          <th>Growths</th>
-          <td>
-            <Show when={Object.keys(props.plant.growthNames).length > 0} fallback='None'>
+            <Show when={biomes.latest.length > 0} fallback={<>No known biomes.</>}>
               <ul>
-                <For each={Object.keys(props.plant.growthNames)}>
-                  {(growth) => <li>{props.plant.growthNames[growth].singular}</li>}
-                </For>
+                <For each={biomes.latest}>{(biome) => <li>{biome}</li>}</For>
               </ul>
             </Show>
           </td>
         </tr>
         <tr>
-          <th>Base Value</th>
-          <td>{props.plant.value}</td>
+          <th>Inhabited Depth</th>
+          <td>{UndergroundDepthDescription(props.plant.undergroundDepth)}</td>
         </tr>
       </tbody>
     </table>

@@ -1,17 +1,14 @@
-import { IoCogSharp } from 'solid-icons/io';
+import { A, useLocation } from '@solidjs/router';
+import { BiRegularCog } from 'solid-icons/bi';
 import { Component } from 'solid-js';
 
 const OpenSettingsButton: Component = () => {
+  const location = useLocation();
   return (
-    <div class='tooltip tooltip-left' data-tip='Open Settings'>
-      <button
-        class='btn btn-sm btn-circle btn-ghost fill-secondary'
-        onClick={() => {
-          const dialog = document.getElementById('settingsModal') as HTMLDialogElement;
-          dialog.showModal();
-        }}>
-        <IoCogSharp size={'1.5rem'} />
-      </button>
+    <div class='tooltip tooltip-left' data-tip={location.pathname === '/' ? 'Open Settings' : 'Close Settings'}>
+      <A class='btn btn-sm btn-circle btn-ghost fill-secondary' href={location.pathname === '/' ? '/settings' : '/'}>
+        <BiRegularCog size={'1.5rem'} />
+      </A>
     </div>
   );
 };

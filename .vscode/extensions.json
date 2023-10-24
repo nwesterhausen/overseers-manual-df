@@ -1,8 +1,8 @@
 {
-    "recommendations": [
-        "vivaxy.vscode-conventional-commits",
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "rust-lang.rust-analyzer"
-    ]
+  "recommendations": [
+    "vivaxy.vscode-conventional-commits",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "rust-lang.rust-analyzer"
+  ]
 }

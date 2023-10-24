@@ -5,25 +5,30 @@ const DFDirectoryNotSet: Component = () => {
   const directoryContext = useDirectoryProvider();
 
   return (
-    <div class='join join-vertical gap-4'>
-      <h2>No valid path is set!</h2>
-      <p>
-        To set the path to your Dwarf Fortress game, drag and drop the <code>gamelog.txt</code> file from the dwarf
-        fortress directory onto this window, or use a button below to pull up a folder selection dialog.
-      </p>
-      <p>
-        Valid choices for a directory are the Dwarf Fortress folder, where the <code>gamelog.txt</code> file exists or
-        the equivalent of <code>data/saves</code> from the Dwarf Fortress directory (where each subdirectory of the
-        chosen directory is a save file).
-      </p>
-      <div class='join gap-3 p-3'>
-        <button
-          class='btn btn-primary'
-          onClick={() => {
-            directoryContext.activateManualDirectorySelection(true);
-          }}>
-          Set Directory
-        </button>
+    <div class='hero min-h-screen bg-base-200'>
+      <div class='hero-content flex-col md:flex-row'>
+        <img src='/icon.png' class='max-w-sm rounded-lg shadow-2xl shadow-primary' />
+        <div>
+          <h1 class='text-5xl font-bold'>Overseer's Reference Manual</h1>
+          <p class='py-6'>
+            Welcome! This is a utility to help you be informed when making decisions in Dwarf Fortress. It is currently
+            in development, and more features will be added over time. Before it can do anything, you need to set the
+            path to your Dwarf Fortress game.
+          </p>
+          <p>
+            To set the path to your Dwarf Fortress game, drag and drop the <code>gamelog.txt</code> file from the dwarf
+            fortress directory onto this window, or use the button below to pull up a folder selection dialog.
+          </p>
+          <div class='float-right'>
+            <button
+              class='btn btn-primary'
+              onClick={() => {
+                directoryContext.activateManualDirectorySelection(true);
+              }}>
+              Set Directory
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

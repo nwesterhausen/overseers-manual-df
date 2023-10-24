@@ -1,11 +1,11 @@
 import { Component, For } from 'solid-js';
-import { ActiveTimeStatus, NoSeasonStatus } from '../../definitions/Creature';
-import { toTitleCase } from '../../definitions/Utils';
-import type { CasteRange, Creature } from '../../definitions/types';
+import { Creature } from '../../definitions/Creature';
+import { ActiveTimeStatus, NoSeasonStatus } from '../../lib/CreatureUtil';
+import { toTitleCase } from '../../lib/Utils';
 
 const CreatureActivityDisplay: Component<{ creature: Creature }> = (props) => {
-  const seasonActivity = CondenseInactiveSeasons(props.creature.inactiveSeason);
-  const dayActivity = CondenseActiveTimes(props.creature.activeTime);
+  const seasonActivity = CondenseInactiveSeasons(props.creature);
+  const dayActivity = CondenseActiveTimes(props.creature);
 
   return (
     <div class='join join-vertical'>
@@ -21,33 +21,24 @@ const CreatureActivityDisplay: Component<{ creature: Creature }> = (props) => {
 
 export default CreatureActivityDisplay;
 
-const CondenseInactiveSeasons = (inactiveSeasons: CasteRange<number>): string[] => {
-  const keys = Object.keys(inactiveSeasons);
-  if (keys.length > 1) {
-    // Multiple sets of season activity based on caste
-    const strArr: string[] = [];
-    for (const k of keys) {
-      strArr.push(`${toTitleCase(k)}: ${NoSeasonStatus(inactiveSeasons[k])}`);
+const CondenseInactiveSeasons = (creature: Creature): string[] => {
+  // Multiple sets of season activity based on caste
+  const strArr: string[] = [];
+  if (Array.isArray(creature.castes)) {
+    for (const caste of creature.castes) {
+      strArr.push(`${toTitleCase(caste.identifier)}: ${NoSeasonStatus(caste)}`);
     }
-    return strArr;
   }
-  if (keys.length === 0) {
-    return [];
-  }
-  return [NoSeasonStatus(inactiveSeasons[keys[0]])];
+  return strArr;
 };
-const CondenseActiveTimes = (inactiveSeasons: CasteRange<number>): string[] => {
-  const keys = Object.keys(inactiveSeasons);
-  if (keys.length > 1) {
-    // Multiple sets of season activity based on caste
-    const strArr: string[] = [];
-    for (const k of keys) {
-      strArr.push(`${toTitleCase(k)}: ${ActiveTimeStatus(inactiveSeasons[k])}`);
+
+const CondenseActiveTimes = (creature: Creature): string[] => {
+  // Multiple sets of season activity based on caste
+  const strArr: string[] = [];
+  if (Array.isArray(creature.castes)) {
+    for (const caste of creature.castes) {
+      strArr.push(`${toTitleCase(caste.identifier)}: ${ActiveTimeStatus(caste)}`);
     }
-    return strArr;
   }
-  if (keys.length === 0) {
-    return [];
-  }
-  return [ActiveTimeStatus(inactiveSeasons[keys[0]])];
+  return strArr;
 };

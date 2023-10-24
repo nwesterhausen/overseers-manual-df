@@ -1,6 +1,6 @@
-import { Component, For } from 'solid-js';
-import { toTitleCase } from '../../definitions/Utils';
-import type { CasteRange } from '../../definitions/types';
+import { Component, For, Show } from 'solid-js';
+import { Caste } from '../../definitions/Caste';
+import { toTitleCase } from '../../lib/Utils';
 
 function rawToTiles(grazeVal: number): number {
   const mathTile = 20000 / grazeVal;
@@ -8,19 +8,20 @@ function rawToTiles(grazeVal: number): number {
   return parseFloat(mathTile.toFixed(1));
 }
 
-const CreatureGrazerTable: Component<{ values: CasteRange<number>; fallbackDesc: string }> = (props) => {
-  const values = props.values;
+const CreatureGrazerTable: Component<{ castes: Caste[]; fallbackDesc: string }> = (props) => {
   return (
     <table class='table table-xs'>
       <tbody>
-        <For each={Object.keys(values)} fallback={<p>{props.fallbackDesc}</p>}>
+        <For each={props.castes} fallback={<p>{props.fallbackDesc}</p>}>
           {(caste) => (
-            <tr>
-              <td>{toTitleCase(caste)}</td>
-              <td>
-                Requires {rawToTiles(values[caste])} grazing tiles ({values[caste]})
-              </td>
-            </tr>
+            <Show when={caste.grazer}>
+              <tr>
+                <td>{toTitleCase(caste.identifier)}</td>
+                <td>
+                  Requires {rawToTiles(caste.grazer)} grazing tiles ({caste.grazer})
+                </td>
+              </tr>
+            </Show>
           )}
         </For>
       </tbody>

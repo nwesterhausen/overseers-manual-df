@@ -10,5 +10,6 @@
     "types": ["vite/client"],
     "noEmit": true,
     "isolatedModules": true
-  }
+  },
+  "exclude": ["src-tauri/**/*", "node_modules/**/*", "dist/**/*"]
 }

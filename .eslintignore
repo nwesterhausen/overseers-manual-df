@@ -2,6 +2,7 @@
 dist
 # Ignore the rust builds
 src-tauri
+bindings
 # Ignore all others...
 .devcontainer
 .github

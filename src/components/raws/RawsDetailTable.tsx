@@ -1,39 +1,43 @@
 import { Component } from 'solid-js';
 import { Raw } from '../../definitions/types';
-import { useRawsProvider } from '../../providers/RawsProvider';
 
-const RawJsonTable: Component<{ item: Raw }> = (props) => {
-  const rawsContext = useRawsProvider();
+const RawJsonTable: Component<{ raw: Raw }> = (props) => {
   return (
     <>
       <table class='table table-sm'>
         <tbody>
           <tr>
             <th>Identifier</th>
-            <td>{props.item.identifier}</td>
+            <td>{props.raw.identifier}</td>
+            <th>Raw Type</th>
+            <td>{props.raw.metadata.objectType}</td>
           </tr>
           <tr>
             <th>Raw file</th>
-            <td>{props.item.parentRaw}</td>
+            <td>{props.raw.metadata.rawIdentifier}</td>
+          </tr>
+          <tr>
+            <th>Raw file exact path</th>
+            <th>{props.raw.metadata.rawFilePath}</th>
           </tr>
           <tr>
             <th>ObjectID</th>
-            <td>{props.item.objectId}</td>
+            <td>{props.raw.objectId}</td>
           </tr>
           <tr>
             <th>Raws as JSON</th>
             <td>
-              <pre class='p-1 text-muted'>{JSON.stringify(props.item, null, 2)}</pre>
+              <pre class='p-1 text-muted'>{JSON.stringify(props.raw, null, 2)}</pre>
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <th>Graphics Raws</th>
             <td>
               <pre class='p-1 text-muted'>
                 {JSON.stringify(rawsContext.allGraphicsFor(props.item.identifier), null, 2)}
               </pre>
             </td>
-          </tr>
+          </tr> */}
         </tbody>
       </table>
     </>

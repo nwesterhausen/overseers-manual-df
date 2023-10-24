@@ -16,7 +16,21 @@
     "-A",
     "clippy::too_many_lines"
   ],
-  "cSpell.words": ["bestiarum", "dfraw", "Ferdinandi", "gamelog", "lyrasearch", "scrolltop", "vocabulum"],
+  "cSpell.words": [
+    "bestiarum",
+    "dbaeumer",
+    "dfraw",
+    "dotenv",
+    "dotenvy",
+    "esbenp",
+    "Ferdinandi",
+    "gamelog",
+    "lyrasearch",
+    "scrolltop",
+    "solidjs",
+    "vivaxy",
+    "vocabulum"
+  ],
   "githubPullRequests.ignoredPullRequestBranches": ["main"],
   "css.lint.unknownAtRules": "ignore"
 }

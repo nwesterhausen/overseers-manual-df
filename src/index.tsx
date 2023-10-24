@@ -2,17 +2,22 @@
 import { render } from 'solid-js/web';
 // import './sass/main.scss';
 
+import { Router } from '@solidjs/router';
 import App from './App';
 import { DirectoryProvider } from './providers/DirectoryProvider';
 import { RawsProvider } from './providers/RawsProvider';
 import { SearchProvider } from './providers/SearchProvider';
 import { SettingsProvider } from './providers/SettingsProvider';
-import { ThemeProvider } from './providers/ThemeProvider';
+
+import { attachConsole } from '@tauri-apps/plugin-log';
+
+// Attach our console to the tauri logs
+attachConsole().catch(console.error);
 
 render(
   () => (
-    <SettingsProvider>
-      <ThemeProvider>
+    <Router>
+      <SettingsProvider>
         <SearchProvider>
           <DirectoryProvider>
             <RawsProvider>
@@ -20,8 +25,8 @@ render(
             </RawsProvider>
           </DirectoryProvider>
         </SearchProvider>
-      </ThemeProvider>
-    </SettingsProvider>
+      </SettingsProvider>
+    </Router>
   ),
   document.getElementById('root') as HTMLElement,
 );

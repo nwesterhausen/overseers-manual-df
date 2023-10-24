@@ -1,10 +1,10 @@
 import { createContextProvider } from '@solid-primitives/context';
-import { OpenDialogOptions, open as tauriOpen } from '@tauri-apps/api/dialog';
 import { Event, listen } from '@tauri-apps/api/event';
-import { readDir } from '@tauri-apps/api/fs';
-import { createMemo, createResource, createSignal } from 'solid-js';
-import { splitPathAgnostically } from '../definitions/Utils';
-import { PATH_STRING, PATH_TYPE, get as getFromStore, getSymbol, init as initStore, set } from '../settings';
+import { OpenDialogOptions, open as tauriOpen } from '@tauri-apps/plugin-dialog';
+import { readDir } from '@tauri-apps/plugin-fs';
+import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
+import { splitPathAgnostically } from '../lib/Utils';
+import { useSettingsContext } from './SettingsProvider';
 
 export const DIR_NONE = Symbol('none'),
   DIR_DF = Symbol('df'),
@@ -20,11 +20,12 @@ export interface DirectorySelection {
  * Dialog options for the select directory window
  */
 const openDialogOptions: OpenDialogOptions = {
-  directory: true,
   title: 'Select your Dwarf Fortress install Directory',
 };
 
 export const [DirectoryProvider, useDirectoryProvider] = createContextProvider(() => {
+  // Settings which will hold all the information.
+  const [settings, { setDirectoryPath }] = useSettingsContext();
   // Signal to open the directory open dialog, change to true to open it
   const [activateManualDirectorySelection, setManualDirectorySelection] = createSignal(false);
   // Helper function to reset manual selection
@@ -32,6 +33,18 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
 
   // Array to just hold recently selected directories and our evaluations of them
   const [directoryHistory, setDirectoryHistory] = createSignal<DirectorySelection[]>([]);
+
+  createEffect(() => {
+    if (settings.directoryPath !== '' && directoryHistory().length === 0) {
+      // Set initial directory from settings
+      setDirectoryHistory([
+        {
+          path: settings.directoryPath.split('/'),
+          type: DIR_DF,
+        },
+      ]);
+    }
+  });
 
   // Helper accessor for 'current' directory
   const currentDirectory = createMemo(() => {
@@ -50,7 +63,11 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     activateManualDirectorySelection,
     async () => {
       try {
-        const folderPath = await tauriOpen(openDialogOptions);
+        const folderPath = await tauriOpen({
+          ...openDialogOptions,
+          multiple: false,
+          directory: true,
+        });
         processDirectoryPath(folderPath);
 
         // Re-arm the directory selection action after 50ms
@@ -123,39 +140,15 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     ]);
 
     // Save to store
-    set(PATH_STRING, splitPath.join('/'));
-    set(PATH_TYPE, dirType.toString());
+    setDirectoryPath(splitPath.join('/'));
   }
-
-  // Setting up the settings storage.
-  initStore()
-    // After its setup, try to get the save directory from the settings
-    .then(() => {
-      return getFromStore(PATH_STRING);
-    })
-    // With the save folder, set it as the drag and drop path, since that's the path we set programmatically
-    // and let the effects do the rest.
-    .then((val) => {
-      const value = '' + val;
-      console.log('Setting initial value for directory to', value);
-      const dirPath = splitPathAgnostically(value);
-      setDirectoryHistory([{ path: dirPath, type: DIR_NONE }]);
-      return getSymbol(PATH_TYPE);
-    })
-    .then((dirType) => {
-      if (directoryHistory().length > 0 && dirType !== DIR_NONE) {
-        setDirectoryHistory([{ path: directoryHistory()[0].path, type: dirType }]);
-      } else {
-        console.log('Not updating history from store:', directoryHistory().length, dirType);
-      }
-    })
-    .catch((err) => {
-      console.debug('Error when init the store!');
-      console.debug(err);
-    });
 
   return {
     activateManualDirectorySelection: setManualDirectorySelection,
     currentDirectory,
+    resetDirectory: () => {
+      setDirectoryHistory([]);
+      setDirectoryPath('');
+    },
   };
 });

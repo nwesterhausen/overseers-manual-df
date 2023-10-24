@@ -1,28 +1,21 @@
-import { Component, For } from 'solid-js';
-import { CleanName, toTitleCase } from '../../definitions/Utils';
-import type { CasteRange } from '../../definitions/types';
+import { Component, For, Show } from 'solid-js';
+import { Caste } from '../../definitions/Caste';
+import { FormatName } from '../../lib/CreatureUtil';
+import { toTitleCase } from '../../lib/Utils';
 
-const CreatureNamesTable: Component<{ names: CasteRange<string[]> }> = (props) => {
-  const names = props.names;
+const CreatureNamesTable: Component<{ castes: Caste[] }> = (props) => {
   return (
     <table class='table table-xs'>
       <tbody>
-        <For each={Object.keys(names)} fallback={<p>No name data.</p>}>
-          {(caste) =>
-            names[caste] && names[caste].length && names[caste].join('').length ? (
+        <For each={props.castes} fallback={<p>No name data.</p>}>
+          {(caste) => (
+            <Show when={caste.casteName}>
               <tr>
-                <td>
-                  {caste
-                    .split('_')
-                    .map((v) => toTitleCase(v))
-                    .join(' ')}
-                </td>
-                <td>{CleanName(names[caste])}</td>
+                <td>{toTitleCase(caste.identifier)}</td>
+                <td>{FormatName(caste.casteName)}</td>
               </tr>
-            ) : (
-              ''
-            )
-          }
+            </Show>
+          )}
         </For>
       </tbody>
     </table>

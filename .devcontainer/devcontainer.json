@@ -16,7 +16,7 @@
   // "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
 
   // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
-  // "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
+  // "runArgs": ["--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined"],
 
   // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "vscode",
@@ -24,11 +24,10 @@
     "node": "lts",
     "rust": "latest"
   },
-  "extensions": [
-    "vivaxy.vscode-conventional-commits",
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "rust-lang.rust-analyzer"
-  ],
-  "updateContentCommand": "npm install -g pnpm && pnpm i && cargo install tauri-cli"
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "rust-lang.rust-analyzer"]
+    }
+  },
+  "updateContentCommand": "npm install -g pnpm && pnpm i && cargo install tauri-cli --version \"^2.0.0-alpha\""
 }
