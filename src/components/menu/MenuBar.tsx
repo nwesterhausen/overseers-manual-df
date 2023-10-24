@@ -9,6 +9,7 @@ import OpenSettingsButton from './OpenSettingsButton';
 import Pagination from './Pagination';
 import ReloadRawsButton from './ReloadRawsButton';
 import SearchBox from './SearchBox';
+import UpdateAvailable from './UpdateAvailable';
 
 const MenuBar: ParentComponent = (props) => {
   const rawsContext = useRawsProvider();
@@ -41,6 +42,7 @@ const MenuBar: ParentComponent = (props) => {
         <div class='ms-auto'>
           <ul class='menu menu-horizontal'>
             <OpenSettingsButton />
+            <UpdateAvailable />
           </ul>
         </div>
       </div>

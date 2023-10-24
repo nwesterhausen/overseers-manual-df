@@ -6,7 +6,7 @@ const ReloadRawsButton: Component = () => {
   const rawsContext = useRawsProvider();
   return (
     <div class='tooltip tooltip-bottom' data-tip='Force Refresh Raws'>
-      <button class='btn btn-sm btn-ghost btn-circle' onClick={() => rawsContext.setLoadRaws(true)}>
+      <button class='btn btn-sm btn-ghost btn-circle hover:text-accent' onClick={() => rawsContext.setLoadRaws(true)}>
         <BiRegularRefresh size={'1.5rem'} />
       </button>
     </div>
