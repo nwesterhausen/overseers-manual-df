@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/primitives';
-import { BiSolidCat, BiSolidCity, BiSolidDiamond, BiSolidTree } from 'solid-icons/bi';
+import { BiRegularQuestionMark, BiSolidCat, BiSolidCity, BiSolidDiamond, BiSolidTree } from 'solid-icons/bi';
 import { TbSearch } from 'solid-icons/tb';
 import { Component, Match, Show, Switch, createResource } from 'solid-js';
 import { Creature } from '../definitions/Creature';
@@ -39,7 +39,7 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
         </div>
       </div>
       <div class='top-1 right-1 absolute tooltip tooltip-bottom' data-tip={props.raw.metadata.objectType}>
-        <Switch fallback={<></>}>
+        <Switch fallback={<BiRegularQuestionMark />}>
           <Match when={props.raw.metadata.objectType === 'Plant'}>
             <BiSolidTree />
           </Match>
