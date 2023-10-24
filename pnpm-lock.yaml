@@ -20,9 +20,15 @@ dependencies:
   '@tauri-apps/plugin-log':
     specifier: github:tauri-apps/tauri-plugin-log#v2
     version: github.com/tauri-apps/tauri-plugin-log/2ad405623b4ae15aee8c234ee8f4e5667e6d3b49
+  '@tauri-apps/plugin-process':
+    specifier: github:tauri-apps/tauri-plugin-process#v2
+    version: github.com/tauri-apps/tauri-plugin-process/a2fa97b323bd7da93c52b9eb2b87feac96956ff1
   '@tauri-apps/plugin-store':
     specifier: github:tauri-apps/tauri-plugin-store#v2
     version: github.com/tauri-apps/tauri-plugin-store/74795ad4b1476d46e456b8eba9cd1be1fb6145e8
+  '@tauri-apps/plugin-updater':
+    specifier: github:tauri-apps/tauri-plugin-updater#v2
+    version: github.com/tauri-apps/tauri-plugin-updater/e88bca5f509c7709947d1f51a23d48cad468d3fb
   '@tauri-apps/plugin-window-state':
     specifier: github:tauri-apps/tauri-plugin-window-state#v2
     version: github.com/tauri-apps/tauri-plugin-window-state/8a80c16860d8094a7231f3de068eee545d7d890c
@@ -4159,10 +4165,26 @@ packages:
       '@tauri-apps/api': 2.0.0-alpha.9
     dev: false
 
+  github.com/tauri-apps/tauri-plugin-process/a2fa97b323bd7da93c52b9eb2b87feac96956ff1:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-process/tar.gz/a2fa97b323bd7da93c52b9eb2b87feac96956ff1}
+    name: '@tauri-apps/plugin-process'
+    version: 2.0.0-alpha.2
+    dependencies:
+      '@tauri-apps/api': 2.0.0-alpha.9
+    dev: false
+
   github.com/tauri-apps/tauri-plugin-store/74795ad4b1476d46e456b8eba9cd1be1fb6145e8:
     resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/74795ad4b1476d46e456b8eba9cd1be1fb6145e8}
     name: '@tauri-apps/plugin-store'
     version: 2.0.0-alpha.1
+    dependencies:
+      '@tauri-apps/api': 2.0.0-alpha.9
+    dev: false
+
+  github.com/tauri-apps/tauri-plugin-updater/e88bca5f509c7709947d1f51a23d48cad468d3fb:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-updater/tar.gz/e88bca5f509c7709947d1f51a23d48cad468d3fb}
+    name: '@tauri-apps/plugin-updater'
+    version: 2.0.0-alpha.2
     dependencies:
       '@tauri-apps/api': 2.0.0-alpha.9
     dev: false

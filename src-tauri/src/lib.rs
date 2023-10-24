@@ -76,6 +76,8 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         // Add window plugin
         .plugin(tauri_plugin_dialog::init())
+        // Add process plugin
+        .plugin(tauri_plugin_process::init())
         // Add simple storage plugin
         .plugin(tauri_plugin_store::Builder::default().build())
         // Add aptabase plugin

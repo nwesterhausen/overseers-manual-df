@@ -1,7 +1,10 @@
 import { A, useMatch } from '@solidjs/router';
 import { getTauriVersion, getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/primitives';
-import { Component, createMemo, createResource } from 'solid-js';
+import { relaunch } from '@tauri-apps/plugin-process';
+import { Update, check } from '@tauri-apps/plugin-updater';
+import { BiSolidDownload } from 'solid-icons/bi';
+import { Component, Show, createMemo, createResource, createSignal } from 'solid-js';
 import { Info } from '../../definitions/Info';
 
 const AppDrawerContent: Component = () => {
@@ -37,6 +40,9 @@ const AppDrawerContent: Component = () => {
       initialValue: '2.0.0',
     },
   );
+  const [updater, setUpdater] = createSignal<Update | null>(null);
+  check().then(setUpdater);
+
   const dfrawJsonVersion = createMemo(() => {
     if (buildInfo.latest.dependencies.length > 0) {
       // dependencies are laid out in Array of Array[2] where [0] is the name and [1] is the version
@@ -91,24 +97,36 @@ const AppDrawerContent: Component = () => {
         </li>
       </ul>
       {/* Show some details about the app */}
-      <ul class='menu-xs mt-auto mb-2 ms-2'>
+      <ul class='menu-xs mt-auto mb-2 ms-2 opacity-75'>
         <li>
-          <div class='menu-item'>
-            App Version: <span class='text-accent'>{appVersion.latest}</span>
+          <div class='menu-item text-slate-400 flex flex-row'>
+            <div>
+              App Version: <span class='text-accent'>{appVersion.latest}</span>
+            </div>
+            <Show when={updater()}>
+              <a
+                class='ms-2 text-success hover:link opacity-100 flex flex-row items-center gap-1'
+                onClick={async () => {
+                  await updater()?.downloadAndInstall();
+                  await relaunch();
+                }}>
+                <BiSolidDownload /> {updater()?.version}
+              </a>
+            </Show>
           </div>
         </li>
         <li>
-          <div class='menu-item'>
+          <div class='menu-item text-slate-400'>
             Built with Tauri <span class='text-accent'>{tauriVersion.latest}</span>
           </div>
         </li>
         <li>
-          <div class='menu-item'>
+          <div class='menu-item text-slate-400'>
             Using dfraw_json_parser <span class='text-accent'>{dfrawJsonVersion()}</span>
           </div>
         </li>
         <li>
-          <div class='menu-item'>
+          <div class='menu-item text-slate-400'>
             Commit <span class='text-secondary'>{buildInfo.latest.gitCommitHash}</span>
           </div>
         </li>

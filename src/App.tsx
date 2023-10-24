@@ -1,9 +1,10 @@
 import { Route, Routes } from '@solidjs/router';
 import { getCurrent } from '@tauri-apps/api/window';
-import { Component } from 'solid-js';
+import { Component, lazy } from 'solid-js';
 import MenuBar from './components/menu/MenuBar';
 import ReferenceManual from './pages/ReferenceManual';
-import Settings from './pages/Settings';
+const Settings = lazy(() => import('./pages/Settings'));
+const About = lazy(() => import('./pages/About'));
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -20,6 +21,7 @@ const App: Component = () => {
         <Routes>
           <Route path='/' element={<ReferenceManual />} />
           <Route path='/settings' element={<Settings />} />
+          <Route path='/about' element={<About />} />
         </Routes>
       </MenuBar>
     </>

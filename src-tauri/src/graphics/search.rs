@@ -12,7 +12,7 @@ pub fn get_graphics_for_identifier(
 ) -> GraphicsResults {
     #[allow(clippy::unwrap_used)]
     if state.store.lock().unwrap().is_empty() {
-        log::info!(
+        log::debug!(
             "get_graphics_for_identifier: No raws in storage, returning empty search results"
         );
         return GraphicsResults::default();
@@ -62,7 +62,7 @@ pub fn get_graphics_for_identifier(
     let tile_page_find_duration = start2.elapsed();
     let total_duration = start.elapsed();
 
-    log::info!(
+    log::debug!(
         "get_graphics_for_identifier: Found {} tile pages for identifier {}\nGraphic lookup: {}, Find tile pages: {}, Total: {}",
         tile_page_identifiers.len(),
         options.identifier,
