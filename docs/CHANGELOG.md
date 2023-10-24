@@ -1,3 +1,10 @@
+## [0.27.5](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.4...v0.27.5) (2023-10-24)
+
+
+### Bug Fixes
+
+* update available within app now ([02cdaf2](https://github.com/nwesterhausen/overseers-manual-df/commit/02cdaf24d63ae1ef1e33c5681f098ad518d2b0fc))
+
 ## [0.27.4](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.3...v0.27.4) (2023-10-24)
 
 
