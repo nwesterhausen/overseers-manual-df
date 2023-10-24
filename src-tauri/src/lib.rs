@@ -7,6 +7,7 @@ use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
 
 use dotenvy_macro::dotenv;
 
+mod biome;
 mod graphics;
 mod info;
 mod open_explorer;
@@ -88,6 +89,7 @@ pub fn run() {
             info::get_build_info,
             graphics::search::get_graphics_for_identifier,
             open_explorer::show_in_folder,
+            biome::lookup::get_biome_description,
         ])
         .build(tauri::generate_context!())
         .expect("Error when building tauri app")

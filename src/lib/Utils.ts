@@ -1,4 +1,5 @@
 import { Creature } from '../definitions/Creature';
+import { Material } from '../definitions/Material';
 import { StateName } from '../definitions/StateName';
 
 export const M3_to_CM3 = 1000000;
@@ -244,4 +245,24 @@ export function splitPathAgnostically(path: string): string[] {
   const pathArr = path.split(pathDelineation);
   console.debug(`Path delineated to [${pathArr.join(', ')}]`);
   return pathArr;
+}
+
+/**
+ * The function "friendlyMaterialName" takes a material and a plant name as input and returns a
+ * friendly name for the material.
+ * @param material - The material parameter is of type Material, which represents a material
+ * object.
+ * @param plantName - The name of the plant where the material is produced.
+ */
+export function friendlyMaterialName(material: Material, plantName: string): string {
+  const nameArr: string[] = [];
+  if (material.stateAdjectives) {
+    nameArr.push(material.stateAdjectives.solid);
+  } else {
+    nameArr.push(plantName);
+  }
+  if (material.isLocalMaterial && material.name !== 'STRUCTURAL') {
+    nameArr.push(material.name);
+  }
+  return toTitleCase(nameArr.join(' '));
 }
