@@ -79,7 +79,11 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   };
   const gotoPage = (page: number) => {
     if (page > searchResults.latest.totalPages) {
-      setCurrentResultsPage(searchResults.latest.totalPages);
+      if (searchResults.latest.totalPages === 0) {
+        setCurrentResultsPage(1);
+      } else {
+        setCurrentResultsPage(searchResults.latest.totalPages);
+      }
     } else if (page <= 0) {
       setCurrentResultsPage(1);
     } else {
