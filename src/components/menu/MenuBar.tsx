@@ -51,7 +51,7 @@ const MenuBar: ParentComponent = (props) => {
           {/* Page content here */}
           {props.children}
 
-          <Show when={rawsContext.parsingStatus() == STS_IDLE}>
+          <Show when={rawsContext.parsingStatus() == STS_IDLE && location.pathname === '/'}>
             <Pagination />
           </Show>
         </div>

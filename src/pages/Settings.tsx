@@ -27,15 +27,19 @@ const Settings: Component = () => {
     <div class='p-2 flex flex-col gap-3'>
       <section class='bg-slate-800 bg-opacity-75 rounded-lg p-2'>
         <h3 class='text-lg font-semibold mb-2'>Parsing Options</h3>
+        <hr class='mt-4 opacity-25' />
 
         <legend class='font-semibold text-md my-1'>Location Options</legend>
         <LocationOptions />
+        <hr class='mt-4 opacity-25' />
 
         <legend class='font-semibold text-md my-1'>Object Type Inclusion Options</legend>
         <ObjectTypeOptions />
+        <hr class='mt-4 opacity-25' />
 
         <legend class='font-semibold text-md my-1'>Display Options</legend>
         <DisplayOptions />
+        <hr class='mt-4 opacity-25' />
 
         <legend class='font-semibold text-md my-1'>Directory</legend>
         <DirectoryOptions />

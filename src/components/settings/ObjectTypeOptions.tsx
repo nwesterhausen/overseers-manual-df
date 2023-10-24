@@ -11,9 +11,7 @@ const ObjectTypeOptions: Component = () => {
         <label class='cursor-pointer label hover:font-semibold'>
           <div class='join'>
             <BiSolidCat class='me-2' />
-            <span class='label-text'>
-              Include <code>Creature</code> objects
-            </span>
+            <span class='label-text'>Include Creatures</span>
           </div>
           <input
             type='checkbox'
@@ -28,9 +26,7 @@ const ObjectTypeOptions: Component = () => {
         <label class='cursor-pointer label hover:font-semibold'>
           <div class='join'>
             <BiSolidTree class='me-2' />
-            <span class='label-text'>
-              Include <code>Plant</code> objects
-            </span>
+            <span class='label-text'>Include Plants</span>
           </div>
           <input
             type='checkbox'
@@ -45,9 +41,7 @@ const ObjectTypeOptions: Component = () => {
         <label class='cursor-pointer label hover:font-semibold'>
           <div class='join'>
             <BiSolidDiamond class='me-2' />
-            <span class='label-text'>
-              Include <code>Inorganic</code> objects
-            </span>
+            <span class='label-text'>Include Inorganics</span>
           </div>
           <input
             type='checkbox'
@@ -62,9 +56,7 @@ const ObjectTypeOptions: Component = () => {
         <label class='cursor-pointer label hover:font-semibold'>
           <div class='join'>
             <BiSolidCity class='me-2' />
-            <span class='label-text'>
-              Include <code>Entity</code> objects
-            </span>
+            <span class='label-text'>Include Entities</span>
           </div>
           <input
             type='checkbox'

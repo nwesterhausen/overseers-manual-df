@@ -5,7 +5,7 @@ const DisplayOptions: Component = () => {
   const [settings, { toggleDisplayGraphics, setResultsPerPage }] = useSettingsContext();
 
   return (
-    <div class='grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3'>
+    <div class='grid grid-cols-1 md:grid-cols-2 gap-2 mb-3'>
       <div class='form-control'>
         <label class='cursor-pointer label hover:font-semibold'>
           <span class='label-text'>Display Graphics</span>
@@ -33,14 +33,16 @@ const DisplayOptions: Component = () => {
           </div> */}
       <div class='form-control'>
         <label class='label hover:font-semibold'>
-          <span class='label-text'>Results Per Page</span>
+          <span class='label-text min-w-max me-2'>
+            Results Per Page <span class='text-accent font-bold'>{settings.resultsPerPage}</span>
+          </span>
           <input
-            type='number'
-            class='input input-sm input-bordered'
+            type='range'
+            class='range range-sm'
             min='1'
             max='100'
             value={settings.resultsPerPage}
-            onFocusOut={(e) => {
+            onChange={(e) => {
               const value = parseInt((e.target as HTMLInputElement).value);
               if (value >= 1 && value <= 100) {
                 setResultsPerPage(value);
