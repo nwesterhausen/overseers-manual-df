@@ -91,7 +91,7 @@ scope = ["**"]
 
 [[tauri.windows]]
 fullscreen = false
-height = 640
+height = 800
 resizable = true
 title = "Overseer's Reference Manual"
-width = 944
+width = 1180

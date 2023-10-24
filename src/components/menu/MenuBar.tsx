@@ -22,7 +22,7 @@ const MenuBar: ParentComponent = (props) => {
         <div class='me-auto'>
           <ul class='menu menu-horizontal'>
             <AppDrawerButton />
-            <Show when={location.pathname === '/'}>
+            <Show when={location.pathname === '/' && rawsContext.parsingStatus() == STS_IDLE}>
               <ReloadRawsButton />
             </Show>
             <Show when={location.pathname === '/settings'}>
@@ -51,7 +51,9 @@ const MenuBar: ParentComponent = (props) => {
           {/* Page content here */}
           {props.children}
 
-          <Pagination />
+          <Show when={rawsContext.parsingStatus() == STS_IDLE}>
+            <Pagination />
+          </Show>
         </div>
         <AppDrawerContent />
         <ScrollToTopBtn />
