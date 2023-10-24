@@ -1,3 +1,10 @@
+## [0.27.3](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.2...v0.27.3) (2023-10-24)
+
+
+### Bug Fixes
+
+* **ci:** semantic release should respect nvmrc ([7ff7d58](https://github.com/nwesterhausen/overseers-manual-df/commit/7ff7d5837ee6b1ba6479aafaf01a7a66915d8fb7))
+
 ## [0.27.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.1...v0.27.2) (2023-10-24)
 
 
