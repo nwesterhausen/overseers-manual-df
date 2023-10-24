@@ -1,3 +1,11 @@
+## [0.27.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.1...v0.27.2) (2023-10-24)
+
+
+### Bug Fixes
+
+* quieter logging, remove some unused components ([23c8144](https://github.com/nwesterhausen/overseers-manual-df/commit/23c814439d104f56b4ba2420d54325cdabf4f558))
+* stop double page travel ([2253e1d](https://github.com/nwesterhausen/overseers-manual-df/commit/2253e1d0905d7dcdf6366b12f6a93de4a2a8e5cf))
+
 ## [0.27.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.0...v0.27.1) (2023-10-24)
 
 
