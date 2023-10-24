@@ -1,3 +1,10 @@
+## [0.27.6](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.5...v0.27.6) (2023-10-24)
+
+
+### Bug Fixes
+
+* correct wrapper around logic ([1eead91](https://github.com/nwesterhausen/overseers-manual-df/commit/1eead91ea004dd14056fd04f82c33c507de3a6ee))
+
 ## [0.27.5](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.4...v0.27.5) (2023-10-24)
 
 
