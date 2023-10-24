@@ -32,7 +32,7 @@ jobs:
   
   publish-tauri:
     needs: semantic-release
-    if: needs.semantic-release.outputs.new-release-published == 'true'
+    if: ${{ needs.semantic-release.outputs.new-release-published == 'true' }}
     name: 'Publish Tauri App'
     strategy:
       fail-fast: false
