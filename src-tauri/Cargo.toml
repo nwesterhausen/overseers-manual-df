@@ -44,10 +44,8 @@ features = ["derive"]
 # Used to parse the raw files into json
 [dependencies.dfraw_json_parser]
 git = "https://github.com/nwesterhausen/dfraw_json_parser"
-branch = "dev"
-# version = "0.14"
+branch = "v2"
 features = ["tauri"]
-# path = "../../dfraw_json_parser"
 
 # Used to provide centralized logging
 [dependencies.tauri-plugin-log]
