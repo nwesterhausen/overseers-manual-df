@@ -21,7 +21,7 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version-file: .nvmrc
           cache: pnpm
 
       - name: Create Fake .env File (dotenvy_macro requirement)
@@ -58,7 +58,6 @@ jobs:
 
       - name: Install app dependencies and build web
         run: |
-          npm install -g pnpm
           pnpm install
           pnpm build
 
