@@ -1,3 +1,11 @@
+## [0.27.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.26.2...v0.27.0) (2023-10-24)
+
+
+### Features
+
+* update app ([ca0c706](https://github.com/nwesterhausen/overseers-manual-df/commit/ca0c706cd3ebcdd7cfb6432b760841b218f57a32))
+* update to Tauri v2 & improved backend ([ea2d4c1](https://github.com/nwesterhausen/overseers-manual-df/commit/ea2d4c11160eb2fa2affa200899585e31886e671))
+
 ## [0.26.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.26.1...v0.26.2) (2023-10-17)
 
 
