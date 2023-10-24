@@ -5,9 +5,9 @@ const DFDirectoryNotSet: Component = () => {
   const directoryContext = useDirectoryProvider();
 
   return (
-    <div class='hero min-h-screen bg-base-200'>
+    <div class='hero min-h-fit pt-16'>
       <div class='hero-content flex-col md:flex-row'>
-        <img src='/icon.png' class='max-w-sm rounded-lg shadow-2xl shadow-primary' />
+        <img src='/icon.png' class='max-w-sm' />
         <div>
           <h1 class='text-5xl font-bold'>Overseer's Reference Manual</h1>
           <p class='py-6'>
@@ -19,7 +19,7 @@ const DFDirectoryNotSet: Component = () => {
             To set the path to your Dwarf Fortress game, drag and drop the <code>gamelog.txt</code> file from the dwarf
             fortress directory onto this window, or use the button below to pull up a folder selection dialog.
           </p>
-          <div class='float-right'>
+          <div class='float-right mt-8'>
             <button
               class='btn btn-primary'
               onClick={() => {

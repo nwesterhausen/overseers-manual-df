@@ -21,6 +21,8 @@ Currently it will display (and let you search through):
 
 ![app-screenshot](docs/img/app_inuse.png)
 
+![app-screenshot](docs/img/app_parsing.png)
+
 ## Usage
 
 When the app is started for the first time, it presents some instructions:
