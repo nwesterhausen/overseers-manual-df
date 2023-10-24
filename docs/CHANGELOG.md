@@ -1,3 +1,10 @@
+## [0.27.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.0...v0.27.1) (2023-10-24)
+
+
+### Bug Fixes
+
+* **ci:** use correct ENV var names ([80a5a7c](https://github.com/nwesterhausen/overseers-manual-df/commit/80a5a7cb652916f991c31acd0d140db3347818e6))
+
 ## [0.27.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.26.2...v0.27.0) (2023-10-24)
 
 
