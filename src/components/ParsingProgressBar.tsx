@@ -64,10 +64,25 @@ const ParsingProgressBar: Component = () => {
             data-content={settings.includeLocationMods ? '4' : '✗'}>
             Parse Downloaded Mods Raws
           </li>
-          <li class='step'>Build Search Index</li>
+          <li
+            class='step'
+            classList={{
+              'step-success': rawsContext.parsingProgress().currentTask === 'PrepareLookups',
+            }}>
+            Build Search Index
+          </li>
         </ul>
-        <div class='flex justify-around'>
-          <span>Parsing {rawsContext.parsingProgress().currentModule}</span>
+        <div class='flex justify-around pt-16'>
+          <Show
+            when={rawsContext.parsingProgress().currentTask !== 'PrepareLookups'}
+            fallback={
+              <div class='flex flex-row items-center'>
+                <span class='loading loading-infinity loading-lg'></span>
+                <span class='ms-4'>Building search lookups</span>
+              </div>
+            }>
+            <span>Parsing {rawsContext.parsingProgress().currentModule}</span>
+          </Show>
         </div>
       </div>
     </Show>

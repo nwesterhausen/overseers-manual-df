@@ -10,6 +10,7 @@ use dfraw_json_parser::{
         raws::RawObject,
         searchable::get_search_string,
     },
+    ProgressPayload,
 };
 use serde_json::json;
 use tauri::{AppHandle, State, Window};
@@ -31,7 +32,7 @@ pub fn parse_and_store_raws(
     );
     let start = std::time::Instant::now();
     // Get the raws with given options (and progress)
-    let raws_vec = dfraw_json_parser::parse_with_tauri_emit(&options, window);
+    let raws_vec = dfraw_json_parser::parse_with_tauri_emit(&options, window.clone());
     let total_raws = raws_vec.len();
     let duration = start.elapsed();
 
@@ -96,6 +97,22 @@ pub fn parse_and_store_raws(
             .into(),
         ),
     );
+
+    window
+        .emit(
+            "PROGRESS",
+            ProgressPayload {
+                current_task: "PrepareLookups".to_string(),
+                percentage: 0.0,
+                current_module: String::new(),
+                current_file: String::new(),
+                current_location: String::new(),
+                running_total: 0,
+            },
+        )
+        .unwrap_or_else(|err| {
+            log::warn!("parse_and_store_raws: failed to emit progress event\n{err:?}");
+        });
 
     // Update the search lookup table
     update_search_lookup(&storage);
