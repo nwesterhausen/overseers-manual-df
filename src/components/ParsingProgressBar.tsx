@@ -1,49 +1,74 @@
-import { Component, Show, createMemo } from 'solid-js';
+import { Component, Show, createEffect } from 'solid-js';
+import { createStore } from 'solid-js/store';
 import { STS_PARSING, useRawsProvider } from '../providers/RawsProvider';
 import { useSettingsContext } from '../providers/SettingsProvider';
 
 const ParsingProgressBar: Component = () => {
   const rawsContext = useRawsProvider();
   const [settings] = useSettingsContext();
-  const percentage = createMemo(() => {
+  const [progress, setProgress] = createStore({
+    vanilla: false,
+    installed: false,
+    downloaded: false,
+  });
+  createEffect(() => {
     if (rawsContext.parsingStatus() === STS_PARSING) {
-      return Math.floor(100 * rawsContext.parsingProgress().percentage);
+      if (rawsContext.parsingProgress().currentLocation === 'Vanilla') {
+        setProgress('vanilla', true);
+      }
+      if (rawsContext.parsingProgress().currentLocation === 'InstalledMods') {
+        setProgress('installed', true);
+      }
+      if (rawsContext.parsingProgress().currentLocation === 'Mods') {
+        setProgress('downloaded', true);
+      }
+    } else {
+      setProgress({
+        vanilla: false,
+        installed: false,
+        downloaded: false,
+      });
     }
-    return 0;
   });
   return (
     <Show when={rawsContext.parsingStatus() === STS_PARSING}>
-      <div class='w-full p-5 flex flex-row'>
-        <div class='basis-1/6'>
-          <div
-            class='radial-progress bg-primary text-primary-content border-4 border-primary'
-            style={`--value:${percentage()};`}>
-            {percentage()}%
-          </div>
+      <div class='flex flex-col'>
+        <ul class='steps'>
+          <li class='step step-success' data-context='✓'>
+            Set Directory
+          </li>
+          <li
+            class='step'
+            classList={{
+              'step-neutral': !settings.includeLocationVanilla,
+              'step-success': progress.vanilla,
+            }}
+            data-content={settings.includeLocationVanilla ? '2' : '✗'}>
+            Parse Vanilla Raws
+          </li>
+          <li
+            class='step'
+            classList={{
+              'step-neutral': !settings.includeLocationInstalledMods,
+              'step-success': progress.installed,
+            }}
+            data-content={settings.includeLocationInstalledMods ? '3' : '✗'}>
+            Parse Installed Mods Raws
+          </li>
+          <li
+            class='step'
+            classList={{
+              'step-neutral': !settings.includeLocationMods,
+              'step-success': progress.downloaded,
+            }}
+            data-content={settings.includeLocationMods ? '4' : '✗'}>
+            Parse Downloaded Mods Raws
+          </li>
+          <li class='step'>Build Search Index</li>
+        </ul>
+        <div class='flex justify-around'>
+          <span>Parsing {rawsContext.parsingProgress().currentModule}</span>
         </div>
-        <div class='basis-2/6'>
-          <div class='join join-vertical gap-1'>
-            <div class='join-item'>
-              <span class='badge bg-primary'>Location</span> {rawsContext.parsingProgress().currentLocation}
-            </div>
-            <div class='join-item'>
-              <span class='badge bg-primary'>Module</span> {rawsContext.parsingProgress().currentModule}
-            </div>
-            <div class='join-item'>
-              <span class='badge bg-primary'>File</span> {rawsContext.parsingProgress().currentFile}
-            </div>
-          </div>
-        </div>
-        <Show when={settings.includeLocationVanilla}>
-          <div class='basis-1/6'>
-            <div class='stat place-items-center'>
-              <div class='stat-title'>Parsed Raws</div>
-              <div class='stat-value'>
-                {rawsContext.parsingProgress().runningTotal || <span class='loading loading-ring loading-xs'></span>}
-              </div>
-            </div>
-          </div>
-        </Show>
       </div>
     </Show>
   );
