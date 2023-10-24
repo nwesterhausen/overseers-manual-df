@@ -1,19 +1,21 @@
 import { Component, For, Show } from 'solid-js';
 import { STS_IDLE, useRawsProvider } from '../providers/RawsProvider';
 import DynamicCard from './DynamicCard';
-import Pagination from './menu/Pagination';
 
 const Listings: Component = () => {
   const rawsContext = useRawsProvider();
 
   return (
     <Show
-      when={rawsContext.parsingStatus() === STS_IDLE && rawsContext.searchFilteredRaws().length > 0}
-      fallback={<div class='my-5 text-center text-neutral-700'>No results</div>}>
+      when={rawsContext.parsingStatus() === STS_IDLE && rawsContext.parsedRaws.latest.results.length > 0}
+      fallback={
+        <Show when={rawsContext.parsingStatus() === STS_IDLE}>
+          <div class='my-5 text-center text-neutral-700'>No results</div>
+        </Show>
+      }>
       <div class='flex flex-wrap justify-center gap-4 mb-16'>
-        <For each={rawsContext.searchFilteredRaws()}>{(raw) => <DynamicCard raw={raw} />}</For>
+        <For each={rawsContext.parsedRaws.latest.results}>{(raw) => <DynamicCard raw={raw} />}</For>
       </div>
-      <Pagination />
     </Show>
   );
 };

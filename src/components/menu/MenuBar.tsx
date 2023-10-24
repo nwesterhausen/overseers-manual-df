@@ -1,57 +1,64 @@
-import { Component, Show, createMemo } from 'solid-js';
-import { STS_IDLE, STS_LOADING, STS_PARSING, useRawsProvider } from '../../providers/RawsProvider';
-import { useSearchProvider } from '../../providers/SearchProvider';
-import AdvancedFiltersButton from './AdvancedFiltersButton';
-import GameReferenceButton from './GameReferenceButton';
-import GraphicsToggleButton from './GraphicsToggleButton';
+import { A, useLocation } from '@solidjs/router';
+import { ParentComponent, Show, createMemo } from 'solid-js';
+import { STS_IDLE, useRawsProvider } from '../../providers/RawsProvider';
+import ScrollToTopBtn from '../ScrollToTopBtn';
+import SearchFilters from '../filtering/SearchFilters';
+import AppDrawerButton from './AppDrawerButton';
+import AppDrawerContent from './AppDrawerContent';
 import OpenSettingsButton from './OpenSettingsButton';
-import RawTypeCheckboxes from './RawTypeCheckboxes';
+import Pagination from './Pagination';
 import ReloadRawsButton from './ReloadRawsButton';
 import SearchBox from './SearchBox';
-import SetDirectoryButton from './SetDirectoryButton';
 
-const MenuBar: Component = () => {
+const MenuBar: ParentComponent = (props) => {
   const rawsContext = useRawsProvider();
-  const searchContext = useSearchProvider();
-
+  const location = useLocation();
   const disableButtons = createMemo(() => rawsContext.parsingStatus() !== STS_IDLE);
 
+  console.log('MenuBar', location.pathname);
   return (
     <>
-      <div class='navbar'>
+      <div class='navbar mb-2 bg-slate-700 bg-opacity-50 rounded-b-lg px-2 py-0'>
         <div class='me-auto'>
-          <div class='join'>
-            <SetDirectoryButton
-              disabled={rawsContext.parsingStatus() === STS_PARSING && rawsContext.parsingStatus() === STS_LOADING}
-            />
-            <ReloadRawsButton disabled={disableButtons()} />
-          </div>
+          <ul class='menu menu-horizontal'>
+            <AppDrawerButton />
+            <Show when={location.pathname === '/' && rawsContext.parsingStatus() == STS_IDLE}>
+              <ReloadRawsButton />
+            </Show>
+            <Show when={location.pathname === '/settings'}>
+              <li>
+                <A href='/'>Back</A>
+              </li>
+            </Show>
+          </ul>
         </div>
 
-        <div class='mx-auto'>
-          <div class='join'>
-            <SearchBox disabled={disableButtons()} />
-            <RawTypeCheckboxes disabled={disableButtons()} />
-            {/* <TagRestrictionButton disabled={disableButtons()} /> */}
-            <AdvancedFiltersButton disabled={disableButtons()} />
-          </div>
+        <div class='mx-auto grow'>
+          <Show when={!disableButtons()}>
+            <SearchBox />
+          </Show>
         </div>
-        <Show when={searchContext.active()}>
-          <div class='mx-2 text-xs text-accent'>
-            {rawsContext.searchFilteredRaws().length >= 50 ? 'More than ' : ''}
-            {rawsContext.searchFilteredRaws().length} results
-          </div>
-        </Show>
-        <div class='mx-2 text-xs text-info'>{rawsContext.totalRawCount()} raws loaded</div>
+
         <div class='ms-auto'>
-          <div class='join'>
-            <GraphicsToggleButton disabled={disableButtons()} />
-            <GameReferenceButton disabled={disableButtons()} />
-
-            {/* <ThemeChangeButton /> */}
+          <ul class='menu menu-horizontal'>
             <OpenSettingsButton />
-          </div>
+          </ul>
         </div>
+      </div>
+      <div class='drawer'>
+        <input id='my-drawer' type='checkbox' class='drawer-toggle' />
+        <div class='drawer-content'>
+          {/* Page content here */}
+          {props.children}
+
+          <Show when={rawsContext.parsingStatus() == STS_IDLE && location.pathname === '/'}>
+            <Pagination />
+          </Show>
+        </div>
+        <AppDrawerContent />
+        <ScrollToTopBtn />
+        {/*  MODALS  */}
+        <SearchFilters />
       </div>
     </>
   );

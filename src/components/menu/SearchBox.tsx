@@ -2,14 +2,13 @@ import { debounce } from '@solid-primitives/scheduled';
 import { Component } from 'solid-js';
 import { useSearchProvider } from '../../providers/SearchProvider';
 
-const SearchBox: Component<{ disabled: boolean }> = (props) => {
+const SearchBox: Component = () => {
   const searchContext = useSearchProvider();
 
   return (
-    <div class='form-control'>
+    <div class='form-control w-full'>
       <input
-        disabled={props.disabled}
-        class='input input-sm'
+        class='input input-sm input-bordered'
         id='search-box'
         type='search'
         placeholder='Type here to search'

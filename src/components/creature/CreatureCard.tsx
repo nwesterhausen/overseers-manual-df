@@ -1,9 +1,6 @@
-import { Component, Show } from 'solid-js';
-import { toTitleCase } from '../../definitions/Utils';
-import type { Creature } from '../../definitions/types';
-import SpriteImage from '../SpriteImage';
-import RawJsonTable from '../raws/RawsDetailTable';
-import CreatureDescriptionTable from './CreateDescriptionTable';
+import { Component } from 'solid-js';
+import { Creature } from '../../definitions/Creature';
+import { FormatDescription } from '../../lib/CreatureUtil';
 import CreatureBadges from './CreatureBadges';
 
 /**
@@ -21,74 +18,12 @@ import CreatureBadges from './CreatureBadges';
  * @returns Component of creature data for a listing.
  */
 const CreatureCard: Component<{ creature: Creature }> = (props) => {
-  const title = props.creature.namesMap['SPECIES'][0]
-    .split(' ')
-    .map((v: string) => toTitleCase(v))
-    .join(' ');
-
   return (
     <>
-      <div class='card-body'>
-        <div class='flex flex-row'>
-          <div class='flex-grow'>
-            <div class='card-title'>{title}</div>
-            <div class='text-muted italic text-xs'>{props.creature.moduleDisplayName}</div>
-          </div>
-          <div class='self-center'>
-            <SpriteImage identifier={props.creature.identifier} />
-          </div>
-        </div>
-        <div class='card-badges'>
-          <CreatureBadges creature={props.creature} />
-        </div>
-        <div>
-          <Show
-            when={Object.values(props.creature.descriptions).length > 0}
-            fallback={<p class='text-muted fst-italic'>No description available.</p>}>
-            {Object.values(props.creature.descriptions).join(' ')}
-          </Show>
-        </div>
+      <div class='card-badges'>
+        <CreatureBadges creature={props.creature} />
       </div>
-      <div class='card-actions'>
-        <button
-          class='btn btn-primary btn-sm'
-          onClick={() => {
-            const dialog = document.getElementById(`${props.creature.objectId}-details`) as HTMLDialogElement;
-            dialog?.showModal();
-          }}>
-          Show All Details
-        </button>
-        <button
-          onClick={() => {
-            const dialog = document.getElementById(`${props.creature.objectId}-raws`) as HTMLDialogElement;
-            dialog?.showModal();
-          }}
-          class='btn btn-sm btn-ghost'>
-          See Raw Info
-        </button>
-      </div>
-
-      {/* Include modal for "Show All Details" */}
-      <dialog class='modal' id={`${props.creature.objectId}-details`}>
-        <div class='modal-box w-11/12 max-w-5xl'>
-          <h3 class='font-bold text-lg'>{title} Details</h3>
-          <CreatureDescriptionTable creature={props.creature} />
-        </div>
-        <form method='dialog' class='modal-backdrop'>
-          <button>close</button>
-        </form>
-      </dialog>
-
-      {/* Include modal for "See Raw Info" */}
-      <dialog class='modal' id={`${props.creature.objectId}-raws`}>
-        <div class='modal-box w-11/12 max-w-5xl'>
-          <h3 class='font-bold text-lg'>{title} Details</h3>
-          <RawJsonTable item={props.creature} />
-        </div>
-        <form method='dialog' class='modal-backdrop'>
-          <button>close</button>
-        </form>
-      </dialog>
+      <div>{FormatDescription(props.creature)}</div>
     </>
   );
 };

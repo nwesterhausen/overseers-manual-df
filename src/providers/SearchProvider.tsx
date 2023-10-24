@@ -1,10 +1,22 @@
 import { createContextProvider } from '@solid-primitives/context';
 import { createMemo, createSignal } from 'solid-js';
+import { SearchOptions } from '../definitions/SearchOptions';
+import { useSettingsContext } from './SettingsProvider';
 
 export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
+  const [settings] = useSettingsContext();
   // Signal for the search filter
   const [searchString, setSearchString] = createSignal('');
   const active = createMemo(() => searchString().length > 0);
+
+  const [showDoesNotExist, setShowDoesNotExist] = createSignal(false);
+  const handleToggleShowDoesNotExist = () => {
+    setShowDoesNotExist(!showDoesNotExist());
+  };
+  const [onlyEggLayers, setOnlyEggLayers] = createSignal(false);
+  const handleToggleOnlyEggLayers = () => {
+    setOnlyEggLayers(!onlyEggLayers());
+  };
 
   const [requireCreature, setRequireCreature] = createSignal(true);
   const handleToggleRequireCreature = () => {
@@ -17,6 +29,10 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
   const [requireInorganic, setRequireInorganic] = createSignal(true);
   const handleToggleRequireInorganic = () => {
     setRequireInorganic(!requireInorganic());
+  };
+  const [requireEntity, setRequireEntity] = createSignal(true);
+  const handleToggleRequireEntity = () => {
+    setRequireEntity(!requireEntity());
   };
 
   // Required Modules (by objectId)
@@ -66,10 +82,36 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
   const handleHideAdvancedFilters = () => setShowAdvancedFilters(false);
   const handleToggleAdvancedFilters = () => setShowAdvancedFilters(!showAdvancedFilters());
 
+  const searchOptions = createMemo<SearchOptions>(() => {
+    const options: SearchOptions = {
+      limit: settings.resultsPerPage,
+      page: settings.currentPage,
+      objectTypes: settings.includeObjectTypes,
+      query: searchString(),
+      locations: [],
+      onlyEggLayers: onlyEggLayers(),
+      showDoesNotExist: showDoesNotExist(),
+    };
+
+    if (settings.includeLocationInstalledMods) {
+      options.locations.push('InstalledMods');
+    }
+    if (settings.includeLocationVanilla) {
+      options.locations.push('Vanilla');
+    }
+    if (settings.includeLocationMods) {
+      options.locations.push('Mods');
+    }
+
+    // Todo: include advanced filtering options (modules and tags) once supported by the backend
+
+    return options;
+  });
+
   return {
-    searchString,
     setSearchString,
     active,
+    searchOptions,
 
     advancedFiltering,
     // Advanced Filtering Display Handling
@@ -97,5 +139,13 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
     handleToggleRequirePlant,
     requireInorganic,
     handleToggleRequireInorganic,
+    requireEntity,
+    handleToggleRequireEntity,
+
+    // Other Filtering
+    showDoesNotExist,
+    handleToggleShowDoesNotExist,
+    onlyEggLayers,
+    handleToggleOnlyEggLayers,
   };
 });

@@ -7,47 +7,85 @@ license = "MIT"
 repository = "github.com:nwesterhausen/overseers-manual-df.git"
 default-run = "overseers-manual-tauriapp"
 edition = "2021"
-rust-version = "1.57"
+rust-version = "1.70"
+keywords = ["tauri", "dwarf_fortress", "gaming", "utility"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[build-dependencies]
-tauri-build = { version = "1.5", features = [] }
+[build-dependencies.tauri-build]
+version = "2.0.0-alpha.10"
+features = ['config-toml']
+
+[build-dependencies.built]
+version = "0.7"
+features = ["git2", "chrono", "cargo-lock"]
 
 [dependencies]
-tauri = { version = "1.5", features = [
-    "dialog-open",
-    "fs-read-dir",
-    "protocol-asset",
-    "updater",
-    "window-set-title",
-] }
-log = "0.4.20"
+# A nice time library
 chrono = "0.4"
+# Used to load the .env file during build
+dotenvy_macro = "0.15.7"
+# Used for logging
+log = "0.4.20"
+# Part of the TS_RS requirements, also used in our custom commands
+serde_json = "1.0"
+# Part of the TS_RS requirements.
+typetag = "0.2"
 
-# [dependencies.fern]
-# default-features = false
-# version = "0.6"
-# features = ["colored"]
+[dependencies.tauri]
+version = "2.0.0-alpha.16"
+features = ["protocol-asset"]
 
-[dependencies.tauri-plugin-store]
-git = "https://github.com/tauri-apps/plugins-workspace"
-branch = "dev"
+# Required for adding invoke commands to tauri app
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
 
+# Used to parse the raw files into json
 [dependencies.dfraw_json_parser]
-# git = "https://github.com/nwesterhausen/dfraw_json_parser"
-# branch = "dev"
-version = "0.13"
+git = "https://github.com/nwesterhausen/dfraw_json_parser"
+branch = "v2"
 features = ["tauri"]
-# path = "../../dfraw_json_parser"
 
+# Used to provide centralized logging
 [dependencies.tauri-plugin-log]
 git = "https://github.com/tauri-apps/plugins-workspace"
-branch = "dev"
+branch = "v2"
 
 [dependencies.tauri-plugin-window-state]
 git = "https://github.com/tauri-apps/plugins-workspace"
-branch = "dev"
+branch = "v2"
+
+# Used to provide the tauri fs api to the frontend.
+[dependencies.tauri-plugin-fs]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
+# Used to store data to disk.
+[dependencies.tauri-plugin-store]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
+# Used to open dialog windows.
+[dependencies.tauri-plugin-dialog]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
+[target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies]
+tauri-plugin-updater = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+
+# Used to collect anonymized usage data about app usage
+# and active versions.
+[dependencies.tauri-plugin-aptabase]
+git = "https://github.com/aptabase/tauri-plugin-aptabase"
+branch = "v2"
+
+# Used to generate interface/type definitions for the structs used to
+# send data between the frontend and backend.
+[dependencies.ts-rs]
+version = "7.0"
+default-features = true
+features = ["serde-compat"]
 
 [features]
 # by default Tauri runs in production mode
@@ -63,3 +101,7 @@ codegen-units = 1
 lto = true
 opt-level = "s"
 strip = true      # Automatically strip symbols from the binary.
+
+[lib]
+crate-type = ["staticlib", "cdylib", "rlib"]
+name = "app_lib"
