@@ -1,6 +1,7 @@
 import { Store as TauriStore } from '@tauri-apps/plugin-store';
 import { ParentComponent, createContext, createEffect, createSignal, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
+import { ObjectType } from '../definitions/ObjectType';
 
 const SETTINGS_DEFAULTS = {
   layoutAsGrid: true,
@@ -11,6 +12,7 @@ const SETTINGS_DEFAULTS = {
   resultsPerPage: 32,
   directoryPath: '',
   currentPage: 1,
+  includeObjectTypes: ['Creature', 'Plant'] as ObjectType[],
 };
 
 type SettingsStore = [
@@ -23,6 +25,7 @@ type SettingsStore = [
     resultsPerPage: number;
     directoryPath: string;
     currentPage: number;
+    includeObjectTypes: ObjectType[];
   },
   {
     toggleLayoutAsGrid: () => void;
@@ -33,6 +36,9 @@ type SettingsStore = [
     setResultsPerPage: (num: number) => void;
     setDirectoryPath: (path: string) => void;
     setCurrentResultsPage: (num: number) => void;
+    objectTypeIncluded: (type: ObjectType) => boolean;
+    toggleObjectType: (type: ObjectType) => void;
+    resetToDefaults: () => void;
   },
 ];
 
@@ -67,6 +73,16 @@ const SettingsContext = createContext<SettingsStore>([
     setCurrentResultsPage(num: number) {
       console.log('Un-initialized settings provider.', num);
     },
+    objectTypeIncluded(type: ObjectType) {
+      console.log('Un-initialized settings provider.', type);
+      return false;
+    },
+    toggleObjectType(type: ObjectType) {
+      console.log('Un-initialized settings provider.', type);
+    },
+    resetToDefaults() {
+      console.log('Un-initialized settings provider.');
+    },
   },
 ]);
 
@@ -78,43 +94,51 @@ export const SettingsProvider: ParentComponent = (props) => {
   // Attempt to load the settings from disk
   tauriSettingsStore.load().then(async () => {
     console.log('Loading settings from disk.');
-    // If the settings file does not exist, create it
+    // If the settings file does not exist, create it..
+
+    // Initialize the layoutAsGrid setting
     if (typeof (await tauriSettingsStore.get('layoutAsGrid')) === 'undefined') {
       await tauriSettingsStore.set('layoutAsGrid', SETTINGS_DEFAULTS.layoutAsGrid);
     } else {
       setState({ layoutAsGrid: await tauriSettingsStore.get('layoutAsGrid') });
       console.log('Loaded layoutAsGrid', state.layoutAsGrid);
     }
+    // Initialize the displayGraphics setting
     if (typeof (await tauriSettingsStore.get('displayGraphics')) === 'undefined') {
       await tauriSettingsStore.set('displayGraphics', SETTINGS_DEFAULTS.displayGraphics);
     } else {
       setState({ displayGraphics: await tauriSettingsStore.get('displayGraphics') });
       console.log('Loaded displayGraphics', state.displayGraphics);
     }
+    // Initialize the includeLocationVanilla setting
     if (typeof (await tauriSettingsStore.get('includeLocationVanilla')) === 'undefined') {
       await tauriSettingsStore.set('includeLocationVanilla', SETTINGS_DEFAULTS.includeLocationVanilla);
     } else {
       setState({ includeLocationVanilla: await tauriSettingsStore.get('includeLocationVanilla') });
       console.log('Loaded includeLocationVanilla', state.includeLocationVanilla);
     }
+    // Initialize the includeLocationMods setting
     if (typeof (await tauriSettingsStore.get('includeLocationMods')) === 'undefined') {
       await tauriSettingsStore.set('includeLocationMods', SETTINGS_DEFAULTS.includeLocationMods);
     } else {
       setState({ includeLocationMods: await tauriSettingsStore.get('includeLocationMods') });
       console.log('Loaded includeLocationMods', state.includeLocationMods);
     }
+    // Initialize the includeLocationInstalledMods setting
     if (typeof (await tauriSettingsStore.get('includeLocationInstalledMods')) === 'undefined') {
       await tauriSettingsStore.set('includeLocationInstalledMods', SETTINGS_DEFAULTS.includeLocationInstalledMods);
     } else {
       setState({ includeLocationInstalledMods: await tauriSettingsStore.get('includeLocationInstalledMods') });
       console.log('Loaded includeLocationInstalledMods', state.includeLocationInstalledMods);
     }
+    // Initialize the results per page setting
     if (typeof (await tauriSettingsStore.get('resultsPerPage')) === 'undefined') {
       await tauriSettingsStore.set('resultsPerPage', SETTINGS_DEFAULTS.resultsPerPage);
     } else {
       setState({ resultsPerPage: await tauriSettingsStore.get('resultsPerPage') });
       console.log('Loaded resultsPerPage', state.resultsPerPage);
     }
+    // Initialize the directory path setting
     if (typeof (await tauriSettingsStore.get('directoryPath')) === 'undefined') {
       await tauriSettingsStore.set('directoryPath', SETTINGS_DEFAULTS.directoryPath);
     } else {
@@ -138,6 +162,7 @@ export const SettingsProvider: ParentComponent = (props) => {
       await tauriSettingsStore.set('includeLocationInstalledMods', state.includeLocationInstalledMods);
       await tauriSettingsStore.set('resultsPerPage', state.resultsPerPage);
       await tauriSettingsStore.set('directoryPath', state.directoryPath);
+      await tauriSettingsStore.set('includeObjectTypes', state.includeObjectTypes);
 
       setSettingsChanged(false);
 
@@ -179,6 +204,24 @@ export const SettingsProvider: ParentComponent = (props) => {
       setCurrentResultsPage(num: number) {
         setState('currentPage', num);
         // This is not recorded to disk.
+      },
+      objectTypeIncluded(type: ObjectType) {
+        return state.includeObjectTypes.includes(type);
+      },
+      toggleObjectType(type: ObjectType) {
+        if (state.includeObjectTypes.includes(type)) {
+          setState(
+            'includeObjectTypes',
+            state.includeObjectTypes.filter((t) => t !== type),
+          );
+        } else {
+          setState('includeObjectTypes', [...state.includeObjectTypes, type]);
+        }
+        setSettingsChanged(true);
+      },
+      resetToDefaults() {
+        setState({ ...SETTINGS_DEFAULTS });
+        setSettingsChanged(true);
       },
     },
   ];

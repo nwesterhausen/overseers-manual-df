@@ -1,55 +1,48 @@
+import { A, useLocation } from '@solidjs/router';
 import { ParentComponent, Show, createMemo } from 'solid-js';
 import { STS_IDLE, useRawsProvider } from '../../providers/RawsProvider';
-import { useSearchProvider } from '../../providers/SearchProvider';
 import ScrollToTopBtn from '../ScrollToTopBtn';
 import SearchFilters from '../filtering/SearchFilters';
-import AdvancedFiltersButton from './AdvancedFiltersButton';
 import AppDrawerButton from './AppDrawerButton';
 import AppDrawerContent from './AppDrawerContent';
-import GraphicsToggleButton from './GraphicsToggleButton';
 import OpenSettingsButton from './OpenSettingsButton';
-import RawTypeCheckboxes from './RawTypeCheckboxes';
+import Pagination from './Pagination';
 import ReloadRawsButton from './ReloadRawsButton';
 import SearchBox from './SearchBox';
 
 const MenuBar: ParentComponent = (props) => {
   const rawsContext = useRawsProvider();
-  const searchContext = useSearchProvider();
-
+  const location = useLocation();
   const disableButtons = createMemo(() => rawsContext.parsingStatus() !== STS_IDLE);
 
+  console.log('MenuBar', location.pathname);
   return (
     <>
-      <div class='navbar rounded-lg shadow-slate-500 shadow-inner mb-2'>
+      <div class='navbar mb-2 bg-slate-700 bg-opacity-50 rounded-b-lg px-2 py-0'>
         <div class='me-auto'>
-          <div class='join'>
+          <ul class='menu menu-horizontal'>
             <AppDrawerButton />
-            <ReloadRawsButton disabled={disableButtons()} />
-          </div>
+            <Show when={location.pathname === '/'}>
+              <ReloadRawsButton />
+            </Show>
+            <Show when={location.pathname === '/settings'}>
+              <li>
+                <A href='/'>Back</A>
+              </li>
+            </Show>
+          </ul>
         </div>
 
-        <div class='mx-auto'>
-          <div class='join'>
-            <SearchBox disabled={disableButtons()} />
-            <RawTypeCheckboxes disabled={disableButtons()} />
-            {/* <TagRestrictionButton disabled={disableButtons()} /> */}
-            <AdvancedFiltersButton disabled={disableButtons()} />
-          </div>
+        <div class='mx-auto grow'>
+          <Show when={!disableButtons()}>
+            <SearchBox />
+          </Show>
         </div>
-        <Show when={searchContext.active()}>
-          <div class='mx-2 text-xs text-accent'>
-            {rawsContext.parsedRaws.latest.results.length >= 50 ? 'More than ' : ''}
-            {rawsContext.parsedRaws.latest.results.length} results
-          </div>
-        </Show>
-        <div class='mx-2 text-xs text-info'>{rawsContext.parsedRaws.latest.totalResults} raws loaded</div>
+
         <div class='ms-auto'>
-          <div class='join'>
-            <GraphicsToggleButton disabled={disableButtons()} />
-
-            {/* <ThemeChangeButton /> */}
+          <ul class='menu menu-horizontal'>
             <OpenSettingsButton />
-          </div>
+          </ul>
         </div>
       </div>
       <div class='drawer'>
@@ -57,6 +50,8 @@ const MenuBar: ParentComponent = (props) => {
         <div class='drawer-content'>
           {/* Page content here */}
           {props.children}
+
+          <Pagination />
         </div>
         <AppDrawerContent />
         <ScrollToTopBtn />

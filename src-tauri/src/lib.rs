@@ -9,6 +9,7 @@ use dotenvy_macro::dotenv;
 
 mod graphics;
 mod info;
+mod open_explorer;
 mod parsing;
 mod search_handler;
 pub mod state;
@@ -86,6 +87,7 @@ pub fn run() {
             search_handler::util::get_search_string_for_object,
             info::get_build_info,
             graphics::search::get_graphics_for_identifier,
+            open_explorer::show_in_folder,
         ])
         .build(tauri::generate_context!())
         .expect("Error when building tauri app")

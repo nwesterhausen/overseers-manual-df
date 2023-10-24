@@ -8,7 +8,6 @@ import { DirectoryProvider } from './providers/DirectoryProvider';
 import { RawsProvider } from './providers/RawsProvider';
 import { SearchProvider } from './providers/SearchProvider';
 import { SettingsProvider } from './providers/SettingsProvider';
-import { ThemeProvider } from './providers/ThemeProvider';
 
 import { attachConsole } from '@tauri-apps/plugin-log';
 
@@ -19,15 +18,13 @@ render(
   () => (
     <Router>
       <SettingsProvider>
-        <ThemeProvider>
-          <SearchProvider>
-            <DirectoryProvider>
-              <RawsProvider>
-                <App />
-              </RawsProvider>
-            </DirectoryProvider>
-          </SearchProvider>
-        </ThemeProvider>
+        <SearchProvider>
+          <DirectoryProvider>
+            <RawsProvider>
+              <App />
+            </RawsProvider>
+          </DirectoryProvider>
+        </SearchProvider>
       </SettingsProvider>
     </Router>
   ),

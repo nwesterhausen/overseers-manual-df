@@ -1,7 +1,6 @@
 import { Component, For, Show } from 'solid-js';
 import { STS_IDLE, useRawsProvider } from '../providers/RawsProvider';
 import DynamicCard from './DynamicCard';
-import Pagination from './menu/Pagination';
 
 const Listings: Component = () => {
   const rawsContext = useRawsProvider();
@@ -13,7 +12,6 @@ const Listings: Component = () => {
       <div class='flex flex-wrap justify-center gap-4 mb-16'>
         <For each={rawsContext.parsedRaws.latest.results}>{(raw) => <DynamicCard raw={raw} />}</For>
       </div>
-      <Pagination />
     </Show>
   );
 };

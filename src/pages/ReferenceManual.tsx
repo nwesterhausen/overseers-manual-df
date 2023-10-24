@@ -1,10 +1,10 @@
 import { Component, createMemo } from 'solid-js';
-import { DIR_NONE, useDirectoryProvider } from '../../providers/DirectoryProvider';
-import { STS_EMPTY, useRawsProvider } from '../../providers/RawsProvider';
-import DFDirectoryNotSet from '../DFDirectoryNotSet';
-import Listings from '../Listings';
-import LoadingRawsProgress from '../LoadingRawsProgress';
-import ParsingProgressBar from '../ParsingProgressBar';
+import DFDirectoryNotSet from '../components/DFDirectoryNotSet';
+import Listings from '../components/Listings';
+import LoadingRawsProgress from '../components/LoadingRawsProgress';
+import ParsingProgressBar from '../components/ParsingProgressBar';
+import { DIR_NONE, useDirectoryProvider } from '../providers/DirectoryProvider';
+import { STS_EMPTY, useRawsProvider } from '../providers/RawsProvider';
 
 const ReferenceManual: Component = () => {
   const rawsContext = useRawsProvider();

@@ -2,8 +2,8 @@ import { Route, Routes } from '@solidjs/router';
 import { getCurrent } from '@tauri-apps/api/window';
 import { Component } from 'solid-js';
 import MenuBar from './components/menu/MenuBar';
-import ReferenceManual from './components/pages/ReferenceManual';
-import Settings from './components/pages/Settings';
+import ReferenceManual from './pages/ReferenceManual';
+import Settings from './pages/Settings';
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";

@@ -48,14 +48,14 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   // Signal for loading raws
   const [loadRaws, setLoadRaws] = createSignal(false);
 
-  // Provide "helper" for loading raws
-  function forceLoadRaws() {
-    // Reset loadRaws
-    setLoadRaws(true);
-  }
-
   // Resource for raws (actually loads raws into the search database)
-  const [_parsedRaws] = createResource(loadRaws, parseRaws);
+  createEffect(async () => {
+    if (loadRaws()) {
+      await parseRaws();
+      setLoadRaws(false);
+    }
+  });
+  // The actual raws resource (what's displayed on the page)
   const [searchResults, { refetch }] = createResource(searchContext.searchOptions, updateDisplayedRaws, {
     name: 'pageOfParsedRaws',
     initialValue: emptySearchResults,
@@ -89,7 +89,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   });
 
   // Resource for raws info files
-  const [allRawsInfosJsonArray] = createResource(loadRaws, parseRawsInfo, {
+  const [allRawsInfosJsonArray] = createResource(parseRawsInfo, {
     initialValue: [],
   });
 
@@ -255,13 +255,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   // We can check if the directory is valid and if so, load the raws
   createEffect(() => {
     if (directoryContext.currentDirectory().type !== DIR_NONE) {
-      forceLoadRaws();
+      setLoadRaws(true);
     }
   });
 
   return {
     parsingStatus,
-    forceLoadRaws,
+    setLoadRaws,
     parsingProgress,
     rawModulesInfo: allRawsInfosJsonArray,
     rawModules,

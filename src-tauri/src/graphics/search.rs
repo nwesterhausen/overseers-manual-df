@@ -17,7 +17,7 @@ pub fn get_graphics_for_identifier(
         );
         return GraphicsResults::default();
     }
-    log::info!(
+    log::debug!(
         "get_graphics_for_identifier: Processing search with options:\n{:#?}",
         options
     );

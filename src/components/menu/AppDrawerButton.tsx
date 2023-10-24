@@ -1,11 +1,11 @@
-import { IoMenuSharp } from 'solid-icons/io';
+import { BiRegularMenu } from 'solid-icons/bi';
 import { Component } from 'solid-js';
 
 const AppDrawerButton: Component = () => {
   return (
-    <div class='tooltip tooltip-right' data-tip='Open App Switch Menu'>
+    <div>
       <label for='my-drawer' class='btn btn-ghost btn-sm btn-circle fill-secondary drawer-button'>
-        <IoMenuSharp size={'1.5rem'} />
+        <BiRegularMenu size={'1.5rem'} />
       </label>
     </div>
   );

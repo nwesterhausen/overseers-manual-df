@@ -1,9 +1,8 @@
-import { A } from '@solidjs/router';
+import { A, useMatch } from '@solidjs/router';
 import { getTauriVersion, getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/primitives';
 import { Component, createMemo, createResource } from 'solid-js';
 import { Info } from '../../definitions/Info';
-import { useDirectoryProvider } from '../../providers/DirectoryProvider';
 
 const AppDrawerContent: Component = () => {
   const [buildInfo] = createResource<Info>(
@@ -48,18 +47,35 @@ const AppDrawerContent: Component = () => {
     }
     return 'unknown';
   });
-  const directoryContext = useDirectoryProvider();
+  const inSettings = useMatch(() => '/settings');
+  const inMain = useMatch(() => '/');
   return (
     <div class='drawer-side'>
       <label for='my-drawer' aria-label='close sidebar' class='drawer-overlay'></label>
-      <ul class='menu p-4 w-80 min-h-full bg-base-200 text-base-content'>
+      <ul class='menu menu-vertical p-2 w-80 min-h-full bg-base-200 text-base-content'>
         {/* <!-- Sidebar content here --> */}
         <li>
-          <div class='menu-title'>App Functionality</div>
+          <A
+            href='/'
+            activeClass='bg-primary'
+            classList={{
+              'font-bold': Boolean(inMain()),
+              'ps-6': Boolean(inMain()),
+              'bg-primary': Boolean(inMain()),
+            }}>
+            Reference Manual
+          </A>
         </li>
         <li>
-          <A href='/' activeClass='font-bold ps-6 bg-primary'>
-            Reference Manual
+          <A
+            href='/settings'
+            activeClass='bg-primary'
+            classList={{
+              'font-bold': Boolean(inSettings()),
+              'ps-6': Boolean(inSettings()),
+              'bg-primary': Boolean(inSettings()),
+            }}>
+            Settings
           </A>
         </li>
         <li class='disabled'>
@@ -72,26 +88,6 @@ const AppDrawerContent: Component = () => {
         </li>
         <li class='disabled'>
           <a>Embark Planning</a>
-        </li>
-        <li>
-          <div class='menu-title'>App Settings</div>
-        </li>
-        <li>
-          <a
-            onClick={() => {
-              directoryContext.activateManualDirectorySelection(true);
-            }}>
-            {(directoryContext.currentDirectory().path.length > 0 ? 'Change ' : 'Set ') + ' Game Directory'}
-          </a>
-        </li>
-        <li>
-          <a
-            onClick={() => {
-              const dialog = document.getElementById('settingsModal') as HTMLDialogElement;
-              dialog.showModal();
-            }}>
-            Open Settings
-          </a>
         </li>
       </ul>
       {/* Show some details about the app */}
