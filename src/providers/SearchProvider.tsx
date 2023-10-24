@@ -86,23 +86,21 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
     const options: SearchOptions = {
       limit: settings.resultsPerPage,
       page: settings.currentPage,
-      objectTypes: [],
+      objectTypes: settings.includeObjectTypes,
       query: searchString(),
       locations: [],
       onlyEggLayers: onlyEggLayers(),
       showDoesNotExist: showDoesNotExist(),
     };
-    if (requireCreature()) {
-      options.objectTypes.push('Creature');
+
+    if (settings.includeLocationInstalledMods) {
+      options.locations.push('InstalledMods');
     }
-    if (requirePlant()) {
-      options.objectTypes.push('Plant');
+    if (settings.includeLocationVanilla) {
+      options.locations.push('Vanilla');
     }
-    if (requireInorganic()) {
-      options.objectTypes.push('Inorganic');
-    }
-    if (requireEntity()) {
-      options.objectTypes.push('Entity');
+    if (settings.includeLocationMods) {
+      options.locations.push('Mods');
     }
 
     // Todo: include advanced filtering options (modules and tags) once supported by the backend

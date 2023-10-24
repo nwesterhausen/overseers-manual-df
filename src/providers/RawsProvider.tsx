@@ -51,6 +51,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   // Resource for raws (actually loads raws into the search database)
   createEffect(async () => {
     if (loadRaws()) {
+      resetPage();
+      searchContext.setSearchString('');
       await parseRaws();
       setLoadRaws(false);
     }
