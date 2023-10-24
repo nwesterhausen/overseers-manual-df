@@ -1,3 +1,10 @@
+## [0.27.4](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.3...v0.27.4) (2023-10-24)
+
+
+### Bug Fixes
+
+* **ci:** auto-publish releases ([e73afcc](https://github.com/nwesterhausen/overseers-manual-df/commit/e73afccfc645e416a58c8ce0c5e906f7548a43ff))
+
 ## [0.27.3](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.2...v0.27.3) (2023-10-24)
 
 
