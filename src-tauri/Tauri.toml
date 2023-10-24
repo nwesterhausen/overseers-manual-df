@@ -14,6 +14,7 @@ scope = ["**"]
 [plugins.updater]
 endpoints = [
   "https://overseers-manual-df.updates.nwest.one/v1/{{target}}/{{arch}}/{{current_version}}",
+  "https://tauri-update-server.nwest.workers.dev/v1/{{target}}/{{arch}}/{{current_version}}",
 ]
 
 [tauri.bundle]

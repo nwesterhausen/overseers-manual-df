@@ -81,7 +81,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     if (page > searchResults.latest.totalPages) {
       setCurrentResultsPage(searchResults.latest.totalPages);
     } else if (page <= 0) {
-      setCurrentResultsPage(0);
+      setCurrentResultsPage(1);
     } else {
       setCurrentResultsPage(page);
     }

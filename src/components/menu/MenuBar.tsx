@@ -15,7 +15,6 @@ const MenuBar: ParentComponent = (props) => {
   const location = useLocation();
   const disableButtons = createMemo(() => rawsContext.parsingStatus() !== STS_IDLE);
 
-  console.log('MenuBar', location.pathname);
   return (
     <>
       <div class='navbar mb-2 bg-slate-700 bg-opacity-50 rounded-b-lg px-2 py-0'>

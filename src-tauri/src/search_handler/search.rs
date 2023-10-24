@@ -15,7 +15,7 @@ use super::{options::SearchOptions, results::SearchResults};
 pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> SearchResults {
     #[allow(clippy::unwrap_used)]
     if storage.store.lock().unwrap().is_empty() {
-        log::info!("search_raws: No raws in storage, returning empty search results");
+        log::debug!("search_raws: No raws in storage, returning empty search results");
         return SearchResults::default();
     }
     log::info!(
@@ -31,7 +31,7 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
     // If the search query is empty, we should be returning all raws
     if search_options.query.is_empty() {
         let start = std::time::Instant::now();
-        log::info!("search_raws: Search query is empty, returning all raws");
+        log::debug!("search_raws: Search query is empty, returning all raws");
         #[allow(clippy::unwrap_used)]
         let mut all_raws: Vec<Box<dyn RawObject>> = storage
             .store
@@ -96,7 +96,7 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
         let duration = start.elapsed();
 
         log::info!(
-            "search_raws: search returned {}/{} results in {}. Returning Page#{} with {} results",
+            "search_raws: search returned {} results ({} pages) in {}. Returning Page#{} with {} results",
             all_raws.len(),
             get_total_pages(all_raws.len(), search_options.limit),
             format!("{duration:?}"),
@@ -220,7 +220,7 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
     let duration = start.elapsed();
 
     log::info!(
-        "search_raws: search returned {} ({} pages) results in {}. Returning Page#{} with {} results\nsearch: {}, filter/clone: {}, sort: {}",
+        "search_raws: search returned {} results ({} pages) in {}. Returning Page#{} with {} results\nsearch: {}, filter/clone: {}, sort: {}",
         filtered_raws.len(),
         get_total_pages(filtered_raws.len(), search_options.limit),
         format!("{duration:?}"),

@@ -2562,6 +2562,7 @@ dependencies = [
  "tauri-plugin-dialog",
  "tauri-plugin-fs",
  "tauri-plugin-log",
+ "tauri-plugin-process",
  "tauri-plugin-store",
  "tauri-plugin-updater",
  "tauri-plugin-window-state",
@@ -3957,6 +3958,14 @@ dependencies = [
  "tauri",
  "tauri-build",
  "time",
+]
+
+[[package]]
+name = "tauri-plugin-process"
+version = "2.0.0-alpha.3"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#76cfdc32b4593acfdfed95bf3028cdba0d83fe61"
+dependencies = [
+ "tauri",
 ]
 
 [[package]]
