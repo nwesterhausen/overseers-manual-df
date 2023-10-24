@@ -863,7 +863,7 @@ checksum = "6a1abaf4d861455be59f64fd2b55606cb151fce304ede7165f410243ce96bde6"
 [[package]]
 name = "dfraw_json_parser"
 version = "0.13.0"
-source = "git+https://github.com/nwesterhausen/dfraw_json_parser?branch=dev#d9ae52da032dfa51e8aa7442bae2098fbbb59f22"
+source = "git+https://github.com/nwesterhausen/dfraw_json_parser?branch=dev#06090e7a428ab61792b2bb1de574af28227877ee"
 dependencies = [
  "encoding_rs",
  "encoding_rs_io",

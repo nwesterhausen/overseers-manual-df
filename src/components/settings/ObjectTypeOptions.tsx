@@ -6,7 +6,7 @@ const ObjectTypeOptions: Component = () => {
   const [_settings, { toggleObjectType, objectTypeIncluded }] = useSettingsContext();
 
   return (
-    <div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-3'>
+    <div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-3'>
       <div class='form-control'>
         <label class='cursor-pointer label hover:font-semibold'>
           <div class='join'>

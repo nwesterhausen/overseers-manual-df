@@ -5,7 +5,7 @@ const DisplayOptions: Component = () => {
   const [settings, { toggleDisplayGraphics, setResultsPerPage }] = useSettingsContext();
 
   return (
-    <div class='grid grid-cols-1 md:grid-cols-2 gap-2 mb-3'>
+    <div class='grid grid-cols-1 md:grid-cols-2 mb-3'>
       <div class='form-control'>
         <label class='cursor-pointer label hover:font-semibold'>
           <span class='label-text'>Display Graphics</span>

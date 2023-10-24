@@ -6,7 +6,7 @@ const LocationOptions: Component = () => {
     useSettingsContext();
 
   return (
-    <div class='grid grid-cols-1 sm:grid-cols-3 gap-5 mb-3'>
+    <div class='grid grid-cols-1 sm:grid-cols-2 mb-3'>
       <div class='form-control'>
         <label class='cursor-pointer label hover:font-semibold'>
           <span class='label-text'>Vanilla Raws</span>

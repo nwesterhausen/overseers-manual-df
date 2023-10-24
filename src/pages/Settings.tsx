@@ -26,18 +26,18 @@ const Settings: Component = () => {
   return (
     <div class='p-2 flex flex-col gap-3'>
       <section class='bg-slate-800 bg-opacity-75 rounded-lg p-2'>
-        <h3 class='text-lg font-semibold mb-2'>Parsing Options</h3>
+        <h3 class='text-lg font-semibold mb-2'>Parsing and Search Options</h3>
         <hr class='mt-4 opacity-25' />
 
-        <legend class='font-semibold text-md my-1'>Location Options</legend>
+        <legend class='font-semibold text-md my-1'>Locations</legend>
         <LocationOptions />
         <hr class='mt-4 opacity-25' />
 
-        <legend class='font-semibold text-md my-1'>Object Type Inclusion Options</legend>
+        <legend class='font-semibold text-md my-1'>Object Type Inclusion</legend>
         <ObjectTypeOptions />
         <hr class='mt-4 opacity-25' />
 
-        <legend class='font-semibold text-md my-1'>Display Options</legend>
+        <legend class='font-semibold text-md my-1'>Display</legend>
         <DisplayOptions />
         <hr class='mt-4 opacity-25' />
 

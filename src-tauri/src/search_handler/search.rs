@@ -39,8 +39,13 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
             .unwrap()
             .iter()
             .filter(|raw| {
-                // Filter by object type
+                // Filter by location
                 search_options
+                    .locations
+                    .iter()
+                    .any(|location| raw.get_metadata().get_location() == location)
+                // Filter by object type
+                && search_options
                     .object_types
                     .iter()
                     .any(|object_type| raw.get_type() == object_type)
@@ -143,6 +148,11 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
             if
             // Filter by index
             filtered_indexes.contains(&index)
+            // Filter by location
+            && search_options
+                .locations
+                .iter()
+                .any(|location| raw.get_metadata().get_location() == location)
             // Filter by object type
             && search_options
                 .object_types
