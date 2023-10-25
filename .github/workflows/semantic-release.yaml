@@ -53,7 +53,7 @@ jobs:
       
       - name: Set Updated Version
         run: |
-          pnpm version ${{ needs.semantic-release.outputs.new-release-version }}
+          pnpm version ${{ needs.semantic-release.outputs.new-release-version }} --git-tag-version=false
 
       - name: Create Fake .env File (dotenvy_macro requirement)
         run: |
