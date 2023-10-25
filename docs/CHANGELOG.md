@@ -1,3 +1,11 @@
+## [0.27.8](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.7...v0.27.8) (2023-10-25)
+
+
+### Bug Fixes
+
+* **ci:** update version in build/publish ([a05601c](https://github.com/nwesterhausen/overseers-manual-df/commit/a05601c2a4cb6b6c253843befeb85854983c183a))
+* remove unused themes ([7580393](https://github.com/nwesterhausen/overseers-manual-df/commit/7580393cb68c69cc6d3df5a8c40b065d9cdd3bc7))
+
 ## [0.27.7](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.6...v0.27.7) (2023-10-25)
 
 
