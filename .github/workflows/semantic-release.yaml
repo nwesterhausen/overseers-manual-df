@@ -25,7 +25,7 @@ jobs:
         run: |
           npm install -g pnpm
           pnpm install
-          pnpm semantic-release --dry-run
+          pnpm semantic-release
           cat $GITHUB_OUTPUT
     outputs:
       new-release-published: ${{ steps.get-next-version.outputs.new-release-published }}
