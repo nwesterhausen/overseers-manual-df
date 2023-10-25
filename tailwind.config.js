@@ -25,9 +25,7 @@ module.exports = {
           "warning": "#db7706",
           "error": "#dc2828",
         },
-      },
-      'dark',
-      'light',
+      }
     ],
   }
 }
