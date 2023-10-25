@@ -1,3 +1,12 @@
+## [0.27.7](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.6...v0.27.7) (2023-10-25)
+
+
+### Bug Fixes
+
+* **ci:** remove dry-run ([39abc31](https://github.com/nwesterhausen/overseers-manual-df/commit/39abc31660bc6a1879ccd4e37d4f8496cd740b96))
+* include export in semantic release steps ([8e2f00f](https://github.com/nwesterhausen/overseers-manual-df/commit/8e2f00f6254e3a9d02571908e11975a358b839c0))
+* title ([bf54df9](https://github.com/nwesterhausen/overseers-manual-df/commit/bf54df96e8d506e1047673aaab17d14fa1f0acf0))
+
 ## [0.27.6](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.5...v0.27.6) (2023-10-24)
 
 
