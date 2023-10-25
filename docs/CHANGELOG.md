@@ -1,3 +1,10 @@
+## [0.27.9](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.8...v0.27.9) (2023-10-25)
+
+
+### Bug Fixes
+
+* don't commit during publish ([3122da3](https://github.com/nwesterhausen/overseers-manual-df/commit/3122da3294157bd4f6428f926e2bb390f9b6b7b5))
+
 ## [0.27.8](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.7...v0.27.8) (2023-10-25)
 
 
