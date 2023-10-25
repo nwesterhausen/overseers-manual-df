@@ -30,11 +30,20 @@ jobs:
     outputs:
       new-release-published: ${{ steps.get-next-version.outputs.new-release-published }}
       new-release-version: ${{ steps.get-next-version.outputs.new-release-version }}
-
+  echo:
+    needs: semantic-release
+    if: needs.semantic-release.outputs.new-release-published == 'false'
+    name: 'Echo new version'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Exported Variables
+        run: |
+          echo ${{ needs.semantic-release.outputs.new-release-version }}
+          echo ${{ needs.semantic-release.outputs.new-release-published }}
   
   publish-tauri:
     needs: semantic-release
-    if: ${{ needs.semantic-release.outputs.new-release-published == 'true' }}
+    if: needs.semantic-release.outputs.new-release-published == 'true'
     name: 'Publish Tauri App'
     strategy:
       fail-fast: false
