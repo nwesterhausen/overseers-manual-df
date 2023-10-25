@@ -1,6 +1,6 @@
 {
   "name": "overseers-manual-df",
-  "version": "0.27.7",
+  "version": "0.27.8",
   "description": "Tauri app to provide Dwarf Fortress players with personalized, raws-accurate references.",
   "scripts": {
     "dev": "vite",
