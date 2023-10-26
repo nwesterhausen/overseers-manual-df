@@ -5,6 +5,12 @@ use std::path::PathBuf;
 use std::process::Command;
 
 #[tauri::command]
+/// Opens the file explorer or finder at the specified path depending on the operating system.
+/// 
+/// Arguments:
+/// 
+/// * `path`: The `path` parameter is a string that represents the file or folder path that you want to
+/// show in the folder.
 pub async fn show_in_folder(path: String) {
     #[cfg(target_os = "windows")]
     {
