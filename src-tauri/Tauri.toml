@@ -6,14 +6,26 @@ distDir = "../dist"
 
 [package]
 productName = "overseers-manual-df"
+# Tracking version in package.json, which is updated automatically with semantic-release.
 version = "../package.json"
 
 [plugins.fs]
+# We scope to anything because we don't know where the game might be saved at.
 scope = ["**"]
 
+# Don't forget to look at tauri.bundle.updater for additional updater configuration.
 [plugins.updater]
+# For the updater endpoint, since everything gets published on Github releases via an action (.i.e. automatically),
+# there is a neat project that turns the releases API into the API expected by tauri updater. This is that project:
+#   https://github.com/KilleenCode/tauri-update-cloudflare
+# The version specifically used by this project is also public (it's a fork of the above):
+#   https://github.com/nwesterhausen/tauri-update-cloudflare
+# The endpoint is hosted on Cloudflare Workers which has a free tier that allows for 100k requests a day, which so
+# far for this project has been more than enough. 
 endpoints = [
+  # Primary on my domain (which matches app identifier domain
   "https://overseers-manual-df.updates.nwest.one/v1/{{target}}/{{arch}}/{{current_version}}",
+  # Secondary fallback using Cloudflare Workers provided domain
   "https://tauri-update-server.nwest.workers.dev/v1/{{target}}/{{arch}}/{{current_version}}",
 ]
 
@@ -84,10 +96,12 @@ type = "skip"
 template = "custom.wxs"
 
 [tauri.security]
+# This was the recommended tauri.security value
 csp = "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost"
 
 [tauri.security.assetProtocol]
 enable = true
+# We need to be able to access images from wherever the game data is stored.
 scope = ["**"]
 
 [[tauri.windows]]
