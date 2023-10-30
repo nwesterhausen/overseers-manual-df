@@ -3,7 +3,6 @@ import { invoke } from '@tauri-apps/api/primitives';
 import { BiSolidFolderOpen } from 'solid-icons/bi';
 import { Component, createResource } from 'solid-js';
 import DirectoryOptions from '../components/settings/DirectoryOptions';
-import DisplayOptions from '../components/settings/DisplayOptions';
 import LocationOptions from '../components/settings/LocationOptions';
 import ObjectTypeOptions from '../components/settings/ObjectTypeOptions';
 import SavedSettingsDataTable from '../components/settings/SavedSettingsDataTable';
@@ -26,7 +25,11 @@ const Settings: Component = () => {
   return (
     <div class='p-2 flex flex-col gap-3'>
       <section class='bg-slate-800 bg-opacity-75 rounded-lg p-2'>
-        <h3 class='text-lg font-semibold mb-2'>Parsing and Search Options</h3>
+        <h3 class='text-lg font-semibold mb-2'>Parsing Options</h3>
+        <p>
+          Set restrictions for when the raws are parsed. To filter results after searching, use the filters on the main
+          page.
+        </p>
         <hr class='mt-4 opacity-25' />
 
         <legend class='font-semibold text-md my-1'>Locations</legend>
@@ -35,10 +38,6 @@ const Settings: Component = () => {
 
         <legend class='font-semibold text-md my-1'>Object Type Inclusion</legend>
         <ObjectTypeOptions />
-        <hr class='mt-4 opacity-25' />
-
-        <legend class='font-semibold text-md my-1'>Display</legend>
-        <DisplayOptions />
         <hr class='mt-4 opacity-25' />
 
         <legend class='font-semibold text-md my-1'>Directory</legend>

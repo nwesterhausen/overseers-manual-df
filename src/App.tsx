@@ -1,7 +1,6 @@
 import { Route, Routes } from '@solidjs/router';
 import { getCurrent } from '@tauri-apps/api/window';
 import { Component, lazy } from 'solid-js';
-import ShowFilterButton from './components/filtering/ShowFilterButton';
 import MenuBar from './components/menu/MenuBar';
 import ReferenceManual from './pages/ReferenceManual';
 const Settings = lazy(() => import('./pages/Settings'));
@@ -19,7 +18,6 @@ const App: Component = () => {
   return (
     <>
       <MenuBar>
-        <ShowFilterButton />
         <Routes>
           <Route path='/' element={<ReferenceManual />} />
           <Route path='/settings' element={<Settings />} />
