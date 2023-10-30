@@ -8,6 +8,7 @@ module.exports = {
     extend: {},
   },
   plugins: [
+    require('@kobalte/tailwindcss'),
     require('@tailwindcss/typography'),
     require("daisyui")
   ],
