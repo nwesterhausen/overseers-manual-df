@@ -13,6 +13,7 @@ const SETTINGS_DEFAULTS = {
   directoryPath: '',
   currentPage: 1,
   includeObjectTypes: ['Creature', 'Plant'] as ObjectType[],
+  includeBiomes: [] as string[],
 };
 
 type SettingsStore = [
@@ -26,6 +27,7 @@ type SettingsStore = [
     directoryPath: string;
     currentPage: number;
     includeObjectTypes: ObjectType[];
+    includeBiomes: string[];
   },
   {
     toggleLayoutAsGrid: () => void;
@@ -39,6 +41,8 @@ type SettingsStore = [
     objectTypeIncluded: (type: ObjectType) => boolean;
     toggleObjectType: (type: ObjectType) => void;
     resetToDefaults: () => void;
+    biomeIncluded: (biome: string) => boolean;
+    toggleBiome: (biome: string) => void;
   },
 ];
 
@@ -82,6 +86,13 @@ const SettingsContext = createContext<SettingsStore>([
     },
     resetToDefaults() {
       console.log('Un-initialized settings provider.');
+    },
+    biomeIncluded(biome: string) {
+      console.log('Un-initialized settings provider.', biome);
+      return false;
+    },
+    toggleBiome(biome: string) {
+      console.log('Un-initialized settings provider.', biome);
     },
   },
 ]);
@@ -163,6 +174,7 @@ export const SettingsProvider: ParentComponent = (props) => {
       await tauriSettingsStore.set('resultsPerPage', state.resultsPerPage);
       await tauriSettingsStore.set('directoryPath', state.directoryPath);
       await tauriSettingsStore.set('includeObjectTypes', state.includeObjectTypes);
+      await tauriSettingsStore.set('includeBiomes', state.includeBiomes);
 
       setSettingsChanged(false);
 
@@ -221,6 +233,20 @@ export const SettingsProvider: ParentComponent = (props) => {
       },
       resetToDefaults() {
         setState({ ...SETTINGS_DEFAULTS });
+        setSettingsChanged(true);
+      },
+      biomeIncluded(biome: string) {
+        return state.includeBiomes.includes(biome);
+      },
+      toggleBiome(biome: string) {
+        if (state.includeBiomes.includes(biome)) {
+          setState(
+            'includeBiomes',
+            state.includeBiomes.filter((b) => b !== biome),
+          );
+        } else {
+          setState('includeBiomes', [...state.includeBiomes, biome]);
+        }
         setSettingsChanged(true);
       },
     },
