@@ -2,7 +2,7 @@ import { BiSolidCat, BiSolidCity, BiSolidDiamond, BiSolidTree } from 'solid-icon
 import { Component } from 'solid-js';
 import { useSettingsContext } from '../../providers/SettingsProvider';
 
-const RawTypeCheckboxes: Component = () => {
+const RawTypeCheckboxes: Component<{ parsingOnly?: boolean }> = (props) => {
   const [_settings, { toggleObjectType, objectTypeIncluded }] = useSettingsContext();
 
   return (
@@ -17,8 +17,8 @@ const RawTypeCheckboxes: Component = () => {
             type='checkbox'
             class='toggle toggle-primary'
             name='settingsEnableCreatureResults'
-            checked={objectTypeIncluded('Creature')}
-            onClick={() => toggleObjectType('Creature')}
+            checked={objectTypeIncluded('Creature', props.parsingOnly)}
+            onClick={() => toggleObjectType('Creature', props.parsingOnly)}
           />
         </label>
       </div>
@@ -32,8 +32,8 @@ const RawTypeCheckboxes: Component = () => {
             type='checkbox'
             class='toggle toggle-primary'
             name='settingsEnablePlanResults'
-            checked={objectTypeIncluded('Plant')}
-            onClick={() => toggleObjectType('Plant')}
+            checked={objectTypeIncluded('Plant', props.parsingOnly)}
+            onClick={() => toggleObjectType('Plant', props.parsingOnly)}
           />
         </label>
       </div>
@@ -47,8 +47,8 @@ const RawTypeCheckboxes: Component = () => {
             type='checkbox'
             class='toggle toggle-primary'
             name='settingsEnableInorganicResults'
-            checked={objectTypeIncluded('Inorganic')}
-            onClick={() => toggleObjectType('Inorganic')}
+            checked={objectTypeIncluded('Inorganic', props.parsingOnly)}
+            onClick={() => toggleObjectType('Inorganic', props.parsingOnly)}
           />
         </label>
       </div>
@@ -62,8 +62,8 @@ const RawTypeCheckboxes: Component = () => {
             type='checkbox'
             class='toggle toggle-primary'
             name='settingsEnableEntityResults'
-            checked={objectTypeIncluded('Entity')}
-            onClick={() => toggleObjectType('Entity')}
+            checked={objectTypeIncluded('Entity', props.parsingOnly)}
+            onClick={() => toggleObjectType('Entity', props.parsingOnly)}
           />
         </label>
       </div>

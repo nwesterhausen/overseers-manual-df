@@ -2,6 +2,7 @@ import { Store as TauriStore } from '@tauri-apps/plugin-store';
 import { ParentComponent, createContext, createEffect, createSignal, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { ObjectType } from '../definitions/ObjectType';
+import { RawModuleLocation } from '../definitions/RawModuleLocation';
 
 const SETTINGS_DEFAULTS = {
   layoutAsGrid: true,
@@ -13,7 +14,9 @@ const SETTINGS_DEFAULTS = {
   directoryPath: '',
   currentPage: 1,
   includeObjectTypes: ['Creature', 'Plant'] as ObjectType[],
+  parseObjectTypes: ['Creature', 'Plant'] as ObjectType[],
   includeBiomes: [] as string[],
+  includeLocations: [] as RawModuleLocation[],
 };
 
 type SettingsStore = [
@@ -23,26 +26,30 @@ type SettingsStore = [
     includeLocationVanilla: boolean;
     includeLocationMods: boolean;
     includeLocationInstalledMods: boolean;
+    parseObjectTypes: ObjectType[];
     resultsPerPage: number;
     directoryPath: string;
     currentPage: number;
     includeObjectTypes: ObjectType[];
     includeBiomes: string[];
+    includeLocations: RawModuleLocation[];
   },
   {
     toggleLayoutAsGrid: () => void;
     toggleDisplayGraphics: () => void;
+    // These are for parsing
     toggleIncludeLocationVanilla: () => void;
     toggleIncludeLocationMods: () => void;
     toggleIncludeLocationInstalledMods: () => void;
+    objectTypeIncluded: (type: ObjectType, parsingOnly: boolean) => boolean;
+    toggleObjectType: (type: ObjectType, parsingOnly: boolean) => void;
+    // These are for filtering
     setResultsPerPage: (num: number) => void;
     setDirectoryPath: (path: string) => void;
     setCurrentResultsPage: (num: number) => void;
-    objectTypeIncluded: (type: ObjectType) => boolean;
-    toggleObjectType: (type: ObjectType) => void;
     resetToDefaults: () => void;
-    biomeIncluded: (biome: string) => boolean;
-    toggleBiome: (biome: string) => void;
+    updateFilteredBiomes: (biomes: string[]) => void;
+    updateFilteredLocations: (locations: RawModuleLocation[]) => void;
   },
 ];
 
@@ -77,22 +84,21 @@ const SettingsContext = createContext<SettingsStore>([
     setCurrentResultsPage(num: number) {
       console.log('Un-initialized settings provider.', num);
     },
-    objectTypeIncluded(type: ObjectType) {
-      console.log('Un-initialized settings provider.', type);
+    objectTypeIncluded(type: ObjectType, parsingOnly: boolean) {
+      console.log('Un-initialized settings provider.', type, parsingOnly);
       return false;
     },
-    toggleObjectType(type: ObjectType) {
-      console.log('Un-initialized settings provider.', type);
+    toggleObjectType(type: ObjectType, parsingOnly: boolean) {
+      console.log('Un-initialized settings provider.', type, parsingOnly);
     },
     resetToDefaults() {
       console.log('Un-initialized settings provider.');
     },
-    biomeIncluded(biome: string) {
-      console.log('Un-initialized settings provider.', biome);
-      return false;
+    updateFilteredBiomes(biomes: string[]) {
+      console.log('Un-initialized settings provider.', biomes);
     },
-    toggleBiome(biome: string) {
-      console.log('Un-initialized settings provider.', biome);
+    updateFilteredLocations(locations: RawModuleLocation[]) {
+      console.log('Un-initialized settings provider.', locations);
     },
   },
 ]);
@@ -217,17 +223,31 @@ export const SettingsProvider: ParentComponent = (props) => {
         setState('currentPage', num);
         // This is not recorded to disk.
       },
-      objectTypeIncluded(type: ObjectType) {
+      objectTypeIncluded(type: ObjectType, parsingOnly: boolean) {
+        if (parsingOnly) {
+          return state.parseObjectTypes.includes(type);
+        }
         return state.includeObjectTypes.includes(type);
       },
-      toggleObjectType(type: ObjectType) {
-        if (state.includeObjectTypes.includes(type)) {
-          setState(
-            'includeObjectTypes',
-            state.includeObjectTypes.filter((t) => t !== type),
-          );
+      toggleObjectType(type: ObjectType, parsingOnly: boolean) {
+        if (parsingOnly) {
+          if (state.parseObjectTypes.includes(type)) {
+            setState(
+              'parseObjectTypes',
+              state.parseObjectTypes.filter((t) => t !== type),
+            );
+          } else {
+            setState('parseObjectTypes', [...state.parseObjectTypes, type]);
+          }
         } else {
-          setState('includeObjectTypes', [...state.includeObjectTypes, type]);
+          if (state.includeObjectTypes.includes(type)) {
+            setState(
+              'includeObjectTypes',
+              state.includeObjectTypes.filter((t) => t !== type),
+            );
+          } else {
+            setState('includeObjectTypes', [...state.includeObjectTypes, type]);
+          }
         }
         setSettingsChanged(true);
       },
@@ -247,6 +267,16 @@ export const SettingsProvider: ParentComponent = (props) => {
         } else {
           setState('includeBiomes', [...state.includeBiomes, biome]);
         }
+        setSettingsChanged(true);
+      },
+      updateFilteredBiomes(biomes: string[]) {
+        setState('includeBiomes', biomes);
+        console.log('Updated biomes', biomes);
+        setSettingsChanged(true);
+      },
+      updateFilteredLocations(locations: RawModuleLocation[]) {
+        setState('includeLocations', locations);
+        console.log('Updated locations', locations);
         setSettingsChanged(true);
       },
     },

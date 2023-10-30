@@ -3,6 +3,7 @@ import { invoke } from '@tauri-apps/api/primitives';
 import { getCurrent } from '@tauri-apps/api/window';
 import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
 import { ModuleInfoFile } from '../definitions/ModuleInfoFile';
+import { ObjectType } from '../definitions/ObjectType';
 import { ParserOptions } from '../definitions/ParserOptions';
 import { ProgressPayload } from '../definitions/ProgressPayload';
 import { SearchResults } from '../definitions/SearchResults';
@@ -160,21 +161,19 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     try {
       // See the function in dfraw_json_parser/src/lib.rs for more info
       // The function in our lib.rs simply passes this through (more or less)
+      const objectTypesToParse: ObjectType[] = [
+        ...settings.parseObjectTypes,
+        // Include graphics details
+        'Graphics',
+        'TilePage',
+      ];
 
       const parsingOptions: ParserOptions = {
         targetPath: settings.directoryPath,
         attachMetadataToRaws: true,
         skipApplyCopyTagsFrom: false,
         skipApplyCreatureVariations: false,
-        rawsToParse: [
-          'Creature',
-          'Plant',
-          'Inorganic',
-          'Entity',
-          // Include graphics details
-          'Graphics',
-          'TilePage',
-        ],
+        rawsToParse: objectTypesToParse,
         locationsToParse: [],
         job: 'All',
         serializeResultToJson: false,
