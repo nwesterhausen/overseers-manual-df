@@ -32,11 +32,11 @@
     "@tailwindcss/typography": "^0.5.10",
     "@tauri-apps/cli": "2.0.0-alpha.16",
     "@types/node": "^20.8.9",
-    "@typescript-eslint/eslint-plugin": "^6.9.0",
-    "@typescript-eslint/parser": "^6.9.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
     "autoprefixer": "^10.4.16",
     "conventional-changelog-conventionalcommits": "^7.0.2",
-    "daisyui": "^3.9.3",
+    "daisyui": "^3.9.4",
     "eslint": "^8.52.0",
     "eslint-plugin-tsdoc": "^0.2.17",
     "postcss": "^8.4.31",
@@ -45,7 +45,7 @@
     "prettier": "^3.0.3",
     "semantic-release": "22.0.5",
     "semantic-release-export-data": "^1.0.1",
-    "solid-icons": "^1.0.12",
+    "solid-icons": "^1.1.0",
     "tailwindcss": "^3.3.5",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
@@ -60,8 +60,7 @@
     "@tauri-apps/plugin-process": "github:tauri-apps/tauri-plugin-process#v2",
     "@tauri-apps/plugin-store": "github:tauri-apps/tauri-plugin-store#v2",
     "@tauri-apps/plugin-updater": "github:tauri-apps/tauri-plugin-updater#v2",
-    "@tauri-apps/plugin-window-state": "github:tauri-apps/tauri-plugin-window-state#v2",
-    "solid-js": "^1.8.3"
+    "solid-js": "^1.8.5"
   },
   "prettier": {
     "bracketSameLine": true,
