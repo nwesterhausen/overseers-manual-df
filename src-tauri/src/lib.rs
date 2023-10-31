@@ -84,7 +84,7 @@ pub fn run() {
         .plugin(tauri_plugin_aptabase::Builder::new(dotenv!("APTABASE_KEY")).build())
         // Add invoke handlers
         .invoke_handler(tauri::generate_handler![
-            parsing::passthrough::parse_all_raws_info,
+            parsing::passthrough::parse_raws_info,
             search_handler::prepare::parse_and_store_raws,
             search_handler::search::search_raws,
             search_handler::util::get_search_string_for_object,

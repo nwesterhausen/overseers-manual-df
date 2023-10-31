@@ -2,6 +2,7 @@ import { BiRegularFilter } from 'solid-icons/bi';
 import { Component } from 'solid-js';
 import BiomeFiltering from './BiomeFiltering';
 import DisplayFilters from './DisplayFilters';
+import ModuleFiltering from './ModuleFiltering';
 import RawLocationCheckboxes from './RawLocationCheckboxes';
 import RawTypeCheckboxes from './RawTypeCheckboxes';
 
@@ -42,6 +43,13 @@ const FilterButton: Component = () => {
             <div class='collapse-title font-medium'>Raw Locations</div>
             <div class='collapse-content'>
               <RawLocationCheckboxes />
+            </div>
+          </div>
+          <div class='collapse collapse-arrow join-item bg-base-100 border-b-2 border-b-slate-200/25'>
+            <input type='radio' name='filter-accordion' />
+            <div class='collapse-title font-medium'>Module Inclusion</div>
+            <div class='collapse-content'>
+              <ModuleFiltering />
             </div>
           </div>
         </div>

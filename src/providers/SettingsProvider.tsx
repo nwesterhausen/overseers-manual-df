@@ -16,6 +16,7 @@ const SETTINGS_DEFAULTS = {
   includeBiomes: [] as Biome[],
   parseLocations: ['Vanilla'] as RawModuleLocation[],
   includeLocations: ['Vanilla'] as RawModuleLocation[],
+  includeModules: [] as string[],
 };
 
 type SettingsStore = [
@@ -30,6 +31,7 @@ type SettingsStore = [
     includeObjectTypes: ObjectType[];
     includeBiomes: Biome[];
     includeLocations: RawModuleLocation[];
+    includeModules: string[];
   },
   {
     toggleLayoutAsGrid: () => void;
@@ -46,6 +48,7 @@ type SettingsStore = [
     resetToDefaults: () => void;
     updateFilteredBiomes: (biomes: Biome[]) => void;
     updateFilteredLocations: (locations: RawModuleLocation[]) => void;
+    updateFilteredModules: (modules: string[]) => void;
   },
 ];
 
@@ -93,6 +96,9 @@ const SettingsContext = createContext<SettingsStore>([
     },
     toggleLocation(location: RawModuleLocation, parsingOnly: boolean) {
       console.log('Un-initialized settings provider.', location, parsingOnly);
+    },
+    updateFilteredModules(modules: string[]) {
+      console.log('Un-initialized settings provider.', modules);
     },
   },
 ]);
@@ -167,6 +173,7 @@ export const SettingsProvider: ParentComponent = (props) => {
       await tauriSettingsStore.set('includeObjectTypes', state.includeObjectTypes);
       await tauriSettingsStore.set('includeBiomes', state.includeBiomes);
       await tauriSettingsStore.set('includeLocations', state.includeLocations);
+      await tauriSettingsStore.set('includeModules', state.includeModules);
 
       setSettingsChanged(false);
 
@@ -279,6 +286,11 @@ export const SettingsProvider: ParentComponent = (props) => {
             setState('includeLocations', [...state.includeLocations, location]);
           }
         }
+        setSettingsChanged(true);
+      },
+      updateFilteredModules(modules: string[]) {
+        setState('includeModules', modules);
+        console.log('Updated modules', modules);
         setSettingsChanged(true);
       },
     },

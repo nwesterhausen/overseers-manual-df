@@ -69,6 +69,15 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
                  else {
                     true
                 }
+                // Filter by module object_id (if modules isn't empty)
+                && if search_options.modules.is_empty() {
+                    true
+                } else {
+                    search_options
+                        .modules
+                        .iter()
+                        .any(|module| raw.get_metadata().get_module_object_id() == module)
+                }
                 // Filter by egg layers (if `only_egg_layers` is true)
                 && if search_options.only_egg_layers {
                     if raw.get_type() == &ObjectType::Creature {
@@ -196,6 +205,15 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
                 }
                  else {
                     true
+                }
+                // Filter by module object_id (if modules isn't empty)
+                && if search_options.modules.is_empty() {
+                    true
+                } else {
+                    search_options
+                        .modules
+                        .iter()
+                        .any(|module| raw.get_metadata().get_module_object_id() == module)
                 }
             {
                 if raw.get_type() == &ObjectType::Creature {

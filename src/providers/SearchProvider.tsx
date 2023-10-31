@@ -73,6 +73,7 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
       query: searchString(),
       locations: settings.includeLocations,
       biomes: settings.includeBiomes,
+      modules: settings.includeModules,
       onlyEggLayers: onlyEggLayers(),
       showDoesNotExist: showDoesNotExist(),
     };
