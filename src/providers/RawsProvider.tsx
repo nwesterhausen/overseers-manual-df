@@ -95,8 +95,9 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     console.log(`Traveling to page ${settings.currentPage}`);
   });
 
+  const [updateRawsInfo, setUpdateRawsInfo] = createSignal(false);
   // Resource for raws info files
-  const [allRawsInfosJsonArray] = createResource(parseRawsInfo, {
+  const [allRawsInfosJsonArray] = createResource(updateRawsInfo, parseRawsInfo, {
     initialValue: [],
   });
 
@@ -210,6 +211,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
       // Update the search results
       refetch();
+      // Update the raw modules
+      setUpdateRawsInfo(true);
     } catch (e) {
       console.error(e);
       setParsingProgress(emptyParsingStatus);
@@ -232,19 +235,50 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   async function parseRawsInfo(): Promise<ModuleInfoFile[]> {
     // Don't parse when empty directory
     if (settings.directoryPath === '') {
+      setUpdateRawsInfo(false);
       return [];
     }
 
+    // See the function in dfraw_json_parser/src/lib.rs for more info
+    // The function in our lib.rs simply passes this through (more or less)
+    const objectTypesToParse: ObjectType[] = [
+      ...settings.parseObjectTypes,
+      // Include graphics details
+      'Graphics',
+      'TilePage',
+    ];
+
+    const parsingOptions: ParserOptions = {
+      targetPath: settings.directoryPath,
+      attachMetadataToRaws: false,
+      skipApplyCopyTagsFrom: false,
+      skipApplyCreatureVariations: false,
+      rawsToParse: objectTypesToParse,
+      locationsToParse: settings.parseLocations,
+      job: 'AllModuleInfoFiles',
+      serializeResultToJson: false,
+      outputPath: '',
+      outputToFile: false,
+    };
+
     try {
-      const raw_file_data: ModuleInfoFile[] = await invoke('parse_all_raws_info', { path: settings.directoryPath });
+      const raw_file_data: ModuleInfoFile[] = await invoke('parse_raws_info', {
+        options: parsingOptions,
+      });
 
       // Filter unknown raw info stuff..
-      const flat_raw_info = raw_file_data.flat().filter((dfi) => dfi.identifier !== 'unknown');
-
-      return flat_raw_info.sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
+      const flat_raw_info = raw_file_data
+        .flat()
+        .filter((dfi) => dfi.identifier !== 'unknown')
+        .sort((a, b) => (a.objectId < b.objectId ? -1 : 1));
+      // Reset on timer
+      setTimeout(() => setUpdateRawsInfo(false), 5);
+      return flat_raw_info;
     } catch (e) {
       console.error(e);
     }
+    // Reset
+    setUpdateRawsInfo(false);
     return [];
   }
 
