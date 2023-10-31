@@ -14,7 +14,7 @@ const SETTINGS_DEFAULTS = {
   parseObjectTypes: ['Creature', 'Plant'] as ObjectType[],
   includeBiomes: [] as string[],
   parseLocations: ['Vanilla'] as RawModuleLocation[],
-  includeLocations: [] as RawModuleLocation[],
+  includeLocations: ['Vanilla'] as RawModuleLocation[],
 };
 
 type SettingsStore = [
@@ -127,6 +127,13 @@ export const SettingsProvider: ParentComponent = (props) => {
       setState({ parseLocations: await tauriSettingsStore.get('parseLocations') });
       console.log('Loaded parseLocations', state.parseLocations);
     }
+    // Initialize the filtered location settings
+    if (typeof (await tauriSettingsStore.get('includeLocations')) === 'undefined') {
+      await tauriSettingsStore.set('includeLocations', SETTINGS_DEFAULTS.includeLocations);
+    } else {
+      setState({ includeLocations: await tauriSettingsStore.get('includeLocations') });
+      console.log('Loaded includeLocations', state.includeLocations);
+    }
     // Initialize the results per page setting
     if (typeof (await tauriSettingsStore.get('resultsPerPage')) === 'undefined') {
       await tauriSettingsStore.set('resultsPerPage', SETTINGS_DEFAULTS.resultsPerPage);
@@ -158,6 +165,7 @@ export const SettingsProvider: ParentComponent = (props) => {
       await tauriSettingsStore.set('directoryPath', state.directoryPath);
       await tauriSettingsStore.set('includeObjectTypes', state.includeObjectTypes);
       await tauriSettingsStore.set('includeBiomes', state.includeBiomes);
+      await tauriSettingsStore.set('includeLocations', state.includeLocations);
 
       setSettingsChanged(false);
 
