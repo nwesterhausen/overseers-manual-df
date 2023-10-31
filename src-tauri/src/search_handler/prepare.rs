@@ -13,7 +13,7 @@ use dfraw_json_parser::{
     ProgressPayload,
 };
 use serde_json::json;
-use tauri::{AppHandle, State, Window};
+use tauri::{AppHandle, Manager, State, Window};
 use tauri_plugin_aptabase::EventTracker;
 
 use crate::{state::Storage, tracking::ParseAndStoreRaws};
