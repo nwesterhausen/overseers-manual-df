@@ -885,7 +885,7 @@ checksum = "6a1abaf4d861455be59f64fd2b55606cb151fce304ede7165f410243ce96bde6"
 [[package]]
 name = "dfraw_json_parser"
 version = "0.14.0-alpha"
-source = "git+https://github.com/nwesterhausen/dfraw_json_parser?branch=v2#54283eb4e346f48b809fb718f0fc1688d1bfeed8"
+source = "git+https://github.com/nwesterhausen/dfraw_json_parser?branch=v2#c5e15a31df89966596f41c64a4f668ca5a93d8ed"
 dependencies = [
  "encoding_rs",
  "encoding_rs_io",
@@ -2639,6 +2639,7 @@ dependencies = [
  "chrono",
  "dfraw_json_parser",
  "dotenvy_macro",
+ "itertools",
  "log",
  "serde",
  "serde_json",

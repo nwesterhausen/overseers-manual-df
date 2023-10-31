@@ -28,6 +28,10 @@ pub struct SearchOptions {
     /// Biomes to include in the search results
     /// Default: All biomes
     pub biomes: Vec<Biome>,
+    /// Modules to include in the search results
+    /// These are specified by their object_id which is unique
+    /// Default: All modules
+    pub modules: Vec<String>,
     /// Some specific tags we want to allow searching for as toggles.
     /// Default: false ; Requires creatures
     pub only_egg_layers: bool,

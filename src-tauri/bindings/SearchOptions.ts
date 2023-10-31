@@ -10,6 +10,7 @@ export interface SearchOptions {
   query: string;
   locations: Array<RawModuleLocation>;
   biomes: Array<Biome>;
+  modules: Array<string>;
   onlyEggLayers: boolean;
   showDoesNotExist: boolean;
 }
