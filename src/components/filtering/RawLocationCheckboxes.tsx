@@ -1,9 +1,8 @@
 import { Component } from 'solid-js';
 import { useSettingsContext } from '../../providers/SettingsProvider';
 
-const RawLocationCheckboxes: Component = () => {
-  const [settings, { toggleIncludeLocationInstalledMods, toggleIncludeLocationMods, toggleIncludeLocationVanilla }] =
-    useSettingsContext();
+const RawLocationCheckboxes: Component<{ parsingOnly?: boolean }> = (props) => {
+  const [_settings, { locationIncluded, toggleLocation }] = useSettingsContext();
   return (
     <>
       <div class='form-control'>
@@ -13,8 +12,8 @@ const RawLocationCheckboxes: Component = () => {
             type='checkbox'
             class='toggle toggle-primary'
             name='settingsEnableVanilla'
-            checked={settings.includeLocationVanilla}
-            onClick={toggleIncludeLocationVanilla}
+            checked={locationIncluded('Vanilla', props.parsingOnly)}
+            onClick={() => toggleLocation('Vanilla', props.parsingOnly)}
           />
         </label>
       </div>
@@ -25,8 +24,8 @@ const RawLocationCheckboxes: Component = () => {
             type='checkbox'
             class='toggle toggle-primary'
             name='settingsEnableInstalled'
-            checked={settings.includeLocationInstalledMods}
-            onClick={toggleIncludeLocationInstalledMods}
+            checked={locationIncluded('InstalledMods', props.parsingOnly)}
+            onClick={() => toggleLocation('InstalledMods', props.parsingOnly)}
           />
         </label>
       </div>
@@ -37,8 +36,8 @@ const RawLocationCheckboxes: Component = () => {
             type='checkbox'
             class='toggle toggle-primary'
             name='settingsEnableWorkshop'
-            checked={settings.includeLocationMods}
-            onClick={toggleIncludeLocationMods}
+            checked={locationIncluded('Mods', props.parsingOnly)}
+            onClick={() => toggleLocation('Mods', props.parsingOnly)}
           />
         </label>
       </div>

@@ -88,22 +88,12 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
       page: settings.currentPage,
       objectTypes: settings.includeObjectTypes,
       query: searchString(),
-      locations: [],
+      locations: settings.includeLocations,
       onlyEggLayers: onlyEggLayers(),
       showDoesNotExist: showDoesNotExist(),
     };
 
-    if (settings.includeLocationInstalledMods) {
-      options.locations.push('InstalledMods');
-    }
-    if (settings.includeLocationVanilla) {
-      options.locations.push('Vanilla');
-    }
-    if (settings.includeLocationMods) {
-      options.locations.push('Mods');
-    }
-
-    // Todo: include advanced filtering options (modules and tags) once supported by the backend
+    // Todo: include advanced filtering options (biomes and modules and tags) once supported by the backend
 
     return options;
   });

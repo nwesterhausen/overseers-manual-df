@@ -2,9 +2,9 @@ import { appDataDir } from '@tauri-apps/api/path';
 import { invoke } from '@tauri-apps/api/primitives';
 import { BiSolidFolderOpen } from 'solid-icons/bi';
 import { Component, createResource } from 'solid-js';
+import RawLocationCheckboxes from '../components/filtering/RawLocationCheckboxes';
+import RawTypeCheckboxes from '../components/filtering/RawTypeCheckboxes';
 import DirectoryOptions from '../components/settings/DirectoryOptions';
-import LocationOptions from '../components/settings/LocationOptions';
-import ObjectTypeOptions from '../components/settings/ObjectTypeOptions';
 import SavedSettingsDataTable from '../components/settings/SavedSettingsDataTable';
 import { useSettingsContext } from '../providers/SettingsProvider';
 
@@ -33,11 +33,15 @@ const Settings: Component = () => {
         <hr class='mt-4 opacity-25' />
 
         <legend class='font-semibold text-md my-1'>Locations</legend>
-        <LocationOptions />
+        <div class='grid grid-cols-1 sm:grid-cols-2 mb-3'>
+          <RawLocationCheckboxes parsingOnly />
+        </div>
         <hr class='mt-4 opacity-25' />
 
         <legend class='font-semibold text-md my-1'>Object Type Inclusion</legend>
-        <ObjectTypeOptions />
+        <div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-3'>
+          <RawTypeCheckboxes parsingOnly />
+        </div>
         <hr class='mt-4 opacity-25' />
 
         <legend class='font-semibold text-md my-1'>Directory</legend>
