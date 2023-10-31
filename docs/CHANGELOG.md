@@ -1,3 +1,10 @@
+## [0.28.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.1...v0.28.2) (2023-10-31)
+
+
+### Bug Fixes
+
+* reset settings if outdated ([d3ab15e](https://github.com/nwesterhausen/overseers-manual-df/commit/d3ab15ee3c72f37e593f7797e1efe1d5568d7bef))
+
 ## [0.28.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.0...v0.28.1) (2023-10-31)
 
 
