@@ -1,3 +1,20 @@
+## [0.28.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.9...v0.28.0) (2023-10-31)
+
+
+### Features
+
+* add biome filtering ([2870373](https://github.com/nwesterhausen/overseers-manual-df/commit/2870373df4a9766f1913f6dae169587fe1da5701))
+* add filters dropdown ([ff03183](https://github.com/nwesterhausen/overseers-manual-df/commit/ff03183ac1b7a9f3020a56686e01c4dac0db0074))
+* add module filtering ([074f600](https://github.com/nwesterhausen/overseers-manual-df/commit/074f600266b6f818e0bca164107edcf54dfddcad))
+* enable object and location filtering/parsing ([12aa572](https://github.com/nwesterhausen/overseers-manual-df/commit/12aa572f656aeb7d10bf52387b9eea09b86e754f))
+* handle biome filters for search ([e76b93e](https://github.com/nwesterhausen/overseers-manual-df/commit/e76b93eb04526a1c57d60f48511238e2c8c83707))
+* include filtered locations in settings (saved to disk) ([d8f35c8](https://github.com/nwesterhausen/overseers-manual-df/commit/d8f35c8efadd8a82a21fe18d1bc462a08dbb6e4f))
+
+
+### Bug Fixes
+
+* include Manager for trait definitions ([dd3aa3d](https://github.com/nwesterhausen/overseers-manual-df/commit/dd3aa3dd47fffe3da13cedb7b9b3949a39968771))
+
 ## [0.27.9](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.27.8...v0.27.9) (2023-10-25)
 
 
