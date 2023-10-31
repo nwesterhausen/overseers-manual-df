@@ -29,22 +29,22 @@ const SavedSettingsDataTable: Component = () => {
           <td>layoutAsGrid</td>
           <td>{settings.layoutAsGrid.toString()}</td>
         </tr>
-        {/* Include Location Installed Mods */}
+        {/* Parse Locations */}
         <tr>
-          <td>includeLocationInstalledMods</td>
-          <td>{settings.includeLocationInstalledMods.toString()}</td>
+          <td>parseLocations</td>
+          <td>{settings.parseLocations.join(', ')}</td>
         </tr>
-        {/* Include Location Mods */}
+        {/* Filter Locations */}
         <tr>
-          <td>includeLocationMods</td>
-          <td>{settings.includeLocationMods.toString()}</td>
+          <td>filterLocations</td>
+          <td>{settings.includeLocations.join(', ')}</td>
         </tr>
-        {/* Include Location Vanilla */}
+        {/* Parse Object Types */}
         <tr>
-          <td>includeLocationVanilla</td>
-          <td>{settings.includeLocationVanilla.toString()}</td>
+          <td>parseObjectTypes</td>
+          <td>{settings.parseObjectTypes.join(', ')}</td>
         </tr>
-        {/* Object Type Included */}
+        {/* Filtered Object Types */}
         <tr>
           <td>includeObjectTypes</td>
           <td>{settings.includeObjectTypes.join(', ')}</td>

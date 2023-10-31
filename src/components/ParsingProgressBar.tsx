@@ -5,7 +5,7 @@ import { useSettingsContext } from '../providers/SettingsProvider';
 
 const ParsingProgressBar: Component = () => {
   const rawsContext = useRawsProvider();
-  const [settings] = useSettingsContext();
+  const [_settings, { locationIncluded }] = useSettingsContext();
   const [progress, setProgress] = createStore({
     vanilla: false,
     installed: false,
@@ -40,28 +40,28 @@ const ParsingProgressBar: Component = () => {
           <li
             class='step'
             classList={{
-              'step-neutral': !settings.includeLocationVanilla,
+              'step-neutral': !locationIncluded('Vanilla', true),
               'step-success': progress.vanilla,
             }}
-            data-content={settings.includeLocationVanilla ? '2' : '✗'}>
+            data-content={locationIncluded('Vanilla', true) ? '2' : '✗'}>
             Parse Vanilla Raws
           </li>
           <li
             class='step'
             classList={{
-              'step-neutral': !settings.includeLocationInstalledMods,
+              'step-neutral': !locationIncluded('InstalledMods', true),
               'step-success': progress.installed,
             }}
-            data-content={settings.includeLocationInstalledMods ? '3' : '✗'}>
+            data-content={locationIncluded('InstalledMods', true) ? '2' : '✗'}>
             Parse Installed Mods Raws
           </li>
           <li
             class='step'
             classList={{
-              'step-neutral': !settings.includeLocationMods,
+              'step-neutral': !locationIncluded('Mods', true),
               'step-success': progress.downloaded,
             }}
-            data-content={settings.includeLocationMods ? '4' : '✗'}>
+            data-content={locationIncluded('Mods', true) ? '2' : '✗'}>
             Parse Downloaded Mods Raws
           </li>
           <li
