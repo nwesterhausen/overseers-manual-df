@@ -1,7 +1,4 @@
-use dfraw_json_parser::{
-    options::{ParserOptions, ParsingJob},
-    parser::module_info_file::ModuleInfoFile,
-};
+use dfraw_json_parser::{options::ParserOptions, parser::module_info_file::ModuleInfoFile};
 use itertools::Itertools;
 use serde_json::json;
 use tauri::AppHandle;
