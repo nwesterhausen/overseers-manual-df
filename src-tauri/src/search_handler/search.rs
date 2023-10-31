@@ -2,6 +2,7 @@ use dfraw_json_parser::parser::{
     creature::raw::Creature,
     helpers::{clone_raw_object_box, clone_raw_vector},
     object_types::ObjectType,
+    plant::raw::Plant,
     raws::RawObject,
 };
 use tauri::State;
@@ -49,6 +50,25 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
                     .object_types
                     .iter()
                     .any(|object_type| raw.get_type() == object_type)
+                // Filter by biome (if biomes isn't empty)
+                && if search_options.biomes.is_empty() {
+                    true
+                } else if raw.get_type() == &ObjectType::Creature {
+                    let creature = raw.as_any().downcast_ref::<Creature>().unwrap();
+                    search_options
+                        .biomes
+                        .iter()
+                        .any(|biome| creature.get_biomes().contains(biome))
+                } else if raw.get_type() == &ObjectType::Plant {
+                    let plant = raw.as_any().downcast_ref::<Plant>().unwrap();
+                    search_options
+                        .biomes
+                        .iter()
+                        .any(|biome| plant.get_biomes().contains(biome))
+                }
+                 else {
+                    true
+                }
                 // Filter by egg layers (if `only_egg_layers` is true)
                 && if search_options.only_egg_layers {
                     if raw.get_type() == &ObjectType::Creature {
@@ -158,6 +178,25 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
                 .object_types
                 .iter()
                 .any(|object_type| raw.get_type() == object_type)
+                // Filter by biome (if biomes isn't empty)
+                && if search_options.biomes.is_empty() {
+                    true
+                } else if raw.get_type() == &ObjectType::Creature {
+                    let creature = raw.as_any().downcast_ref::<Creature>().unwrap();
+                    search_options
+                        .biomes
+                        .iter()
+                        .any(|biome| creature.get_biomes().contains(biome))
+                } else if raw.get_type() == &ObjectType::Plant {
+                    let plant = raw.as_any().downcast_ref::<Plant>().unwrap();
+                    search_options
+                        .biomes
+                        .iter()
+                        .any(|biome| plant.get_biomes().contains(biome))
+                }
+                 else {
+                    true
+                }
             {
                 if raw.get_type() == &ObjectType::Creature {
                     let creature = raw.as_any().downcast_ref::<Creature>().unwrap();

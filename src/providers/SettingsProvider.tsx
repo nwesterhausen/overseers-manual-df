@@ -1,6 +1,7 @@
 import { Store as TauriStore } from '@tauri-apps/plugin-store';
 import { ParentComponent, createContext, createEffect, createSignal, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
+import { Biome } from '../definitions/Biome';
 import { ObjectType } from '../definitions/ObjectType';
 import { RawModuleLocation } from '../definitions/RawModuleLocation';
 
@@ -12,7 +13,7 @@ const SETTINGS_DEFAULTS = {
   currentPage: 1,
   includeObjectTypes: ['Creature', 'Plant'] as ObjectType[],
   parseObjectTypes: ['Creature', 'Plant'] as ObjectType[],
-  includeBiomes: [] as string[],
+  includeBiomes: [] as Biome[],
   parseLocations: ['Vanilla'] as RawModuleLocation[],
   includeLocations: ['Vanilla'] as RawModuleLocation[],
 };
@@ -27,7 +28,7 @@ type SettingsStore = [
     directoryPath: string;
     currentPage: number;
     includeObjectTypes: ObjectType[];
-    includeBiomes: string[];
+    includeBiomes: Biome[];
     includeLocations: RawModuleLocation[];
   },
   {
@@ -43,7 +44,7 @@ type SettingsStore = [
     setDirectoryPath: (path: string) => void;
     setCurrentResultsPage: (num: number) => void;
     resetToDefaults: () => void;
-    updateFilteredBiomes: (biomes: string[]) => void;
+    updateFilteredBiomes: (biomes: Biome[]) => void;
     updateFilteredLocations: (locations: RawModuleLocation[]) => void;
   },
 ];
@@ -228,10 +229,10 @@ export const SettingsProvider: ParentComponent = (props) => {
         setState({ ...SETTINGS_DEFAULTS });
         setSettingsChanged(true);
       },
-      biomeIncluded(biome: string) {
+      biomeIncluded(biome: Biome) {
         return state.includeBiomes.includes(biome);
       },
-      toggleBiome(biome: string) {
+      toggleBiome(biome: Biome) {
         if (state.includeBiomes.includes(biome)) {
           setState(
             'includeBiomes',
@@ -242,7 +243,7 @@ export const SettingsProvider: ParentComponent = (props) => {
         }
         setSettingsChanged(true);
       },
-      updateFilteredBiomes(biomes: string[]) {
+      updateFilteredBiomes(biomes: Biome[]) {
         setState('includeBiomes', biomes);
         console.log('Updated biomes', biomes);
         setSettingsChanged(true);
