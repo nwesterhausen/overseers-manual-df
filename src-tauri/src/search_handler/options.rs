@@ -1,4 +1,6 @@
-use dfraw_json_parser::parser::{object_types::ObjectType, raw_locations::RawModuleLocation};
+use dfraw_json_parser::parser::{
+    biome::tokens::Biome, object_types::ObjectType, raw_locations::RawModuleLocation,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(ts_rs::TS)]
@@ -23,6 +25,9 @@ pub struct SearchOptions {
     /// Locations to include in the search results
     /// Default: All locations
     pub locations: Vec<RawModuleLocation>,
+    /// Biomes to include in the search results
+    /// Default: All biomes
+    pub biomes: Vec<Biome>,
     /// Some specific tags we want to allow searching for as toggles.
     /// Default: false ; Requires creatures
     pub only_egg_layers: bool,
