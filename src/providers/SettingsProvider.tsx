@@ -1,3 +1,4 @@
+import { message } from '@tauri-apps/plugin-dialog';
 import { Store as TauriStore } from '@tauri-apps/plugin-store';
 import { ParentComponent, createContext, createEffect, createSignal, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
@@ -103,6 +104,28 @@ const SettingsContext = createContext<SettingsStore>([
   },
 ]);
 
+/**
+ * Resets all saved settings to their default values.
+ * @returns {Promise<void>} A promise that resolves when the settings have been reset.
+ */
+async function resetSavedSettingsToDefaults() {
+  // Reset
+  await tauriSettingsStore.reset();
+  await tauriSettingsStore.save();
+  // Load defaults
+  await tauriSettingsStore.set('layoutAsGrid', SETTINGS_DEFAULTS.layoutAsGrid);
+  await tauriSettingsStore.set('displayGraphics', SETTINGS_DEFAULTS.displayGraphics);
+  await tauriSettingsStore.set('parseLocations', SETTINGS_DEFAULTS.parseLocations);
+  await tauriSettingsStore.set('resultsPerPage', SETTINGS_DEFAULTS.resultsPerPage);
+  await tauriSettingsStore.set('directoryPath', SETTINGS_DEFAULTS.directoryPath);
+  await tauriSettingsStore.set('includeObjectTypes', SETTINGS_DEFAULTS.includeObjectTypes);
+  await tauriSettingsStore.set('includeBiomes', SETTINGS_DEFAULTS.includeBiomes);
+  await tauriSettingsStore.set('includeLocations', SETTINGS_DEFAULTS.includeLocations);
+  await tauriSettingsStore.set('includeModules', SETTINGS_DEFAULTS.includeModules);
+  // Save
+  await tauriSettingsStore.save();
+}
+
 export const SettingsProvider: ParentComponent = (props) => {
   const [state, setState] = createStore({
     ...SETTINGS_DEFAULTS,
@@ -112,6 +135,20 @@ export const SettingsProvider: ParentComponent = (props) => {
   tauriSettingsStore.load().then(async () => {
     console.log('Loading settings from disk.');
     // If the settings file does not exist, create it..
+
+    // Check for an old setting and if we find it, we need to force an update
+    if (typeof (await tauriSettingsStore.get('includeLocationVanilla')) !== 'undefined') {
+      await message(
+        `Overseer's Manual has updated and changed what settings are stored. Your settings have been reset to the defaults. Sorry for the inconvenience!`,
+        {
+          okLabel: 'Acknowledge',
+          title: `Overseer's Manual Settings Check`,
+          type: 'warning',
+        },
+      );
+      await resetSavedSettingsToDefaults();
+      return;
+    }
 
     // Initialize the layoutAsGrid setting
     if (typeof (await tauriSettingsStore.get('layoutAsGrid')) === 'undefined') {
