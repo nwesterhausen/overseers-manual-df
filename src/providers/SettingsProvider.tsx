@@ -7,15 +7,13 @@ import { RawModuleLocation } from '../definitions/RawModuleLocation';
 const SETTINGS_DEFAULTS = {
   layoutAsGrid: true,
   displayGraphics: true,
-  includeLocationVanilla: true,
-  includeLocationMods: false,
-  includeLocationInstalledMods: true,
   resultsPerPage: 32,
   directoryPath: '',
   currentPage: 1,
   includeObjectTypes: ['Creature', 'Plant'] as ObjectType[],
   parseObjectTypes: ['Creature', 'Plant'] as ObjectType[],
   includeBiomes: [] as string[],
+  parseLocations: ['Vanilla'] as RawModuleLocation[],
   includeLocations: [] as RawModuleLocation[],
 };
 
@@ -23,10 +21,8 @@ type SettingsStore = [
   {
     layoutAsGrid: boolean;
     displayGraphics: boolean;
-    includeLocationVanilla: boolean;
-    includeLocationMods: boolean;
-    includeLocationInstalledMods: boolean;
     parseObjectTypes: ObjectType[];
+    parseLocations: RawModuleLocation[];
     resultsPerPage: number;
     directoryPath: string;
     currentPage: number;
@@ -38,11 +34,10 @@ type SettingsStore = [
     toggleLayoutAsGrid: () => void;
     toggleDisplayGraphics: () => void;
     // These are for parsing
-    toggleIncludeLocationVanilla: () => void;
-    toggleIncludeLocationMods: () => void;
-    toggleIncludeLocationInstalledMods: () => void;
     objectTypeIncluded: (type: ObjectType, parsingOnly: boolean) => boolean;
     toggleObjectType: (type: ObjectType, parsingOnly: boolean) => void;
+    locationIncluded: (type: RawModuleLocation, parsingOnly: boolean) => boolean;
+    toggleLocation: (type: RawModuleLocation, parsingOnly: boolean) => void;
     // These are for filtering
     setResultsPerPage: (num: number) => void;
     setDirectoryPath: (path: string) => void;
@@ -64,15 +59,6 @@ const SettingsContext = createContext<SettingsStore>([
       console.log('Un-initialized settings provider.');
     },
     toggleDisplayGraphics() {
-      console.log('Un-initialized settings provider.');
-    },
-    toggleIncludeLocationVanilla() {
-      console.log('Un-initialized settings provider.');
-    },
-    toggleIncludeLocationMods() {
-      console.log('Un-initialized settings provider.');
-    },
-    toggleIncludeLocationInstalledMods() {
       console.log('Un-initialized settings provider.');
     },
     setResultsPerPage(num: number) {
@@ -99,6 +85,13 @@ const SettingsContext = createContext<SettingsStore>([
     },
     updateFilteredLocations(locations: RawModuleLocation[]) {
       console.log('Un-initialized settings provider.', locations);
+    },
+    locationIncluded(location: RawModuleLocation, parsingOnly: boolean) {
+      console.log('Un-initialized settings provider.', location, parsingOnly);
+      return false;
+    },
+    toggleLocation(location: RawModuleLocation, parsingOnly: boolean) {
+      console.log('Un-initialized settings provider.', location, parsingOnly);
     },
   },
 ]);
@@ -127,26 +120,12 @@ export const SettingsProvider: ParentComponent = (props) => {
       setState({ displayGraphics: await tauriSettingsStore.get('displayGraphics') });
       console.log('Loaded displayGraphics', state.displayGraphics);
     }
-    // Initialize the includeLocationVanilla setting
-    if (typeof (await tauriSettingsStore.get('includeLocationVanilla')) === 'undefined') {
-      await tauriSettingsStore.set('includeLocationVanilla', SETTINGS_DEFAULTS.includeLocationVanilla);
+    // Initialize the parsed location settings
+    if (typeof (await tauriSettingsStore.get('parseLocations')) === 'undefined') {
+      await tauriSettingsStore.set('parseLocations', SETTINGS_DEFAULTS.parseLocations);
     } else {
-      setState({ includeLocationVanilla: await tauriSettingsStore.get('includeLocationVanilla') });
-      console.log('Loaded includeLocationVanilla', state.includeLocationVanilla);
-    }
-    // Initialize the includeLocationMods setting
-    if (typeof (await tauriSettingsStore.get('includeLocationMods')) === 'undefined') {
-      await tauriSettingsStore.set('includeLocationMods', SETTINGS_DEFAULTS.includeLocationMods);
-    } else {
-      setState({ includeLocationMods: await tauriSettingsStore.get('includeLocationMods') });
-      console.log('Loaded includeLocationMods', state.includeLocationMods);
-    }
-    // Initialize the includeLocationInstalledMods setting
-    if (typeof (await tauriSettingsStore.get('includeLocationInstalledMods')) === 'undefined') {
-      await tauriSettingsStore.set('includeLocationInstalledMods', SETTINGS_DEFAULTS.includeLocationInstalledMods);
-    } else {
-      setState({ includeLocationInstalledMods: await tauriSettingsStore.get('includeLocationInstalledMods') });
-      console.log('Loaded includeLocationInstalledMods', state.includeLocationInstalledMods);
+      setState({ parseLocations: await tauriSettingsStore.get('parseLocations') });
+      console.log('Loaded parseLocations', state.parseLocations);
     }
     // Initialize the results per page setting
     if (typeof (await tauriSettingsStore.get('resultsPerPage')) === 'undefined') {
@@ -174,9 +153,7 @@ export const SettingsProvider: ParentComponent = (props) => {
       // For each setting, we update the store
       await tauriSettingsStore.set('layoutAsGrid', state.layoutAsGrid);
       await tauriSettingsStore.set('displayGraphics', state.displayGraphics);
-      await tauriSettingsStore.set('includeLocationVanilla', state.includeLocationVanilla);
-      await tauriSettingsStore.set('includeLocationMods', state.includeLocationMods);
-      await tauriSettingsStore.set('includeLocationInstalledMods', state.includeLocationInstalledMods);
+      await tauriSettingsStore.set('parseLocations', state.parseLocations);
       await tauriSettingsStore.set('resultsPerPage', state.resultsPerPage);
       await tauriSettingsStore.set('directoryPath', state.directoryPath);
       await tauriSettingsStore.set('includeObjectTypes', state.includeObjectTypes);
@@ -197,18 +174,6 @@ export const SettingsProvider: ParentComponent = (props) => {
       },
       toggleDisplayGraphics() {
         setState('displayGraphics', !state.displayGraphics);
-        setSettingsChanged(true);
-      },
-      toggleIncludeLocationVanilla() {
-        setState('includeLocationVanilla', !state.includeLocationVanilla);
-        setSettingsChanged(true);
-      },
-      toggleIncludeLocationMods() {
-        setState('includeLocationMods', !state.includeLocationMods);
-        setSettingsChanged(true);
-      },
-      toggleIncludeLocationInstalledMods() {
-        setState('includeLocationInstalledMods', !state.includeLocationInstalledMods);
         setSettingsChanged(true);
       },
       setResultsPerPage(num: number) {
@@ -277,6 +242,34 @@ export const SettingsProvider: ParentComponent = (props) => {
       updateFilteredLocations(locations: RawModuleLocation[]) {
         setState('includeLocations', locations);
         console.log('Updated locations', locations);
+        setSettingsChanged(true);
+      },
+      locationIncluded(location: RawModuleLocation, parsingOnly: boolean) {
+        if (parsingOnly) {
+          return state.parseLocations.includes(location);
+        }
+        return state.includeLocations.includes(location);
+      },
+      toggleLocation(location: RawModuleLocation, parsingOnly: boolean) {
+        if (parsingOnly) {
+          if (state.parseLocations.includes(location)) {
+            setState(
+              'parseLocations',
+              state.parseLocations.filter((t) => t !== location),
+            );
+          } else {
+            setState('parseLocations', [...state.parseLocations, location]);
+          }
+        } else {
+          if (state.includeLocations.includes(location)) {
+            setState(
+              'includeLocations',
+              state.includeLocations.filter((t) => t !== location),
+            );
+          } else {
+            setState('includeLocations', [...state.includeLocations, location]);
+          }
+        }
         setSettingsChanged(true);
       },
     },

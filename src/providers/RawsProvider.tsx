@@ -174,22 +174,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         skipApplyCopyTagsFrom: false,
         skipApplyCreatureVariations: false,
         rawsToParse: objectTypesToParse,
-        locationsToParse: [],
+        locationsToParse: settings.parseLocations,
         job: 'All',
         serializeResultToJson: false,
         outputPath: '',
         outputToFile: false,
       };
 
-      if (settings.includeLocationVanilla) {
-        parsingOptions.locationsToParse.push('Vanilla');
-      }
-      if (settings.includeLocationInstalledMods) {
-        parsingOptions.locationsToParse.push('InstalledMods');
-      }
-      if (settings.includeLocationMods) {
-        parsingOptions.locationsToParse.push('Mods');
-      }
       // Shortcut the parsing if there are no locations to parse
       if (parsingOptions.locationsToParse.length === 0) {
         return;
