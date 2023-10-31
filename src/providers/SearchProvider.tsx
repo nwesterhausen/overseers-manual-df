@@ -18,23 +18,6 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
     setOnlyEggLayers(!onlyEggLayers());
   };
 
-  const [requireCreature, setRequireCreature] = createSignal(true);
-  const handleToggleRequireCreature = () => {
-    setRequireCreature(!requireCreature());
-  };
-  const [requirePlant, setRequirePlant] = createSignal(true);
-  const handleToggleRequirePlant = () => {
-    setRequirePlant(!requirePlant());
-  };
-  const [requireInorganic, setRequireInorganic] = createSignal(true);
-  const handleToggleRequireInorganic = () => {
-    setRequireInorganic(!requireInorganic());
-  };
-  const [requireEntity, setRequireEntity] = createSignal(true);
-  const handleToggleRequireEntity = () => {
-    setRequireEntity(!requireEntity());
-  };
-
   // Required Modules (by objectId)
   const [filteredModules, setFilteredModules] = createSignal<string[]>([]);
   const addFilteredModule = (module: string | string[]) => {
@@ -121,16 +104,6 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
     addRequiredTag,
     removeRequiredTag,
     removeAllRequiredTags,
-
-    // Object Type Filtering
-    requireCreature,
-    handleToggleRequireCreature,
-    requirePlant,
-    handleToggleRequirePlant,
-    requireInorganic,
-    handleToggleRequireInorganic,
-    requireEntity,
-    handleToggleRequireEntity,
 
     // Other Filtering
     showDoesNotExist,
