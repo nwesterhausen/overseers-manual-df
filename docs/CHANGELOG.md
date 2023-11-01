@@ -1,3 +1,12 @@
+## [0.28.3](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.2...v0.28.3) (2023-11-01)
+
+
+### Bug Fixes
+
+* prevent searching repeatedly ([a80b7af](https://github.com/nwesterhausen/overseers-manual-df/commit/a80b7af252c0516009bfb6f3566a30972f53184f))
+* re-parse raws if directory changed ([f11d43d](https://github.com/nwesterhausen/overseers-manual-df/commit/f11d43dfba76aca206d0b7df8b26b1948d97f766))
+* use consistent icon theme ([1a56404](https://github.com/nwesterhausen/overseers-manual-df/commit/1a56404b7b06c6ca053869da1ac1a1106f7a46d6))
+
 ## [0.28.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.1...v0.28.2) (2023-10-31)
 
 
