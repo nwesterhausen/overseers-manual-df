@@ -1,10 +1,10 @@
-import { Component, For, Show, createMemo } from 'solid-js';
+import { For, JSX, Show, createMemo } from 'solid-js';
 import { useRawsProvider } from '../../providers/RawsProvider';
 import { useSettingsContext } from '../../providers/SettingsProvider';
 
-const Pagination: Component = () => {
+function Pagination(): JSX.Element {
   const rawsContext = useRawsProvider();
-  const [settings] = useSettingsContext();
+  const [settings, { gotoPage, nextPage, prevPage }] = useSettingsContext();
 
   const pageNumbers = createMemo(() => {
     if (rawsContext.parsedRaws.latest.totalPages === 1) {
@@ -36,14 +36,14 @@ const Pagination: Component = () => {
             <button
               class='join-item btn btn-xs'
               classList={{ disabled: settings.currentPage === 0 }}
-              onClick={rawsContext.prevPage}>
+              onClick={() => prevPage()}>
               «
             </button>
             <Show when={showFirstPageAndEllipses()}>
               <button
                 class='join-item btn btn-xs'
                 classList={{ 'btn-primary': settings.currentPage === 0 }}
-                onClick={() => rawsContext.gotoPage(1)}>
+                onClick={() => gotoPage(1)}>
                 1
               </button>
               <Show when={settings.currentPage > 6}>
@@ -55,7 +55,7 @@ const Pagination: Component = () => {
                 <button
                   class='join-item btn btn-xs'
                   classList={{ 'btn-primary': settings.currentPage === i }}
-                  onClick={() => rawsContext.gotoPage(i)}>
+                  onClick={() => gotoPage(i)}>
                   {i}
                 </button>
               )}
@@ -67,14 +67,14 @@ const Pagination: Component = () => {
               <button
                 class='join-item btn btn-xs'
                 classList={{ disabled: settings.currentPage === rawsContext.parsedRaws.latest.totalPages }}
-                onClick={() => rawsContext.gotoPage(rawsContext.parsedRaws.latest.totalPages)}>
+                onClick={() => gotoPage(rawsContext.parsedRaws.latest.totalPages)}>
                 {rawsContext.parsedRaws.latest.totalPages}
               </button>
             </Show>
             <button
               class='join-item btn btn-xs'
               classList={{ disabled: settings.currentPage === rawsContext.parsedRaws.latest.totalPages }}
-              onClick={rawsContext.nextPage}>
+              onClick={() => nextPage()}>
               »
             </button>
           </div>
@@ -82,6 +82,6 @@ const Pagination: Component = () => {
       </div>
     </Show>
   );
-};
+}
 
 export default Pagination;

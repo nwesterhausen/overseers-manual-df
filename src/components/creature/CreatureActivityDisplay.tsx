@@ -1,6 +1,6 @@
 import { Component, For } from 'solid-js';
 import { Creature } from '../../definitions/Creature';
-import { ActiveTimeStatus, NoSeasonStatus } from '../../lib/CreatureUtil';
+import { CasteActiveTimeStatus, CasteSeasonActivity } from '../../lib/CreatureUtil';
 import { toTitleCase } from '../../lib/Utils';
 
 const CreatureActivityDisplay: Component<{ creature: Creature }> = (props) => {
@@ -26,7 +26,7 @@ const CondenseInactiveSeasons = (creature: Creature): string[] => {
   const strArr: string[] = [];
   if (Array.isArray(creature.castes)) {
     for (const caste of creature.castes) {
-      strArr.push(`${toTitleCase(caste.identifier)}: ${NoSeasonStatus(caste)}`);
+      strArr.push(`${toTitleCase(caste.identifier)}: ${CasteSeasonActivity(caste)}`);
     }
   }
   return strArr;
@@ -37,7 +37,7 @@ const CondenseActiveTimes = (creature: Creature): string[] => {
   const strArr: string[] = [];
   if (Array.isArray(creature.castes)) {
     for (const caste of creature.castes) {
-      strArr.push(`${toTitleCase(caste.identifier)}: ${ActiveTimeStatus(caste)}`);
+      strArr.push(`${toTitleCase(caste.identifier)}: ${CasteActiveTimeStatus(caste)}`);
     }
   }
   return strArr;

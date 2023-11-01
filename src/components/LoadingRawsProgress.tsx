@@ -1,5 +1,6 @@
 import { Component, Show } from 'solid-js';
-import { STS_LOADING, useRawsProvider } from '../providers/RawsProvider';
+import { STS_LOADING } from '../lib/Constants';
+import { useRawsProvider } from '../providers/RawsProvider';
 
 const LoadingRawsProgress: Component = () => {
   const rawsContext = useRawsProvider();

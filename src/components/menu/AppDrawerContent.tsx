@@ -3,11 +3,12 @@ import { getTauriVersion, getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/primitives';
 import { Component, createMemo, createResource } from 'solid-js';
 import { Info } from '../../definitions/Info';
+import { COMMAND_GET_BUILD_INFO } from '../../lib/Constants';
 
 const AppDrawerContent: Component = () => {
   const [buildInfo] = createResource<Info>(
     async () => {
-      return await invoke('get_build_info');
+      return await invoke(COMMAND_GET_BUILD_INFO);
     },
     {
       initialValue: {

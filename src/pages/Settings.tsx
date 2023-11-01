@@ -1,14 +1,15 @@
 import { appDataDir } from '@tauri-apps/api/path';
 import { invoke } from '@tauri-apps/api/primitives';
 import { BiSolidFolderOpen } from 'solid-icons/bi';
-import { Component, createResource } from 'solid-js';
+import { JSX, createResource } from 'solid-js';
 import RawLocationCheckboxes from '../components/filtering/RawLocationCheckboxes';
 import RawTypeCheckboxes from '../components/filtering/RawTypeCheckboxes';
 import DirectoryOptions from '../components/settings/DirectoryOptions';
 import SavedSettingsDataTable from '../components/settings/SavedSettingsDataTable';
+import { COMMAND_SHOW_IN_FOLDER } from '../lib/Constants';
 import { useSettingsContext } from '../providers/SettingsProvider';
 
-const Settings: Component = () => {
+function Settings(): JSX.Element {
   const [_settings, { resetToDefaults }] = useSettingsContext();
 
   const [settingsFilePath] = createResource<string>(
@@ -58,7 +59,7 @@ const Settings: Component = () => {
               <button
                 class='btn btn-sm btn-primary btn-outline border-none'
                 onClick={() => {
-                  invoke('show_in_folder', {
+                  invoke(COMMAND_SHOW_IN_FOLDER, {
                     path: settingsFilePath.latest,
                   }).catch(console.error);
                 }}>
@@ -76,6 +77,6 @@ const Settings: Component = () => {
       </section>
     </div>
   );
-};
+}
 
 export default Settings;

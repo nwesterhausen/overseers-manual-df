@@ -1,6 +1,7 @@
 import { invoke } from '@tauri-apps/api/primitives';
 import { Component, For, Show, createResource } from 'solid-js';
 import { Plant } from '../../definitions/Plant';
+import { COMMAND_GET_BIOME_DESCRIPTION } from '../../lib/Constants';
 import { UndergroundDepthDescription } from '../../lib/CreatureUtil';
 
 const PlantDescriptionTable: Component<{ plant: Plant }> = (props) => {
@@ -11,7 +12,7 @@ const PlantDescriptionTable: Component<{ plant: Plant }> = (props) => {
       }
       const biomes = [];
       for (const biome of props.plant.biomes) {
-        biomes.push(await invoke('get_biome_description', { biomeToken: biome }));
+        biomes.push(await invoke(COMMAND_GET_BIOME_DESCRIPTION, { biomeToken: biome }));
       }
       return biomes;
     },

@@ -6,14 +6,8 @@ import { createEffect, createMemo, createResource, createSignal } from 'solid-js
 import { splitPathAgnostically } from '../lib/Utils';
 import { useSettingsContext } from './SettingsProvider';
 
-export const DIR_NONE = Symbol('none'),
-  DIR_DF = Symbol('df'),
-  DIR_SAVE = Symbol('saves'),
-  DIR_RAWS = Symbol('raws');
-
 export interface DirectorySelection {
   path: string[];
-  type: symbol;
 }
 
 /**
@@ -40,7 +34,6 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
       setDirectoryHistory([
         {
           path: settings.directoryPath.split('/'),
-          type: DIR_DF,
         },
       ]);
     }
@@ -51,7 +44,6 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     if (directoryHistory().length === 0) {
       return {
         path: [],
-        type: DIR_NONE,
       };
     }
     console.info(`Current directory ${directoryHistory()[0].path.join('/')}`);
@@ -109,8 +101,6 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
       return;
     }
 
-    let dirType: symbol = DIR_NONE;
-
     // Determine what kind of path it is
     try {
       // Use the tauri fs.readDir API
@@ -121,9 +111,8 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
       const hasGamelogTxt = dirContents.filter((v) => v.name === 'gamelog.txt').length > 0;
       if (hasGamelogTxt) {
         console.debug('Matched a gamelog.txt file');
-        dirType = DIR_DF;
       } else {
-        dirType = DIR_NONE;
+        return;
       }
     } catch (e) {
       console.error(e);
@@ -134,7 +123,6 @@ export const [DirectoryProvider, useDirectoryProvider] = createContextProvider((
     setDirectoryHistory([
       {
         path: splitPath,
-        type: dirType,
       },
       ...directoryHistory(),
     ]);

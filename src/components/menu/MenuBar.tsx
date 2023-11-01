@@ -1,6 +1,7 @@
 import { A, useLocation } from '@solidjs/router';
 import { ParentComponent, Show, createMemo } from 'solid-js';
-import { STS_IDLE, useRawsProvider } from '../../providers/RawsProvider';
+import { STS_IDLE } from '../../lib/Constants';
+import { useRawsProvider } from '../../providers/RawsProvider';
 import ScrollToTopBtn from '../ScrollToTopBtn';
 import SearchFilters from '../filtering/SearchFilters';
 import AppDrawerButton from './AppDrawerButton';

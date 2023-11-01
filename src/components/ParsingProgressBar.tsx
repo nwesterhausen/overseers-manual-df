@@ -1,6 +1,7 @@
 import { Component, Show, createEffect } from 'solid-js';
 import { createStore } from 'solid-js/store';
-import { STS_PARSING, useRawsProvider } from '../providers/RawsProvider';
+import { STS_PARSING } from '../lib/Constants';
+import { useRawsProvider } from '../providers/RawsProvider';
 import { useSettingsContext } from '../providers/SettingsProvider';
 
 const ParsingProgressBar: Component = () => {

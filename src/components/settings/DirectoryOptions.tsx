@@ -1,12 +1,26 @@
-import { Component } from 'solid-js';
+import { invoke } from '@tauri-apps/api/primitives';
+import { BiSolidFolderOpen } from 'solid-icons/bi';
+import { JSX } from 'solid-js';
+import { COMMAND_SHOW_IN_FOLDER } from '../../lib/Constants';
 import { useDirectoryProvider } from '../../providers/DirectoryProvider';
 
-const DirectoryOptions: Component = () => {
+function DirectoryOptions(): JSX.Element {
   const directoryContext = useDirectoryProvider();
   return (
     <div>
       <div class='flex flex-row gap-3'>
         <span class='label'>Current Dwarf Fortress Directory:</span>
+        <div class='tooltip' data-tip='Show in Explorer'>
+          <button
+            class='btn btn-sm btn-primary btn-outline border-none'
+            onClick={() => {
+              invoke(COMMAND_SHOW_IN_FOLDER, {
+                path: [...directoryContext.currentDirectory().path, 'gamelog.txt'].join('/'),
+              }).catch(console.error);
+            }}>
+            <BiSolidFolderOpen size={'1.5rem'} />
+          </button>
+        </div>
         <input
           type='text'
           placeholder={directoryContext.currentDirectory().path.join('/')}
@@ -32,6 +46,6 @@ const DirectoryOptions: Component = () => {
       </div>
     </div>
   );
-};
+}
 
 export default DirectoryOptions;

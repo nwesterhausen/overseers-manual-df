@@ -2,6 +2,7 @@ import { convertFileSrc, invoke } from '@tauri-apps/api/primitives';
 import { TbPhotoOff } from 'solid-icons/tb';
 import { Component, Show, createMemo, createResource } from 'solid-js';
 import { GraphicsResults } from '../definitions/GraphicsResults';
+import { COMMAND_GET_GRAPHICS_FOR_IDENTIFIER } from '../lib/Constants';
 import { useSettingsContext } from '../providers/SettingsProvider';
 
 interface Dimensions {
@@ -28,7 +29,7 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
 
   const [graphics] = createResource<GraphicsResults>(
     async () => {
-      return await invoke('get_graphics_for_identifier', {
+      return await invoke(COMMAND_GET_GRAPHICS_FOR_IDENTIFIER, {
         options: {
           identifier: props.identifier,
           allGraphics: true,
