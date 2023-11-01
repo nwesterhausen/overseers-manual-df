@@ -1,6 +1,6 @@
-import { Component } from 'solid-js';
+import { JSX } from 'solid-js';
 
-const About: Component = () => {
+function About(): JSX.Element {
   return (
     <>
       <p>What does it do?</p>
@@ -10,6 +10,6 @@ const About: Component = () => {
       <p>Why was it made?</p>
     </>
   );
-};
+}
 
 export default About;

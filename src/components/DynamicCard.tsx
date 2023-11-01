@@ -5,6 +5,7 @@ import { Component, Match, Show, Switch, createResource } from 'solid-js';
 import { Creature } from '../definitions/Creature';
 import { Plant } from '../definitions/Plant';
 import { Raw } from '../definitions/types';
+import { COMMAND_GET_SEARCH_STRING_FOR_OBJECT } from '../lib/Constants';
 import { nameForRaw } from '../lib/Raw';
 import SpriteImage from './SpriteImage';
 import CreatureDescriptionTable from './creature/CreateDescriptionTable';
@@ -18,7 +19,7 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
 
   const [searchString] = createResource<string>(
     async (): Promise<string> => {
-      const searchString = await invoke('get_search_string_for_object', { objectId: props.raw.objectId });
+      const searchString = await invoke(COMMAND_GET_SEARCH_STRING_FOR_OBJECT, { objectId: props.raw.objectId });
       if (typeof searchString === 'string') {
         return searchString;
       }

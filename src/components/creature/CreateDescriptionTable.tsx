@@ -1,13 +1,13 @@
 import { Component, For, Show } from 'solid-js';
 import { Creature } from '../../definitions/Creature';
 import {
+  CasteTrainableStatus,
   ClusterSizeStatus,
   EggLayingStatus,
   GrownAtStatus,
   LifeExpectancyStatus,
   PetValueStatus,
   PopulationNumberStatus,
-  TrainableStatus,
   UndergroundDepthDescription,
 } from '../../lib/CreatureUtil';
 import { toTitleCase } from '../../lib/Utils';
@@ -75,7 +75,7 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
           </tr>
           <tr>
             <th>Trainable</th>
-            <td>{props.creature.castes.map((v) => TrainableStatus(v)).join(', ')}</td>
+            <td>{props.creature.castes.map((v) => CasteTrainableStatus(v)).join(', ')}</td>
           </tr>
           <tr>
             <th>Defining Classes</th>
