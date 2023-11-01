@@ -1,5 +1,5 @@
 import { convertFileSrc, invoke } from '@tauri-apps/api/primitives';
-import { TbPhotoOff } from 'solid-icons/tb';
+import { BiRegularImageAlt } from 'solid-icons/bi';
 import { Component, Show, createMemo, createResource } from 'solid-js';
 import { GraphicsResults } from '../definitions/GraphicsResults';
 import { COMMAND_GET_GRAPHICS_FOR_IDENTIFIER } from '../lib/Constants';
@@ -130,7 +130,7 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
             {graphics.loading ? (
               <div class='loading loading-dots loading-xs' style={{ width: '1rem', height: '1rem' }}></div>
             ) : (
-              <TbPhotoOff />
+              <BiRegularImageAlt />
             )}
           </div>
         </div>

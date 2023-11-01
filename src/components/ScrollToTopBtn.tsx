@@ -1,4 +1,4 @@
-import { HiSolidChevronDoubleUp } from 'solid-icons/hi';
+import { BiSolidUpArrow } from 'solid-icons/bi';
 import { Component, createEffect, createSignal } from 'solid-js';
 
 const ScrollToTopBtn: Component = () => {
@@ -21,7 +21,7 @@ const ScrollToTopBtn: Component = () => {
             onClick={() => {
               window.scrollTo(0, 0);
             }}>
-            <HiSolidChevronDoubleUp />
+            <BiSolidUpArrow />
           </button>
         </div>
       ) : (
