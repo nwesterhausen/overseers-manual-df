@@ -5,15 +5,15 @@ import LoadingRawsProgress from '../components/LoadingRawsProgress';
 import ParsingProgressBar from '../components/ParsingProgressBar';
 import FilterButton from '../components/filtering/FilterButton';
 import { STS_EMPTY, STS_IDLE } from '../lib/Constants';
-import { useDirectoryProvider } from '../providers/DirectoryProvider';
 import { useRawsProvider } from '../providers/RawsProvider';
+import { useSettingsContext } from '../providers/SettingsProvider';
 
 function ReferenceManual(): JSX.Element {
   const rawsContext = useRawsProvider();
-  const directoryContext = useDirectoryProvider();
+  const [settings] = useSettingsContext();
   // Helper boolean to know when to display the page or not
   const contentToDisplay = createMemo(() => {
-    return rawsContext.parsingStatus() === STS_IDLE && directoryContext.currentDirectory().path.length > 0;
+    return rawsContext.parsingStatus() === STS_IDLE && settings.directoryPath.length > 0;
   });
   return (
     <div class='px-2 main'>

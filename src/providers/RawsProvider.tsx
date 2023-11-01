@@ -115,14 +115,15 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
    * @returns A promise which resolves when the raws are done parsing
    */
   async function parseRaws(): Promise<void> {
-    // Don't parse when empty directory
-    if (settings.directoryPath === '') {
-      console.info('Skipped parsing because directory type is DIR_NONE');
+    // Don't parse when not ready
+    if (settings.ready !== true || settings.directoryPath === '') {
+      console.info('Skipped parsing because settings are not initialized / the directory is not set');
       resetPage();
       // Reset the trigger after 50ms
       setTimeout(() => {
         setLoadRaws(false);
       }, 5);
+      // EXIT EARLY
       return;
     }
 

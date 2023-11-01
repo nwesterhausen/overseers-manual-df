@@ -25,6 +25,7 @@ export const NO_UPDATE: Update = {
  */
 export const SETTINGS_DEFAULTS = {
   dataVersion: 10,
+  ready: false,
   layoutAsGrid: true,
   displayGraphics: true,
   resultsPerPage: 32,

@@ -1,8 +1,8 @@
-import { Component } from 'solid-js';
-import { useDirectoryProvider } from '../providers/DirectoryProvider';
+import { JSX } from 'solid-js';
+import { useSettingsContext } from '../providers/SettingsProvider';
 
-const DFDirectoryNotSet: Component = () => {
-  const directoryContext = useDirectoryProvider();
+function DFDirectoryNotSet(): JSX.Element {
+  const [_settings, { openDirectorySelection }] = useSettingsContext();
 
   return (
     <div class='hero min-h-fit pt-16'>
@@ -23,7 +23,7 @@ const DFDirectoryNotSet: Component = () => {
             <button
               class='btn btn-primary'
               onClick={() => {
-                directoryContext.activateManualDirectorySelection(true);
+                openDirectorySelection();
               }}>
               Set Directory
             </button>
@@ -32,6 +32,6 @@ const DFDirectoryNotSet: Component = () => {
       </div>
     </div>
   );
-};
+}
 
 export default DFDirectoryNotSet;

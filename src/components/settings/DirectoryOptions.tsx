@@ -2,10 +2,10 @@ import { invoke } from '@tauri-apps/api/primitives';
 import { BiSolidFolderOpen } from 'solid-icons/bi';
 import { JSX } from 'solid-js';
 import { COMMAND_SHOW_IN_FOLDER } from '../../lib/Constants';
-import { useDirectoryProvider } from '../../providers/DirectoryProvider';
+import { useSettingsContext } from '../../providers/SettingsProvider';
 
 function DirectoryOptions(): JSX.Element {
-  const directoryContext = useDirectoryProvider();
+  const [settings, { openDirectorySelection, resetDirectorySelection }] = useSettingsContext();
   return (
     <div>
       <div class='flex flex-row gap-3'>
@@ -15,31 +15,26 @@ function DirectoryOptions(): JSX.Element {
             class='btn btn-sm btn-primary btn-outline border-none'
             onClick={() => {
               invoke(COMMAND_SHOW_IN_FOLDER, {
-                path: [...directoryContext.currentDirectory().path, 'gamelog.txt'].join('/'),
+                path: `${settings.directoryPath}/gamelog.txt`,
               }).catch(console.error);
             }}>
             <BiSolidFolderOpen size={'1.5rem'} />
           </button>
         </div>
-        <input
-          type='text'
-          placeholder={directoryContext.currentDirectory().path.join('/')}
-          class='input input-primary input-ghost grow'
-          disabled
-        />
+        <input type='text' placeholder={settings.directoryPath} class='input input-primary input-ghost grow' disabled />
       </div>
       <div class='flex justify-around my-2'>
         <button
           class='btn btn-sm btn-error btn-outline'
           onClick={async () => {
-            directoryContext.resetDirectory();
+            resetDirectorySelection();
           }}>
           Clear Dwarf Fortress Directory
         </button>
         <button
           class='btn btn-sm btn-primary'
           onClick={async () => {
-            directoryContext.activateManualDirectorySelection();
+            openDirectorySelection();
           }}>
           Change Dwarf Fortress Directory
         </button>

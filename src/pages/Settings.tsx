@@ -10,7 +10,7 @@ import { COMMAND_SHOW_IN_FOLDER } from '../lib/Constants';
 import { useSettingsContext } from '../providers/SettingsProvider';
 
 function Settings(): JSX.Element {
-  const [_settings, { resetToDefaults }] = useSettingsContext();
+  const [settings, { resetToDefaults }] = useSettingsContext();
 
   const [settingsFilePath] = createResource<string>(
     async () => {
@@ -50,7 +50,18 @@ function Settings(): JSX.Element {
       </section>
 
       <section class='bg-slate-800 bg-opacity-75 rounded-lg p-2'>
-        <legend class='font-semibold font-md my-1'>Stored Data</legend>
+        <legend class='font-semibold font-md my-1'>
+          Stored Data
+          <span
+            class='ms-2 tooltip'
+            data-tip={settings.ready ? 'Settings are loaded and ready to use' : 'Settings are not reporting as "ready"'}
+            classList={{
+              'text-success': settings.ready,
+              'text-error': !settings.ready,
+            }}>
+            {settings.ready ? 'Loaded' : 'Error'}
+          </span>
+        </legend>
         <div class='join join-vertical gap-3 w-full'>
           <p>Settings are persisted to disk. You can delete them here if you want to reset the application.</p>
           <div class='flex flex-row'>

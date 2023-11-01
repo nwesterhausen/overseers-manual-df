@@ -1,3 +1,4 @@
+import { Event, listen } from '@tauri-apps/api/event';
 import { message } from '@tauri-apps/plugin-dialog';
 import { Store as TauriStore } from '@tauri-apps/plugin-store';
 import { JSX, ParentProps, createContext, createEffect, createSignal, useContext } from 'solid-js';
@@ -6,6 +7,7 @@ import { Biome } from '../definitions/Biome';
 import { ObjectType } from '../definitions/ObjectType';
 import { RawModuleLocation } from '../definitions/RawModuleLocation';
 import { SETTINGS_DEFAULTS, SETTINGS_FILE_NAME } from '../lib/Constants';
+import { getDwarfDirectoryPath } from '../lib/DirectoryActions';
 
 type SettingsStore = [
   {
@@ -65,6 +67,10 @@ type SettingsStore = [
      * The modules to include when filtering results.
      */
     includeModules: string[];
+    /**
+     * If the settings have been initialized and are ready to use.
+     */
+    ready: boolean;
   },
   {
     /**
@@ -186,6 +192,18 @@ type SettingsStore = [
      * @returns void
      */
     setResultsPerPage: (num: number) => void;
+    /**
+     * Opens a dialog to ask the user to select a directory.
+     *
+     * @returns void
+     */
+    openDirectorySelection: () => void;
+    /**
+     * Resets the directory path to an empty string.
+     *
+     * @returns void
+     */
+    resetDirectorySelection: () => void;
   },
 ];
 
@@ -260,11 +278,18 @@ const SettingsContext = createContext<SettingsStore>([
     setTotalResults(num: number) {
       console.log('Un-initialized settings provider.', num);
     },
+    openDirectorySelection() {
+      console.log('Un-initialized settings provider.');
+    },
+    resetDirectorySelection() {
+      console.log('Un-initialized settings provider.');
+    },
   },
 ]);
 
 /**
- * Resets all saved settings to their default values.
+ * Resets all saved settings saved on disk to their default values.
+ *
  * @returns A promise that resolves when the settings have been reset.
  */
 async function resetSavedSettingsToDefaults() {
@@ -276,11 +301,12 @@ async function resetSavedSettingsToDefaults() {
   await tauriSettingsStore.set('layoutAsGrid', SETTINGS_DEFAULTS.layoutAsGrid);
   await tauriSettingsStore.set('displayGraphics', SETTINGS_DEFAULTS.displayGraphics);
   await tauriSettingsStore.set('parseLocations', SETTINGS_DEFAULTS.parseLocations);
+  await tauriSettingsStore.set('includeLocations', SETTINGS_DEFAULTS.includeLocations);
   await tauriSettingsStore.set('resultsPerPage', SETTINGS_DEFAULTS.resultsPerPage);
   await tauriSettingsStore.set('directoryPath', SETTINGS_DEFAULTS.directoryPath);
+  await tauriSettingsStore.set('parseObjectTypes', SETTINGS_DEFAULTS.parseObjectTypes);
   await tauriSettingsStore.set('includeObjectTypes', SETTINGS_DEFAULTS.includeObjectTypes);
   await tauriSettingsStore.set('includeBiomes', SETTINGS_DEFAULTS.includeBiomes);
-  await tauriSettingsStore.set('includeLocations', SETTINGS_DEFAULTS.includeLocations);
   await tauriSettingsStore.set('includeModules', SETTINGS_DEFAULTS.includeModules);
   await tauriSettingsStore.set('dataVersion', SETTINGS_DEFAULTS.dataVersion);
   // Save
@@ -300,54 +326,95 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
   });
 
   /**
+   * Checks the settings to make sure they are valid. Verifies that each setting value is
+   * of the correct type. If it isn't, it tries to reset it to default.
+   *
+   * If any setting is reset, the settings changed flag is set to true.
+   *
+   * @returns void
+   */
+  function validateSettings() {
+    let failedValidation = false;
+    console.info('Validating settings.');
+    // Check each setting
+    Object.keys(SETTINGS_DEFAULTS).forEach((key) => {
+      if (key === 'ready') return; // Don't check the ready flag.
+
+      const setting = key as keyof typeof SETTINGS_DEFAULTS;
+      // If the setting is not of the correct type, reset it to default
+      if (typeof state[setting] !== typeof SETTINGS_DEFAULTS[setting]) {
+        console.warn(`Setting ${setting} is not of the correct type. Resetting to default.`);
+        setState(setting, SETTINGS_DEFAULTS[setting]);
+        failedValidation = true;
+      }
+    });
+    // If we failed validation, set the settings changed flag
+    if (failedValidation) {
+      setSettingsChanged(true);
+    }
+    // Update the ready flag
+    setState('ready', !failedValidation);
+    console.log(`Settings are ${failedValidation ? 'invalid' : 'valid'}`);
+  }
+
+  /**
    * Loads a setting from disk or sets it to the default value if it does not exist.
    *
    * @param key - The key to load
    * @returns A promise that resolves when the setting has been loaded.
    */
   async function loadFromStoreOrDefault(key: keyof typeof SETTINGS_DEFAULTS) {
-    if (typeof (await tauriSettingsStore.get(key)) === 'undefined') {
+    const loadedVal = await tauriSettingsStore.get(key);
+    if (typeof loadedVal === 'undefined' || typeof loadedVal !== typeof SETTINGS_DEFAULTS[key]) {
       await tauriSettingsStore.set(key, SETTINGS_DEFAULTS[key]);
+      console.log(`Set ${key} to default`, state[key]);
     } else {
-      const loadedVal = await tauriSettingsStore.get(key);
       setState(key, loadedVal as (typeof SETTINGS_DEFAULTS)[typeof key]);
       console.log(`Loaded ${key}`, state[key as keyof typeof state]);
-      console.log(`Loaded ${key}`, state[key]);
     }
   }
 
   // Attempt to load the settings from disk
-  tauriSettingsStore.load().then(async () => {
-    console.log('Loading settings from disk.');
-    // If the settings file does not exist, create it..
+  tauriSettingsStore
+    .load()
+    .then(async () => {
+      console.log('Loading settings from disk.');
+      // If the settings file does not exist, create it..
 
-    // Check for an old setting and if we find it, we need to force an update
-    const dataVersion = await tauriSettingsStore.get('dataVersion');
-    if (typeof dataVersion !== 'number' && dataVersion !== SETTINGS_DEFAULTS.dataVersion) {
-      await message(
-        `Overseer's Manual has updated and changed what settings are stored. Your settings have been reset to the defaults. Sorry for the inconvenience!`,
-        {
-          okLabel: 'Acknowledge',
-          title: `Overseer's Manual Settings Check`,
-          type: 'warning',
-        },
-      );
-      await resetSavedSettingsToDefaults();
-      return;
-    }
+      // Check for an old setting and if we find it, we need to force an update
+      const dataVersion = await tauriSettingsStore.get('dataVersion');
+      if (typeof dataVersion !== 'number' && dataVersion !== SETTINGS_DEFAULTS.dataVersion) {
+        await message(
+          `Overseer's Manual has updated and changed what settings are stored. Your settings have been reset to the defaults. Sorry for the inconvenience!`,
+          {
+            okLabel: 'Acknowledge',
+            title: `Overseer's Manual Settings Check`,
+            type: 'warning',
+          },
+        );
+        await resetSavedSettingsToDefaults();
+        // Set "ready"
+        setState('ready', true);
+        // Return early before loading the settings we just reset..
+        return;
+      }
 
-    // Load the rest of the settings from disk.
-    loadFromStoreOrDefault('layoutAsGrid');
-    loadFromStoreOrDefault('displayGraphics');
-    loadFromStoreOrDefault('parseObjectTypes');
-    loadFromStoreOrDefault('parseLocations');
-    loadFromStoreOrDefault('resultsPerPage');
-    loadFromStoreOrDefault('directoryPath');
-    loadFromStoreOrDefault('includeObjectTypes');
-    loadFromStoreOrDefault('includeBiomes');
-    loadFromStoreOrDefault('includeLocations');
-    loadFromStoreOrDefault('includeModules');
-  });
+      // Load the rest of the settings from disk.
+      loadFromStoreOrDefault('layoutAsGrid');
+      loadFromStoreOrDefault('displayGraphics');
+      loadFromStoreOrDefault('parseObjectTypes');
+      loadFromStoreOrDefault('parseLocations');
+      loadFromStoreOrDefault('resultsPerPage');
+      loadFromStoreOrDefault('directoryPath');
+      loadFromStoreOrDefault('includeObjectTypes');
+      loadFromStoreOrDefault('includeBiomes');
+      loadFromStoreOrDefault('includeLocations');
+      loadFromStoreOrDefault('includeModules');
+
+      // Set "ready"
+      setState('ready', true);
+    })
+    .catch(console.error);
 
   // Signal to indicate if settings have changed (requiring a flush to disk)
   const [settingsChanged, setSettingsChanged] = createSignal(false);
@@ -357,8 +424,10 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
       console.log('Settings changed. Flushing to disk.');
 
       // For each setting, we update the store
+      await tauriSettingsStore.set('dataVersion', SETTINGS_DEFAULTS.dataVersion);
       await tauriSettingsStore.set('layoutAsGrid', state.layoutAsGrid);
       await tauriSettingsStore.set('displayGraphics', state.displayGraphics);
+      await tauriSettingsStore.set('parseObjectTypes', state.parseObjectTypes);
       await tauriSettingsStore.set('parseLocations', state.parseLocations);
       await tauriSettingsStore.set('resultsPerPage', state.resultsPerPage);
       await tauriSettingsStore.set('directoryPath', state.directoryPath);
@@ -370,6 +439,24 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
       setSettingsChanged(false);
 
       await tauriSettingsStore.save();
+    }
+  });
+
+  // Listen for a file being dropped on the window to change the save location.
+  listen('tauri://file-drop', (event: Event<string[]>) => {
+    if (event.payload.length > 0) {
+      const file = event.payload[0];
+      if (file.endsWith('gamelog.txt')) {
+        console.log('File dropped', file);
+        getDwarfDirectoryPath(file)
+          .then((directory) => {
+            if (directory.length > 0) {
+              setState('directoryPath', directory.join('/'));
+              setSettingsChanged(true);
+            }
+          })
+          .catch(console.error);
+      }
     }
   });
 
@@ -520,8 +607,28 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
         }
         setState('totalPages', Math.ceil(num / state.resultsPerPage));
       },
+      openDirectorySelection() {
+        getDwarfDirectoryPath()
+          .then((directory) => {
+            if (directory.length > 0) {
+              setState('directoryPath', directory.join('/'));
+              setSettingsChanged(true);
+            }
+          })
+          .catch(console.error);
+      },
+      resetDirectorySelection() {
+        setState('directoryPath', '');
+        setSettingsChanged(true);
+      },
     },
   ];
+
+  // Set a timeout to validate the settings after 5 seconds.
+  // This is to ensure that the settings are loaded before we validate them.
+  setTimeout(() => {
+    if (!state.ready) validateSettings();
+  }, 5 * 1000);
 
   return <SettingsContext.Provider value={defaultSettings as SettingsStore}>{props.children}</SettingsContext.Provider>;
 }
