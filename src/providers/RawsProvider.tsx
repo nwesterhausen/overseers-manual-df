@@ -61,7 +61,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   // When the raws are done parsing, it will set the loadRaws signal to false, which will
   // enable it to be triggered again.
   createEffect(async () => {
-    if (loadRaws()) {
+    if (loadRaws() && settings.directoryPath.length > 0) {
       resetPage();
       searchContext.setSearchString('');
       await parseRaws();
