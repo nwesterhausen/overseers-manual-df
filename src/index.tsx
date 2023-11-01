@@ -4,7 +4,6 @@ import { render } from 'solid-js/web';
 
 import { Router } from '@solidjs/router';
 import App from './App';
-import { DirectoryProvider } from './providers/DirectoryProvider';
 import { RawsProvider } from './providers/RawsProvider';
 import { SearchProvider } from './providers/SearchProvider';
 import { SettingsProvider } from './providers/SettingsProvider';
@@ -19,11 +18,9 @@ render(
     <Router>
       <SettingsProvider>
         <SearchProvider>
-          <DirectoryProvider>
-            <RawsProvider>
-              <App />
-            </RawsProvider>
-          </DirectoryProvider>
+          <RawsProvider>
+            <App />
+          </RawsProvider>
         </SearchProvider>
       </SettingsProvider>
     </Router>
