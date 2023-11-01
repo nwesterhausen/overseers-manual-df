@@ -5,6 +5,7 @@ import MenuBar from './components/menu/MenuBar';
 import ReferenceManual from './pages/ReferenceManual';
 const Settings = lazy(() => import('./pages/Settings'));
 const About = lazy(() => import('./pages/About'));
+const UpdateDetails = lazy(() => import('./pages/UpdateDetails'));
 
 // App name for title
 const APP_NAME = "Overseer's Reference Manual";
@@ -22,6 +23,7 @@ const App: Component = () => {
           <Route path='/' element={<ReferenceManual />} />
           <Route path='/settings' element={<Settings />} />
           <Route path='/about' element={<About />} />
+          <Route path='/update-details' element={<UpdateDetails />} />
         </Routes>
       </MenuBar>
     </>

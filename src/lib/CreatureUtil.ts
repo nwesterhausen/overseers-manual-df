@@ -2,20 +2,8 @@ import { BodySize } from '../definitions/BodySize';
 import { Caste } from '../definitions/Caste';
 import { CasteTag } from '../definitions/CasteTag';
 import { Creature } from '../definitions/Creature';
-import { Name } from '../definitions/Name';
-import { SingPlurName } from '../definitions/SingPlurName';
-import { Raw } from '../definitions/types';
-import { SearchableNames, SimplifyVolume, TransformIntoSearchTermString, toTitleCase } from './Utils';
-
-/**
- * Returns true if the raw is a Creature raw.
- *
- * @param raw - The parsed raw to check.
- * @returns True if the raw is a creature.
- */
-export function isCreature(raw: Raw | Creature): boolean {
-  return (<Creature>raw).biomes !== undefined;
-}
+import { DepthRanges } from './Constants';
+import { SimplifyVolume, toTitleCase } from './Utils';
 
 /**
  * Helper to tell if a caste of the creature lays eggs.
@@ -23,18 +11,9 @@ export function isCreature(raw: Raw | Creature): boolean {
  * @param creature - Creature to check for egg laying tag
  * @returns true if one caste of this creature lays eggs
  */
-export const IsEggLayer = (creature: Creature): boolean => {
-  if (!Array.isArray(creature.castes)) {
-    return false;
-  }
-
-  for (const caste of creature.castes) {
-    if (caste.tags && caste.tags.indexOf('LaysEggs') !== -1) {
-      return true;
-    }
-  }
-  return false;
-};
+export function IsEggLayer(creature: Creature): boolean {
+  return HasCasteTag(creature, 'LaysEggs');
+}
 
 /**
  * Helper to tell get a single pet value.
@@ -42,7 +21,7 @@ export const IsEggLayer = (creature: Creature): boolean => {
  * @param creature - Creature to get pet value from
  * @returns pet value of first encountered value or 0
  */
-export const FirstPetValue = (creature: Creature): number => {
+export function FirstPetValue(creature: Creature): number {
   if (!Array.isArray(creature.castes)) {
     return 0;
   }
@@ -52,7 +31,7 @@ export const FirstPetValue = (creature: Creature): number => {
     }
   }
   return 0;
-};
+}
 
 /**
  * Helper to tell get a single difficulty value.
@@ -60,7 +39,7 @@ export const FirstPetValue = (creature: Creature): number => {
  * @param creature - Creature to get difficulty value from
  * @returns difficulty value of first encountered value or 0
  */
-export const FirstDifficulty = (creature: Creature): number => {
+export function FirstDifficulty(creature: Creature): number {
   if (!Array.isArray(creature.castes)) {
     return 0;
   }
@@ -70,7 +49,7 @@ export const FirstDifficulty = (creature: Creature): number => {
     }
   }
   return 0;
-};
+}
 
 /**
  * Returns a short description of the creature's egg-laying behavior.
@@ -78,7 +57,7 @@ export const FirstDifficulty = (creature: Creature): number => {
  * @param creature - Creature to get the egg-laying status for.
  * @returns Text to describe the egg-laying of the creature.
  */
-export const EggLayingStatus = (creature: Creature): string => {
+export function EggLayingStatus(creature: Creature): string {
   if (!IsEggLayer(creature)) {
     return "Doesn't lay eggs.";
   }
@@ -95,7 +74,7 @@ export const EggLayingStatus = (creature: Creature): string => {
     }
   }
   return ret.join(' ');
-};
+}
 
 /**
  * Returns a short description of the creature's life expectancy.
@@ -103,7 +82,7 @@ export const EggLayingStatus = (creature: Creature): string => {
  * @param creature - Creature to get the life expectancy of.
  * @returns Text to describe the life expectancy of the creature.
  */
-export const LifeExpectancyStatus = (creature: Creature): string => {
+export function LifeExpectancyStatus(creature: Creature): string {
   const ret: string[] = [];
   if (Array.isArray(creature.castes)) {
     for (const caste of creature.castes) {
@@ -117,7 +96,7 @@ export const LifeExpectancyStatus = (creature: Creature): string => {
   }
 
   return ret.join(' ');
-};
+}
 
 /**
  * Returns a short description of the creatures spawning patterns.
@@ -125,7 +104,7 @@ export const LifeExpectancyStatus = (creature: Creature): string => {
  * @param creature - Creature to get the spawning group size of
  * @returns Text to describe the spawning patterns
  */
-export const ClusterSizeStatus = (creature: Creature): string => {
+export function ClusterSizeStatus(creature: Creature): string {
   if (!creature.clusterNumber) {
     return 'None';
   }
@@ -140,7 +119,7 @@ export const ClusterSizeStatus = (creature: Creature): string => {
     return `They always appear in groups of ${min}`;
   }
   return `They appear in groups of ${min} to ${max} individuals.`;
-};
+}
 
 /**
  * Returns a short text description of a BodySizeRange.
@@ -148,7 +127,7 @@ export const ClusterSizeStatus = (creature: Creature): string => {
  * @param size - The body size range to turn into a string
  * @returns Text to describe the body size range value
  */
-export const BodySizeStatus = (size: BodySize): string => {
+export function BodySizeStatus(size: BodySize): string {
   if (size.years === 0) {
     if (size.days === 0) {
       return `${SimplifyVolume(size.sizeCm3)} at birth`;
@@ -160,7 +139,7 @@ export const BodySizeStatus = (size: BodySize): string => {
     return `${SimplifyVolume(size.sizeCm3)} at ${size.years} years`;
   }
   return `${SimplifyVolume(size.sizeCm3)} at ${size.years} years, ${size.days} days`;
-};
+}
 
 /**
  * Returns a short text description of when the creature reaches adulthood.
@@ -168,7 +147,7 @@ export const BodySizeStatus = (size: BodySize): string => {
  * @param grown_data - Age for each caste to reach adulthood as CasteRange
  * @returns Text to describe how the creature reaches adulthood
  */
-export const GrownAtStatus = (creature: Creature): string => {
+export function GrownAtStatus(creature: Creature): string {
   const sts: string[] = [];
   if (Array.isArray(creature.castes)) {
     for (const caste of creature.castes) {
@@ -185,14 +164,14 @@ export const GrownAtStatus = (creature: Creature): string => {
     return sts.join(' ');
   }
   return 'Only appear as adults.';
-};
+}
 
 /**
  * Returns a string describing the active time from tags
  *
  * @returns String describing the caste's active time
  */
-export const ActiveTimeStatus = (caste: Caste): string => {
+export function CasteActiveTimeStatus(caste: Caste): string {
   const strArr: string[] = [];
   if (caste.tags) {
     if (caste.tags.indexOf('ActiveDiurnal') !== -1) {
@@ -222,7 +201,7 @@ export const ActiveTimeStatus = (caste: Caste): string => {
     default:
       return `Active ${strArr.slice(0, -1).join(', ')}, and ${strArr.slice(-1)}.`;
   }
-};
+}
 
 /**
  * Returns a string describing the active seasons represented by the caste tags.
@@ -230,20 +209,24 @@ export const ActiveTimeStatus = (caste: Caste): string => {
  *
  * @returns String describing the caste's active seasons
  */
-export const NoSeasonStatus = (caste: Caste): string => {
-  const strArr: string[] = [];
+export function CasteSeasonActivity(caste: Caste): string {
+  const strArr: string[] = ['spring', 'summer', 'autumn', 'winter'];
   if (caste.tags) {
     if (caste.tags.indexOf('NoSpring') !== -1) {
-      strArr.push('in spring');
+      // Remove spring from the list without the index
+      strArr.splice(strArr.indexOf('spring'), 1);
     }
     if (caste.tags.indexOf('NoSummer') !== -1) {
-      strArr.push('in summer');
+      // Remove summer from the list
+      strArr.splice(strArr.indexOf('summer'), 1);
     }
     if (caste.tags.indexOf('NoFall') !== -1) {
-      strArr.push('in autumn');
+      // Remove fall from the list
+      strArr.splice(strArr.indexOf('autumn'), 1);
     }
     if (caste.tags.indexOf('NoWinter') !== -1) {
-      strArr.push('in winter');
+      // Remove winter from the list
+      strArr.splice(strArr.indexOf('winter'), 1);
     }
   }
 
@@ -257,7 +240,7 @@ export const NoSeasonStatus = (caste: Caste): string => {
     default:
       return `Active during ${strArr.slice(0, -1).join(', ')}, and ${strArr.slice(-1)}.`;
   }
-};
+}
 
 /**
  * Returns a string describing the trainability
@@ -267,7 +250,7 @@ export const NoSeasonStatus = (caste: Caste): string => {
  *
  * @returns String describing the caste's trainability
  */
-export const TrainableStatus = (caste: Caste): string => {
+export function CasteTrainableStatus(caste: Caste): string {
   const strArr: string[] = [];
   if (caste.tags) {
     if (caste.tags.indexOf('TrainableHunting') !== -1) {
@@ -285,37 +268,81 @@ export const TrainableStatus = (caste: Caste): string => {
     return `Trainable for ${strArr.join(' and ')}.`;
   }
   return 'Not trainable.';
-};
+}
 
-export const PopulationNumberStatus = (creature: Creature): string => {
+/**
+ * Determines the population status of a creature and returns a sentence describing how they appear
+ * in the world.
+ *
+ * @param creature - The `creature` to get the population status for.
+ * @returns a string that describes the population status of a creature.
+ */
+export function PopulationNumberStatus(creature: Creature): string {
   let descriptor = 'alone.';
   if (creature.populationNumber && creature.populationNumber[0] !== creature.populationNumber[1]) {
     descriptor = `in groups of ${creature.populationNumber[0]} to ${creature.populationNumber[1]}.`;
   }
   return `They live in the world ${descriptor}`;
-};
+}
 
-export const IsFlier = (creature: Creature): boolean => {
+/**
+ * The function determines if a creature is a flier based on its caste tags.
+ *
+ * @param creature - The `creature` to get the flier status for.
+ * @returns true if the creature is a flier.
+ */
+export function IsFlier(creature: Creature): boolean {
   return HasCasteTag(creature, 'Flier');
-};
+}
 
-export const HasIntelligence = (creature: Creature): boolean => {
+/**
+ * The function determines if a creature has intelligence based on its caste tags.
+ *
+ * @param creature - The `creature` to get the intelligence status for.
+ * @returns true if the creature is a flier.
+ */
+export function HasIntelligence(creature: Creature): boolean {
   return HasCasteTag(creature, 'Intelligent');
-};
+}
 
-export const CanLearn = (creature: Creature): boolean => {
+/**
+ * Determines whether a creature can learn.
+ *
+ * @param creature - The creature to check.
+ * @returns True if the creature can learn, false otherwise.
+ */
+export function CanLearn(creature: Creature): boolean {
   return HasCasteTag(creature, 'CanLearn');
-};
+}
 
-export const CanSpeak = (creature: Creature): boolean => {
+/**
+ * Determines whether a creature can speak.
+ *
+ * @param creature - The creature to check.
+ * @returns True if the creature can speak, false otherwise.
+ */
+export function CanSpeak(creature: Creature): boolean {
   return HasCasteTag(creature, 'CanSpeak');
-};
+}
 
-export const IsGnawer = (creature: Creature): boolean => {
+/**
+ * Determines whether a creature is a gnawer
+ *
+ * @param creature - The creature to check.
+ * @returns True if the creature gnaws cages, false otherwise.
+ */
+export function IsGnawer(creature: Creature): boolean {
   return HasCasteTag(creature, 'Gnawer');
-};
+}
 
-export const HasCasteTag = (creature: Creature, tag: CasteTag): boolean => {
+/**
+ * The function checks if a creature has a specific caste tag.
+ *
+ * @param creature - The `creature` to check for a caste tag in
+ * @param tag - The `CasteTag` to check for
+ * @returns true if the tag exists on a caste of the creature.
+ */
+export function HasCasteTag(creature: Creature, tag: CasteTag): boolean {
   if (!Array.isArray(creature.castes)) {
     return false;
   }
@@ -325,16 +352,15 @@ export const HasCasteTag = (creature: Creature, tag: CasteTag): boolean => {
     }
   }
   return false;
-};
+}
 
-export const FormatName = (name: Name | SingPlurName): string => {
-  if (typeof name === 'undefined') {
-    return 'Unknown';
-  }
-  return toTitleCase(name.singular);
-};
-
-export const FormatDescription = (creature: Creature): string => {
+/**
+ * Combines the descriptions of all castes into a single string.
+ *
+ * @param creature - Creature to get the description for.
+ * @returns A string containing the description of all castes.
+ */
+export function FormatDescription(creature: Creature): string {
   const strArr: string[] = [];
   if (Array.isArray(creature.castes)) {
     for (const caste of creature.castes) {
@@ -347,7 +373,7 @@ export const FormatDescription = (creature: Creature): string => {
     return 'No description available.';
   }
   return strArr.join(' ');
-};
+}
 
 /**
  * Returns a short description of the creature's pet value.
@@ -355,7 +381,7 @@ export const FormatDescription = (creature: Creature): string => {
  * @param creature - Creature to get the pet value for.
  * @returns Text to describe the pet value of the creature.
  */
-export const PetValueStatus = (creature: Creature): string => {
+export function PetValueStatus(creature: Creature): string {
   const ret: string[] = [];
   if (Array.isArray(creature.castes)) {
     for (const caste of creature.castes) {
@@ -370,9 +396,15 @@ export const PetValueStatus = (creature: Creature): string => {
     return 'No pet value.';
   }
   return ret.join(' ');
-};
+}
 
-export const CondensedEggSize = (creature: Creature): string => {
+/**
+ * Returns a short description of the creature's egg sizes
+ *
+ * @param creature - Creature to get the egg sizes for
+ * @returns Text to describe the egg sizes of the creature
+ */
+export function CondensedEggSize(creature: Creature): string {
   const ret: string[] = [];
   if (Array.isArray(creature.castes)) {
     for (const caste of creature.castes) {
@@ -385,9 +417,15 @@ export const CondensedEggSize = (creature: Creature): string => {
     return '';
   }
   return ret.join(' ');
-};
+}
 
-export const CreatureIntelligenceSummary = (creature: Creature): string => {
+/**
+ * Get a summary of the creature's intelligence
+ *
+ * @param creature - Creature to get the intelligence summary for
+ * @returns string describing the creature's intelligence
+ */
+export function CreatureIntelligenceSummary(creature: Creature): string {
   const ret: string[] = [];
 
   if (Array.isArray(creature.castes)) {
@@ -408,47 +446,7 @@ export const CreatureIntelligenceSummary = (creature: Creature): string => {
     return '';
   }
   return ret.join(' and ');
-};
-
-/**
- * Returns an array of search terms that describe the creature.
- *
- * @param creature - Creature to create search terms for
- * @returns An array of strings that can be used to describe the creature
- */
-export const GenerateCreatureSearchString = (creature: Creature): string => {
-  let searchableTerms = [
-    SearchableNames(creature),
-    IsEggLayer(creature) ? `eggs ${CondensedEggSize(creature)}` : '',
-    FirstPetValue(creature) > 0 ? `pet value ${FirstPetValue(creature)}` : '',
-    FirstDifficulty(creature) > 0 ? `difficulty ${FirstDifficulty(creature)}` : '',
-    CreatureIntelligenceSummary(creature),
-  ];
-
-  if (creature.tags) {
-    searchableTerms.push(creature.tags.indexOf('LocalPopsProduceHeroes') === -1 ? '' : 'playable');
-    searchableTerms.push(creature.tags.indexOf('LocalPopsControllable') === -1 ? '' : 'civilized');
-  }
-
-  if (Array.isArray(creature.castes)) {
-    searchableTerms.push(Object.values(creature.castes.map((v) => v.description)).join(' '));
-    searchableTerms.push(Object.values(creature.castes.map((v) => v.tags)).join(' '));
-  }
-
-  searchableTerms = searchableTerms.concat(creature.tags);
-  searchableTerms = searchableTerms.concat(creature.prefStrings);
-
-  return TransformIntoSearchTermString(searchableTerms);
-};
-
-const DepthRanges = [
-  'Aboveground',
-  '1st Cavern Layer',
-  '2nd Cavern Layer',
-  '3rd Cavern Layer',
-  'Magma Sea Layer',
-  'HFS',
-];
+}
 
 /**
  * Turn the UNDERGROUND_DEPTH tag into a string description
@@ -456,12 +454,14 @@ const DepthRanges = [
  * @param depth_range - [min,max] UNDERGROUND_DEPTH tag values
  * @returns string describing what depths they are found at
  */
-export const UndergroundDepthDescription = (depth_range: number[]): string => {
-  return 'TODO';
+export function UndergroundDepthDescription(depth_range: number[]): string {
+  if (typeof depth_range === 'undefined' || !Array.isArray(depth_range) || depth_range.length !== 2) {
+    return '';
+  }
   const topLevel = depth_range[0];
   const bottomLevel = depth_range[1];
   if (topLevel === bottomLevel) {
     return DepthRanges[topLevel];
   }
   return `${DepthRanges[topLevel]} to ${DepthRanges[bottomLevel]}`;
-};
+}

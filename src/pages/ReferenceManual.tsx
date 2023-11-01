@@ -1,18 +1,19 @@
-import { Component, Show, createMemo } from 'solid-js';
+import { JSX, Show, createMemo } from 'solid-js';
 import DFDirectoryNotSet from '../components/DFDirectoryNotSet';
 import Listings from '../components/Listings';
 import LoadingRawsProgress from '../components/LoadingRawsProgress';
 import ParsingProgressBar from '../components/ParsingProgressBar';
 import FilterButton from '../components/filtering/FilterButton';
-import { DIR_NONE, useDirectoryProvider } from '../providers/DirectoryProvider';
-import { STS_EMPTY, STS_IDLE, useRawsProvider } from '../providers/RawsProvider';
+import { STS_EMPTY, STS_IDLE } from '../lib/Constants';
+import { useDirectoryProvider } from '../providers/DirectoryProvider';
+import { useRawsProvider } from '../providers/RawsProvider';
 
-const ReferenceManual: Component = () => {
+function ReferenceManual(): JSX.Element {
   const rawsContext = useRawsProvider();
   const directoryContext = useDirectoryProvider();
   // Helper boolean to know when to display the page or not
   const contentToDisplay = createMemo(() => {
-    return rawsContext.parsingStatus() === STS_IDLE && directoryContext.currentDirectory().type !== DIR_NONE;
+    return rawsContext.parsingStatus() === STS_IDLE && directoryContext.currentDirectory().path.length > 0;
   });
   return (
     <div class='px-2 main'>
@@ -29,6 +30,6 @@ const ReferenceManual: Component = () => {
       </Show>
     </div>
   );
-};
+}
 
 export default ReferenceManual;

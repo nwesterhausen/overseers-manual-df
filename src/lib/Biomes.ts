@@ -1,6 +1,13 @@
 import { Biome } from '../definitions/Biome';
-
+// BiomeItem is used for the Combobox component which is used to select biomes.
 export type BiomeItem = { value: Biome; label: string; disabled: boolean };
+
+// This is just hardcoded biome information. Value corresponds to the string token
+// which would be in the raws as part of the biome tag (e.g. `[BIOME:MOUNTAIN]`).
+// The value is not an exact match for the raws, because the backend has already
+// parsed and "cleaned up" the token.
+// The label is the human-readable name for the biome, and the disabled flag will
+// disable the biome in the Combobox component.
 export const BIOMES: BiomeItem[] = [
   { disabled: false, value: 'Mountain', label: 'Mountain' },
   { disabled: false, value: 'Mountains', label: 'Mountains' },

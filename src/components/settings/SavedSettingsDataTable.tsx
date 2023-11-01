@@ -14,6 +14,11 @@ const SavedSettingsDataTable: Component = () => {
         </tr>
       </thead>
       <tbody>
+        {/* Data Version */}
+        <tr>
+          <td>dataVersion</td>
+          <td>{settings.dataVersion}</td>
+        </tr>
         {/* Directory Path */}
         <tr>
           <td>directoryPath</td>
@@ -49,10 +54,35 @@ const SavedSettingsDataTable: Component = () => {
           <td>includeObjectTypes</td>
           <td>{settings.includeObjectTypes.join(', ')}</td>
         </tr>
+        {/* Filter Biomes */}
+        <tr>
+          <td>includeBiomes</td>
+          <td>{settings.includeBiomes.length === 0 ? 'All' : settings.includeBiomes.join(', ')}</td>
+        </tr>
+        {/* Filter Modules */}
+        <tr>
+          <td>includeModules</td>
+          <td>{settings.includeModules.length === 0 ? 'All' : settings.includeModules.join(', ')}</td>
+        </tr>
         {/* Results Per Page */}
         <tr>
           <td>resultsPerPage</td>
           <td>{settings.resultsPerPage}</td>
+        </tr>
+        {/* Current Page */}
+        <tr>
+          <td>currentPage</td>
+          <td>{settings.currentPage}</td>
+        </tr>
+        {/* Total Pages */}
+        <tr>
+          <td>totalPages</td>
+          <td>{settings.totalPages}</td>
+        </tr>
+        {/* Total Results */}
+        <tr>
+          <td>totalResults</td>
+          <td>{settings.totalResults}</td>
         </tr>
       </tbody>
     </table>

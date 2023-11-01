@@ -33,7 +33,7 @@
     "@solid-primitives/scheduled": "^1.4.1",
     "@tailwindcss/typography": "^0.5.10",
     "@tauri-apps/cli": "2.0.0-alpha.17",
-    "@types/node": "^20.8.9",
+    "@types/node": "^20.8.10",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.9.1",
     "autoprefixer": "^10.4.16",
@@ -54,6 +54,7 @@
     "vite-plugin-solid": "^2.7.2"
   },
   "dependencies": {
+    "@aptabase/tauri": "^0.4.1",
     "@solidjs/router": "^0.8.3",
     "@tauri-apps/api": "2.0.0-alpha.11",
     "@tauri-apps/plugin-dialog": "github:tauri-apps/tauri-plugin-dialog#v2",

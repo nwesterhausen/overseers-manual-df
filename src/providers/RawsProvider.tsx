@@ -1,13 +1,33 @@
+/**
+ * RawsProvider is a context provider that handles loading (and parsing) raws and exposing
+ * them to the rest of the application.
+ *
+ * It relies on the SearchProvider to get the search options.
+ *
+ * It also relies on the SettingsProvider to get the directory path and the parsing options.
+ * Settings also provides the number of results per page and the current page.
+ */
 import { createContextProvider } from '@solid-primitives/context';
 import { invoke } from '@tauri-apps/api/primitives';
 import { getCurrent } from '@tauri-apps/api/window';
-import { createEffect, createMemo, createResource, createSignal } from 'solid-js';
+import { createEffect, createResource, createSignal } from 'solid-js';
 import { ModuleInfoFile } from '../definitions/ModuleInfoFile';
 import { ObjectType } from '../definitions/ObjectType';
 import { ParserOptions } from '../definitions/ParserOptions';
 import { ProgressPayload } from '../definitions/ProgressPayload';
 import { SearchResults } from '../definitions/SearchResults';
-import { DIR_NONE, useDirectoryProvider } from './DirectoryProvider';
+import {
+  COMMAND_PARSE_AND_STORE_RAWS,
+  COMMAND_PARSE_RAWS_INFO,
+  COMMAND_SEARCH_RAWS,
+  DEFAULT_PARSING_STATUS,
+  DEFAULT_SEARCH_RESULT,
+  PARSING_PROGRESS_EVENT,
+  STS_EMPTY,
+  STS_IDLE,
+  STS_LOADING,
+  STS_PARSING,
+} from '../lib/Constants';
 import { useSearchProvider } from './SearchProvider';
 import { useSettingsContext } from './SettingsProvider';
 
@@ -16,40 +36,28 @@ import { useSettingsContext } from './SettingsProvider';
 // - [ ] Update our parse raws resource to execute the search_raws functions
 // - [ ] Update the calls that require raws to be reloaded (change types/locations/etc)
 
-// Statuses for the parsing status
-export const STS_PARSING = 'Parsing Raws',
-  STS_LOADING = 'Loading Raws',
-  STS_IDLE = 'Idle',
-  STS_EMPTY = 'Idle/No Raws';
-
-const emptySearchResults: SearchResults = {
-  results: [],
-  totalPages: 1,
-  totalResults: 0,
-};
-const emptyParsingStatus: ProgressPayload = {
-  currentModule: '',
-  currentFile: '',
-  currentLocation: '',
-  currentTask: '',
-  percentage: 0.0,
-  runningTotal: 0,
-};
-
 export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
+  /**
+   * The current window (used for listening to events)
+   */
   const appWindow = getCurrent();
 
-  const directoryContext = useDirectoryProvider();
+  // Load the various contexts we need
   const searchContext = useSearchProvider();
-  const [settings, { setCurrentResultsPage }] = useSettingsContext();
+  const [settings, { setTotalResults, resetPage }] = useSettingsContext();
 
   // Signal for setting raw parse status
+  // This signal is exposed and is used in many components to affect how they render
   const [parsingStatus, setParsingStatus] = createSignal(STS_IDLE);
 
   // Signal for loading raws
   const [loadRaws, setLoadRaws] = createSignal(false);
 
-  // Resource for raws (actually loads raws into the search database)
+  // This effect is responsible for telling the backend to parse the raws. It will go off
+  // whenever the loadRaws signal is set to true. It will also reset the page to 1 and clear
+  // the search string.
+  // When the raws are done parsing, it will set the loadRaws signal to false, which will
+  // enable it to be triggered again.
   createEffect(async () => {
     if (loadRaws()) {
       resetPage();
@@ -58,66 +66,27 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       setLoadRaws(false);
     }
   });
-  // The actual raws resource (what's displayed on the page)
+
+  // The resource for raws which is exposed to the rest of the application.
   const [searchResults, { refetch }] = createResource(searchContext.searchOptions, updateDisplayedRaws, {
     name: 'pageOfParsedRaws',
-    initialValue: emptySearchResults,
+    initialValue: DEFAULT_SEARCH_RESULT,
   });
 
-  const nextPage = () => {
-    if (settings.currentPage >= searchResults.latest.totalPages) {
-      setCurrentResultsPage(searchResults.latest.totalPages);
-    } else {
-      setCurrentResultsPage(settings.currentPage + 1);
-    }
-  };
-  const prevPage = () => {
-    if (settings.currentPage < 1) {
-      setCurrentResultsPage(1);
-    } else {
-      setCurrentResultsPage(settings.currentPage - 1);
-    }
-  };
-  const gotoPage = (page: number) => {
-    if (page > searchResults.latest.totalPages) {
-      if (searchResults.latest.totalPages === 0) {
-        setCurrentResultsPage(1);
-      } else {
-        setCurrentResultsPage(searchResults.latest.totalPages);
-      }
-    } else if (page <= 0) {
-      setCurrentResultsPage(1);
-    } else {
-      setCurrentResultsPage(page);
-    }
-  };
-  createEffect(() => {
-    console.log(`Traveling to page ${settings.currentPage}`);
-  });
-
+  // Signal to update the raw module info files data
   const [updateRawsInfo, setUpdateRawsInfo] = createSignal(false);
-  // Resource for raws info files
-  const [allRawsInfosJsonArray] = createResource(updateRawsInfo, parseRawsInfo, {
+  // Resource for raws' modules info.txt files (as restricted by the search options)
+  const [rawModulesInfo] = createResource(updateRawsInfo, parseRawsInfo, {
     initialValue: [],
   });
 
-  const rawModules = createMemo(() => {
-    const modules = [...new Set(allRawsInfosJsonArray.latest.map((v) => v.identifier))];
-    return modules.sort((a, b) => {
-      const nameA = allRawsInfosJsonArray.latest.find((v) => v.identifier === a) || { name: a };
-      const nameB = allRawsInfosJsonArray.latest.find((v) => v.identifier === b) || { name: b };
-
-      return nameA.name.toLowerCase() < nameB.name.toLowerCase() ? -1 : 1;
-    });
-  });
-
   // Signal for raw parsing progress
-  const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>(emptyParsingStatus);
+  const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>(DEFAULT_PARSING_STATUS);
 
   // Listen to window events from Tauri
   appWindow
     .listen(
-      'PROGRESS',
+      PARSING_PROGRESS_EVENT,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ({ event, payload }) => {
         const progress = payload as ProgressPayload;
@@ -126,13 +95,9 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       },
     )
     .then(() => {
-      console.log('Listening for progress updates from backend.');
+      console.log('✓ Listening for progress updates from backend.');
     })
     .catch(console.error);
-
-  const resetPage = () => {
-    setCurrentResultsPage(1);
-  };
 
   createEffect(() => {
     if (settings.directoryPath !== '') {
@@ -140,10 +105,15 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       resetPage();
     } else {
       setParsingStatus(STS_EMPTY);
-      setParsingProgress(emptyParsingStatus);
+      setParsingProgress(DEFAULT_PARSING_STATUS);
     }
   });
 
+  /**
+   * Function which tells the backend to parse the raws.
+   *
+   * @returns A promise which resolves when the raws are done parsing
+   */
   async function parseRaws(): Promise<void> {
     // Don't parse when empty directory
     if (settings.directoryPath === '') {
@@ -192,7 +162,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       }
 
       // Have the backend parse the raws
-      await invoke('parse_and_store_raws', {
+      await invoke(COMMAND_PARSE_AND_STORE_RAWS, {
         options: parsingOptions,
       });
 
@@ -206,7 +176,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       await new Promise((resolve) => setTimeout(resolve, 1));
 
       // Update parsing status (reset it)
-      setParsingProgress(emptyParsingStatus);
+      setParsingProgress(DEFAULT_PARSING_STATUS);
       setParsingStatus(STS_IDLE);
 
       // Update the search results
@@ -215,23 +185,31 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       setUpdateRawsInfo(true);
     } catch (e) {
       console.error(e);
-      setParsingProgress(emptyParsingStatus);
+      setParsingProgress(DEFAULT_PARSING_STATUS);
       setParsingStatus(STS_EMPTY);
     }
   }
 
+  /**
+   * Get raws from the backend and update the total results. This executes a search.
+   *
+   * @returns The search results
+   */
   async function updateDisplayedRaws(): Promise<SearchResults> {
     // Get the raws that we care about (page 1 basically)
-    const results = (await invoke('search_raws', {
+    const results = (await invoke(COMMAND_SEARCH_RAWS, {
       window: appWindow,
       searchOptions: searchContext.searchOptions(),
     })) as SearchResults;
-    if (results.totalPages < settings.currentPage) {
-      setCurrentResultsPage(results.totalPages);
-    }
+    setTotalResults(results.totalResults);
     return results;
   }
 
+  /**
+   * Parse the raws' modules info.txt files (as restricted by the search options)
+   *
+   * @returns The raws' modules info.txt files data
+   */
   async function parseRawsInfo(): Promise<ModuleInfoFile[]> {
     // Don't parse when empty directory
     if (settings.directoryPath === '') {
@@ -262,7 +240,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     };
 
     try {
-      const raw_file_data: ModuleInfoFile[] = await invoke('parse_raws_info', {
+      const raw_file_data: ModuleInfoFile[] = await invoke(COMMAND_PARSE_RAWS_INFO, {
         options: parsingOptions,
       });
 
@@ -284,7 +262,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   // We can check if the directory is valid and if so, load the raws
   createEffect(() => {
-    if (directoryContext.currentDirectory().type !== DIR_NONE) {
+    if (settings.directoryPath.length > 0) {
       setLoadRaws(true);
     }
   });
@@ -293,11 +271,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     parsingStatus,
     setLoadRaws,
     parsingProgress,
-    rawModulesInfo: allRawsInfosJsonArray,
-    rawModules,
-    nextPage,
-    prevPage,
-    gotoPage,
+    rawModulesInfo,
     parsedRaws: searchResults,
   };
 });
