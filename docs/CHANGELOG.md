@@ -1,3 +1,10 @@
+## [0.28.7](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.6...v0.28.7) (2023-11-02)
+
+
+### Bug Fixes
+
+* improve update ux ([7f7e290](https://github.com/nwesterhausen/overseers-manual-df/commit/7f7e290a5eee57304eb54f4a4c2cc3caf2df3427))
+
 ## [0.28.6](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.5...v0.28.6) (2023-11-02)
 
 
