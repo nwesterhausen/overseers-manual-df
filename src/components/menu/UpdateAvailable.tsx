@@ -1,15 +1,19 @@
 import { useNavigate } from '@solidjs/router';
-import { Update, check } from '@tauri-apps/plugin-updater';
 import { BiRegularDownload } from 'solid-icons/bi';
-import { Component, Show, createSignal } from 'solid-js';
+import { Component, Show } from 'solid-js';
+import { useUpdateProvider } from '../../providers/UpdateProvider';
 
 const UpdateAvailable: Component = () => {
-  const [updater, setUpdater] = createSignal<Update | null>(null);
-  check().then(setUpdater).catch(console.error);
+  const updateContext = useUpdateProvider();
   const navigate = useNavigate();
+
   return (
-    <Show when={updater()}>
-      <div class='tooltip tooltip-left' data-tip={`Update Available: Version ${updater().version}`}>
+    <Show
+      when={
+        updateContext.update.latest.version !== updateContext.update.latest.currentVersion &&
+        !updateContext.skipUpdate()
+      }>
+      <div class='tooltip tooltip-left' data-tip={`Update Available: Version ${updateContext.update.latest.version}`}>
         <button
           class='btn btn-sm btn-ghost btn-circle hover:text-accent'
           onClick={async () => {
