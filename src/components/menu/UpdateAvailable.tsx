@@ -8,12 +8,8 @@ const UpdateAvailable: Component = () => {
   const navigate = useNavigate();
 
   return (
-    <Show
-      when={
-        updateContext.update.latest.version !== updateContext.update.latest.currentVersion &&
-        updateContext.updateSkipped() === false
-      }>
-      <div class='tooltip tooltip-left' data-tip={`Update Available: Version ${updateContext.update.latest.version}`}>
+    <Show when={updateContext.updateAvailable()}>
+      <div class='tooltip tooltip-left' data-tip={`Update Available: Version ${updateContext.updateVersion()}`}>
         <button
           class='btn btn-sm btn-ghost btn-circle hover:text-accent'
           onClick={async () => {

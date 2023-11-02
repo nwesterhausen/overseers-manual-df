@@ -1,6 +1,8 @@
 import { createContextProvider } from '@solid-primitives/context';
+import { invoke } from '@tauri-apps/api/primitives';
+import { relaunch } from '@tauri-apps/plugin-process';
 import { check } from '@tauri-apps/plugin-updater';
-import { createResource, createSignal } from 'solid-js';
+import { createMemo, createResource, createSignal } from 'solid-js';
 import { NO_UPDATE } from '../lib/Constants';
 
 export const [UpdateProvider, useUpdateProvider] = createContextProvider(() => {
@@ -27,13 +29,42 @@ export const [UpdateProvider, useUpdateProvider] = createContextProvider(() => {
   }
 
   function skipUpdate() {
+    invoke('plugin:aptabase|track_event', {
+      name: 'skip_update',
+      props: {
+        to_version: update.latest.version,
+        current_version: update.latest.currentVersion,
+      },
+    });
     setUpdateSkipped(true);
   }
 
+  const updateAvailable = createMemo(() => {
+    return (
+      update.latest.version !== update.latest.currentVersion &&
+      update.latest.version !== NO_UPDATE.version &&
+      updateSkipped() === false
+    );
+  });
+
+  async function applyUpdate() {
+    if (updateAvailable()) {
+      invoke('plugin:aptabase|track_event', { name: 'apply_update', props: { to_version: update.latest.version } });
+      await update.latest.downloadAndInstall();
+      await relaunch();
+    }
+  }
+
+  const updateVersion = createMemo(() => update.latest.version);
+  const updateDetails = createMemo(() => update.latest.body.trim());
+
   return {
-    update,
+    updateVersion,
+    updateDetails,
+    updateAvailable,
     checkForUpdates,
     skipUpdate,
     updateSkipped,
+    applyUpdate,
   };
 });
