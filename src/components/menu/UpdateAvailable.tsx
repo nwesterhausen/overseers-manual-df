@@ -11,7 +11,7 @@ const UpdateAvailable: Component = () => {
     <Show
       when={
         updateContext.update.latest.version !== updateContext.update.latest.currentVersion &&
-        !updateContext.skipUpdate()
+        updateContext.updateSkipped() === false
       }>
       <div class='tooltip tooltip-left' data-tip={`Update Available: Version ${updateContext.update.latest.version}`}>
         <button
