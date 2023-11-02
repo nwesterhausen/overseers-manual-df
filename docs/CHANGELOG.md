@@ -1,3 +1,10 @@
+## [0.28.6](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.5...v0.28.6) (2023-11-02)
+
+
+### Bug Fixes
+
+* stop update indicator from not showing ([7c449c4](https://github.com/nwesterhausen/overseers-manual-df/commit/7c449c4fc269566fdc8b9737501f2ada427cb13f))
+
 ## [0.28.5](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.4...v0.28.5) (2023-11-02)
 
 
