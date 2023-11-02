@@ -9,6 +9,7 @@ import { SearchProvider } from './providers/SearchProvider';
 import { SettingsProvider } from './providers/SettingsProvider';
 
 import { attachConsole } from '@tauri-apps/plugin-log';
+import { UpdateProvider } from './providers/UpdateProvider';
 
 // Attach our console to the tauri logs
 attachConsole().catch(console.error);
@@ -19,7 +20,9 @@ render(
       <SettingsProvider>
         <SearchProvider>
           <RawsProvider>
-            <App />
+            <UpdateProvider>
+              <App />
+            </UpdateProvider>
           </RawsProvider>
         </SearchProvider>
       </SettingsProvider>
