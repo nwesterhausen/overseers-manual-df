@@ -13,12 +13,12 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: latest
-      - name: setup node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: pnpm
-      - name: process semantic-release
+      - name: Process Semantic-release
         id: get-next-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -29,9 +29,31 @@ jobs:
     outputs:
       new-release-published: ${{ steps.get-next-version.outputs.new-release-published }}
       new-release-version: ${{ steps.get-next-version.outputs.new-release-version }}
-  
+  pnpm-cache-update:
+    name: 'Update Windows & MacOS pnpm Cache'
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Install dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install
   publish-tauri:
-    needs: semantic-release
+    needs:
+      - semantic-release
+      - pnpm-cache-update
     if: needs.semantic-release.outputs.new-release-published == 'true'
     name: 'Publish Tauri App'
     strategy:
@@ -45,7 +67,7 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: latest
-      - name: setup node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -60,7 +82,7 @@ jobs:
           touch src-tauri/.env
           echo APTABASE_KEY=${{ secrets.APTABASE_KEY }} >> src-tauri/.env
 
-      - name: Install dependencies (ubuntu only)
+      - name: Install Dependencies (Ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
         # You can remove libayatana-appindicator3-dev if you don't use the system tray feature.
         run: |
@@ -78,16 +100,16 @@ jobs:
               libsoup-3.0 \
               webkit2gtk-4.1
 
-      - name: Rust setup
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
-      - name: Rust cache
+      - name: Cache Rust
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './src-tauri -> target'
           cache-on-failure: true
           shared-key: tauri
 
-      - name: Install app dependencies and build web
+      - name: Install Dependencies and Build
         run: |
           pnpm install
           pnpm build
