@@ -56,3 +56,28 @@ pub struct ParseAndStoreRaws {
     /// "[\"Vanilla\",\"InstalledMods\"]"
     pub parsed_raw_locations: String,
 }
+
+/// Update Skipped
+///
+/// Tracked data is whether the update is skipped by the end user, and the versions involved.
+pub struct SkipUpdate {
+    pub current_version: String,
+    pub to_version: String,
+}
+
+/// Apply Update
+///
+/// Tracked data is the versions involved.
+pub struct ApplyUpdate {
+    pub to_version: String,
+}
+
+/// App Launch
+///
+/// No data is collected, just the event.
+pub struct AppStarted {}
+
+/// App Exit
+///
+/// No data is collected, just the event.
+pub struct AppExited {}
