@@ -30,7 +30,7 @@ jobs:
       new-release-published: ${{ steps.get-next-version.outputs.new-release-published }}
       new-release-version: ${{ steps.get-next-version.outputs.new-release-version }}
   pnpm-cache-update:
-    name: 'Update Windows & MacOS pnpm Cache'
+    name: 'Refresh ${{ matrix.platform }} pnpm Cache'
     strategy:
       fail-fast: false
       matrix:
