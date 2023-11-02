@@ -1,5 +1,5 @@
-import { trackEvent } from '@aptabase/tauri';
 import { useNavigate } from '@solidjs/router';
+import { invoke } from '@tauri-apps/api/primitives';
 import { relaunch } from '@tauri-apps/plugin-process';
 import { JSX, Show } from 'solid-js';
 import { useUpdateProvider } from '../providers/UpdateProvider';
@@ -27,7 +27,13 @@ function UpdateDetails(): JSX.Element {
         <button
           class='btn btn-secondary'
           onClick={() => {
-            trackEvent('skip_update', { version: updateContext.update.latest.version });
+            invoke('plugin:aptabase|track_event', {
+              name: 'skip_update',
+              props: {
+                latestVersion: updateContext.update.latest.version,
+                currentVersion: updateContext.update.latest.currentVersion,
+              },
+            });
             updateContext.skipUpdate();
             navigate('/');
           }}>

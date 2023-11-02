@@ -8,7 +8,10 @@ export const [UpdateProvider, useUpdateProvider] = createContextProvider(() => {
   const [update, { refetch }] = createResource(
     async () => {
       const status = await check();
-      if (status) return status;
+      if (typeof status !== 'undefined' && status !== null) {
+        console.log(`⁂ Update Available: ${status.currentVersion} → ${status.version} ⁂`);
+        return status;
+      }
       return NO_UPDATE;
     },
     {
@@ -23,10 +26,14 @@ export const [UpdateProvider, useUpdateProvider] = createContextProvider(() => {
     refetch();
   }
 
+  function skipUpdate() {
+    setUpdateSkipped(true);
+  }
+
   return {
     update,
     checkForUpdates,
-    skipUpdate: () => setUpdateSkipped(true),
+    skipUpdate,
     updateSkipped,
   };
 });
