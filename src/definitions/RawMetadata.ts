@@ -9,4 +9,5 @@ export interface RawMetadata {
   rawIdentifier: string;
   objectType: ObjectType;
   rawModuleLocation: RawModuleLocation;
+  moduleObjectId: string;
 }

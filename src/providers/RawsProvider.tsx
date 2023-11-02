@@ -30,19 +30,16 @@ import {
 import { useSearchProvider } from './SearchProvider';
 import { useSettingsContext } from './SettingsProvider';
 
-// TODO:
-// - [ ] Setup a separate "resource" that tells the backend to parse the raws
-// - [ ] Update our parse raws resource to execute the search_raws functions
-// - [ ] Update the calls that require raws to be reloaded (change types/locations/etc)
-
 export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   /**
    * The current window (used for listening to events)
    */
   const appWindow = getCurrent();
 
-  // Load the various contexts we need
+  // Search context provides the compiled search options
   const searchContext = useSearchProvider();
+  // Settings context provides the directory path and the parsing options
+  // We reset page when we parse the raws
   const [settings, { setTotalResults, resetPage }] = useSettingsContext();
 
   // Signal for setting raw parse status
@@ -114,16 +111,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     })
     .catch(console.error);
 
-  createEffect(() => {
-    if (settings.directoryPath !== '') {
-      setLoadRaws(true);
-      resetPage();
-    } else {
-      setParsingStatus(STS_EMPTY);
-      setParsingProgress(DEFAULT_PARSING_STATUS);
-    }
-  });
-
   /**
    * Function which tells the backend to parse the raws.
    *
@@ -162,7 +149,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         skipApplyCreatureVariations: false,
         rawsToParse: objectTypesToParse,
         locationsToParse: settings.parseLocations,
-        job: 'All',
+        job: 'AllModulesInLocations',
         serializeResultToJson: false,
         outputPath: '',
         outputToFile: false,
@@ -171,10 +158,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       // Shortcut the parsing if there are no locations to parse
       if (parsingOptions.locationsToParse.length === 0) {
         return;
-      }
-      // Update the job if there is only one location to parse
-      if (parsingOptions.locationsToParse.length === 1) {
-        parsingOptions.job = 'SingleLocation';
       }
 
       // Have the backend parse the raws
