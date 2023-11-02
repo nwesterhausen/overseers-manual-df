@@ -3,7 +3,6 @@
 export type ParsingJob =
   | "SingleRaw"
   | "SingleModule"
-  | "SingleLocation"
-  | "All"
+  | "AllModulesInLocations"
   | "SingleModuleInfoFile"
   | "AllModuleInfoFiles";

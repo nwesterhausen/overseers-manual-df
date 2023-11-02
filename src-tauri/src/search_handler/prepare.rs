@@ -103,11 +103,7 @@ pub fn parse_and_store_raws(
             "PROGRESS",
             ProgressPayload {
                 current_task: "PrepareLookups".to_string(),
-                percentage: 0.0,
-                current_module: String::new(),
-                current_file: String::new(),
-                current_location: String::new(),
-                running_total: 0,
+                ..Default::default()
             },
         )
         .unwrap_or_else(|err| {
