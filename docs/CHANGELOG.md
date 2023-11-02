@@ -1,3 +1,10 @@
+## [0.28.4](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.3...v0.28.4) (2023-11-02)
+
+
+### Bug Fixes
+
+* handle dfraw_json_parser lib change ([45f1ed2](https://github.com/nwesterhausen/overseers-manual-df/commit/45f1ed2042f30cc856824d0bf07321b8bf64d61a))
+
 ## [0.28.3](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.2...v0.28.3) (2023-11-01)
 
 
