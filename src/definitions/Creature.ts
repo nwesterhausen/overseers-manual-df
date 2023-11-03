@@ -2,14 +2,14 @@
 import type { Biome } from "./Biome";
 import type { Caste } from "./Caste";
 import type { CreatureTag } from "./CreatureTag";
+import type { Metadata } from "./Metadata";
 import type { Name } from "./Name";
-import type { RawMetadata } from "./RawMetadata";
 import type { SelectCreature } from "./SelectCreature";
 import type { SingPlurName } from "./SingPlurName";
 import type { Tile } from "./Tile";
 
 export interface Creature {
-  metadata: RawMetadata;
+  metadata: Metadata;
   identifier: string;
   castes: Array<Caste>;
   tags: Array<CreatureTag>;
