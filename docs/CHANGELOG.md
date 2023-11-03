@@ -1,3 +1,10 @@
+## [0.29.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.7...v0.29.0) (2023-11-03)
+
+
+### Features
+
+* improve plant details ([ecb387e](https://github.com/nwesterhausen/overseers-manual-df/commit/ecb387ec948cabde5b3de88225003ce2987ddfa2)), closes [#90](https://github.com/nwesterhausen/overseers-manual-df/issues/90)
+
 ## [0.28.7](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.6...v0.28.7) (2023-11-02)
 
 
