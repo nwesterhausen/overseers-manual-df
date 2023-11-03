@@ -2,15 +2,15 @@
 import type { Color } from "./Color";
 import type { FuelType } from "./FuelType";
 import type { MaterialMechanics } from "./MaterialMechanics";
-import type { MaterialType } from "./MaterialType";
-import type { MaterialUsage } from "./MaterialUsage";
 import type { StateName } from "./StateName";
 import type { Syndrome } from "./Syndrome";
 import type { Temperatures } from "./Temperatures";
 import type { Tile } from "./Tile";
+import type { Type } from "./Type";
+import type { Usage } from "./Usage";
 
 export interface Material {
-  materialType: MaterialType;
+  materialType: Type;
   name: string;
   fuelType: FuelType;
   creatureIdentifier: string;
@@ -19,7 +19,7 @@ export interface Material {
   reagentIdentifier: string;
   reactionProductIdentifier: string;
   templateIdentifier: string;
-  usage: Array<MaterialUsage>;
+  usage: Array<Usage>;
   value: number;
   color: Color;
   stateNames: StateName;

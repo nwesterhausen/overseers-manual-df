@@ -3,11 +3,11 @@ import type { EnvironmentClass } from "./EnvironmentClass";
 import type { InclusionType } from "./InclusionType";
 import type { InorganicToken } from "./InorganicToken";
 import type { Material } from "./Material";
-import type { RawMetadata } from "./RawMetadata";
+import type { Metadata } from "./Metadata";
 
 export interface Inorganic {
   identifier: string;
-  metadata: RawMetadata;
+  metadata: Metadata;
   objectId: string;
   material: Material;
   metalOreChance: Array<[string, number]>;
