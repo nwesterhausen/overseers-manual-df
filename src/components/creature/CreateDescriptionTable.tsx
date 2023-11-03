@@ -8,9 +8,8 @@ import {
   LifeExpectancyStatus,
   PetValueStatus,
   PopulationNumberStatus,
-  UndergroundDepthDescription,
 } from '../../lib/CreatureUtil';
-import { toTitleCase } from '../../lib/Utils';
+import { UndergroundDepthDescription, toTitleCase } from '../../lib/Utils';
 import CreatureActivityDisplay from './CreatureActivityDisplay';
 import CreatureBodySizeTable from './CreatureBodySizeTable';
 import CreatureGrazerTable from './CreatureGrazerTable';
