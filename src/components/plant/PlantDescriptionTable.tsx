@@ -2,7 +2,8 @@ import { invoke } from '@tauri-apps/api/primitives';
 import { Component, For, Show, createResource } from 'solid-js';
 import { Plant } from '../../definitions/Plant';
 import { COMMAND_GET_BIOME_DESCRIPTION } from '../../lib/Constants';
-import { UndergroundDepthDescription } from '../../lib/CreatureUtil';
+import { GetPlantProvidesList } from '../../lib/PlantUtil';
+import { UndergroundDepthDescription, toTitleCase } from '../../lib/Utils';
 
 const PlantDescriptionTable: Component<{ plant: Plant }> = (props) => {
   const [biomes] = createResource(
@@ -25,10 +26,10 @@ const PlantDescriptionTable: Component<{ plant: Plant }> = (props) => {
       <tbody>
         <tr>
           <th>Likeable Features</th>
-          <td>{props.plant.prefStrings ? props.plant.prefStrings.join(', ') : 'None'}</td>
+          <td>{props.plant.prefStrings ? props.plant.prefStrings.map((s) => toTitleCase(s)).join(', ') : 'None'}</td>
         </tr>
         <tr>
-          <th>Found In</th>
+          <th>Natural Habitat</th>
           <td>
             <Show when={biomes.latest.length > 0} fallback={<>No known biomes.</>}>
               <ul>
@@ -41,6 +42,20 @@ const PlantDescriptionTable: Component<{ plant: Plant }> = (props) => {
           <th>Inhabited Depth</th>
           <td>{UndergroundDepthDescription(props.plant.undergroundDepth)}</td>
         </tr>
+        <tr>
+          <th>Used for:</th>
+          <td>
+            {GetPlantProvidesList(props.plant)
+              .map((s) => toTitleCase(s))
+              .join(', ')}
+          </td>
+        </tr>
+        <Show when={props.plant.shrubDetails && Array.isArray(props.plant.shrubDetails.growingSeason)}>
+          <tr>
+            <th>Grows During</th>
+            <td>{props.plant.shrubDetails.growingSeason.join(', ')}</td>
+          </tr>
+        </Show>
       </tbody>
     </table>
   );

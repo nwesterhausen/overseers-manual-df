@@ -3,7 +3,7 @@ import { Material } from '../definitions/Material';
 import { Name } from '../definitions/Name';
 import { SingPlurName } from '../definitions/SingPlurName';
 import { StateName } from '../definitions/StateName';
-import { M3_to_CM3 } from './Constants';
+import { DepthRanges, M3_to_CM3 } from './Constants';
 import { GAME_TICKS_ADVENTURE, GAME_TICKS_FORTRESS, SpecificTickToCalendarConversion } from './GameTicks';
 
 /**
@@ -197,4 +197,32 @@ export function friendlyMaterialName(material: Material, plantName: string): str
     nameArr.push(material.name);
   }
   return toTitleCase(nameArr.join(' '));
+}
+
+/**
+ * Turn the UNDERGROUND_DEPTH tag into a string description
+ *
+ * @param depth_range - [min,max] UNDERGROUND_DEPTH tag values
+ * @returns string describing what depths they are found at
+ */
+export function UndergroundDepthDescription(depth_range: number[]): string {
+  if (typeof depth_range === 'undefined' || !Array.isArray(depth_range) || depth_range.length !== 2) {
+    // Undefined depth_range means it is the default value.
+    return 'Aboveground';
+  }
+  const topLevel = depth_range[0];
+  const bottomLevel = depth_range[1];
+  if (topLevel === bottomLevel) {
+    if (topLevel === 0) {
+      return DepthRanges[topLevel];
+    }
+    return `in the ${DepthRanges[topLevel]}`;
+  }
+  const topDepth = DepthRanges[topLevel];
+  const bottomDepth = DepthRanges[bottomLevel];
+
+  if (topDepth.endsWith('Cavern Layer') && bottomDepth.endsWith('Cavern Layer')) {
+    return `from ${topDepth.replace(' Cavern Layer', '')} to ${bottomDepth}`;
+  }
+  return `from ${DepthRanges[topLevel]} to ${DepthRanges[bottomLevel]}`;
 }

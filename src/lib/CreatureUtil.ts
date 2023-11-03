@@ -2,7 +2,6 @@ import { BodySize } from '../definitions/BodySize';
 import { Caste } from '../definitions/Caste';
 import { CasteTag } from '../definitions/CasteTag';
 import { Creature } from '../definitions/Creature';
-import { DepthRanges } from './Constants';
 import { SimplifyVolume, toTitleCase } from './Utils';
 
 /**
@@ -446,22 +445,4 @@ export function CreatureIntelligenceSummary(creature: Creature): string {
     return '';
   }
   return ret.join(' and ');
-}
-
-/**
- * Turn the UNDERGROUND_DEPTH tag into a string description
- *
- * @param depth_range - [min,max] UNDERGROUND_DEPTH tag values
- * @returns string describing what depths they are found at
- */
-export function UndergroundDepthDescription(depth_range: number[]): string {
-  if (typeof depth_range === 'undefined' || !Array.isArray(depth_range) || depth_range.length !== 2) {
-    return '';
-  }
-  const topLevel = depth_range[0];
-  const bottomLevel = depth_range[1];
-  if (topLevel === bottomLevel) {
-    return DepthRanges[topLevel];
-  }
-  return `${DepthRanges[topLevel]} to ${DepthRanges[bottomLevel]}`;
 }

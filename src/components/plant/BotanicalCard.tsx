@@ -1,6 +1,7 @@
-import { Component } from 'solid-js';
+import { Component, For, Show } from 'solid-js';
 import { Plant } from '../../definitions/Plant';
-import PlantProvidesList from './PlantProvidesList';
+import { GetPlantProvidesList } from '../../lib/PlantUtil';
+import { UndergroundDepthDescription, toTitleCase } from '../../lib/Utils';
 
 /**
  * Given a Plant, returns a listing entry for it.
@@ -20,7 +21,16 @@ const BotanicalCard: Component<{ plant: Plant }> = (props) => {
   return (
     <>
       <div>
-        <PlantProvidesList plant={props.plant} />
+        <Show when={props.plant.prefStrings && props.plant.prefStrings.length > 0}>
+          <div class='font-medium'>Liked for its {props.plant.prefStrings.join(', ')}.</div>
+        </Show>
+        <div class='mb-2'>Found {UndergroundDepthDescription(props.plant.undergroundDepth)}</div>
+        <Show when={GetPlantProvidesList(props.plant).length > 0}>
+          <div class='font-medium'>Provides:</div>
+          <ul class='list-disc list-inside'>
+            <For each={GetPlantProvidesList(props.plant)}>{(provision) => <li>{toTitleCase(provision)}</li>}</For>
+          </ul>
+        </Show>
       </div>
     </>
   );
