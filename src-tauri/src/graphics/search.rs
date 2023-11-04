@@ -6,22 +6,39 @@ use super::{options::GraphicsOptions, results::GraphicsResults};
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
+/// Get the graphics for the given identifier.
+///
+/// This will return the graphic and all tile pages that are referenced by the graphic.
+///
+/// If the identifier is not found, an empty result will be returned.
+///
+/// # Arguments
+///
+/// * `options` - The options for the search.
+///
+/// # Returns
+///
+/// The results of the search.
 pub fn get_graphics_for_identifier(
     options: GraphicsOptions,
     state: State<Storage>,
 ) -> GraphicsResults {
     #[allow(clippy::unwrap_used)]
     if state.store.lock().unwrap().is_empty() {
+        // If there isn't anything in the store, return an empty result.
         log::debug!(
             "get_graphics_for_identifier: No raws in storage, returning empty search results"
         );
         return GraphicsResults::default();
     }
+
     log::debug!(
         "get_graphics_for_identifier: Processing search with options:\n{:#?}",
         options
     );
+
     let start = std::time::Instant::now();
+
     #[allow(clippy::unwrap_used)]
     let graphic_match = state
         .graphics_store
