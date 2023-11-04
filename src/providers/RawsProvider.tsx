@@ -16,13 +16,16 @@ import { ObjectType } from '../definitions/ObjectType';
 import { ParserOptions } from '../definitions/ParserOptions';
 import { ProgressPayload } from '../definitions/ProgressPayload';
 import { SearchResults } from '../definitions/SearchResults';
+import { Summary } from '../definitions/Summary';
 import {
   COMMAND_PARSE_AND_STORE_RAWS,
   COMMAND_PARSE_RAWS_INFO,
   COMMAND_SEARCH_RAWS,
   DEFAULT_PARSING_STATUS,
   DEFAULT_SEARCH_RESULT,
+  DEFAULT_SUMMARY,
   PARSING_PROGRESS_EVENT,
+  PARSING_SUMMARY_EVENT,
   STS_EMPTY,
   STS_IDLE,
   STS_PARSING,
@@ -110,6 +113,18 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       console.log('✓ Listening for progress updates from backend.');
     })
     .catch(console.error);
+
+  // Signal for parsing summary
+  const [summary, setSummary] = createSignal<Summary>(DEFAULT_SUMMARY);
+
+  appWindow.listen(
+    PARSING_SUMMARY_EVENT,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ({ event, payload }) => {
+      const summary = payload as Summary;
+      setSummary(summary);
+    },
+  );
 
   /**
    * Function which tells the backend to parse the raws.
@@ -264,6 +279,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     parsingStatus,
     setLoadRaws,
     parsingProgress,
+    summary,
     rawModulesInfo,
     parsedRaws: searchResults,
   };

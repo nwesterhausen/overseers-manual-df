@@ -72,7 +72,7 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: pnpm
-      
+
       - name: Set Updated Version
         run: |
           pnpm version ${{ needs.semantic-release.outputs.new-release-version }} --git-tag-version=false
@@ -125,5 +125,3 @@ jobs:
           releaseName: 'v__VERSION__'
           releaseDraft: true
           prerelease: false
-
-
