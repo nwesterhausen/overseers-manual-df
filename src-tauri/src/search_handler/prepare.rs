@@ -209,7 +209,9 @@ fn update_graphics_store(storage: &State<Storage>) {
             .graphics_store
             .lock()
             .unwrap()
-            .insert(graphic.get_identifier().to_string(), graphic.clone());
+            .entry(graphic.get_identifier().to_string())
+            .or_default()
+            .push(graphic.clone());
     }
     let duration = start.elapsed();
 

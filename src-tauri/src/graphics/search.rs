@@ -46,7 +46,7 @@ pub fn get_graphics_for_identifier(
         .unwrap()
         .get(options.identifier.as_str())
         .cloned();
-    let Some(graphic_raw) = graphic_match else {
+    let Some(graphic_raws) = graphic_match else {
         log::warn!(
             "get_graphics_for_identifier: identifier not found: {}",
             options.identifier
@@ -58,10 +58,13 @@ pub fn get_graphics_for_identifier(
     let start2 = std::time::Instant::now();
 
     let mut results = GraphicsResults {
-        graphic: Some(graphic_raw.clone()),
+        matching_graphics: Some(graphic_raws.clone()),
         ..GraphicsResults::default()
     };
-    let tile_page_identifiers = graphic_raw.get_tile_pages();
+    let tile_page_identifiers = graphic_raws
+        .iter()
+        .flat_map(dfraw_json_parser::parser::graphics::raw::Graphic::get_tile_pages)
+        .collect::<Vec<_>>();
 
     // Find the tile pages with the given identifiers
     #[allow(clippy::unwrap_used)]

@@ -3,6 +3,6 @@ import type { Graphic } from './Graphic';
 import type { TilePage } from './TilePage';
 
 export interface GraphicsResults {
-  graphic: Graphic | null;
+  matchingGraphics: Array<Graphic> | null;
   tilePages: Array<TilePage>;
 }
