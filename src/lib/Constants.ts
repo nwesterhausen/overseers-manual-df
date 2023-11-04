@@ -4,6 +4,7 @@ import { ObjectType } from '../definitions/ObjectType';
 import { ProgressPayload } from '../definitions/ProgressPayload';
 import { RawModuleLocation } from '../definitions/RawModuleLocation';
 import { SearchResults } from '../definitions/SearchResults';
+import { Summary } from '../definitions/Summary';
 
 /**
  * Default update object. This is an empty update object which is used
@@ -88,6 +89,23 @@ export const DEFAULT_PARSING_STATUS: ProgressPayload = {
 };
 
 /**
+ * A summary of the parsing process is sent from the backend to
+ * the frontend when the parsing is complete.
+ *
+ * This is an empty default value.
+ */
+export const DEFAULT_SUMMARY: Summary = {
+  counts: [],
+  locations: [],
+  objectsAllowed: [],
+  filteringDuration: '',
+  parsingDuration: '',
+  saveToStoreDuration: '',
+  locationTotals: [],
+  totalRaws: 0,
+};
+
+/**
  * A list of common words to ignore when searching.
  */
 export const IgnoredSearchTerms = [
@@ -128,6 +146,7 @@ export const M3_to_CM3 = 1000000;
  * The name for parsing progress event that is sent from the backend to the frontend.
  */
 export const PARSING_PROGRESS_EVENT = 'PROGRESS';
+export const PARSING_SUMMARY_EVENT = 'PARSE_SUMMARY';
 
 export const COMMAND_PARSE_AND_STORE_RAWS = 'parse_and_store_raws';
 export const COMMAND_SEARCH_RAWS = 'search_raws';
