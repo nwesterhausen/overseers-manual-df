@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 #[allow(clippy::module_name_repetitions)]
 pub struct GraphicsResults {
     /// The resulting graphics
-    pub graphic: Option<Graphic>,
+    pub matching_graphics: Option<Vec<Graphic>>,
     /// The tile page(s) that the graphics are on
     pub tile_pages: Vec<TilePage>,
 }
