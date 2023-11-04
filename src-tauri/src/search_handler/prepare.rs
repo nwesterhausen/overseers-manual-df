@@ -16,7 +16,7 @@ use serde_json::json;
 use tauri::{AppHandle, Manager, State, Window};
 use tauri_plugin_aptabase::EventTracker;
 
-use crate::{state::Storage, tracking::ParseAndStoreRaws};
+use crate::{search_handler::summary::Summary, state::Storage, tracking::ParseAndStoreRaws};
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
@@ -36,32 +36,12 @@ pub fn parse_and_store_raws(
     let total_raws = raws_vec.len();
     let duration = start.elapsed();
 
-    let count_creatures = raws_vec
-        .as_slice()
-        .iter()
-        .filter(|raw| raw.get_type() == &ObjectType::Creature)
-        .count();
-    let count_plants = raws_vec
-        .as_slice()
-        .iter()
-        .filter(|raw| raw.get_type() == &ObjectType::Plant)
-        .count();
-    let count_inorganics = raws_vec
-        .as_slice()
-        .iter()
-        .filter(|raw| raw.get_type() == &ObjectType::Inorganic)
-        .count();
-
-    let count_graphics = raws_vec
-        .as_slice()
-        .iter()
-        .filter(|raw| raw.get_type() == &ObjectType::Graphics)
-        .count();
-    let count_tile_pages = raws_vec
-        .as_slice()
-        .iter()
-        .filter(|raw| raw.get_type() == &ObjectType::TilePage)
-        .count();
+    // Build summary
+    let mut summary = Summary::from_results(
+        &raws_vec,
+        &options.raws_to_parse,
+        &options.locations_to_parse,
+    );
 
     let start2 = std::time::Instant::now();
     // Store the raws in the storage, after clearing it
@@ -71,25 +51,24 @@ pub fn parse_and_store_raws(
     storage.store.lock().unwrap().extend(raws_vec);
 
     let duration2 = start2.elapsed();
-    let duration2_test = start.elapsed();
-
+    let duration2_total = start.elapsed();
+    let start3 = std::time::Instant::now();
     // Tracking data.
     log::info!(
         "parse_and_store_raws: {} raws stored in {}; search lookup updated in {}; total time: {}; objects allowed: {:?}; locations: {:?}",
         total_raws,
         format!("{:?}", duration),
         format!("{:?}", duration2),
-        format!("{:?}", duration2_test),
+        format!("{:?}", duration2_total),
         options.raws_to_parse,
         options.locations_to_parse,
     );
-    log::info!("parse_and_store_raws: Creatures: {}, Plants: {}, Inorganics: {}, Graphics: {}, Tile Pages: {}", count_creatures, count_plants, count_inorganics,  count_graphics, count_tile_pages);
     app_handle.track_event(
         "parse_and_store_raws",
         Some(
             serde_json::to_string(&ParseAndStoreRaws {
                 total_raws_parsed: total_raws,
-                elapsed_time: format!("{duration2_test:?}"),
+                elapsed_time: format!("{duration2_total:?}"),
                 parsed_raw_types: json!(options.raws_to_parse).to_string(),
                 parsed_raw_locations: json!(options.locations_to_parse).to_string(),
             })
@@ -118,6 +97,17 @@ pub fn parse_and_store_raws(
 
     // Update the tile page store
     update_tile_page_store(&storage);
+
+    let duration3 = start3.elapsed();
+
+    summary.set_parsing_duration(duration);
+    summary.set_save_to_store_duration(duration2);
+    summary.set_filtering_duration(duration3);
+
+    log::info!("{:#?}", summary);
+    window.emit("PARSE_SUMMARY", summary).unwrap_or_else(|err| {
+        log::warn!("parse_and_store_raws: failed to emit summary event\n{err:?}");
+    });
 }
 
 #[allow(clippy::needless_pass_by_value)]
