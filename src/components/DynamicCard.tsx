@@ -62,20 +62,16 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
         </Switch>
       </div>
       <div class='card-body'>
-        <div class='flex flex-row'>
-          <div class='flex-grow'>
-            <div class='card-title'>{nameForRaw(props.raw)}</div>
-            <Show
-              when={
-                props.raw && props.raw.metadata && props.raw.metadata.moduleName && props.raw.metadata.moduleVersion
-              }
-              fallback={<div class='text-muted italic text-xs'>No metadata {props.raw.objectId}</div>}>
-              <div class='text-muted italic text-xs'>
-                {props.raw.metadata.moduleName} {props.raw.metadata.moduleVersion}
-              </div>
-            </Show>
-          </div>
-          <div class='self-center'>
+        <div>
+          <div class='card-title'>{nameForRaw(props.raw)}</div>
+          <Show
+            when={props.raw && props.raw.metadata && props.raw.metadata.moduleName && props.raw.metadata.moduleVersion}
+            fallback={<div class='text-muted italic text-xs'>No metadata {props.raw.objectId}</div>}>
+            <div class='text-muted italic text-xs'>
+              {props.raw.metadata.moduleName} {props.raw.metadata.moduleVersion}
+            </div>
+          </Show>
+          <div class='absolute right-6 top-6'>
             <SpriteImage identifier={props.raw.identifier} />
           </div>
         </div>
