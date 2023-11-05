@@ -14,10 +14,6 @@ use dfraw_json_parser::parser::{
 /// we can search the `search_lookup` in the background thread and then return
 /// the results to the main thread, which can then use the index to get the
 /// actual raw object from `store`.
-///
-/// The `graphics_store` and `tile_page_store` are used to store the graphics
-/// and tile pages parsed from the raws. This is done so that we don't have to
-/// parse the raws every time we want to get a graphic or tile page.
 pub struct Storage {
     /// Holds all the parsed raws.
     ///
@@ -32,6 +28,18 @@ pub struct Storage {
     pub store: Mutex<Vec<Box<dyn RawObject>>>,
     /// Holds all the search strings for every raw and their index in `store`
     pub search_lookup: Mutex<Vec<(String, usize)>>,
+}
+
+/// Specific storage for graphics and tile pages.
+///
+/// This is separate from the `Storage` struct because it reduces the locks on
+/// the `Storage` struct. We don't need to lock the `Storage` struct when we're
+/// just looking for graphics or tile pages.
+///
+/// The `graphics_store` and `tile_page_store` are used to store the graphics
+/// and tile pages parsed from the raws. This is done so that we don't have to
+/// parse the raws every time we want to get a graphic or tile page.
+pub struct GraphicStorage {
     /// Holds all graphics by their identifier
     pub graphics_store: Mutex<HashMap<String, Vec<Graphic>>>,
     /// Holds all tile pages by their identifier

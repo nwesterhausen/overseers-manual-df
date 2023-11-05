@@ -1,4 +1,4 @@
-use state::Storage;
+use state::{GraphicStorage, Storage};
 use std::sync::Mutex;
 #[cfg(debug_assertions)]
 use tauri::Manager;
@@ -41,6 +41,8 @@ pub fn run() {
         .manage(Storage {
             store: Mutex::default(),
             search_lookup: Mutex::default(),
+        })
+        .manage(GraphicStorage {
             graphics_store: Mutex::default(),
             tile_page_store: Mutex::default(),
         })

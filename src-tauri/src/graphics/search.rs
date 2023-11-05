@@ -1,6 +1,6 @@
 use tauri::State;
 
-use crate::state::Storage;
+use crate::state::GraphicStorage;
 
 use super::{options::GraphicsOptions, results::GraphicsResults};
 
@@ -21,10 +21,10 @@ use super::{options::GraphicsOptions, results::GraphicsResults};
 /// The results of the search.
 pub async fn get_graphics_for_identifier(
     options: GraphicsOptions,
-    state: State<'_, Storage>,
+    state: State<'_, GraphicStorage>,
 ) -> Result<GraphicsResults, ()> {
     #[allow(clippy::unwrap_used)]
-    if state.store.lock().unwrap().is_empty() {
+    if state.graphics_store.lock().unwrap().is_empty() {
         // If there isn't anything in the store, return an empty result.
         log::debug!(
             "get_graphics_for_identifier: No raws in storage, returning empty search results"
