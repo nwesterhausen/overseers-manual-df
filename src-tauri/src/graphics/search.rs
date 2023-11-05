@@ -19,17 +19,17 @@ use super::{options::GraphicsOptions, results::GraphicsResults};
 /// # Returns
 ///
 /// The results of the search.
-pub fn get_graphics_for_identifier(
+pub async fn get_graphics_for_identifier(
     options: GraphicsOptions,
-    state: State<Storage>,
-) -> GraphicsResults {
+    state: State<'_, Storage>,
+) -> Result<GraphicsResults, ()> {
     #[allow(clippy::unwrap_used)]
     if state.store.lock().unwrap().is_empty() {
         // If there isn't anything in the store, return an empty result.
         log::debug!(
             "get_graphics_for_identifier: No raws in storage, returning empty search results"
         );
-        return GraphicsResults::default();
+        return Ok(GraphicsResults::default());
     }
 
     log::debug!(
@@ -51,7 +51,7 @@ pub fn get_graphics_for_identifier(
             "get_graphics_for_identifier: identifier not found: {}",
             options.identifier
         );
-        return GraphicsResults::default();
+        return Ok(GraphicsResults::default());
     };
 
     let lookup_duration = start.elapsed();
@@ -91,5 +91,5 @@ pub fn get_graphics_for_identifier(
         format!("{:?}", total_duration),
     );
 
-    results
+    Ok(results)
 }

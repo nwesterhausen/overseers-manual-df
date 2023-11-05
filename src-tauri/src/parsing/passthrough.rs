@@ -7,7 +7,10 @@ use tauri_plugin_aptabase::EventTracker;
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
 /// Passthrough to parse all info.txt files at game path
-pub fn parse_raws_info(options: ParserOptions, app_handler: AppHandle) -> Vec<ModuleInfoFile> {
+pub async fn parse_raws_info(
+    options: ParserOptions,
+    app_handler: AppHandle,
+) -> Vec<ModuleInfoFile> {
     let start = std::time::Instant::now();
 
     log::info!("parse_raws_info: options provided\n{:#?}", options);

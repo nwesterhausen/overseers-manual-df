@@ -20,12 +20,12 @@ use crate::{search_handler::summary::Summary, state::Storage, tracking::ParseAnd
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
-pub fn parse_and_store_raws(
+pub async fn parse_and_store_raws(
     options: ParserOptions,
     window: Window,
-    storage: State<Storage>,
+    storage: State<'_, Storage>,
     app_handle: AppHandle,
-) {
+) -> Result<(), ()> {
     log::info!(
         "parse_and_store_raws: parsing raws with options\n{:#?}",
         options
@@ -108,6 +108,8 @@ pub fn parse_and_store_raws(
     window.emit("PARSE_SUMMARY", summary).unwrap_or_else(|err| {
         log::warn!("parse_and_store_raws: failed to emit summary event\n{err:?}");
     });
+
+    Ok(())
 }
 
 #[allow(clippy::needless_pass_by_value)]
