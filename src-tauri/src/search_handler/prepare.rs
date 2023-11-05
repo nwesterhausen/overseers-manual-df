@@ -16,7 +16,11 @@ use serde_json::json;
 use tauri::{AppHandle, Manager, State, Window};
 use tauri_plugin_aptabase::EventTracker;
 
-use crate::{search_handler::summary::Summary, state::Storage, tracking::ParseAndStoreRaws};
+use crate::{
+    search_handler::summary::Summary,
+    state::{GraphicStorage, Storage},
+    tracking::ParseAndStoreRaws,
+};
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
@@ -24,6 +28,7 @@ pub async fn parse_and_store_raws(
     options: ParserOptions,
     window: Window,
     storage: State<'_, Storage>,
+    graphics_storage: State<'_, GraphicStorage>,
     app_handle: AppHandle,
 ) -> Result<(), ()> {
     log::info!(
@@ -93,10 +98,10 @@ pub async fn parse_and_store_raws(
     update_search_lookup(&storage);
 
     // Update the graphics store
-    update_graphics_store(&storage);
+    update_graphics_store(&storage, &graphics_storage);
 
     // Update the tile page store
-    update_tile_page_store(&storage);
+    update_tile_page_store(&storage, &graphics_storage);
 
     let duration3 = start3.elapsed();
 
@@ -186,7 +191,7 @@ fn update_search_lookup(storage: &State<Storage>) {
 }
 
 #[allow(clippy::needless_pass_by_value)]
-fn update_graphics_store(storage: &State<Storage>) {
+fn update_graphics_store(storage: &State<Storage>, graphics_storage: &State<GraphicStorage>) {
     let start = std::time::Instant::now();
     // Get only the graphics raws and store them in the graphics store
     #[allow(clippy::unwrap_used)]
@@ -201,13 +206,13 @@ fn update_graphics_store(storage: &State<Storage>) {
 
     // Clear the graphics store
     #[allow(clippy::unwrap_used)]
-    storage.graphics_store.lock().unwrap().clear();
+    graphics_storage.graphics_store.lock().unwrap().clear();
 
     let total_graphics = graphics.len();
     // Insert the graphics into the graphics store
     for graphic in graphics {
         #[allow(clippy::unwrap_used)]
-        storage
+        graphics_storage
             .graphics_store
             .lock()
             .unwrap()
@@ -225,7 +230,7 @@ fn update_graphics_store(storage: &State<Storage>) {
 }
 
 #[allow(clippy::needless_pass_by_value)]
-fn update_tile_page_store(storage: &State<Storage>) {
+fn update_tile_page_store(storage: &State<Storage>, graphics_storage: &State<GraphicStorage>) {
     let start = std::time::Instant::now();
     // Get only the tile pages raws and store them in the tile page store
     #[allow(clippy::unwrap_used)]
@@ -240,13 +245,13 @@ fn update_tile_page_store(storage: &State<Storage>) {
 
     // Clear the tile page store
     #[allow(clippy::unwrap_used)]
-    storage.tile_page_store.lock().unwrap().clear();
+    graphics_storage.tile_page_store.lock().unwrap().clear();
 
     let total_tile_pages = tile_pages.len();
     // Insert the tile pages into the tile page store
     for tile_page in tile_pages {
         #[allow(clippy::unwrap_used)]
-        storage
+        graphics_storage
             .tile_page_store
             .lock()
             .unwrap()
