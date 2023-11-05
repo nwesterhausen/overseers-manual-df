@@ -1,3 +1,15 @@
+## [0.30.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.29.0...v0.30.0) (2023-11-05)
+
+
+### Features
+
+* add parsing summary ([5375282](https://github.com/nwesterhausen/overseers-manual-df/commit/5375282379bbf549018c0ff48e5f6d254e9e0da4))
+* change backend commands to async ([14c0914](https://github.com/nwesterhausen/overseers-manual-df/commit/14c091469f95be1c215abdf38360d6bb1a16377e))
+* cycle graphics ([7bd4919](https://github.com/nwesterhausen/overseers-manual-df/commit/7bd49196910db17a96bfef24d6c61f09051eea2e))
+* cycle graphics images through available ([b4ea4e1](https://github.com/nwesterhausen/overseers-manual-df/commit/b4ea4e1d813e7e7141c9a939948a607ee802d847))
+* expose summary from raws provider ([a159d3f](https://github.com/nwesterhausen/overseers-manual-df/commit/a159d3fa93e78582749216383a3cf13bb981d163))
+* split tauri state into two stores ([c876bd8](https://github.com/nwesterhausen/overseers-manual-df/commit/c876bd853414819f8899cbb0fd2de1161de87159))
+
 ## [0.29.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.28.7...v0.29.0) (2023-11-03)
 
 
