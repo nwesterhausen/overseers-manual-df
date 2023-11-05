@@ -13,11 +13,14 @@ use super::{options::SearchOptions, results::SearchResults};
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value, clippy::module_name_repetitions)]
-pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> SearchResults {
+pub async fn search_raws(
+    search_options: SearchOptions,
+    storage: State<'_, Storage>,
+) -> Result<SearchResults, ()> {
     #[allow(clippy::unwrap_used)]
     if storage.store.lock().unwrap().is_empty() {
         log::debug!("search_raws: No raws in storage, returning empty search results");
-        return SearchResults::default();
+        return Ok(SearchResults::default());
     }
     log::info!(
         "search_raws: Processing search with options:\n{:#?}",
@@ -133,12 +136,12 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
             limited_raws.len()
         );
 
-        return SearchResults {
+        return Ok(SearchResults {
             results: limited_raws,
             total_results: all_raws.len(),
             #[allow(clippy::unwrap_used)]
             total_pages: get_total_pages(all_raws.len(), search_options.limit),
-        };
+        });
     }
     let start = std::time::Instant::now();
     // Retrieve the indexes from the search lookup table
@@ -287,14 +290,14 @@ pub fn search_raws(search_options: SearchOptions, storage: State<Storage>) -> Se
         format!("{filter_duration:?}"),
         format!("{sort_duration:?}"),
     );
-    SearchResults {
+    Ok(SearchResults {
         // Return the limited raws
         results: limited_raws,
         // Return the total number of results
         total_results: filtered_raws.len(),
         // Return the total number of pages
         total_pages,
-    }
+    })
 }
 
 #[allow(

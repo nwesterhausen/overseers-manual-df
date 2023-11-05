@@ -30,12 +30,12 @@ pub mod build_time {
 #[allow(clippy::module_name_repetitions)]
 /// The function `get_build_info` returns information about the build, including version, Rust version,
 /// optimization level, debug status, dependencies, build time, and git commit hash.
-/// 
+///
 /// Returns:
-/// 
+///
 /// The function `get_build_info` returns an instance of the `Info` struct.
-pub fn get_build_info() -> Info {
-    Info {
+pub async fn get_build_info() -> Result<Info, ()> {
+    Ok(Info {
         version: build_time::PKG_VERSION.to_string(),
         rust_version: build_time::RUSTC_VERSION.to_string(),
         optimization_level: build_time::OPT_LEVEL.to_string(),
@@ -48,5 +48,5 @@ pub fn get_build_info() -> Info {
         git_commit_hash: build_time::GIT_COMMIT_HASH_SHORT
             .unwrap_or("(none)")
             .to_string(),
-    }
+    })
 }
