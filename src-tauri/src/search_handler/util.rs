@@ -8,7 +8,10 @@ use crate::state::Storage;
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
-pub fn get_search_string_for_object(object_id: &str, storage: State<Storage>) -> String {
+pub async fn get_search_string_for_object(
+    object_id: String,
+    storage: State<'_, Storage>,
+) -> Result<String, ()> {
     // Get the matching raw object from the storage
     #[allow(clippy::unwrap_used)]
     let Some(raw) = storage
@@ -19,7 +22,7 @@ pub fn get_search_string_for_object(object_id: &str, storage: State<Storage>) ->
         .find(|raw| raw.get_object_id() == object_id)
         .map(clone_raw_object_box::clone_raw_object_box)
     else {
-        return String::new();
+        return Ok(String::new());
     };
 
     let search_string = match raw.get_type() {
@@ -41,5 +44,5 @@ pub fn get_search_string_for_object(object_id: &str, storage: State<Storage>) ->
         }
     };
 
-    search_string
+    Ok(search_string)
 }
