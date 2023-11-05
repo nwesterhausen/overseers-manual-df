@@ -1,8 +1,9 @@
 import { convertFileSrc, invoke } from '@tauri-apps/api/primitives';
-import { BiRegularImageAlt } from 'solid-icons/bi';
+import { BiRegularCaretLeft, BiRegularCaretRight, BiRegularImageAlt } from 'solid-icons/bi';
 import { Component, Show, createMemo, createResource, createSignal } from 'solid-js';
 import { GraphicsResults } from '../definitions/GraphicsResults';
 import { COMMAND_GET_GRAPHICS_FOR_IDENTIFIER } from '../lib/Constants';
+import { toTitleCase } from '../lib/Utils';
 import { useSettingsContext } from '../providers/SettingsProvider';
 
 interface Dimensions {
@@ -20,6 +21,7 @@ interface SpriteImageDetail {
   offset2: Dimensions;
   pageDim: Dimensions;
   tileDim: Dimensions;
+  description?: string;
 }
 
 //Todo: Handle multiple sprites (either cycle between them or let user cycle between them)
@@ -71,27 +73,36 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
               offset2: sprite.offset2,
               tileDim: tilePage.tileDim,
               pageDim: tilePage.pageDim,
+              description: sprite.primaryCondition || '',
             });
           }
         }
       } else if (graphic.layers.length > 0) {
-        const layer = graphic.layers[0][1][0];
-        const tilePage = graphics.latest.tilePages.find((tp) => tp.identifier === layer.tilePageId);
-        if (tilePage.file.length > 0) {
-          results.push({
-            graphicFilePath: tilePage.file,
-            offset: layer.offset,
-            offset2: layer.offset2,
-            tileDim: tilePage.tileDim,
-            pageDim: tilePage.pageDim,
-          });
+        // const layer = graphic.layers[0][1][0];
+        for (const [layerIdentifier, layers] of graphic.layers) {
+          for (const layer of layers) {
+            const tilePage = graphics.latest.tilePages.find((tp) => tp.identifier === layer.tilePageId);
+            if (tilePage.file.length > 0) {
+              results.push({
+                graphicFilePath: tilePage.file,
+                offset: layer.offset,
+                offset2: layer.offset2,
+                tileDim: tilePage.tileDim,
+                pageDim: tilePage.pageDim,
+                description: toTitleCase(`${layerIdentifier || ''} ${layer.layerName || ''}`),
+              });
+            }
+          }
         }
       }
     }
     return results;
   });
 
-  setInterval(() => {
+  const [allowCycle, setAllowCycle] = createSignal(true);
+  const [cycleTimeout, setCycleTimeout] = createSignal(setTimeout(() => {}, 0));
+
+  function incrementIndex() {
     if (spriteDetails().length > 0) {
       if (currentIndex() + 1 >= spriteDetails().length) {
         setCurrentIndex(0);
@@ -100,6 +111,24 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
       }
     } else {
       setCurrentIndex(0);
+    }
+  }
+
+  function decrementIndex() {
+    if (spriteDetails().length > 0) {
+      if (currentIndex() - 1 < 0) {
+        setCurrentIndex(spriteDetails().length - 1);
+      } else {
+        setCurrentIndex(currentIndex() - 1);
+      }
+    } else {
+      setCurrentIndex(0);
+    }
+  }
+
+  setInterval(() => {
+    if (allowCycle() === true) {
+      incrementIndex();
     }
   }, 5 * 1000);
 
@@ -163,7 +192,36 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
           </div>
         </div>
       }>
-      <div class={`border-2 rounded-lg border-accent bg-black/50 ${props.class}`}>
+      <div class={`border-2 rounded-lg border-accent bg-black/50 ${props.class} relative`}>
+        <button
+          class='absolute inset-y-0 -right-3'
+          onClick={() => {
+            setAllowCycle(false);
+            incrementIndex();
+            clearTimeout(cycleTimeout());
+            setCycleTimeout(setTimeout(() => setAllowCycle(true), 15 * 1000));
+          }}>
+          <BiRegularCaretRight class='hover:text-accent' />
+        </button>
+        <button
+          class='absolute inset-y-0 -left-3'
+          onClick={() => {
+            setAllowCycle(false);
+            decrementIndex();
+            clearTimeout(cycleTimeout());
+            setCycleTimeout(setTimeout(() => setAllowCycle(true), 15 * 1000));
+          }}>
+          <BiRegularCaretLeft class='hover:text-accent' />
+        </button>
+
+        <span
+          class='absolute -bottom-3 -left-6 text-center text-accent w-20'
+          style={{
+            'font-size': '0.5rem',
+            'line-height': '0.5rem',
+          }}>
+          {spriteDetails()[currentIndex()].description}
+        </span>
         <div
           style={{
             width: `${dimX()}px`,
