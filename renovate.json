@@ -8,7 +8,9 @@
     ":pinDevDependencies",
     "group:allNonMajor",
     "security:openssf-scorecard",
-    ":semanticCommits"
+    ":semanticCommits",
+    ":assignee(nwesterhausen)",
+    ":reviewer(nwesterhausen)"
   ],
   "packageRules": [
     {
