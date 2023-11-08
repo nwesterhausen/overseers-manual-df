@@ -1,3 +1,10 @@
+## [0.30.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.30.0...v0.30.1) (2023-11-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @solidjs/router to ^0.9.0 ([9400f1f](https://github.com/nwesterhausen/overseers-manual-df/commit/9400f1f54e3f4d665fdac7039b6b102edd4cdc64))
+
 ## [0.30.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.29.0...v0.30.0) (2023-11-05)
 
 
