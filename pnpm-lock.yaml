@@ -38,91 +38,91 @@ dependencies:
 
 devDependencies:
   '@kobalte/core':
-    specifier: ^0.11.2
+    specifier: 0.11.2
     version: 0.11.2(solid-js@1.8.5)
   '@kobalte/tailwindcss':
-    specifier: ^0.9.0
+    specifier: 0.9.0
     version: 0.9.0(tailwindcss@3.3.5)
   '@semantic-release/changelog':
-    specifier: ^6.0.3
+    specifier: 6.0.3
     version: 6.0.3(semantic-release@22.0.7)
   '@semantic-release/commit-analyzer':
-    specifier: ^11.0.0
+    specifier: 11.0.0
     version: 11.0.0(semantic-release@22.0.7)
   '@semantic-release/git':
-    specifier: ^10.0.1
+    specifier: 10.0.1
     version: 10.0.1(semantic-release@22.0.7)
   '@semantic-release/npm':
-    specifier: ^11.0.0
+    specifier: 11.0.0
     version: 11.0.0(semantic-release@22.0.7)
   '@solid-primitives/context':
-    specifier: ^0.2.1
+    specifier: 0.2.1
     version: 0.2.1(solid-js@1.8.5)
   '@solid-primitives/scheduled':
-    specifier: ^1.4.1
+    specifier: 1.4.1
     version: 1.4.1(solid-js@1.8.5)
   '@tailwindcss/typography':
-    specifier: ^0.5.10
+    specifier: 0.5.10
     version: 0.5.10(tailwindcss@3.3.5)
   '@tauri-apps/cli':
     specifier: 2.0.0-alpha.17
     version: 2.0.0-alpha.17
   '@types/node':
-    specifier: ^20.8.10
+    specifier: 20.8.10
     version: 20.8.10
   '@typescript-eslint/eslint-plugin':
-    specifier: ^6.9.1
+    specifier: 6.9.1
     version: 6.9.1(@typescript-eslint/parser@6.9.1)(eslint@8.52.0)(typescript@5.2.2)
   '@typescript-eslint/parser':
-    specifier: ^6.9.1
+    specifier: 6.9.1
     version: 6.9.1(eslint@8.52.0)(typescript@5.2.2)
   autoprefixer:
-    specifier: ^10.4.16
+    specifier: 10.4.16
     version: 10.4.16(postcss@8.4.31)
   conventional-changelog-conventionalcommits:
-    specifier: ^7.0.2
+    specifier: 7.0.2
     version: 7.0.2
   daisyui:
-    specifier: ^3.9.4
+    specifier: 3.9.4
     version: 3.9.4
   eslint:
-    specifier: ^8.52.0
+    specifier: 8.52.0
     version: 8.52.0
   eslint-plugin-tsdoc:
-    specifier: ^0.2.17
+    specifier: 0.2.17
     version: 0.2.17
   postcss:
-    specifier: ^8.4.31
+    specifier: 8.4.31
     version: 8.4.31
   postcss-import:
-    specifier: ^15.1.0
+    specifier: 15.1.0
     version: 15.1.0(postcss@8.4.31)
   postcss-nesting:
-    specifier: ^12.0.1
+    specifier: 12.0.1
     version: 12.0.1(postcss@8.4.31)
   prettier:
-    specifier: ^3.0.3
+    specifier: 3.0.3
     version: 3.0.3
   semantic-release:
     specifier: 22.0.7
     version: 22.0.7(typescript@5.2.2)
   semantic-release-export-data:
-    specifier: ^1.0.1
+    specifier: 1.0.1
     version: 1.0.1(semantic-release@22.0.7)
   solid-icons:
-    specifier: ^1.1.0
+    specifier: 1.1.0
     version: 1.1.0(solid-js@1.8.5)
   tailwindcss:
-    specifier: ^3.3.5
+    specifier: 3.3.5
     version: 3.3.5
   typescript:
-    specifier: ^5.2.2
+    specifier: 5.2.2
     version: 5.2.2
   vite:
-    specifier: ^4.5.0
+    specifier: 4.5.0
     version: 4.5.0(@types/node@20.8.10)
   vite-plugin-solid:
-    specifier: ^2.7.2
+    specifier: 2.7.2
     version: 2.7.2(solid-js@1.8.5)(vite@4.5.0)
 
 packages:
