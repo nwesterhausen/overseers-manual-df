@@ -23,7 +23,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm install -g pnpm
           pnpm install
           pnpm semantic-release
     outputs:
@@ -48,7 +47,6 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: |
-          npm install -g pnpm
           pnpm install
   publish-tauri:
     needs:
