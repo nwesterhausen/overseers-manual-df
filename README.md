@@ -7,6 +7,7 @@
 [![on DF File Depot](https://img.shields.io/badge/DFFD-0.30.0-blue?style=plastic)](https://dffd.bay12games.com/file.php?id=15966)
 [![Semantic Release (and Publish)](https://github.com/nwesterhausen/overseers-manual-df/actions/workflows/semantic-release.yaml/badge.svg?branch=main)](https://github.com/nwesterhausen/overseers-manual-df/actions/workflows/semantic-release.yaml)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/nwesterhausen/overseers-manual-df/badge)](https://securityscorecards.dev/viewer/?uri=github.com/nwesterhausen/overseers-manual-df)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8064/badge)](https://www.bestpractices.dev/projects/8064)
 
 This is a app which provides a searchable interface for your Dwarf Fortress raw files. It's built using
 [Tauri](https://tauri.studio), [SolidJS](https://www.solidjs.com/), [TailwindCSS](https://tailwindcss.com/),
