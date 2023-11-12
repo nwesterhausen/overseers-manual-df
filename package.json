@@ -38,7 +38,7 @@
     "@typescript-eslint/parser": "6.10.0",
     "autoprefixer": "10.4.16",
     "conventional-changelog-conventionalcommits": "7.0.2",
-    "daisyui": "3.9.4",
+    "daisyui": "4.0.1",
     "eslint": "8.53.0",
     "eslint-plugin-tsdoc": "0.2.17",
     "postcss": "8.4.31",
