@@ -21,7 +21,7 @@ jobs:
       - name: Process Semantic-release
         id: get-next-version
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_GH_TOKEN }}
         run: |
           pnpm install
           pnpm semantic-release
