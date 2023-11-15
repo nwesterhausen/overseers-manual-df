@@ -51,7 +51,9 @@ jobs:
               webkit2gtk-4.1
 
       - name: Rust setup
-        uses: dtolnay/rust-toolchain@d76c2a93c593483c9892fd8d2538734f73ed8588 # stable
+        uses: dtolnay/rust-toolchain@439cf607258077187679211f12aa6f19af4a0af7 # master
+        with:
+          toolchain: stable          
       - name: Rust cache
         uses: swatinem/rust-cache@a95ba195448af2da9b00fb742d14ffaaf3c21f43 # v2
         with:
