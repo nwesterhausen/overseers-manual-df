@@ -889,7 +889,7 @@ source = "git+https://github.com/nwesterhausen/dfraw_json_parser?branch=v2#fb312
 dependencies = [
  "encoding_rs",
  "encoding_rs_io",
- "itertools",
+ "itertools 0.11.0",
  "lazy_static",
  "log",
  "phf 0.11.2",
@@ -2002,6 +2002,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "itertools"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "25db6b064527c5d482d0423354fcd07a89a2dfe07b67892e62411946db7f07b0"
+dependencies = [
+ "either",
+]
+
+[[package]]
 name = "itoa"
 version = "0.4.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2639,7 +2648,7 @@ dependencies = [
  "chrono",
  "dfraw_json_parser",
  "dotenvy_macro",
- "itertools",
+ "itertools 0.12.0",
  "log",
  "serde",
  "serde_json",
