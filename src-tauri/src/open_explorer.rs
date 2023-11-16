@@ -6,9 +6,9 @@ use std::process::Command;
 
 #[tauri::command]
 /// Opens the file explorer or finder at the specified path depending on the operating system.
-/// 
+///
 /// Arguments:
-/// 
+///
 /// * `path`: The `path` parameter is a string that represents the file or folder path that you want to
 /// show in the folder.
 pub async fn show_in_folder(path: String) {
@@ -56,6 +56,11 @@ pub async fn show_in_folder(path: String) {
 
     #[cfg(target_os = "macos")]
     {
-        Command::new("open").args(["-R", &path]).spawn().unwrap();
+        match Command::new("open").args(["-R", &path]).spawn() {
+            Ok(_) => (),
+            Err(e) => {
+                log::error!("Error opening finder: {}", e);
+            }
+        }
     }
 }
