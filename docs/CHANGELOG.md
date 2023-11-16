@@ -1,3 +1,10 @@
+## [0.30.5](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.30.4...v0.30.5) (2023-11-16)
+
+
+### Bug Fixes
+
+* don't unwrap unsafely ([36f497b](https://github.com/nwesterhausen/overseers-manual-df/commit/36f497b4013cc8761caa2f36f137eb5feb7b9c8d))
+
 ## [0.30.4](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.30.3...v0.30.4) (2023-11-16)
 
 
