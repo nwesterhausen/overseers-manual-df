@@ -158,16 +158,17 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       ];
 
       const parsingOptions: ParserOptions = {
-        targetPath: settings.directoryPath,
+        dwarfFortressDirectory: settings.directoryPath,
         attachMetadataToRaws: true,
         skipApplyCopyTagsFrom: false,
         skipApplyCreatureVariations: false,
         rawsToParse: objectTypesToParse,
         locationsToParse: settings.parseLocations,
-        job: 'AllModulesInLocations',
         serializeResultToJson: false,
-        outputPath: '',
-        outputToFile: false,
+        legendsExportsToParse: [],
+        moduleInfoFilesToParse: [],
+        rawFilesToParse: [],
+        rawModulesToParse: [],
       };
 
       // Shortcut the parsing if there are no locations to parse
@@ -235,16 +236,17 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     ];
 
     const parsingOptions: ParserOptions = {
-      targetPath: settings.directoryPath,
+      dwarfFortressDirectory: settings.directoryPath,
       attachMetadataToRaws: false,
       skipApplyCopyTagsFrom: false,
       skipApplyCreatureVariations: false,
       rawsToParse: objectTypesToParse,
       locationsToParse: settings.parseLocations,
-      job: 'AllModuleInfoFiles',
       serializeResultToJson: false,
-      outputPath: '',
-      outputToFile: false,
+      legendsExportsToParse: [],
+      moduleInfoFilesToParse: [],
+      rawFilesToParse: [],
+      rawModulesToParse: [],
     };
 
     try {
