@@ -1,4 +1,4 @@
-use dfraw_json_parser::parser::raws::RawObject;
+use dfraw_json_parser::RawObject;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Default)]

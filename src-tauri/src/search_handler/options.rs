@@ -1,6 +1,4 @@
-use dfraw_json_parser::parser::{
-    biome::tokens::Biome, object_types::ObjectType, raw_locations::RawModuleLocation,
-};
+use dfraw_json_parser::{biome::Token as Biome, ObjectType, RawModuleLocation};
 use serde::{Deserialize, Serialize};
 
 #[derive(ts_rs::TS)]
