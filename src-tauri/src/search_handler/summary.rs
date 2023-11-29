@@ -1,6 +1,4 @@
-use dfraw_json_parser::parser::{
-    object_types::ObjectType, raw_locations::RawModuleLocation, raws::RawObject,
-};
+use dfraw_json_parser::{ObjectType, RawModuleLocation, RawObject};
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 

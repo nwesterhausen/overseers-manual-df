@@ -1,6 +1,6 @@
-use dfraw_json_parser::parser::{
-    creature::raw::Creature, helpers::clone_raw_object_box, inorganic::raw::Inorganic,
-    object_types::ObjectType, plant::raw::Plant, searchable::get_search_string,
+use dfraw_json_parser::{
+    creature::Creature, get_search_string, helpers::clone_raw_object_box, inorganic::Inorganic,
+    plant::Plant, ObjectType,
 };
 use tauri::State;
 
@@ -20,7 +20,7 @@ pub async fn get_search_string_for_object(
         .unwrap()
         .iter()
         .find(|raw| raw.get_object_id() == object_id)
-        .map(clone_raw_object_box::clone_raw_object_box)
+        .map(clone_raw_object_box)
     else {
         return Ok(String::new());
     };

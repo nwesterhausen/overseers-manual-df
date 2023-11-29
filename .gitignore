@@ -3,3 +3,7 @@ dist
 
 .pnpm-debug.log
 .env
+
+# Mac files
+.DS_Store
+._*
