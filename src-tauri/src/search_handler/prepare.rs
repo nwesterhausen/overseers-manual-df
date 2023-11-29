@@ -1,16 +1,11 @@
 use dfraw_json_parser::{
-    options::ParserOptions,
-    parser::{
-        creature::raw::Creature,
-        graphics::{raw::Graphic, tile_page::TilePage},
-        helpers::clone_raw_object_box::clone_raw_object_box,
-        inorganic::raw::Inorganic,
-        object_types::ObjectType,
-        plant::raw::Plant,
-        raws::RawObject,
-        searchable::get_search_string,
-    },
-    ProgressPayload,
+    creature::Creature,
+    get_search_string,
+    graphics::{Graphic, TilePage},
+    helpers::clone_raw_object_box,
+    inorganic::Inorganic,
+    plant::Plant,
+    ObjectType, ParserOptions, ProgressPayload, RawObject,
 };
 use serde_json::json;
 use tauri::{AppHandle, Manager, State, Window};
@@ -37,7 +32,13 @@ pub async fn parse_and_store_raws(
     );
     let start = std::time::Instant::now();
     // Get the raws with given options (and progress)
-    let raws_vec = dfraw_json_parser::parse_with_tauri_emit(&options, window.clone());
+    let raws_vec = match dfraw_json_parser::parse_with_tauri_emit(&options, window.clone()) {
+        Ok(result) => result.raws,
+        Err(e) => {
+            log::error!("Failure parsing: {e:?}");
+            vec![]
+        }
+    };
     let total_raws = raws_vec.len();
     let duration = start.elapsed();
 
