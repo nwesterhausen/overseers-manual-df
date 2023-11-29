@@ -1,8 +1,8 @@
 use std::{collections::HashMap, sync::Mutex};
 
-use dfraw_json_parser::parser::{
-    graphics::{raw::Graphic, tile_page::TilePage},
-    raws::RawObject,
+use dfraw_json_parser::{
+    graphics::{Graphic, TilePage},
+    RawObject,
 };
 
 /// The shared state storage used by the tauri app. This enables us to do the

@@ -1,4 +1,4 @@
-use dfraw_json_parser::{options::ParserOptions, parser::module_info_file::ModuleInfoFile};
+use dfraw_json_parser::{ModuleInfoFile, ParserOptions};
 use itertools::Itertools;
 use serde_json::json;
 use tauri::AppHandle;
@@ -15,17 +15,24 @@ pub async fn parse_raws_info(
 
     log::info!("parse_raws_info: options provided\n{:#?}", options);
 
-    let results: Vec<_> = dfraw_json_parser::parse_info_modules(&options)
-        .iter()
-        .filter(|module| module.get_identifier().to_lowercase() != "unknown")
-        // Sort by object_id
-        .sorted_by(|a, b| {
-            a.get_object_id()
-                .to_lowercase()
-                .cmp(&b.get_object_id().to_lowercase())
-        })
-        .cloned()
-        .collect();
+    let results: Vec<_> = match dfraw_json_parser::parse(&options) {
+        Ok(result) => result
+            .info_files
+            .iter()
+            .filter(|module| module.get_identifier().to_lowercase() != "unknown")
+            // Sort by object_id
+            .sorted_by(|a, b| {
+                a.get_object_id()
+                    .to_lowercase()
+                    .cmp(&b.get_object_id().to_lowercase())
+            })
+            .cloned()
+            .collect(),
+        Err(e) => {
+            log::error!("Failure parsing: {e:?}");
+            vec![]
+        }
+    };
 
     let duration = start.elapsed();
     log::info!(
