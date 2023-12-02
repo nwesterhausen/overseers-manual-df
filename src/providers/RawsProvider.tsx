@@ -61,7 +61,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
   // When the raws are done parsing, it will set the loadRaws signal to false, which will
   // enable it to be triggered again.
   createEffect(async () => {
-    if (loadRaws() && settings.directoryPath.length > 0) {
+    if (loadRaws() && settings.parsing.directoryPath.length > 0) {
       resetPage();
       searchContext.setSearchString('');
       await parseRaws();
@@ -133,7 +133,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
    */
   async function parseRaws(): Promise<void> {
     // Don't parse when not ready
-    if (settings.ready !== true || settings.directoryPath === '') {
+    if (settings.ready !== true || settings.parsing.directoryPath === '') {
       console.info('Skipped parsing because settings are not initialized / the directory is not set');
       resetPage();
       // Reset the trigger after 50ms
@@ -151,24 +151,24 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       // See the function in dfraw_json_parser/src/lib.rs for more info
       // The function in our lib.rs simply passes this through (more or less)
       const objectTypesToParse: ObjectType[] = [
-        ...settings.parseObjectTypes,
+        ...settings.parsing.objectTypes,
         // Include graphics details
         'Graphics',
         'TilePage',
       ];
 
       const parsingOptions: ParserOptions = {
-        dwarfFortressDirectory: settings.directoryPath,
+        dwarfFortressDirectory: settings.parsing.directoryPath,
         attachMetadataToRaws: true,
         skipApplyCopyTagsFrom: false,
         skipApplyCreatureVariations: false,
         rawsToParse: objectTypesToParse,
-        locationsToParse: settings.parseLocations,
+        locationsToParse: settings.parsing.locations,
         serializeResultToJson: false,
-        legendsExportsToParse: [],
-        moduleInfoFilesToParse: [],
-        rawFilesToParse: [],
-        rawModulesToParse: [],
+        legendsExportsToParse: settings.parsing.legendsExports,
+        moduleInfoFilesToParse: settings.parsing.moduleInfoFiles,
+        rawFilesToParse: settings.parsing.rawFiles,
+        rawModulesToParse: settings.parsing.rawModules,
       };
 
       // Shortcut the parsing if there are no locations to parse
@@ -221,7 +221,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
    */
   async function parseRawsInfo(): Promise<ModuleInfoFile[]> {
     // Don't parse when empty directory
-    if (settings.directoryPath === '') {
+    if (settings.parsing.directoryPath === '') {
       setTimeout(() => setUpdateRawsInfo(false), 5);
       return [];
     }
@@ -229,24 +229,24 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     // See the function in dfraw_json_parser/src/lib.rs for more info
     // The function in our lib.rs simply passes this through (more or less)
     const objectTypesToParse: ObjectType[] = [
-      ...settings.parseObjectTypes,
+      ...settings.parsing.objectTypes,
       // Include graphics details
       'Graphics',
       'TilePage',
     ];
 
     const parsingOptions: ParserOptions = {
-      dwarfFortressDirectory: settings.directoryPath,
+      dwarfFortressDirectory: settings.parsing.directoryPath,
       attachMetadataToRaws: false,
       skipApplyCopyTagsFrom: false,
       skipApplyCreatureVariations: false,
       rawsToParse: objectTypesToParse,
-      locationsToParse: settings.parseLocations,
+      locationsToParse: settings.parsing.locations,
       serializeResultToJson: false,
-      legendsExportsToParse: [],
-      moduleInfoFilesToParse: [],
-      rawFilesToParse: [],
-      rawModulesToParse: [],
+      legendsExportsToParse: settings.parsing.legendsExports,
+      moduleInfoFilesToParse: settings.parsing.moduleInfoFiles,
+      rawFilesToParse: settings.parsing.rawFiles,
+      rawModulesToParse: settings.parsing.rawModules,
     };
 
     try {
@@ -272,7 +272,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   // We can check if the directory is valid and if so, load the raws
   createEffect(() => {
-    if (settings.directoryPath.length > 0 && settings.ready === true) {
+    if (settings.parsing.directoryPath.length > 0 && settings.ready === true) {
       setLoadRaws(true);
     }
   });

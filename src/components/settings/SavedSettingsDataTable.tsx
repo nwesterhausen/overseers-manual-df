@@ -21,8 +21,8 @@ const SavedSettingsDataTable: Component = () => {
         </tr>
         {/* Directory Path */}
         <tr>
-          <td>directoryPath</td>
-          <td>{settings.directoryPath}</td>
+          <td>parsing → directoryPath</td>
+          <td>{settings.parsing.directoryPath}</td>
         </tr>
         {/* Display Graphics */}
         <tr>
@@ -36,33 +36,53 @@ const SavedSettingsDataTable: Component = () => {
         </tr>
         {/* Parse Locations */}
         <tr>
-          <td>parseLocations</td>
-          <td>{settings.parseLocations.join(', ')}</td>
-        </tr>
-        {/* Filter Locations */}
-        <tr>
-          <td>filterLocations</td>
-          <td>{settings.includeLocations.join(', ')}</td>
+          <td>parsing → locations</td>
+          <td>{settings.parsing.locations.join(', ')}</td>
         </tr>
         {/* Parse Object Types */}
         <tr>
-          <td>parseObjectTypes</td>
-          <td>{settings.parseObjectTypes.join(', ')}</td>
+          <td>parsing → objectTypes</td>
+          <td>{settings.parsing.objectTypes.join(', ')}</td>
+        </tr>
+        {/* Parse Specific Raw Files */}
+        <tr>
+          <td>parsing → rawFiles</td>
+          <td>{settings.parsing.rawFiles.join(', ')}</td>
+        </tr>
+        {/* Parse Specific Raw Modules */}
+        <tr>
+          <td>parsing → rawModules</td>
+          <td>{settings.parsing.rawModules.join(', ')}</td>
+        </tr>
+        {/* Parse Specific Legends Exports */}
+        <tr>
+          <td>parsing → legendsExports</td>
+          <td>{settings.parsing.legendsExports.join(', ')}</td>
+        </tr>
+        {/* Parse Specific Module `info.txt` files */}
+        <tr>
+          <td>parsing → moduleInfoFiles</td>
+          <td>{settings.parsing.moduleInfoFiles.join(', ')}</td>
+        </tr>
+        {/* Filter Locations */}
+        <tr>
+          <td>filtering → locations</td>
+          <td>{settings.filtering.locations.join(', ')}</td>
         </tr>
         {/* Filtered Object Types */}
         <tr>
-          <td>includeObjectTypes</td>
-          <td>{settings.includeObjectTypes.join(', ')}</td>
+          <td>filtering → objectTypes</td>
+          <td>{settings.filtering.objectTypes.join(', ')}</td>
         </tr>
         {/* Filter Biomes */}
         <tr>
-          <td>includeBiomes</td>
-          <td>{settings.includeBiomes.length === 0 ? 'All' : settings.includeBiomes.join(', ')}</td>
+          <td>filtering → biomes</td>
+          <td>{settings.filtering.biomes.length === 0 ? 'All' : settings.filtering.biomes.join(', ')}</td>
         </tr>
         {/* Filter Modules */}
         <tr>
-          <td>includeModules</td>
-          <td>{settings.includeModules.length === 0 ? 'All' : settings.includeModules.join(', ')}</td>
+          <td>filtering → modules</td>
+          <td>{settings.filtering.modules.length === 0 ? 'All' : settings.filtering.modules.join(', ')}</td>
         </tr>
         {/* Results Per Page */}
         <tr>
