@@ -5,6 +5,7 @@ import { ProgressPayload } from '../definitions/ProgressPayload';
 import { RawModuleLocation } from '../definitions/RawModuleLocation';
 import { SearchResults } from '../definitions/SearchResults';
 import { Summary } from '../definitions/Summary';
+import { FilteringSettings, ParsingSettings } from '../providers/SettingsProvider';
 
 /**
  * Default update object. This is an empty update object which is used
@@ -19,27 +20,39 @@ export const NO_UPDATE: Update = {
   date: new Date().toISOString(),
 };
 
+export const SETTINGS_PARSING_DEFAULTS: ParsingSettings = {
+  directoryPath: '',
+  legendsExports: [],
+  locations: ['Vanilla'] as RawModuleLocation[],
+  objectTypes: ['Creature', 'Plant'] as ObjectType[],
+  rawFiles: [] as string[],
+  rawModules: [] as string[],
+  moduleInfoFiles: [] as string[],
+};
+
+export const SETTINGS_FILTERING_DEFAULTS: FilteringSettings = {
+  biomes: [] as Biome[],
+  locations: ['Vanilla'] as RawModuleLocation[],
+  objectTypes: ['Creature', 'Plant'] as ObjectType[],
+  modules: [] as string[],
+};
+
 /**
  * Default settings for the application. These are used when the application
  * is first run and the settings file is created. It is also used when the
  * settings file is corrupted or missing, or when the user resets the settings.
  */
 export const SETTINGS_DEFAULTS = {
-  dataVersion: 10,
+  dataVersion: 11,
+  parsing: SETTINGS_PARSING_DEFAULTS,
+  filtering: SETTINGS_FILTERING_DEFAULTS,
   ready: false,
   layoutAsGrid: true,
   displayGraphics: true,
   resultsPerPage: 32,
-  directoryPath: '',
   currentPage: 1,
   totalResults: 0,
   totalPages: 1,
-  includeObjectTypes: ['Creature', 'Plant'] as ObjectType[],
-  parseObjectTypes: ['Creature', 'Plant'] as ObjectType[],
-  includeBiomes: [] as Biome[],
-  parseLocations: ['Vanilla'] as RawModuleLocation[],
-  includeLocations: ['Vanilla'] as RawModuleLocation[],
-  includeModules: [] as string[],
 };
 
 /**

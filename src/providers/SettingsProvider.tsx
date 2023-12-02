@@ -9,12 +9,70 @@ import { RawModuleLocation } from '../definitions/RawModuleLocation';
 import { SETTINGS_DEFAULTS, SETTINGS_FILE_NAME } from '../lib/Constants';
 import { getDwarfDirectoryPath } from '../lib/DirectoryActions';
 
-type SettingsStore = [
+export type ParsingSettings = {
+  /**
+   * The object types to include when parsing raws.
+   */
+  objectTypes: ObjectType[];
+  /**
+   * The locations to include when parsing raws.
+   */
+  locations: RawModuleLocation[];
+  /**
+   * Individual raw files to parse.
+   */
+  rawFiles: string[];
+  /**
+   * Individual raw modules to parse.
+   */
+  rawModules: string[];
+  /**
+   * Specific legends exports to parse.
+   */
+  legendsExports: string[];
+  /**
+   * Specific module `info.txt` files to parse.
+   */
+  moduleInfoFiles: string[];
+  /**
+   * Dwarf Fortress game directory.
+   */
+  directoryPath: string;
+};
+
+export type FilteringSettings = {
+  /**
+   * The object types to include when filtering results.
+   */
+  objectTypes: ObjectType[];
+  /**
+   * The biomes to include when filtering results.
+   */
+  biomes: Biome[];
+  /**
+   * The locations to include when filtering results.
+   */
+  locations: RawModuleLocation[];
+  /**
+   * The modules to include when filtering results (by objectId).
+   */
+  modules: string[];
+};
+
+export type SettingsStore = [
   {
     /**
      * The version of the data. This is used to determine if we need to reset the settings.
      */
     dataVersion: number;
+    /**
+     * Parsing settings.
+     */
+    parsing: ParsingSettings;
+    /**
+     * Filtering settings.
+     */
+    filtering: FilteringSettings;
     /**
      * Whether or not to display the results as a grid.
      */
@@ -24,21 +82,9 @@ type SettingsStore = [
      */
     displayGraphics: boolean;
     /**
-     * The object types to include when parsing raws.
-     */
-    parseObjectTypes: ObjectType[];
-    /**
-     * The locations to include when parsing raws.
-     */
-    parseLocations: RawModuleLocation[];
-    /**
      * The number of results to display per page.
      */
     resultsPerPage: number;
-    /**
-     * The path to the game directory.
-     */
-    directoryPath: string;
     /**
      * The current page of results. Must always be `>= 1`.
      */
@@ -51,22 +97,6 @@ type SettingsStore = [
      * The total number of pages of results. Must always be `>= 1`.
      */
     totalPages: number;
-    /**
-     * The object types to include when filtering results.
-     */
-    includeObjectTypes: ObjectType[];
-    /**
-     * The biomes to include when filtering results.
-     */
-    includeBiomes: Biome[];
-    /**
-     * The locations to include when filtering results.
-     */
-    includeLocations: RawModuleLocation[];
-    /**
-     * The modules to include when filtering results.
-     */
-    includeModules: string[];
     /**
      * If the settings have been initialized and are ready to use.
      */
@@ -300,15 +330,10 @@ async function resetSavedSettingsToDefaults() {
   // Load defaults
   await tauriSettingsStore.set('layoutAsGrid', SETTINGS_DEFAULTS.layoutAsGrid);
   await tauriSettingsStore.set('displayGraphics', SETTINGS_DEFAULTS.displayGraphics);
-  await tauriSettingsStore.set('parseLocations', SETTINGS_DEFAULTS.parseLocations);
-  await tauriSettingsStore.set('includeLocations', SETTINGS_DEFAULTS.includeLocations);
   await tauriSettingsStore.set('resultsPerPage', SETTINGS_DEFAULTS.resultsPerPage);
-  await tauriSettingsStore.set('directoryPath', SETTINGS_DEFAULTS.directoryPath);
-  await tauriSettingsStore.set('parseObjectTypes', SETTINGS_DEFAULTS.parseObjectTypes);
-  await tauriSettingsStore.set('includeObjectTypes', SETTINGS_DEFAULTS.includeObjectTypes);
-  await tauriSettingsStore.set('includeBiomes', SETTINGS_DEFAULTS.includeBiomes);
-  await tauriSettingsStore.set('includeModules', SETTINGS_DEFAULTS.includeModules);
   await tauriSettingsStore.set('dataVersion', SETTINGS_DEFAULTS.dataVersion);
+  await tauriSettingsStore.set('parsing', SETTINGS_DEFAULTS.parsing);
+  await tauriSettingsStore.set('filtering', SETTINGS_DEFAULTS.filtering);
   // Save
   await tauriSettingsStore.save();
 }
@@ -402,14 +427,9 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
       // Load the rest of the settings from disk.
       loadFromStoreOrDefault('layoutAsGrid');
       loadFromStoreOrDefault('displayGraphics');
-      loadFromStoreOrDefault('parseObjectTypes');
-      loadFromStoreOrDefault('parseLocations');
       loadFromStoreOrDefault('resultsPerPage');
-      loadFromStoreOrDefault('directoryPath');
-      loadFromStoreOrDefault('includeObjectTypes');
-      loadFromStoreOrDefault('includeBiomes');
-      loadFromStoreOrDefault('includeLocations');
-      loadFromStoreOrDefault('includeModules');
+      loadFromStoreOrDefault('parsing');
+      loadFromStoreOrDefault('filtering');
 
       // Set "ready"
       setState('ready', true);
@@ -427,14 +447,8 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
       await tauriSettingsStore.set('dataVersion', SETTINGS_DEFAULTS.dataVersion);
       await tauriSettingsStore.set('layoutAsGrid', state.layoutAsGrid);
       await tauriSettingsStore.set('displayGraphics', state.displayGraphics);
-      await tauriSettingsStore.set('parseObjectTypes', state.parseObjectTypes);
-      await tauriSettingsStore.set('parseLocations', state.parseLocations);
-      await tauriSettingsStore.set('resultsPerPage', state.resultsPerPage);
-      await tauriSettingsStore.set('directoryPath', state.directoryPath);
-      await tauriSettingsStore.set('includeObjectTypes', state.includeObjectTypes);
-      await tauriSettingsStore.set('includeBiomes', state.includeBiomes);
-      await tauriSettingsStore.set('includeLocations', state.includeLocations);
-      await tauriSettingsStore.set('includeModules', state.includeModules);
+      await tauriSettingsStore.set('parsing', state.parsing);
+      await tauriSettingsStore.set('filtering', state.filtering);
 
       setSettingsChanged(false);
 
@@ -451,7 +465,12 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
         getDwarfDirectoryPath(file)
           .then((directory) => {
             if (directory.length > 0) {
-              setState('directoryPath', directory.join('/'));
+              setState({
+                parsing: {
+                  ...state.parsing,
+                  directoryPath: directory.join('/'),
+                },
+              });
               setSettingsChanged(true);
             }
           })
@@ -476,33 +495,52 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
         setSettingsChanged(true);
       },
       setDirectoryPath(path: string) {
-        setState('directoryPath', path);
+        setState({
+          parsing: {
+            ...state.parsing,
+            directoryPath: path,
+          },
+        });
         setSettingsChanged(true);
       },
       objectTypeIncluded(type: ObjectType, parsingOnly: boolean) {
         if (parsingOnly) {
-          return state.parseObjectTypes.includes(type);
+          return state.parsing.objectTypes.includes(type);
         }
-        return state.includeObjectTypes.includes(type);
+        return state.filtering.objectTypes.includes(type);
       },
       toggleObjectType(type: ObjectType, parsingOnly: boolean) {
         if (parsingOnly) {
-          if (state.parseObjectTypes.includes(type)) {
-            setState(
-              'parseObjectTypes',
-              state.parseObjectTypes.filter((t) => t !== type),
-            );
+          if (state.parsing.objectTypes.includes(type)) {
+            setState({
+              parsing: {
+                ...state.parsing,
+                objectTypes: state.parsing.objectTypes.filter((t) => t !== type),
+              },
+            });
           } else {
-            setState('parseObjectTypes', [...state.parseObjectTypes, type]);
+            setState({
+              parsing: {
+                ...state.parsing,
+                objectTypes: [...state.parsing.objectTypes, type],
+              },
+            });
           }
         } else {
-          if (state.includeObjectTypes.includes(type)) {
-            setState(
-              'includeObjectTypes',
-              state.includeObjectTypes.filter((t) => t !== type),
-            );
+          if (state.filtering.objectTypes.includes(type)) {
+            setState({
+              filtering: {
+                ...state.filtering,
+                objectTypes: state.filtering.objectTypes.filter((t) => t !== type),
+              },
+            });
           } else {
-            setState('includeObjectTypes', [...state.includeObjectTypes, type]);
+            setState({
+              filtering: {
+                ...state.filtering,
+                objectTypes: [...state.filtering.objectTypes, type],
+              },
+            });
           }
         }
         setSettingsChanged(true);
@@ -512,59 +550,95 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
         setSettingsChanged(true);
       },
       biomeIncluded(biome: Biome) {
-        return state.includeBiomes.includes(biome);
+        return state.filtering.biomes.includes(biome);
       },
       toggleBiome(biome: Biome) {
-        if (state.includeBiomes.includes(biome)) {
-          setState(
-            'includeBiomes',
-            state.includeBiomes.filter((b) => b !== biome),
-          );
+        if (state.filtering.biomes.includes(biome)) {
+          setState({
+            filtering: {
+              ...state.filtering,
+              biomes: state.filtering.biomes.filter((t) => t !== biome),
+            },
+          });
         } else {
-          setState('includeBiomes', [...state.includeBiomes, biome]);
+          setState({
+            filtering: {
+              ...state.filtering,
+              biomes: [...state.filtering.biomes, biome],
+            },
+          });
         }
         setSettingsChanged(true);
       },
       updateFilteredBiomes(biomes: Biome[]) {
-        setState('includeBiomes', biomes);
+        setState({
+          filtering: {
+            ...state.filtering,
+            biomes,
+          },
+        });
         console.log('Updated biomes', biomes);
         setSettingsChanged(true);
       },
       updateFilteredLocations(locations: RawModuleLocation[]) {
-        setState('includeLocations', locations);
+        setState({
+          filtering: {
+            ...state.filtering,
+            locations,
+          },
+        });
         console.log('Updated locations', locations);
         setSettingsChanged(true);
       },
       locationIncluded(location: RawModuleLocation, forParsing: boolean) {
         if (forParsing) {
-          return state.parseLocations.includes(location);
+          return state.parsing.locations.includes(location);
         }
-        return state.includeLocations.includes(location);
+        return state.filtering.locations.includes(location);
       },
       toggleLocation(location: RawModuleLocation, forParsing: boolean) {
         if (forParsing) {
-          if (state.parseLocations.includes(location)) {
-            setState(
-              'parseLocations',
-              state.parseLocations.filter((t) => t !== location),
-            );
+          if (state.parsing.locations.includes(location)) {
+            setState({
+              parsing: {
+                ...state.parsing,
+                locations: state.parsing.locations.filter((t) => t !== location),
+              },
+            });
           } else {
-            setState('parseLocations', [...state.parseLocations, location]);
+            setState({
+              parsing: {
+                ...state.parsing,
+                locations: [...state.parsing.locations, location],
+              },
+            });
           }
         } else {
-          if (state.includeLocations.includes(location)) {
-            setState(
-              'includeLocations',
-              state.includeLocations.filter((t) => t !== location),
-            );
+          if (state.filtering.locations.includes(location)) {
+            setState({
+              filtering: {
+                ...state.filtering,
+                locations: state.filtering.locations.filter((t) => t !== location),
+              },
+            });
           } else {
-            setState('includeLocations', [...state.includeLocations, location]);
+            setState({
+              filtering: {
+                ...state.filtering,
+                locations: [...state.filtering.locations, location],
+              },
+            });
           }
         }
         setSettingsChanged(true);
       },
       updateFilteredModules(modules: string[]) {
-        setState('includeModules', modules);
+        setState({
+          filtering: {
+            ...state.filtering,
+            modules,
+          },
+        });
         console.log('Updated modules', modules);
         setSettingsChanged(true);
       },
@@ -611,14 +685,24 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
         getDwarfDirectoryPath()
           .then((directory) => {
             if (directory.length > 0) {
-              setState('directoryPath', directory.join('/'));
+              setState({
+                parsing: {
+                  ...state.parsing,
+                  directoryPath: directory.join('/'),
+                },
+              });
               setSettingsChanged(true);
             }
           })
           .catch(console.error);
       },
       resetDirectorySelection() {
-        setState('directoryPath', '');
+        setState({
+          parsing: {
+            ...state.parsing,
+            directoryPath: '',
+          },
+        });
         setSettingsChanged(true);
       },
     },

@@ -13,7 +13,7 @@ function ReferenceManual(): JSX.Element {
   const [settings] = useSettingsContext();
   // Helper boolean to know when to display the page or not
   const contentToDisplay = createMemo(() => {
-    return rawsContext.parsingStatus() === STS_IDLE && settings.directoryPath.length > 0;
+    return rawsContext.parsingStatus() === STS_IDLE && settings.parsing.directoryPath.length > 0;
   });
   return (
     <div class='px-2 main'>

@@ -19,7 +19,7 @@ const ModuleFiltering: Component = () => {
     options: ModuleItem[];
   };
   const options = createMemo<Category[]>(() => {
-    return settings.includeLocations.map((location) => {
+    return settings.filtering.locations.map((location) => {
       return {
         location,
         options: rawsContext.rawModulesInfo.latest
