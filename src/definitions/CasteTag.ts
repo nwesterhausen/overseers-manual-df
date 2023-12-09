@@ -149,4 +149,5 @@ export type CasteTag =
   | "NaturalAnimal"
   | "CuriousBeast"
   | "CannotBreatheAir"
-  | "Utterances";
+  | "Utterances"
+  | "Gait";

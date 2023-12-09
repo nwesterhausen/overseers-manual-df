@@ -6,12 +6,12 @@ export interface ParserOptions {
   attachMetadataToRaws: boolean;
   skipApplyCopyTagsFrom: boolean;
   skipApplyCreatureVariations: boolean;
-  rawsToParse: Array<ObjectType>;
+  objectTypesToParse: Array<ObjectType>;
   locationsToParse: Array<RawModuleLocation>;
   dwarfFortressDirectory: string;
-  serializeResultToJson: boolean;
   legendsExportsToParse: Array<string>;
   rawFilesToParse: Array<string>;
   rawModulesToParse: Array<string>;
   moduleInfoFilesToParse: Array<string>;
+  logSummary: boolean;
 }
