@@ -571,6 +571,14 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
         setSettingsChanged(true);
       },
       updateFilteredBiomes(biomes: Biome[]) {
+        // Avoid setting the state if the biomes are the same
+        if (
+          biomes.length === state.filtering.biomes.length &&
+          biomes.every((v, i) => v === state.filtering.biomes[i])
+        ) {
+          return;
+        }
+
         setState({
           filtering: {
             ...state.filtering,
@@ -633,6 +641,14 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
         setSettingsChanged(true);
       },
       updateFilteredModules(modules: string[]) {
+        // Avoid setting the state if the modules are the same
+        if (
+          modules.length === state.filtering.modules.length &&
+          modules.every((v, i) => v === state.filtering.modules[i])
+        ) {
+          return;
+        }
+
         setState({
           filtering: {
             ...state.filtering,

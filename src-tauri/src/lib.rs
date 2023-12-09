@@ -1,4 +1,4 @@
-use state::{GraphicStorage, Storage};
+use state::{GraphicStorage, ModuleInfoStorage, Storage};
 use std::sync::Mutex;
 #[cfg(debug_assertions)]
 use tauri::Manager;
@@ -11,7 +11,6 @@ mod biome;
 mod graphics;
 mod info;
 mod open_explorer;
-mod parsing;
 mod search_handler;
 pub mod state;
 pub mod tracking;
@@ -45,6 +44,9 @@ pub fn run() {
         .manage(GraphicStorage {
             graphics_store: Mutex::default(),
             tile_page_store: Mutex::default(),
+        })
+        .manage(ModuleInfoStorage {
+            module_info_store: Mutex::default(),
         })
         // Add logging plugin
         .plugin(
@@ -86,8 +88,8 @@ pub fn run() {
         .plugin(tauri_plugin_aptabase::Builder::new(dotenv!("APTABASE_KEY")).build())
         // Add invoke handlers
         .invoke_handler(tauri::generate_handler![
-            parsing::passthrough::parse_raws_info,
             search_handler::prepare::parse_and_store_raws,
+            search_handler::prepare::get_module_info_files,
             search_handler::search::search_raws,
             search_handler::util::get_search_string_for_object,
             info::get_build_info,
