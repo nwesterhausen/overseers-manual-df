@@ -45,7 +45,7 @@ pub async fn parse_and_store_raws(
     // Build summary
     let mut summary = Summary::from_results(
         &raws_vec,
-        &options.raws_to_parse,
+        &options.object_types_to_parse,
         &options.locations_to_parse,
     );
 
@@ -66,7 +66,7 @@ pub async fn parse_and_store_raws(
         format!("{:?}", duration),
         format!("{:?}", duration2),
         format!("{:?}", duration2_total),
-        options.raws_to_parse,
+        options.object_types_to_parse,
         options.locations_to_parse,
     );
     app_handle.track_event(
@@ -75,7 +75,7 @@ pub async fn parse_and_store_raws(
             serde_json::to_string(&ParseAndStoreRaws {
                 total_raws_parsed: total_raws,
                 elapsed_time: format!("{duration2_total:?}"),
-                parsed_raw_types: json!(options.raws_to_parse).to_string(),
+                parsed_raw_types: json!(options.object_types_to_parse).to_string(),
                 parsed_raw_locations: json!(options.locations_to_parse).to_string(),
             })
             .unwrap_or_default()

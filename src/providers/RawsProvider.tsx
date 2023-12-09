@@ -162,13 +162,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         attachMetadataToRaws: true,
         skipApplyCopyTagsFrom: false,
         skipApplyCreatureVariations: false,
-        rawsToParse: objectTypesToParse,
+        objectTypesToParse: objectTypesToParse,
         locationsToParse: settings.parsing.locations,
-        serializeResultToJson: false,
         legendsExportsToParse: settings.parsing.legendsExports,
         moduleInfoFilesToParse: settings.parsing.moduleInfoFiles,
         rawFilesToParse: settings.parsing.rawFiles,
         rawModulesToParse: settings.parsing.rawModules,
+        logSummary: true,
       };
 
       // Shortcut the parsing if there are no locations to parse
@@ -240,13 +240,13 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
       attachMetadataToRaws: false,
       skipApplyCopyTagsFrom: false,
       skipApplyCreatureVariations: false,
-      rawsToParse: objectTypesToParse,
+      objectTypesToParse: objectTypesToParse,
       locationsToParse: settings.parsing.locations,
-      serializeResultToJson: false,
       legendsExportsToParse: settings.parsing.legendsExports,
       moduleInfoFilesToParse: settings.parsing.moduleInfoFiles,
       rawFilesToParse: settings.parsing.rawFiles,
       rawModulesToParse: settings.parsing.rawModules,
+      logSummary: true,
     };
 
     try {
