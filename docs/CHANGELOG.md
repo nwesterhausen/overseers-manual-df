@@ -1,3 +1,10 @@
+## [0.30.7](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.30.6...v0.30.7) (2023-12-05)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([001a8b8](https://github.com/nwesterhausen/overseers-manual-df/commit/001a8b8e200e7379589e63ce1e10af3180d5e3b0))
+
 ## [0.30.6](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.30.5...v0.30.6) (2023-11-24)
 
 
