@@ -18,8 +18,8 @@ import { ProgressPayload } from '../definitions/ProgressPayload';
 import { SearchResults } from '../definitions/SearchResults';
 import { Summary } from '../definitions/Summary';
 import {
+  COMMAND_GET_RAWS_INFO,
   COMMAND_PARSE_AND_STORE_RAWS,
-  COMMAND_PARSE_RAWS_INFO,
   COMMAND_SEARCH_RAWS,
   DEFAULT_PARSING_STATUS,
   DEFAULT_SEARCH_RESULT,
@@ -90,10 +90,21 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 
   // Signal to update the raw module info files data
   const [updateRawsInfo, setUpdateRawsInfo] = createSignal(false);
-  // Resource for raws' modules info.txt files (as restricted by the search options)
-  const [rawModulesInfo] = createResource(updateRawsInfo, parseRawsInfo, {
-    initialValue: [],
-  });
+  /**
+   * Get raws' modules info.txt files from the backend.
+   *
+   * @returns The raws' modules info.txt files
+   */
+  const [rawModulesInfo] = createResource(
+    updateRawsInfo,
+    async () => {
+      const results = (await invoke(COMMAND_GET_RAWS_INFO)) as ModuleInfoFile[];
+      return results;
+    },
+    {
+      initialValue: [],
+    },
+  );
 
   // Signal for raw parsing progress
   const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>(DEFAULT_PARSING_STATUS);
@@ -171,11 +182,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         logSummary: true,
       };
 
-      // Shortcut the parsing if there are no locations to parse
-      if (parsingOptions.locationsToParse.length === 0) {
-        return;
-      }
-
       // Have the backend parse the raws
       await invoke(COMMAND_PARSE_AND_STORE_RAWS, {
         options: parsingOptions,
@@ -212,62 +218,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
     setPreviousSearchOptions(searchContext.searchOptions());
 
     return results;
-  }
-
-  /**
-   * Parse the raws' modules info.txt files (as restricted by the search options)
-   *
-   * @returns The raws' modules info.txt files data
-   */
-  async function parseRawsInfo(): Promise<ModuleInfoFile[]> {
-    // Don't parse when empty directory
-    if (settings.parsing.directoryPath === '') {
-      setTimeout(() => setUpdateRawsInfo(false), 5);
-      return [];
-    }
-
-    // See the function in dfraw_json_parser/src/lib.rs for more info
-    // The function in our lib.rs simply passes this through (more or less)
-    const objectTypesToParse: ObjectType[] = [
-      ...settings.parsing.objectTypes,
-      // Include graphics details
-      'Graphics',
-      'TilePage',
-    ];
-
-    const parsingOptions: ParserOptions = {
-      dwarfFortressDirectory: settings.parsing.directoryPath,
-      attachMetadataToRaws: false,
-      skipApplyCopyTagsFrom: false,
-      skipApplyCreatureVariations: false,
-      objectTypesToParse: objectTypesToParse,
-      locationsToParse: settings.parsing.locations,
-      legendsExportsToParse: settings.parsing.legendsExports,
-      moduleInfoFilesToParse: settings.parsing.moduleInfoFiles,
-      rawFilesToParse: settings.parsing.rawFiles,
-      rawModulesToParse: settings.parsing.rawModules,
-      logSummary: true,
-    };
-
-    try {
-      const raw_file_data: ModuleInfoFile[] = await invoke(COMMAND_PARSE_RAWS_INFO, {
-        options: parsingOptions,
-      });
-
-      // Filter unknown raw info stuff..
-      const flat_raw_info = raw_file_data
-        .flat()
-        .filter((dfi) => dfi.identifier !== 'unknown')
-        .sort((a, b) => (a.objectId < b.objectId ? -1 : 1));
-      // Reset on timer
-      setTimeout(() => setUpdateRawsInfo(false), 5);
-      return flat_raw_info;
-    } catch (e) {
-      console.error(e);
-    }
-    // Reset
-    setTimeout(() => setUpdateRawsInfo(false), 5);
-    return [];
   }
 
   // We can check if the directory is valid and if so, load the raws

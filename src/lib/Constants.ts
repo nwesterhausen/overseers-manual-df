@@ -163,7 +163,7 @@ export const PARSING_SUMMARY_EVENT = 'PARSE_SUMMARY';
 
 export const COMMAND_PARSE_AND_STORE_RAWS = 'parse_and_store_raws';
 export const COMMAND_SEARCH_RAWS = 'search_raws';
-export const COMMAND_PARSE_RAWS_INFO = 'parse_raws_info';
+export const COMMAND_GET_RAWS_INFO = 'get_module_info_files';
 export const COMMAND_SHOW_IN_FOLDER = 'show_in_folder';
 export const COMMAND_GET_SEARCH_STRING_FOR_OBJECT = 'get_search_string_for_object';
 export const COMMAND_GET_BIOME_DESCRIPTION = 'get_biome_description';
