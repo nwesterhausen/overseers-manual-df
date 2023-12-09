@@ -128,11 +128,11 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
     const options: SearchOptions = {
       limit: settings.resultsPerPage,
       page: settings.currentPage,
-      objectTypes: settings.includeObjectTypes,
+      objectTypes: settings.filtering.objectTypes,
       query: searchString(),
-      locations: settings.includeLocations,
-      biomes: settings.includeBiomes,
-      modules: settings.includeModules,
+      locations: settings.filtering.locations,
+      biomes: settings.filtering.biomes,
+      modules: settings.filtering.modules,
       onlyEggLayers: onlyEggLayers(),
       showDoesNotExist: showDoesNotExist(),
     };

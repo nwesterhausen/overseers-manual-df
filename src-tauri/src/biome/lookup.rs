@@ -1,4 +1,4 @@
-use dfraw_json_parser::parser::biome::tokens::Biome;
+use dfraw_json_parser::biome::Token as Biome;
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]

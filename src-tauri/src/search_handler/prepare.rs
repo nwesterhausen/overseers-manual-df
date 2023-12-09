@@ -1,16 +1,11 @@
 use dfraw_json_parser::{
-    options::ParserOptions,
-    parser::{
-        creature::raw::Creature,
-        graphics::{raw::Graphic, tile_page::TilePage},
-        helpers::clone_raw_object_box::clone_raw_object_box,
-        inorganic::raw::Inorganic,
-        object_types::ObjectType,
-        plant::raw::Plant,
-        raws::RawObject,
-        searchable::get_search_string,
-    },
-    ProgressPayload,
+    creature::Creature,
+    get_search_string,
+    graphics::{Graphic, TilePage},
+    helpers::clone_raw_object_box,
+    inorganic::Inorganic,
+    plant::Plant,
+    ModuleInfoFile, ObjectType, ParserOptions, ProgressPayload, RawObject,
 };
 use serde_json::json;
 use tauri::{AppHandle, Manager, State, Window};
@@ -18,7 +13,7 @@ use tauri_plugin_aptabase::EventTracker;
 
 use crate::{
     search_handler::summary::Summary,
-    state::{GraphicStorage, Storage},
+    state::{GraphicStorage, ModuleInfoStorage, Storage},
     tracking::ParseAndStoreRaws,
 };
 
@@ -29,6 +24,7 @@ pub async fn parse_and_store_raws(
     window: Window,
     storage: State<'_, Storage>,
     graphics_storage: State<'_, GraphicStorage>,
+    module_info_storage: State<'_, ModuleInfoStorage>,
     app_handle: AppHandle,
 ) -> Result<(), ()> {
     log::info!(
@@ -37,14 +33,38 @@ pub async fn parse_and_store_raws(
     );
     let start = std::time::Instant::now();
     // Get the raws with given options (and progress)
-    let raws_vec = dfraw_json_parser::parse_with_tauri_emit(&options, window.clone());
+    let mut raws_vec = Vec::new();
+    let mut info_vec = Vec::new();
+    match dfraw_json_parser::parse_with_tauri_emit(&options, window.clone()) {
+        Ok(result) => {
+            raws_vec.extend(result.raws);
+            info_vec.extend(result.info_files);
+        }
+        Err(e) => {
+            log::error!("Failure parsing: {e:?}");
+        }
+    };
     let total_raws = raws_vec.len();
     let duration = start.elapsed();
+
+    // Store the info files in the storage, after clearing it
+    #[allow(clippy::unwrap_used)]
+    module_info_storage
+        .module_info_store
+        .lock()
+        .unwrap()
+        .clear();
+    #[allow(clippy::unwrap_used)]
+    module_info_storage
+        .module_info_store
+        .lock()
+        .unwrap()
+        .extend(info_vec);
 
     // Build summary
     let mut summary = Summary::from_results(
         &raws_vec,
-        &options.raws_to_parse,
+        &options.object_types_to_parse,
         &options.locations_to_parse,
     );
 
@@ -65,7 +85,7 @@ pub async fn parse_and_store_raws(
         format!("{:?}", duration),
         format!("{:?}", duration2),
         format!("{:?}", duration2_total),
-        options.raws_to_parse,
+        options.object_types_to_parse,
         options.locations_to_parse,
     );
     app_handle.track_event(
@@ -74,7 +94,7 @@ pub async fn parse_and_store_raws(
             serde_json::to_string(&ParseAndStoreRaws {
                 total_raws_parsed: total_raws,
                 elapsed_time: format!("{duration2_total:?}"),
-                parsed_raw_types: json!(options.raws_to_parse).to_string(),
+                parsed_raw_types: json!(options.object_types_to_parse).to_string(),
                 parsed_raw_locations: json!(options.locations_to_parse).to_string(),
             })
             .unwrap_or_default()
@@ -264,4 +284,18 @@ fn update_tile_page_store(storage: &State<Storage>, graphics_storage: &State<Gra
         total_tile_pages,
         format!("{:?}", duration),
     );
+}
+
+#[tauri::command]
+pub async fn get_module_info_files(
+    module_info_storage: State<'_, ModuleInfoStorage>,
+) -> Result<Vec<ModuleInfoFile>, ()> {
+    #[allow(clippy::unwrap_used)]
+    Ok(module_info_storage
+        .module_info_store
+        .lock()
+        .unwrap()
+        .iter()
+        .cloned()
+        .collect::<Vec<ModuleInfoFile>>())
 }
