@@ -1,3 +1,20 @@
+## [0.31.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.30.7...v0.31.0) (2023-12-09)
+
+
+### Features
+
+* improve search state ([fecf039](https://github.com/nwesterhausen/overseers-manual-df/commit/fecf0391c104d963d23c3e81fca147b86dea01ed))
+
+
+### Bug Fixes
+
+* **deps:** update dfraw_json_parser to 0.15 ([95f74d7](https://github.com/nwesterhausen/overseers-manual-df/commit/95f74d7f10163eda1d210521b05496ffe5363f0e))
+* **deps:** update dfraw_json_parser to 0.15 ([e6c8f85](https://github.com/nwesterhausen/overseers-manual-df/commit/e6c8f8519aabd9af16d1db04df52bca7a8acf708))
+* **deps:** update vite to v5 and other updates ([e9b4521](https://github.com/nwesterhausen/overseers-manual-df/commit/e9b4521505962695aebd67fbee284a7233ec3442))
+* include creature variations in parsing ([41e12c4](https://github.com/nwesterhausen/overseers-manual-df/commit/41e12c496a3448b171898d1ea0f9491cf9ddd8a1))
+* stop constant propagation ([8609360](https://github.com/nwesterhausen/overseers-manual-df/commit/8609360ad778346a1429f334958f5c5b30286feb))
+* update to latest solid and router ([0ee4e32](https://github.com/nwesterhausen/overseers-manual-df/commit/0ee4e326bcac193aa4425e3df96b1783daca7e60))
+
 ## [0.30.7](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.30.6...v0.30.7) (2023-12-05)
 
 
