@@ -1,8 +1,8 @@
 use std::{collections::HashMap, sync::Mutex};
 
-use dfraw_json_parser::parser::{
-    graphics::{raw::Graphic, tile_page::TilePage},
-    raws::RawObject,
+use dfraw_json_parser::{
+    graphics::{Graphic, TilePage},
+    ModuleInfoFile, RawObject,
 };
 
 /// The shared state storage used by the tauri app. This enables us to do the
@@ -44,4 +44,14 @@ pub struct GraphicStorage {
     pub graphics_store: Mutex<HashMap<String, Vec<Graphic>>>,
     /// Holds all tile pages by their identifier
     pub tile_page_store: Mutex<HashMap<String, TilePage>>,
+}
+
+/// Storage for module info files.
+///
+/// This is separate from the `Storage` struct because it reduces the locks on
+/// the `Storage` struct. We don't need to lock the `Storage` struct when we're
+/// just looking for module info files.
+pub struct ModuleInfoStorage {
+    /// Holds all module info files
+    pub module_info_store: Mutex<Vec<ModuleInfoFile>>,
 }

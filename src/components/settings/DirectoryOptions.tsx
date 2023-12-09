@@ -15,13 +15,18 @@ function DirectoryOptions(): JSX.Element {
             class='btn btn-sm btn-primary btn-outline border-none'
             onClick={() => {
               invoke(COMMAND_SHOW_IN_FOLDER, {
-                path: `${settings.directoryPath}/gamelog.txt`,
+                path: `${settings.parsing.directoryPath}/gamelog.txt`,
               }).catch(console.error);
             }}>
             <BiSolidFolderOpen size={'1.5rem'} />
           </button>
         </div>
-        <input type='text' placeholder={settings.directoryPath} class='input input-primary input-ghost grow' disabled />
+        <input
+          type='text'
+          placeholder={settings.parsing.directoryPath}
+          class='input input-primary input-ghost grow'
+          disabled
+        />
       </div>
       <div class='flex justify-around my-2'>
         <button

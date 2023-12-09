@@ -1,9 +1,8 @@
-use dfraw_json_parser::parser::{
-    creature::raw::Creature,
-    helpers::{clone_raw_object_box, clone_raw_vector},
-    object_types::ObjectType,
-    plant::raw::Plant,
-    raws::RawObject,
+use dfraw_json_parser::{
+    creature::Creature,
+    helpers::{clone_raw_object_box, clone_raw_vector_with_limit_and_page},
+    plant::Plant,
+    ObjectType, RawObject,
 };
 use tauri::State;
 
@@ -111,7 +110,7 @@ pub async fn search_raws(
                         }
                     }
             })
-            .map(clone_raw_object_box::clone_raw_object_box)
+            .map(clone_raw_object_box)
             .collect();
 
         all_raws.sort_by(|a, b| {
@@ -120,7 +119,7 @@ pub async fn search_raws(
                 .cmp(&b.get_name().to_lowercase())
         });
 
-        let limited_raws: Vec<Box<dyn RawObject>> = clone_raw_vector::with_limit_and_page(
+        let limited_raws: Vec<Box<dyn RawObject>> = clone_raw_vector_with_limit_and_page(
             &all_raws,
             search_options.limit,
             search_options.page,
@@ -243,7 +242,7 @@ pub async fn search_raws(
             }
             None
         })
-        .map(clone_raw_object_box::clone_raw_object_box)
+        .map(clone_raw_object_box)
         .collect();
 
     let filter_duration = start2.elapsed();
@@ -270,7 +269,7 @@ pub async fn search_raws(
 
     // Further refine the filtered raws by the search options (limit & page_num)
     // Return a clone of the raw vector with limits applied
-    let limited_raws = clone_raw_vector::with_limit_and_page(
+    let limited_raws = clone_raw_vector_with_limit_and_page(
         &filtered_raws,
         search_options.limit,
         search_options.page,

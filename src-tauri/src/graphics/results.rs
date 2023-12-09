@@ -1,4 +1,4 @@
-use dfraw_json_parser::parser::graphics::{raw::Graphic, tile_page::TilePage};
+use dfraw_json_parser::graphics::{Graphic, TilePage};
 use serde::{Deserialize, Serialize};
 
 #[derive(ts_rs::TS)]
