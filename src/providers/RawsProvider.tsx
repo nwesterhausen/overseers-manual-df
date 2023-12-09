@@ -166,6 +166,8 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
         // Include graphics details
         'Graphics',
         'TilePage',
+        // Include creature variations
+        'CreatureVariation',
       ];
 
       const parsingOptions: ParserOptions = {
