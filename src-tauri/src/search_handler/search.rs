@@ -18,10 +18,10 @@ pub async fn search_raws(
 ) -> Result<SearchResults, ()> {
     #[allow(clippy::unwrap_used)]
     if storage.store.lock().unwrap().is_empty() {
-        log::debug!("search_raws: No raws in storage, returning empty search results");
+        tracing::debug!("search_raws: No raws in storage, returning empty search results");
         return Ok(SearchResults::default());
     }
-    log::info!(
+    tracing::info!(
         "search_raws: Processing search with options:\n{:#?}",
         search_options
     );
@@ -34,7 +34,7 @@ pub async fn search_raws(
     // If the search query is empty, we should be returning all raws
     if search_options.query.is_empty() {
         let start = std::time::Instant::now();
-        log::debug!("search_raws: Search query is empty, returning all raws");
+        tracing::debug!("search_raws: Search query is empty, returning all raws");
         #[allow(clippy::unwrap_used)]
         let mut all_raws: Vec<Box<dyn RawObject>> = storage
             .store
@@ -126,7 +126,7 @@ pub async fn search_raws(
         );
         let duration = start.elapsed();
 
-        log::info!(
+        tracing::info!(
             "search_raws: search returned {} results ({} pages) in {}. Returning Page#{} with {} results",
             all_raws.len(),
             get_total_pages(all_raws.len(), search_options.limit),
@@ -278,7 +278,7 @@ pub async fn search_raws(
     let total_pages = get_total_pages(limited_raws.len(), search_options.limit);
     let duration = start.elapsed();
 
-    log::info!(
+    tracing::info!(
         "search_raws: search returned {} results ({} pages) in {}. Returning Page#{} with {} results\nsearch: {}, filter/clone: {}, sort: {}",
         filtered_raws.len(),
         get_total_pages(filtered_raws.len(), search_options.limit),

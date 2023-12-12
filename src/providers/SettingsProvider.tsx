@@ -50,13 +50,13 @@ export type FilteringSettings = {
    */
   biomes: Biome[];
   /**
-   * The locations to include when filtering results.
-   */
-  locations: RawModuleLocation[];
-  /**
    * The modules to include when filtering results (by objectId).
    */
   modules: string[];
+  /**
+   * The tags to include when filtering results.
+   */
+  tags: TagFilter[];
 };
 
 export type SettingsStore = [

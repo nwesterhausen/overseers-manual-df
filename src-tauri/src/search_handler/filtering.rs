@@ -1,8 +1,10 @@
-use dfraw_json_parser::creature::Token as CreatureToken;
+use dfraw_json_parser::creature::Creature;
 use dfraw_json_parser::creature_caste::Token as CreatureCasteToken;
-use dfraw_json_parser::inorganic::Token as InorganicToken;
+use dfraw_json_parser::inorganic::{Inorganic, Token as InorganicToken};
 use dfraw_json_parser::ObjectType;
+use dfraw_json_parser::{creature::Token as CreatureToken, RawObject};
 use serde::{Deserialize, Serialize};
+use tracing::{debug, warn};
 
 #[derive(ts_rs::TS)]
 #[ts(export)]
@@ -21,6 +23,38 @@ pub enum Filter {
     #[default]
     /// A dummy filter
     None,
+}
+
+impl Filter {
+    pub fn get_object_type(&self) -> ObjectType {
+        match self {
+            Filter::Creature(_) => ObjectType::Creature,
+            Filter::CreatureCaste(_) => ObjectType::Creature,
+            Filter::Inorganic(_) => ObjectType::Inorganic,
+            Filter::None => ObjectType::Unknown,
+        }
+    }
+    /// Returns whether the given raw object is allowed by this filter.
+    ///
+    /// # Arguments
+    ///
+    /// * `raw_object` - The raw object to check against.
+    ///
+    /// # Returns
+    ///
+    /// Whether the given raw object is allowed by this filter.
+    pub fn allow(&self, raw_object: &Box<dyn RawObject>) -> bool {
+        if self.get_object_type() != *raw_object.get_type() {
+            return false;
+        }
+
+        match self {
+            Filter::Creature(creature_token) => creature_token.within(raw_object),
+            Filter::CreatureCaste(creature_caste_token) => creature_caste_token.within(raw_object),
+            Filter::Inorganic(inorganic_token) => inorganic_token.within(raw_object),
+            Filter::None => false,
+        }
+    }
 }
 
 #[derive(ts_rs::TS)]
@@ -94,5 +128,54 @@ impl SearchFilter {
                 Filter::None => false,
             })
             .collect()
+    }
+}
+
+trait FilterableToken {
+    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool;
+}
+
+impl FilterableToken for CreatureToken {
+    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool {
+        if let Some(creature) = raw_object.as_any().downcast_ref::<Creature>() {
+            // Match the tag and if it defines a property, we can check if the property is not the default
+            // value. If tag falls through, just check it against the creature's tags.
+            match self {
+                CreatureToken::DoesNotExist => return creature.does_not_exist(),
+                _ => false,
+            }
+        } else {
+            warn!(
+                "Failed to downcast raw object to creature {}",
+                raw_object.get_object_id()
+            );
+            false
+        }
+    }
+}
+impl FilterableToken for CreatureCasteToken {
+    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool {
+        if let Some(creature) = raw_object.as_any().downcast_ref::<Creature>() {
+            false
+        } else {
+            warn!(
+                "Failed to downcast raw object to creature {}",
+                raw_object.get_object_id()
+            );
+            false
+        }
+    }
+}
+impl FilterableToken for InorganicToken {
+    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool {
+        if let Some(inorganic) = raw_object.as_any().downcast_ref::<Inorganic>() {
+            false
+        } else {
+            warn!(
+                "Failed to downcast raw object to inorganic {}",
+                raw_object.get_object_id()
+            );
+            false
+        }
     }
 }

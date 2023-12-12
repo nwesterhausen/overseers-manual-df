@@ -20,7 +20,7 @@ pub async fn show_in_folder(path: String) {
         {
             Ok(_) => {}
             Err(e) => {
-                log::error!("Error opening explorer: {}", e);
+                tracing::error!("Error opening explorer: {}", e);
             }
         }
     }
@@ -59,7 +59,7 @@ pub async fn show_in_folder(path: String) {
         match Command::new("open").args(["-R", &path]).spawn() {
             Ok(_) => (),
             Err(e) => {
-                log::error!("Error opening finder: {}", e);
+                tracing::error!("Error opening finder: {}", e);
             }
         }
     }

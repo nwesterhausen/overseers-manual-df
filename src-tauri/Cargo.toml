@@ -32,6 +32,8 @@ log = "0.4.20"
 serde_json = "1.0"
 # Part of the TS_RS requirements.
 typetag = "0.2"
+tracing = "0.1.40"
+tracing-subscriber = "0.3.18"
 
 [dependencies.tauri]
 version = "2.0.0-alpha.18"
