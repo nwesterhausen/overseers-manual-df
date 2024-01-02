@@ -8,7 +8,7 @@
  * Settings also provides the number of results per page and the current page.
  */
 import { createContextProvider } from '@solid-primitives/context';
-import { invoke } from '@tauri-apps/api/primitives';
+import { invoke } from '@tauri-apps/api/core';
 import { getCurrent } from '@tauri-apps/api/window';
 import { createEffect, createResource, createSignal } from 'solid-js';
 import { ModuleInfoFile } from '../definitions/ModuleInfoFile';
