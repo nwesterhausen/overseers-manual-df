@@ -1,4 +1,4 @@
-import { invoke } from '@tauri-apps/api/primitives';
+import { invoke } from '@tauri-apps/api/core';
 import { BiSolidFolderOpen } from 'solid-icons/bi';
 import { JSX } from 'solid-js';
 import { COMMAND_SHOW_IN_FOLDER } from '../../lib/Constants';

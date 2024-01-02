@@ -1,6 +1,6 @@
 import { A, useMatch } from '@solidjs/router';
 import { getTauriVersion, getVersion } from '@tauri-apps/api/app';
-import { invoke } from '@tauri-apps/api/primitives';
+import { invoke } from '@tauri-apps/api/core';
 import { Component, createMemo, createResource } from 'solid-js';
 import { Info } from '../../definitions/Info';
 import { COMMAND_GET_BUILD_INFO } from '../../lib/Constants';
