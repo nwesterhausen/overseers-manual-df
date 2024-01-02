@@ -1,3 +1,11 @@
+## [0.31.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.31.0...v0.31.1) (2024-01-02)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([43ab440](https://github.com/nwesterhausen/overseers-manual-df/commit/43ab44000a089c60eeee149cb3ef12afc4500de9))
+* update tauri api from primitives to core ([d3f3e00](https://github.com/nwesterhausen/overseers-manual-df/commit/d3f3e008a70ed55771e95348df6ba40935f566b1))
+
 ## [0.31.0](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.30.7...v0.31.0) (2023-12-09)
 
 
