@@ -1,5 +1,5 @@
 import { createContextProvider } from '@solid-primitives/context';
-import { invoke } from '@tauri-apps/api/primitives';
+import { invoke } from '@tauri-apps/api/core';
 import { relaunch } from '@tauri-apps/plugin-process';
 import { check } from '@tauri-apps/plugin-updater';
 import { createMemo, createResource, createSignal } from 'solid-js';

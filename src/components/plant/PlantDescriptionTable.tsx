@@ -1,4 +1,4 @@
-import { invoke } from '@tauri-apps/api/primitives';
+import { invoke } from '@tauri-apps/api/core';
 import { Component, For, Show, createResource } from 'solid-js';
 import { Plant } from '../../definitions/Plant';
 import { COMMAND_GET_BIOME_DESCRIPTION } from '../../lib/Constants';

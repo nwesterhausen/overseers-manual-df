@@ -1,4 +1,4 @@
-import { convertFileSrc, invoke } from '@tauri-apps/api/primitives';
+import { convertFileSrc, invoke } from '@tauri-apps/api/core';
 import { BiRegularCaretLeft, BiRegularCaretRight, BiRegularImageAlt } from 'solid-icons/bi';
 import { Component, Show, createMemo, createResource, createSignal } from 'solid-js';
 import { GraphicsResults } from '../definitions/GraphicsResults';
