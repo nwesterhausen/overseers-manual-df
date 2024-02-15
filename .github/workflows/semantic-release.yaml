@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           token: ${{ secrets.PAT_GH_TOKEN }}
-      - uses: pnpm/action-setup@d882d12c64e032187b2edb46d3a0d003b7a43598 # v2.4.0
+      - uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3
         with:
           version: latest
       - name: Setup Node
@@ -39,7 +39,7 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      - uses: pnpm/action-setup@d882d12c64e032187b2edb46d3a0d003b7a43598 # v2.4.0
+      - uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3
         with:
           version: latest
       - name: Setup node
@@ -64,7 +64,7 @@ jobs:
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
-      - uses: pnpm/action-setup@d882d12c64e032187b2edb46d3a0d003b7a43598 # v2.4.0
+      - uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3
         with:
           version: latest
       - name: Setup Node
@@ -95,7 +95,7 @@ jobs:
               libssl-dev \
               libgtk-3-dev \
               libayatana-appindicator3-dev \
-              librsvg2-dev 
+              librsvg2-dev
           sudo apt-get install -y javascriptcoregtk-4.1 \
               libsoup-3.0 \
               webkit2gtk-4.1
@@ -103,13 +103,17 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@be73d7920c329f220ce78e0234b8f96b7ae60248 # master
         with:
-          toolchain: stable 
-      - name: Cache Rust
-        uses: swatinem/rust-cache@a95ba195448af2da9b00fb742d14ffaaf3c21f43 # v2
+          toolchain: stable
+      - name: Cache
+        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4
         with:
-          workspaces: './src-tauri -> target'
-          cache-on-failure: true
-          shared-key: tauri
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            src-tauri/target/
+          key: ${{ runner.os }}-rust-${{ hashFiles('**/Cargo.toml') }}
 
       - name: Install Dependencies and Build
         run: |
@@ -117,7 +121,7 @@ jobs:
           pnpm build
 
       - name: Build the Tauri App
-        uses: tauri-apps/tauri-action@681028cb1e50ca968838cf7353365ba4e01d77d8 # dev
+        uses: tauri-apps/tauri-action@8e393664005b532fa959fbd1a59c1d2235ff9248 # dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
