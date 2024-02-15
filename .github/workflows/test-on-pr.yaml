@@ -67,7 +67,7 @@ jobs:
           pnpm build
 
       - name: Build the Tauri App
-        uses: tauri-apps/tauri-action@681028cb1e50ca968838cf7353365ba4e01d77d8 # dev
+        uses: tauri-apps/tauri-action@8e393664005b532fa959fbd1a59c1d2235ff9248 # dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
