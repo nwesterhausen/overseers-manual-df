@@ -93,6 +93,14 @@ jobs:
         with:
           egress-policy: audit
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3
+        with:
+          version: latest
+      - name: Node Setup
+        uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
       - name: Install Dependencies
       # You can remove libayatana-appindicator3-dev if you don't use the system tray feature.
         run: |
@@ -109,6 +117,15 @@ jobs:
           sudo apt-get install --no-install-recommends javascriptcoregtk-4.1 \
               libsoup-3.0 \
               webkit2gtk-4.1
+
+      - name: Create .env
+        run: |
+          touch src-tauri/.env
+          echo APTABASE_KEY=${{ secrets.APTABASE_KEY }} >> src-tauri/.env
+      - name: Install Client Dependencies & Build
+        run: |
+          pnpm install
+          pnpm build
       - name: Cache
         uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4
         with:
