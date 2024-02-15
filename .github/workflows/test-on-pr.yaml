@@ -25,6 +25,7 @@ jobs:
         with:
           egress-policy: audit
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3
       - name: Node Setup
         uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4
         with:
@@ -39,7 +40,6 @@ jobs:
       - name: Install Dependencies
         # You can remove libayatana-appindicator3-dev if you don't use the system tray feature.
         run: |
-          npm install -g pnpm
           sudo apt-get update
           sudo apt-get install --no-install-recommends libwebkit2gtk-4.0-dev \
               build-essential \
@@ -92,7 +92,6 @@ jobs:
       - name: Install Dependencies
       # You can remove libayatana-appindicator3-dev if you don't use the system tray feature.
         run: |
-          npm install -g pnpm
           sudo apt-get update
           sudo apt-get install --no-install-recommends libwebkit2gtk-4.0-dev \
               build-essential \
