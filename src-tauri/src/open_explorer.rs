@@ -27,7 +27,7 @@ pub async fn show_in_folder(path: String) {
 
     #[cfg(target_os = "linux")]
     {
-        if path.contains(",") {
+        if path.contains(',') {
             // see https://gitlab.freedesktop.org/dbus/dbus/-/issues/76
             let new_path = match metadata(&path).unwrap().is_dir() {
                 true => path,
