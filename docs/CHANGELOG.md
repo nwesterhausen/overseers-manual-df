@@ -1,3 +1,11 @@
+## [0.31.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.31.1...v0.31.2) (2024-02-15)
+
+
+### Bug Fixes
+
+* **build:** add missing build-required steps for clippy to pass ([0fa3d62](https://github.com/nwesterhausen/overseers-manual-df/commit/0fa3d620e96f4e869945bdecd2f7e54a02c05870))
+* **build:** specify pnpm version as latest ([cb2310f](https://github.com/nwesterhausen/overseers-manual-df/commit/cb2310fd90cacf7d9b89541b3ceb04f057d40b42))
+
 ## [0.31.1](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.31.0...v0.31.1) (2024-01-02)
 
 
