@@ -1,3 +1,10 @@
+## [0.31.3](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.31.2...v0.31.3) (2024-02-15)
+
+
+### Bug Fixes
+
+* **build:** use run instead of tauri action for test ([a5606a8](https://github.com/nwesterhausen/overseers-manual-df/commit/a5606a88767f8c7d48fb46718bd741d8dfdbfc87))
+
 ## [0.31.2](https://github.com/nwesterhausen/overseers-manual-df/compare/v0.31.1...v0.31.2) (2024-02-15)
 
 
