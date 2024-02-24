@@ -1,3 +1,4 @@
+pub mod filtering;
 pub mod options;
 pub mod prepare;
 pub mod results;

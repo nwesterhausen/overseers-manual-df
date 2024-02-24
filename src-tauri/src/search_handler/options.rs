@@ -1,6 +1,8 @@
 use dfraw_json_parser::{biome::Token as Biome, ObjectType, RawModuleLocation};
 use serde::{Deserialize, Serialize};
 
+use super::filtering::SearchFilter;
+
 #[derive(ts_rs::TS)]
 #[ts(export)]
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -35,4 +37,7 @@ pub struct SearchOptions {
     pub only_egg_layers: bool,
     /// Default: false ; Requires creatures
     pub show_does_not_exist: bool,
+    /// Search filters to apply
+    /// Default: None
+    pub filters: Vec<SearchFilter>,
 }

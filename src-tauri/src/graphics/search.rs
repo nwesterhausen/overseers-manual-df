@@ -26,13 +26,13 @@ pub async fn get_graphics_for_identifier(
     #[allow(clippy::unwrap_used)]
     if state.graphics_store.lock().unwrap().is_empty() {
         // If there isn't anything in the store, return an empty result.
-        log::debug!(
+        tracing::debug!(
             "get_graphics_for_identifier: No raws in storage, returning empty search results"
         );
         return Ok(GraphicsResults::default());
     }
 
-    log::debug!(
+    tracing::debug!(
         "get_graphics_for_identifier: Processing search with options:\n{:#?}",
         options
     );
@@ -47,7 +47,7 @@ pub async fn get_graphics_for_identifier(
         .get(options.identifier.as_str())
         .cloned();
     let Some(graphic_raws) = graphic_match else {
-        log::warn!(
+        tracing::warn!(
             "get_graphics_for_identifier: identifier not found: {}",
             options.identifier
         );
@@ -73,7 +73,7 @@ pub async fn get_graphics_for_identifier(
         if let Some(tile_page) = tile_page_store.get(tile_page_identifier) {
             results.tile_pages.push(tile_page.clone());
         } else {
-            log::warn!(
+            tracing::warn!(
                 "get_graphics_for_identifier: tile page identifier not found: {}",
                 tile_page_identifier
             );
@@ -82,7 +82,7 @@ pub async fn get_graphics_for_identifier(
     let tile_page_find_duration = start2.elapsed();
     let total_duration = start.elapsed();
 
-    log::debug!(
+    tracing::debug!(
         "get_graphics_for_identifier: Found {} tile pages for identifier {}\nGraphic lookup: {}, Find tile pages: {}, Total: {}",
         tile_page_identifiers.len(),
         options.identifier,
