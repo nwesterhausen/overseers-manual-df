@@ -40,7 +40,7 @@
     "autoprefixer": "10.4.17",
     "conventional-changelog-conventionalcommits": "7.0.2",
     "daisyui": "4.6.0",
-    "eslint": "8.56.0",
+    "eslint": "9.0.0",
     "eslint-plugin-tsdoc": "0.2.17",
     "postcss": "8.4.33",
     "postcss-import": "16.0.0",
