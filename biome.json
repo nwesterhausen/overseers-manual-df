@@ -1,0 +1,29 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.6.4/schema.json",
+	"organizeImports": {
+		"enabled": true
+	},
+	"formatter": {
+		"enabled": true,
+		"lineWidth": 120
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true
+		}
+	},
+	"files": {
+		"include": [
+			"index.html",
+			"src/**/*.tsx",
+			"src/**/*.ts"
+		],
+		"ignore": [
+			"node_modules",
+			"dist",
+			"src-tauri"
+		],
+		"ignoreUnknown": true
+	}
+}

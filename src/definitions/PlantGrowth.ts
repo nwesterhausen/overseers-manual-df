@@ -5,13 +5,13 @@ import type { PlantPart } from "./PlantPart";
 import type { SingPlurName } from "./SingPlurName";
 
 export interface PlantGrowth {
-  growthType: GrowthType;
-  name: SingPlurName;
-  item: string;
-  hostTiles: Array<PlantPart>;
-  trunkHeightPercentage: Array<number>;
-  density: number;
-  print: string;
-  timing: Array<number>;
-  tags: Array<GrowthTag>;
+	growthType: GrowthType;
+	name: SingPlurName;
+	item: string;
+	hostTiles: Array<PlantPart>;
+	trunkHeightPercentage: Array<number>;
+	density: number;
+	print: string;
+	timing: Array<number>;
+	tags: Array<GrowthTag>;
 }

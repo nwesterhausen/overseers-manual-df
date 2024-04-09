@@ -3,9 +3,9 @@ import type { CreatureVariationRule } from "./CreatureVariationRule";
 import type { RawMetadata } from "./RawMetadata";
 
 export interface CreatureVariation {
-  metadata: RawMetadata;
-  identifier: string;
-  objectId: string;
-  rules: Array<CreatureVariationRule>;
-  argumentCount: number;
+	metadata: RawMetadata;
+	identifier: string;
+	objectId: string;
+	rules: Array<CreatureVariationRule>;
+	argumentCount: number;
 }

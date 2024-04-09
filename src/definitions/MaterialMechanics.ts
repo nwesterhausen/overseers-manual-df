@@ -2,12 +2,12 @@
 import type { MechanicalProperties } from "./MechanicalProperties";
 
 export interface MaterialMechanics {
-  impact: MechanicalProperties;
-  compressive: MechanicalProperties;
-  tensile: MechanicalProperties;
-  torsion: MechanicalProperties;
-  shear: MechanicalProperties;
-  bending: MechanicalProperties;
-  maxEdge: number;
-  solidDensity: number;
+	impact: MechanicalProperties;
+	compressive: MechanicalProperties;
+	tensile: MechanicalProperties;
+	torsion: MechanicalProperties;
+	shear: MechanicalProperties;
+	bending: MechanicalProperties;
+	maxEdge: number;
+	solidDensity: number;
 }

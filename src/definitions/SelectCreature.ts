@@ -2,8 +2,8 @@
 import type { RawMetadata } from "./RawMetadata";
 
 export interface SelectCreature {
-  metadata: RawMetadata;
-  identifier: string;
-  objectId: string;
-  tags: Array<string>;
+	metadata: RawMetadata;
+	identifier: string;
+	objectId: string;
+	tags: Array<string>;
 }

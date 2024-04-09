@@ -1,7 +1,7 @@
-import { Component } from 'solid-js';
-import { Creature } from '../../definitions/Creature';
-import { FormatDescription } from '../../lib/CreatureUtil';
-import CreatureBadges from './CreatureBadges';
+import { Component } from "solid-js";
+import { Creature } from "../../definitions/Creature";
+import { FormatDescription } from "../../lib/CreatureUtil";
+import CreatureBadges from "./CreatureBadges";
 
 /**
  * Given a Creature, returns a listing entry for it.
@@ -18,14 +18,14 @@ import CreatureBadges from './CreatureBadges';
  * @returns Component of creature data for a listing.
  */
 const CreatureCard: Component<{ creature: Creature }> = (props) => {
-  return (
-    <>
-      <div class='card-badges'>
-        <CreatureBadges creature={props.creature} />
-      </div>
-      <div>{FormatDescription(props.creature)}</div>
-    </>
-  );
+	return (
+		<>
+			<div class="card-badges">
+				<CreatureBadges creature={props.creature} />
+			</div>
+			<div>{FormatDescription(props.creature)}</div>
+		</>
+	);
 };
 
 export default CreatureCard;

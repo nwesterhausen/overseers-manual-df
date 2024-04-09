@@ -3,10 +3,10 @@ import type { Dimensions } from "./Dimensions";
 import type { RawMetadata } from "./RawMetadata";
 
 export interface TilePage {
-  metadata: RawMetadata;
-  identifier: string;
-  objectId: string;
-  file: string;
-  tileDim: Dimensions;
-  pageDim: Dimensions;
+	metadata: RawMetadata;
+	identifier: string;
+	objectId: string;
+	file: string;
+	tileDim: Dimensions;
+	pageDim: Dimensions;
 }
