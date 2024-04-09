@@ -3,9 +3,9 @@ import type { GaitType } from "./GaitType";
 import type { Modifier } from "./Modifier";
 
 export interface Gait {
-  gaitType: GaitType;
-  name: string;
-  maxSpeed: number;
-  energyUse: number;
-  modifiers: Array<Modifier>;
+	gaitType: GaitType;
+	name: string;
+	maxSpeed: number;
+	energyUse: number;
+	modifiers: Array<Modifier>;
 }

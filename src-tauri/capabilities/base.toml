@@ -1,0 +1,40 @@
+"$schema" = "../gen/schemas/desktop-schema.json"
+identifier = "default"
+description = "Capability for the main window"
+windows = ["main"]
+
+[[permissions]]
+identifier = "fs:default"
+
+[[permissions]]
+identifier = "fs:scope"
+
+[[permissions.allow]]
+path = "**"
+
+[[permissions]]
+identifier = "dialog:allow-open"
+
+[[permissions]]
+identifier = "event:allow-listen"
+
+[[permissions]]
+identifier = "event:default"
+
+[[permissions]]
+identifier = "store:allow-load"
+
+[[permissions]]
+identifier = "store:allow-save"
+
+[[permissions]]
+identifier = "store:allow-set"
+
+[[permissions]]
+identifier = "store:allow-get"
+
+[[permissions]]
+identifier = "app:default"
+
+[[permissions]]
+identifier = "updater:default"
