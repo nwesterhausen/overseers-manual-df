@@ -2,14 +2,14 @@
 import type { CreatureEffectProperty } from "./CreatureEffectProperty";
 
 export interface CreatureEffect {
-  severity: number;
-  probability: number;
-  affectedBodyPartsByCategory: Array<string>;
-  affectedBodyPartsByType: Array<string>;
-  affectedBodyPartsByToken: Array<string>;
-  tags: Array<CreatureEffectProperty>;
-  start: number;
-  peak: number;
-  end: number;
-  dwfStretch: number;
+	severity: number;
+	probability: number;
+	affectedBodyPartsByCategory: Array<string>;
+	affectedBodyPartsByType: Array<string>;
+	affectedBodyPartsByToken: Array<string>;
+	tags: Array<CreatureEffectProperty>;
+	start: number;
+	peak: number;
+	end: number;
+	dwfStretch: number;
 }

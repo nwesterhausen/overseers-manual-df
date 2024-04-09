@@ -6,15 +6,15 @@ import type { Material } from "./Material";
 import type { RawMetadata } from "./RawMetadata";
 
 export interface Inorganic {
-  identifier: string;
-  metadata: RawMetadata;
-  objectId: string;
-  material: Material;
-  metalOreChance: Array<[string, number]>;
-  threadMetalChance: Array<[string, number]>;
-  environmentClass: EnvironmentClass;
-  environmentInclusionType: InclusionType;
-  environmentInclusionFrequency: number;
-  environmentClassSpecific: Array<string>;
-  tags: Array<InorganicToken>;
+	identifier: string;
+	metadata: RawMetadata;
+	objectId: string;
+	material: Material;
+	metalOreChance: Array<[string, number]>;
+	threadMetalChance: Array<[string, number]>;
+	environmentClass: EnvironmentClass;
+	environmentInclusionType: InclusionType;
+	environmentInclusionFrequency: number;
+	environmentClassSpecific: Array<string>;
+	tags: Array<InorganicToken>;
 }

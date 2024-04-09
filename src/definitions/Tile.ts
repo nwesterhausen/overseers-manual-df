@@ -2,9 +2,9 @@
 import type { Color } from "./Color";
 
 export interface Tile {
-  character: string;
-  altCharacter: string;
-  color: Color;
-  glowCharacter: string;
-  glowColor: Color;
+	character: string;
+	altCharacter: string;
+	color: Color;
+	glowCharacter: string;
+	glowColor: Color;
 }

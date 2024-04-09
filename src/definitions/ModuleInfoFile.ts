@@ -3,20 +3,20 @@ import type { RawModuleLocation } from "./RawModuleLocation";
 import type { SteamData } from "./SteamData";
 
 export interface ModuleInfoFile {
-  identifier: string;
-  objectId: string;
-  location: RawModuleLocation;
-  parentDirectory: string;
-  numericVersion: number;
-  displayedVersion: string;
-  earliestCompatibleNumericVersion: number;
-  earliestCompatibleDisplayedVersion: string;
-  author: string;
-  name: string;
-  description: string;
-  requiresIds: Array<string>;
-  conflictsWithIds: Array<string>;
-  requiresIdsBefore: Array<string>;
-  requiresIdsAfter: Array<string>;
-  steamData: SteamData;
+	identifier: string;
+	objectId: string;
+	location: RawModuleLocation;
+	parentDirectory: string;
+	numericVersion: number;
+	displayedVersion: string;
+	earliestCompatibleNumericVersion: number;
+	earliestCompatibleDisplayedVersion: string;
+	author: string;
+	name: string;
+	description: string;
+	requiresIds: Array<string>;
+	conflictsWithIds: Array<string>;
+	requiresIdsBefore: Array<string>;
+	requiresIdsAfter: Array<string>;
+	steamData: SteamData;
 }

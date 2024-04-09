@@ -4,14 +4,14 @@ import type { Condition } from "./Condition";
 import type { Dimensions } from "./Dimensions";
 
 export interface SpriteGraphic {
-  primaryCondition: Condition;
-  tilePageId: string;
-  offset: Dimensions;
-  color: ColorModification;
-  largeImage: boolean;
-  offset2: Dimensions;
-  secondaryCondition: Condition;
-  colorPalletSwap: number;
-  targetIdentifier: string;
-  extraDescriptor: string;
+	primaryCondition: Condition;
+	tilePageId: string;
+	offset: Dimensions;
+	color: ColorModification;
+	largeImage: boolean;
+	offset2: Dimensions;
+	secondaryCondition: Condition;
+	colorPalletSwap: number;
+	targetIdentifier: string;
+	extraDescriptor: string;
 }

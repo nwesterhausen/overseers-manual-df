@@ -2,8 +2,8 @@
 import type { GraphicType } from "./GraphicType";
 
 export interface CustomGraphicExtension {
-  extensionType: GraphicType;
-  tilePageId: string;
-  value1: number;
-  value2: number;
+	extensionType: GraphicType;
+	tilePageId: string;
+	value1: number;
+	value2: number;
 }

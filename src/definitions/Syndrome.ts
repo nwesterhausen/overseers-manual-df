@@ -2,14 +2,14 @@
 import type { SyndromeToken } from "./SyndromeToken";
 
 export interface Syndrome {
-  identifier: string;
-  name: string;
-  affectedClasses: Array<string>;
-  immuneClasses: Array<string>;
-  affectedCreatures: Array<[string, string]>;
-  immuneCreatures: Array<[string, string]>;
-  classes: Array<string>;
-  concentrationAdded: Array<number>;
-  tags: Array<SyndromeToken>;
-  conditions: Array<string>;
+	identifier: string;
+	name: string;
+	affectedClasses: Array<string>;
+	immuneClasses: Array<string>;
+	affectedCreatures: Array<[string, string]>;
+	immuneCreatures: Array<[string, string]>;
+	classes: Array<string>;
+	concentrationAdded: Array<number>;
+	tags: Array<SyndromeToken>;
+	conditions: Array<string>;
 }

@@ -4,8 +4,8 @@ import type { ObjectType } from "./ObjectType";
 import type { RawMetadata } from "./RawMetadata";
 
 export interface UnprocessedRaw {
-  rawType: ObjectType;
-  modifications: Array<Modification>;
-  metadata: RawMetadata;
-  identifier: string;
+	rawType: ObjectType;
+	modifications: Array<Modification>;
+	metadata: RawMetadata;
+	identifier: string;
 }

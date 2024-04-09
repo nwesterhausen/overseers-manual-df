@@ -3,11 +3,11 @@ import type { ObjectType } from "./ObjectType";
 import type { RawModuleLocation } from "./RawModuleLocation";
 
 export interface RawMetadata {
-  moduleObjectId: string;
-  moduleName: string;
-  moduleVersion: string;
-  rawFilePath: string;
-  rawIdentifier: string;
-  objectType: ObjectType;
-  rawModuleLocation: RawModuleLocation;
+	moduleObjectId: string;
+	moduleName: string;
+	moduleVersion: string;
+	rawFilePath: string;
+	rawIdentifier: string;
+	objectType: ObjectType;
+	rawModuleLocation: RawModuleLocation;
 }
