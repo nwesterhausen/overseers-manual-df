@@ -18,7 +18,12 @@ const About = lazy(() => import('./pages/About'));
 const UpdateDetails = lazy(() => import('./pages/UpdateDetails'));
 
 // Attach our console to the tauri logs
-attachConsole().catch(console.error);
+try {
+const detach = await attachConsole();
+}
+catch (e) {
+  console.log('Failed to attach console:', e);
+}
 
 const App = (props) => (
   <SettingsProvider>
