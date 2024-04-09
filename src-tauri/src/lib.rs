@@ -31,9 +31,10 @@ pub fn run() {
                 .plugin(tauri_plugin_updater::Builder::new().build())?;
             // Open the dev tools automatically when debugging the application
             #[cfg(debug_assertions)]
-            if let Some(main_window) = app.get_window("main") {
-                main_window.open_devtools();
-            };
+            {
+                let window = app.get_webview_window("main").unwrap();
+                window.open_devtools();
+            }
             Ok(())
         })
         // Set up shared state
