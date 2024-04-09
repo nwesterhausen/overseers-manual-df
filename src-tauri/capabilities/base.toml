@@ -31,6 +31,9 @@ identifier = "store:allow-save"
 identifier = "store:allow-set"
 
 [[permissions]]
+identifier = "store:allow-get"
+
+[[permissions]]
 identifier = "app:default"
 
 [[permissions]]
