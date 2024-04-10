@@ -56,16 +56,9 @@ jobs:
               libsoup-3.0 \
               webkit2gtk-4.1
 
-      - name: Rust Cache
-        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            src-tauri/target/
-          key: ${{ runner.os }}-rust-${{ hashFiles('**/Cargo.toml') }}
+
+      - name: Run sccache-cache
+        uses: mozilla-actions/sccache-action@2e7f9ec7921547d4b46598398ca573513895d0bd # 0.0.4
       - name: Rust setup
         uses: dtolnay/rust-toolchain@dc6353516c68da0f06325f42ad880f76a5e77ec9 # master
         with:
@@ -80,6 +73,15 @@ jobs:
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_PRIVATE_KEY_PASSWORD }}
+
+      - name: Show sccache stats
+        shell: bash
+        run: |
+          echo '## SCCACHE STATS' >> $GITHUB_STEP_SUMMARY
+          echo '| Metric | Value |' >> $GITHUB_STEP_SUMMARY
+          echo '|--------|-------|' >> $GITHUB_STEP_SUMMARY
+          ${SCCACHE_PATH} --show-stats | awk -F'[[:space:]][[:space:]]+' 'NR<=22{ print "| "$1" | "$2" |"}' >> $GITHUB_STEP_SUMMARY
+          echo '</hr>' >> $GITHUB_STEP_SUMMARY
   clippy:
     name: Clippy Check
     timeout-minutes: 30
@@ -123,16 +125,8 @@ jobs:
         run: |
           pnpm install
           pnpm build
-      - name: Cache
-        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            src-tauri/target/
-          key: ${{ runner.os }}-rust-${{ hashFiles('**/Cargo.toml') }}
+      - name: Run sccache-cache
+        uses: mozilla-actions/sccache-action@2e7f9ec7921547d4b46598398ca573513895d0bd # 0.0.4
       - name: Rust setup
         uses: dtolnay/rust-toolchain@dc6353516c68da0f06325f42ad880f76a5e77ec9 # master
         with:
