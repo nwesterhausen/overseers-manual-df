@@ -4,6 +4,11 @@ on:
     branches:
       - main
 
+env:
+  # sccache enablement
+  SCCACHE_GHA_ENABLED: true
+  RUSTC_WRAPPER: sccache
+
 jobs:
   semantic-release:
     name: 'Semantic Release'
