@@ -89,7 +89,7 @@ branch = "v2"
 # Used to generate interface/type definitions for the structs used to
 # send data between the frontend and backend.
 [dependencies.ts-rs]
-version = "7.1"
+version = "8.0"
 default-features = true
 features = ["serde-compat"]
 
