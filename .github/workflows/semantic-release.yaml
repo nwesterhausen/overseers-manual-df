@@ -35,30 +35,9 @@ jobs:
     outputs:
       new-release-published: ${{ steps.get-next-version.outputs.new-release-published }}
       new-release-version: ${{ steps.get-next-version.outputs.new-release-version }}
-  pnpm-cache-update:
-    name: 'Refresh ${{ matrix.platform }} pnpm Cache'
-    strategy:
-      fail-fast: false
-      matrix:
-        platform: [macos-latest, windows-latest]
-    runs-on: ${{ matrix.platform }}
-    steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      - uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3
-        with:
-          version: latest
-      - name: Setup node
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-      - name: Install dependencies
-        run: |
-          pnpm install
   publish-tauri:
     needs:
       - semantic-release
-      - pnpm-cache-update
     if: needs.semantic-release.outputs.new-release-published == 'true'
     name: 'Publish Tauri App'
     strategy:
@@ -68,15 +47,12 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-
-      - uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3
-        with:
-          version: latest
       - name: Setup Node
         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
         with:
           node-version-file: .nvmrc
-          cache: pnpm
+      - name: Install bun
+        uses: oven-sh/setup-bun@8f24390df009a496891208e5e36b8a1de1f45135 #v1
 
       - name: Set Updated Version
         run: |
@@ -113,8 +89,8 @@ jobs:
         uses: mozilla-actions/sccache-action@2e7f9ec7921547d4b46598398ca573513895d0bd # 0.0.4
       - name: Install Dependencies and Build
         run: |
-          pnpm install
-          pnpm build
+          bun install
+          bun run build
 
       - name: Build the Tauri App
         uses: tauri-apps/tauri-action@32165c22c317182abb119ad267da7eeb375cb8aa # dev

@@ -1,8 +1,6 @@
 use dfraw_json_parser::graphics::{Graphic, TilePage};
 use serde::{Deserialize, Serialize};
 
-#[derive(ts_rs::TS)]
-#[ts(export)]
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 #[serde(rename_all = "camelCase")]
 #[allow(clippy::module_name_repetitions)]

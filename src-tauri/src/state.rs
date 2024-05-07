@@ -18,10 +18,10 @@ pub struct Storage {
     /// Holds all the parsed raws.
     ///
     /// This might make more sense to be either split into multiple stores by
-    /// ObjectType? Right now, everything is here and there's some extra conversion
-    /// and reading steps required to go from the search_lookup to raw object.
+    /// `ObjectType`? Right now, everything is here and there's some extra conversion
+    /// and reading steps required to go from the `search_lookup` to raw object.
     ///
-    /// If the search_lookup was a map of search_string -> object_id it might make
+    /// If the `search_lookup` was a map of `search_string` -> `object_id` it might make
     /// sense to have multiple stores (and efficient). It would mean a lot less work
     /// if users are not concerned with searching for everything, and instead are
     /// looking at a certain type of object.

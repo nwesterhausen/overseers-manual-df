@@ -5,7 +5,7 @@ use dfraw_json_parser::{
     helpers::clone_raw_object_box,
     inorganic::Inorganic,
     plant::Plant,
-    ModuleInfoFile, ObjectType, ParserOptions, ProgressPayload, RawObject,
+    ModuleInfoFile, ObjectType, ParserOptions, ProgressPayload, ProgressTask, RawObject,
 };
 use serde_json::json;
 use tauri::{AppHandle, Manager, State, Window};
@@ -106,7 +106,7 @@ pub async fn parse_and_store_raws(
         .emit(
             "PROGRESS",
             ProgressPayload {
-                current_task: "PrepareLookups".to_string(),
+                current_task: ProgressTask::ParseRaws,
                 ..Default::default()
             },
         )
