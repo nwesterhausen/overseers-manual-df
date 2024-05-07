@@ -1,3 +1,6 @@
+//! This module contains the main entry point for the Tauri application, which sets up the application
+//! and runs it.
+
 use state::{GraphicStorage, ModuleInfoStorage, Storage};
 use std::sync::Mutex;
 #[cfg(debug_assertions)]
@@ -12,14 +15,17 @@ mod graphics;
 mod info;
 mod open_explorer;
 mod search_handler;
+/// This module contains the state of the application, including the storage of raws and the search lookup.
 pub mod state;
+/// This module contains the tracking of events in the application.
 pub mod tracking;
 
-#[cfg_attr(mobile, tauri::mobile_entry_point)]
 /// This function sets up and runs a Rust application using the Tauri framework, with various plugins
 /// and event handlers.
 /// # Panics
 /// This function will panic if the Tauri app fails to build or run.
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
+#[allow(clippy::large_stack_frames)]
 pub fn run() {
     #[allow(clippy::expect_used)]
     tauri::Builder::default()
@@ -32,8 +38,11 @@ pub fn run() {
             // Open the dev tools automatically when debugging the application
             #[cfg(debug_assertions)]
             {
-                let window = app.get_webview_window("main").unwrap();
-                window.open_devtools();
+                if let Some(window) = app.get_webview_window("main") {
+                    window.open_devtools();
+                } else {
+                    tracing::warn!("Failed to open devtools");
+                }
             }
             Ok(())
         })

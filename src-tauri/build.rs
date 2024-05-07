@@ -1,3 +1,4 @@
+//! Build script for the Overseer's Manual. This script gathers build-time information.
 fn main() {
     tauri_build::build();
     #[allow(clippy::expect_used)]
