@@ -1,9 +1,8 @@
 use dfraw_json_parser::{biome::Token as Biome, ObjectType, RawModuleLocation};
 use serde::{Deserialize, Serialize};
+use specta::Type;
 
-#[derive(ts_rs::TS)]
-#[ts(export)]
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, Type)]
 #[serde(rename_all = "camelCase")]
 #[allow(clippy::module_name_repetitions)]
 pub struct SearchOptions {
@@ -27,7 +26,7 @@ pub struct SearchOptions {
     /// Default: All biomes
     pub biomes: Vec<Biome>,
     /// Modules to include in the search results
-    /// These are specified by their object_id which is unique
+    /// These are specified by their `object_id` which is unique
     /// Default: All modules
     pub modules: Vec<String>,
     /// Some specific tags we want to allow searching for as toggles.

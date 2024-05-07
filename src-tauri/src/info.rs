@@ -1,8 +1,7 @@
 use serde::{Deserialize, Serialize};
+use specta::Type;
 
-#[derive(ts_rs::TS)]
-#[ts(export)]
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct Info {
     /// App Version
@@ -27,6 +26,7 @@ pub mod build_time {
 }
 
 #[tauri::command]
+#[specta::specta]
 #[allow(clippy::module_name_repetitions)]
 /// The function `get_build_info` returns information about the build, including version, Rust version,
 /// optimization level, debug status, dependencies, build time, and git commit hash.

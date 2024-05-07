@@ -28,16 +28,19 @@ dotenvy_macro = "0.15.7"
 itertools = "0.12.1"
 # Used for logging
 log = "0.4.21"
-# Part of the TS_RS requirements, also used in our custom commands
+# Used in our custom commands
 serde_json = "1.0"
-# Part of the TS_RS requirements.
-typetag = "0.2"
+specta = "=2.0.0-rc.11"
+tauri-specta = { version = "=2.0.0-rc.5", features = [
+  "javascript",
+  "typescript",
+] }
 
 [target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies]
 tauri-plugin-updater = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
 
 [dependencies.tauri]
-version = "2.0.0-beta.14"
+version = "2.0.0-beta.17"
 features = ["protocol-asset"]
 
 # Required for adding invoke commands to tauri app
@@ -47,9 +50,9 @@ features = ["derive"]
 
 # Used to parse the raw files into json
 [dependencies.dfraw_json_parser]
-git = "https://github.com/nwesterhausen/dfraw_json_parser"
-branch = "v2"
+version = "0.17"
 features = ["tauri"]
+path = "../../dfraw_json_parser/lib"
 
 # Used to provide centralized logging
 [dependencies.tauri-plugin-log]
@@ -86,13 +89,6 @@ branch = "v2"
 git = "https://github.com/aptabase/tauri-plugin-aptabase"
 branch = "v2"
 
-# Used to generate interface/type definitions for the structs used to
-# send data between the frontend and backend.
-[dependencies.ts-rs]
-version = "7.1"
-default-features = true
-features = ["serde-compat"]
-
 [features]
 # by default Tauri runs in production mode
 # when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
@@ -111,3 +107,21 @@ strip = true      # Automatically strip symbols from the binary.
 [lib]
 crate-type = ["staticlib", "cdylib", "rlib"]
 name = "app_lib"
+
+# Some very strict lints.
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+unreachable_code = "warn"
+unreachable_patterns = "warn"
+
+[lints.clippy]
+pedantic = { level = "deny", priority = -3 }
+nursery = { level = "deny", priority = -2 }
+unwrap_used = "deny"
+enum_glob_use = "deny"
+module_name_repetitions = "allow"
+needless_pass_by_value = "allow"
+cast_possible_truncation = "allow"
+cast_precision_loss = "allow"
+used_underscore_binding = "allow"

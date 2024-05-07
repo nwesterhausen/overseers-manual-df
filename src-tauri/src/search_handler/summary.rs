@@ -1,10 +1,9 @@
 use dfraw_json_parser::{ObjectType, RawModuleLocation, RawObject};
 use serde::{Deserialize, Serialize};
+use specta::Type;
 use std::time::Duration;
 
-#[derive(ts_rs::TS)]
-#[ts(export)]
-#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, Serialize, Deserialize, Type)]
 #[serde(rename_all = "camelCase")]
 /// A summary of the parsing process.
 pub struct Summary {
@@ -50,7 +49,8 @@ impl Summary {
     ) -> Vec<(RawModuleLocation, usize)> {
         let mut location_totals: Vec<(RawModuleLocation, usize)> = Vec::new();
         for raw in total_raws {
-            let location = raw.get_metadata().get_location();
+            let metadata = raw.get_metadata();
+            let location = metadata.get_location();
             let mut found = false;
             for (index, count) in location_totals.iter_mut().enumerate() {
                 if count.0 == *location {

@@ -1,9 +1,8 @@
 use dfraw_json_parser::graphics::{Graphic, TilePage};
 use serde::{Deserialize, Serialize};
+use specta::Type;
 
-#[derive(ts_rs::TS)]
-#[ts(export)]
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, Type)]
 #[serde(rename_all = "camelCase")]
 #[allow(clippy::module_name_repetitions)]
 pub struct GraphicsResults {

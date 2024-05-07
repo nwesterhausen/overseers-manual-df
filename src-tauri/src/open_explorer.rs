@@ -5,6 +5,7 @@ use std::path::PathBuf;
 use std::process::Command;
 
 #[tauri::command]
+#[specta::specta]
 /// Opens the file explorer or finder at the specified path depending on the operating system.
 ///
 /// Arguments:

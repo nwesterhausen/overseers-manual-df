@@ -48,12 +48,12 @@ pub struct ParseAndStoreRaws {
     /// The types of raws parsed.
     ///
     /// This is from `json!(options.raws_to_parse).to_string()` and usually looks something like
-    /// "[\"Creature\",\"MaterialTemplate\"]"
+    /// `"[\"Creature\",\"MaterialTemplate\"]"`
     pub parsed_raw_types: String,
     /// The locations parsed from.
     ///
     /// This is from `json!(options.locations_to_parse).to_string()` and usually looks something like
-    /// "[\"Vanilla\",\"InstalledMods\"]"
+    /// `"[\"Vanilla\",\"InstalledMods\"]"`
     pub parsed_raw_locations: String,
 }
 
@@ -61,7 +61,9 @@ pub struct ParseAndStoreRaws {
 ///
 /// Tracked data is whether the update is skipped by the end user, and the versions involved.
 pub struct SkipUpdate {
+    /// The current version of the application.
     pub current_version: String,
+    /// The version the update would have taken the application to.
     pub to_version: String,
 }
 
@@ -69,6 +71,7 @@ pub struct SkipUpdate {
 ///
 /// Tracked data is the versions involved.
 pub struct ApplyUpdate {
+    /// The version of the application to update to.
     pub to_version: String,
 }
 

@@ -7,6 +7,7 @@ use tauri::State;
 use crate::state::Storage;
 
 #[tauri::command]
+#[specta::specta]
 #[allow(clippy::needless_pass_by_value)]
 pub async fn get_search_string_for_object(
     object_id: String,

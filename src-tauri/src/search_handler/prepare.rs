@@ -5,7 +5,7 @@ use dfraw_json_parser::{
     helpers::clone_raw_object_box,
     inorganic::Inorganic,
     plant::Plant,
-    ModuleInfoFile, ObjectType, ParserOptions, ProgressPayload, RawObject,
+    ModuleInfoFile, ObjectType, ParserOptions, ProgressPayload, ProgressTask, RawObject,
 };
 use serde_json::json;
 use tauri::{AppHandle, Manager, State, Window};
@@ -18,6 +18,7 @@ use crate::{
 };
 
 #[tauri::command]
+#[specta::specta]
 #[allow(clippy::needless_pass_by_value)]
 pub async fn parse_and_store_raws(
     options: ParserOptions,
@@ -106,7 +107,7 @@ pub async fn parse_and_store_raws(
         .emit(
             "PROGRESS",
             ProgressPayload {
-                current_task: "PrepareLookups".to_string(),
+                current_task: ProgressTask::ParseRaws,
                 ..Default::default()
             },
         )
@@ -287,6 +288,7 @@ fn update_tile_page_store(storage: &State<Storage>, graphics_storage: &State<Gra
 }
 
 #[tauri::command]
+#[specta::specta]
 pub async fn get_module_info_files(
     module_info_storage: State<'_, ModuleInfoStorage>,
 ) -> Result<Vec<ModuleInfoFile>, ()> {

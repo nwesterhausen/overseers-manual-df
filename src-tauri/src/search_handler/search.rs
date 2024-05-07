@@ -11,7 +11,12 @@ use crate::state::Storage;
 use super::{options::SearchOptions, results::SearchResults};
 
 #[tauri::command]
-#[allow(clippy::needless_pass_by_value, clippy::module_name_repetitions)]
+#[specta::specta]
+#[allow(
+    clippy::needless_pass_by_value,
+    clippy::module_name_repetitions,
+    clippy::too_many_lines
+)]
 pub async fn search_raws(
     search_options: SearchOptions,
     storage: State<'_, Storage>,
