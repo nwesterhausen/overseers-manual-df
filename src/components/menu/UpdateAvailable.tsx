@@ -1,6 +1,6 @@
 import { useNavigate } from "@solidjs/router";
 import { BiRegularDownload } from "solid-icons/bi";
-import { Component, Show } from "solid-js";
+import { type Component, Show } from "solid-js";
 import { useUpdateProvider } from "../../providers/UpdateProvider";
 
 const UpdateAvailable: Component = () => {

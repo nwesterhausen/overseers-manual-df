@@ -4,7 +4,7 @@
  */
 import { createContextProvider } from "@solid-primitives/context";
 import { createMemo, createSignal } from "solid-js";
-import { SearchOptions } from "../definitions/SearchOptions";
+import type { SearchOptions } from "../definitions/SearchOptions";
 import { useSettingsContext } from "./SettingsProvider";
 
 export const [SearchProvider, useSearchProvider] = createContextProvider(() => {

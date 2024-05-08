@@ -1,4 +1,4 @@
-import { Component, Show } from "solid-js";
+import { type Component, Show } from "solid-js";
 import { STS_LOADING } from "../lib/Constants";
 import { useRawsProvider } from "../providers/RawsProvider";
 

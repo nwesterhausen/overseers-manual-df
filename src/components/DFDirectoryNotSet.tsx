@@ -1,4 +1,4 @@
-import { JSX } from "solid-js";
+import type { JSX } from "solid-js";
 import { useSettingsContext } from "../providers/SettingsProvider";
 
 function DFDirectoryNotSet(): JSX.Element {

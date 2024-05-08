@@ -1,4 +1,4 @@
-import { Plant } from "../definitions/Plant";
+import type { Plant } from "../definitions/DFRawJson";
 
 export function GetPlantProvidesList(plant: Plant): string[] {
 	const provides: string[] = [];

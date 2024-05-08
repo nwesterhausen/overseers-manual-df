@@ -1,8 +1,8 @@
 import { Combobox } from "@kobalte/core";
 import { BiRegularCaretDown, BiRegularCheck, BiRegularX } from "solid-icons/bi";
-import { Component, For, createEffect, createMemo, createSignal } from "solid-js";
-import { RawModuleLocation } from "../../definitions/RawModuleLocation";
-import { ModuleItem } from "../../lib/Modules";
+import { type Component, For, createEffect, createMemo, createSignal } from "solid-js";
+import type { RawModuleLocation } from "../../definitions/DFRawJson";
+import type { ModuleItem } from "../../lib/Modules";
 import { useRawsProvider } from "../../providers/RawsProvider";
 import { useSettingsContext } from "../../providers/SettingsProvider";
 
@@ -95,6 +95,7 @@ const ModuleFiltering: Component = () => {
 													{option.label}
 												</span>
 												<button
+													type="button"
 													class="hover:text-error tooltip tooltip-left"
 													data-tip="Remove"
 													onClick={() => state.remove(option)}
@@ -118,6 +119,7 @@ const ModuleFiltering: Component = () => {
 										</Combobox.Icon>
 									</Combobox.Trigger>
 									<button
+										type="button"
 										class="bg-error hover:text-black/50 rounded self-center tooltip tooltip-left"
 										data-tip="Clear All"
 										onPointerDown={(e) => e.stopPropagation()}

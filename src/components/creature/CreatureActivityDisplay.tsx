@@ -1,5 +1,5 @@
-import { Component, For } from "solid-js";
-import { Creature } from "../../definitions/Creature";
+import { type Component, For } from "solid-js";
+import type { Creature } from "../../definitions/DFRawJson";
 import { CasteActiveTimeStatus, CasteSeasonActivity } from "../../lib/CreatureUtil";
 import { toTitleCase } from "../../lib/Utils";
 

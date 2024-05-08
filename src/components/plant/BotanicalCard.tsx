@@ -1,5 +1,5 @@
-import { Component, For, Show } from "solid-js";
-import { Plant } from "../../definitions/Plant";
+import { type Component, For, Show } from "solid-js";
+import type { Plant } from "../../definitions/DFRawJson";
 import { GetPlantProvidesList } from "../../lib/PlantUtil";
 import { UndergroundDepthDescription, toTitleCase } from "../../lib/Utils";
 

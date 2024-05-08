@@ -1,5 +1,5 @@
 import { debounce } from "@solid-primitives/scheduled";
-import { Component } from "solid-js";
+import type { Component } from "solid-js";
 import { useSearchProvider } from "../../providers/SearchProvider";
 
 const SearchBox: Component = () => {

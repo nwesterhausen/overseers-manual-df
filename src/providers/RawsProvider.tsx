@@ -11,12 +11,8 @@ import { createContextProvider } from "@solid-primitives/context";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrent } from "@tauri-apps/api/window";
 import { createEffect, createResource, createSignal } from "solid-js";
-import { ModuleInfoFile } from "../definitions/ModuleInfoFile";
-import { ObjectType } from "../definitions/ObjectType";
-import { ParserOptions } from "../definitions/ParserOptions";
-import { ProgressPayload } from "../definitions/ProgressPayload";
-import { SearchResults } from "../definitions/SearchResults";
-import { Summary } from "../definitions/Summary";
+import type { InfoFile, ObjectType, ProgressPayload } from "../definitions/DFRawJson";
+import type { Summary } from "../../src-tauri/bindings/Summary";
 import {
 	COMMAND_GET_RAWS_INFO,
 	COMMAND_PARSE_AND_STORE_RAWS,
@@ -98,7 +94,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 	const [rawModulesInfo] = createResource(
 		updateRawsInfo,
 		async () => {
-			const results = (await invoke(COMMAND_GET_RAWS_INFO)) as ModuleInfoFile[];
+			const results = (await invoke(COMMAND_GET_RAWS_INFO)) as InfoFile[];
 			return results;
 		},
 		{
