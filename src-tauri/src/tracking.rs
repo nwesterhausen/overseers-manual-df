@@ -7,12 +7,13 @@
 ///
 /// These events are providing two main things: vague usage numbers (also version adaption), and performance metrics.
 use serde::{Deserialize, Serialize};
+use specta::Type;
 
 /// Function: `parse_all_raws_info`
 ///
 /// Tracked data is the duration of the event and the total number of files parsed, which
 /// can allow for some interesting analysis.
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, Type)]
 #[serde(rename_all = "snake_case")]
 pub struct ParseAllRawsInfo {
     /// The duration of the event.
@@ -34,7 +35,7 @@ pub struct ParseAllRawsInfo {
 /// This function on the backend is responsible for parsing the raws and storing them in memory.
 /// The instructions for what raws to parse and where to parse them from are provided by the
 /// frontend.
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, Type)]
 #[serde(rename_all = "snake_case")]
 pub struct ParseAndStoreRaws {
     /// The total number of files parsed.
@@ -60,6 +61,7 @@ pub struct ParseAndStoreRaws {
 /// Update Skipped
 ///
 /// Tracked data is whether the update is skipped by the end user, and the versions involved.
+#[derive(Type, Default, Debug, Serialize, Deserialize)]
 pub struct SkipUpdate {
     /// The version the user is currently on.
     pub current_version: String,
@@ -70,6 +72,7 @@ pub struct SkipUpdate {
 /// Apply Update
 ///
 /// Tracked data is the versions involved.
+#[derive(Type, Default, Debug, Serialize, Deserialize)]
 pub struct ApplyUpdate {
     /// The version the user is applying.
     pub to_version: String,
@@ -78,9 +81,11 @@ pub struct ApplyUpdate {
 /// App Launch
 ///
 /// No data is collected, just the event.
+#[derive(Type, Default, Debug, Serialize, Deserialize)]
 pub struct AppStarted {}
 
 /// App Exit
 ///
 /// No data is collected, just the event.
+#[derive(Type, Default, Debug, Serialize, Deserialize)]
 pub struct AppExited {}

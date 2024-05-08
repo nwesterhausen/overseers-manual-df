@@ -20,6 +20,10 @@ features = ['config-toml']
 version = "0.7"
 features = ["git2", "chrono", "cargo-lock"]
 
+[build-dependencies.specta]
+version = "1.0.5"
+features = ["typescript", "export"]
+
 [dependencies]
 # A nice time library
 chrono = "0.4"
@@ -43,6 +47,10 @@ features = ["protocol-asset"]
 [dependencies.serde]
 version = "1.0"
 features = ["derive"]
+
+[dependencies.specta]
+version = "1.0.5"
+features = ["typescript", "export"]
 
 # Used to parse the raw files into json
 [dependencies.dfraw_json_parser]

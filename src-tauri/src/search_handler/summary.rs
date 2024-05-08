@@ -1,8 +1,9 @@
 use dfraw_json_parser::{ObjectType, RawModuleLocation, RawObject};
 use serde::{Deserialize, Serialize};
+use specta::Type;
 use std::time::Duration;
 
-#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, Serialize, Deserialize, Type)]
 #[serde(rename_all = "camelCase")]
 /// A summary of the parsing process.
 pub struct Summary {
@@ -29,6 +30,18 @@ pub struct Summary {
 }
 
 impl Summary {
+    /// Creates a new summary from the results of the parsing process.
+    ///
+    /// # Arguments
+    ///
+    /// * `total_raws` - All the parsed raws.
+    /// * `allowed_object_types` - The object types that were allowed.
+    /// * `allowed_locations` - The locations that were allowed.
+    ///
+    /// # Returns
+    ///
+    /// Returns a new summary.
+    #[must_use]
     pub fn from_results(
         total_raws: &Vec<Box<dyn RawObject>>,
         allowed_object_types: &[ObjectType],
@@ -43,6 +56,16 @@ impl Summary {
             ..Self::default()
         }
     }
+    /// Gets the number of raws of each location.
+    ///
+    /// # Arguments
+    ///
+    /// * `total_raws` - All the parsed raws
+    ///
+    /// # Returns
+    ///
+    /// Returns a vector of tuples with the location and the number of raws at that location.
+    #[must_use]
     pub fn get_location_totals(
         total_raws: &Vec<Box<dyn RawObject>>,
     ) -> Vec<(RawModuleLocation, usize)> {
@@ -64,6 +87,16 @@ impl Summary {
         }
         location_totals
     }
+    /// Gets the number of raws of each type.
+    ///
+    /// # Arguments
+    ///
+    /// * `total_raws` - All the parsed raws
+    ///
+    /// # Returns
+    ///
+    /// Returns a vector of tuples with the object type and the number of raws of that type.
+    #[must_use]
     pub fn get_counts(total_raws: &Vec<Box<dyn RawObject>>) -> Vec<(ObjectType, usize)> {
         let mut counts: Vec<(ObjectType, usize)> = Vec::new();
         for raw in total_raws {
@@ -82,12 +115,27 @@ impl Summary {
         }
         counts
     }
+    /// Save the duration of the parsing process.
+    ///
+    /// # Arguments
+    ///
+    /// * `duration` - The duration of the parsing process.
     pub fn set_parsing_duration(&mut self, duration: Duration) {
         self.parsing_duration = format!("{duration:?}");
     }
+    /// Save the duration of saving all raws to the store.
+    ///
+    /// # Arguments
+    ///
+    /// * `duration` - The duration of saving all raws to the store.
     pub fn set_save_to_store_duration(&mut self, duration: Duration) {
         self.save_to_store_duration = format!("{duration:?}");
     }
+    /// Save the duration of the filtering process.
+    ///
+    /// # Arguments
+    ///
+    /// * `duration` - The duration of the filtering process.
     pub fn set_filtering_duration(&mut self, duration: Duration) {
         self.filtering_duration = format!("{duration:?}");
     }

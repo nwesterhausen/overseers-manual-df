@@ -1,7 +1,9 @@
 use dfraw_json_parser::{biome::Token as Biome, ObjectType, RawModuleLocation};
 use serde::{Deserialize, Serialize};
+use specta::Type;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+/// Options for searching for objects in the game.
+#[derive(Serialize, Deserialize, Debug, Clone, Default, Type)]
 #[serde(rename_all = "camelCase")]
 #[allow(clippy::module_name_repetitions)]
 pub struct SearchOptions {

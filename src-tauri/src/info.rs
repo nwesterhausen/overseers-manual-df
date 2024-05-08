@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
+use specta::Type;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+/// Information about the build, including version, Rust version, optimization level, debug status, dependencies, build time, and git commit hash.
+#[derive(Serialize, Deserialize, Debug, Clone, Default, Type)]
 #[serde(rename_all = "camelCase")]
 pub struct Info {
     /// App Version
@@ -29,9 +31,13 @@ pub mod build_time {
 /// The function `get_build_info` returns information about the build, including version, Rust version,
 /// optimization level, debug status, dependencies, build time, and git commit hash.
 ///
-/// Returns:
+/// # Returns
 ///
-/// The function `get_build_info` returns an instance of the `Info` struct.
+/// Returns an instance of the `Info` struct populated with the build information.
+///
+/// # Errors
+///
+/// This function will return an error if the build information cannot be retrieved.
 pub async fn get_build_info() -> Result<Info, ()> {
     Ok(Info {
         version: build_time::PKG_VERSION.to_string(),

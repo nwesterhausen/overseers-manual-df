@@ -4,7 +4,7 @@
  */
 import { createContextProvider } from "@solid-primitives/context";
 import { createMemo, createSignal } from "solid-js";
-import type { SearchOptions } from "../definitions/SearchOptions";
+import type { SearchOptions } from "../../src-tauri/bindings/Bindings";
 import { useSettingsContext } from "./SettingsProvider";
 
 export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
@@ -126,8 +126,8 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
 	// The actual search options object that is used for searching (see `RawsProvider`)
 	const searchOptions = createMemo<SearchOptions>(() => {
 		const options: SearchOptions = {
-			limit: settings.resultsPerPage,
-			page: settings.currentPage,
+			limit: `${settings.resultsPerPage}`,
+			page: `${settings.currentPage}`,
 			objectTypes: settings.filtering.objectTypes,
 			query: searchString(),
 			locations: settings.filtering.locations,

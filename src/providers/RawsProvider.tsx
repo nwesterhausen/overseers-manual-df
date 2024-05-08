@@ -12,7 +12,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { getCurrent } from "@tauri-apps/api/window";
 import { createEffect, createResource, createSignal } from "solid-js";
 import type { InfoFile, ObjectType, ProgressPayload } from "../definitions/DFRawJson";
-import type { Summary } from "../../src-tauri/bindings/Summary";
+import type { Summary, ParserOptions } from "../../src-tauri/bindings/Bindings";
 import {
 	COMMAND_GET_RAWS_INFO,
 	COMMAND_PARSE_AND_STORE_RAWS,
@@ -28,6 +28,7 @@ import {
 } from "../lib/Constants";
 import { useSearchProvider } from "./SearchProvider";
 import { useSettingsContext } from "./SettingsProvider";
+import type { SearchResults } from "../definitions/SearchResults";
 
 export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 	/**
