@@ -1,5 +1,5 @@
 import { BiRegularFilter } from "solid-icons/bi";
-import { Component } from "solid-js";
+import type { Component } from "solid-js";
 import BiomeFiltering from "./BiomeFiltering";
 import DisplayFilters from "./DisplayFilters";
 import ModuleFiltering from "./ModuleFiltering";

@@ -1,4 +1,4 @@
-import { RawMetadata } from "./RawMetadata";
+import type { Metadata } from "./DFRawJson";
 
 /**
  * The common similarities amongst all raw definitions.
@@ -6,7 +6,7 @@ import { RawMetadata } from "./RawMetadata";
 export type Raw = {
 	objectId: string;
 	identifier: string;
-	metadata: RawMetadata;
+	metadata: Metadata;
 
 	// Added types for this app
 	searchString: string;

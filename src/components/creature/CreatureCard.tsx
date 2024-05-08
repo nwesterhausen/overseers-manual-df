@@ -1,5 +1,5 @@
-import { Component } from "solid-js";
-import { Creature } from "../../definitions/Creature";
+import type { Component } from "solid-js";
+import type { Creature } from "../../definitions/DFRawJson";
 import { FormatDescription } from "../../lib/CreatureUtil";
 import CreatureBadges from "./CreatureBadges";
 

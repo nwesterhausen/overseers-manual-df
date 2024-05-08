@@ -1,6 +1,6 @@
 import { A, useLocation } from "@solidjs/router";
 import { BiRegularCog } from "solid-icons/bi";
-import { Component } from "solid-js";
+import type { Component } from "solid-js";
 
 const OpenSettingsButton: Component = () => {
 	const location = useLocation();

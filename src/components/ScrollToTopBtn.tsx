@@ -1,5 +1,5 @@
 import { BiSolidUpArrow } from "solid-icons/bi";
-import { Component, createEffect, createSignal } from "solid-js";
+import { type Component, createEffect, createSignal } from "solid-js";
 
 const ScrollToTopBtn: Component = () => {
 	const [isVisible, setIsVisible] = createSignal(false);

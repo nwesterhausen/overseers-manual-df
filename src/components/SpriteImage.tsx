@@ -1,7 +1,7 @@
 import { convertFileSrc, invoke } from "@tauri-apps/api/core";
 import { BiRegularCaretLeft, BiRegularCaretRight, BiRegularImageAlt } from "solid-icons/bi";
-import { Component, Show, createMemo, createResource, createSignal } from "solid-js";
-import { GraphicsResults } from "../definitions/GraphicsResults";
+import { type Component, Show, createMemo, createResource, createSignal } from "solid-js";
+import type { GraphicsResults } from "../../src-tauri/bindings/GraphicsResults";
 import { COMMAND_GET_GRAPHICS_FOR_IDENTIFIER } from "../lib/Constants";
 import { toTitleCase } from "../lib/Utils";
 import { useSettingsContext } from "../providers/SettingsProvider";
@@ -186,7 +186,7 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
 						}}
 					>
 						{graphics.loading ? (
-							<div class="loading loading-dots loading-xs" style={{ width: "1rem", height: "1rem" }}></div>
+							<div class="loading loading-dots loading-xs" style={{ width: "1rem", height: "1rem" }} />
 						) : (
 							<BiRegularImageAlt />
 						)}
@@ -196,6 +196,7 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
 		>
 			<div class={`border-2 rounded-lg border-accent bg-black/50 ${props.class} relative`}>
 				<button
+					type="button"
 					class="absolute inset-y-0 -right-3"
 					onClick={() => {
 						setAllowCycle(false);
@@ -207,6 +208,7 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
 					<BiRegularCaretRight class="hover:text-accent" />
 				</button>
 				<button
+					type="button"
 					class="absolute inset-y-0 -left-3"
 					onClick={() => {
 						setAllowCycle(false);
@@ -234,7 +236,7 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
 						"background-image": `url("${assetUrl()}")`,
 						"background-position": positionOffset(),
 					}}
-				></div>
+				/>
 			</div>
 		</Show>
 	);

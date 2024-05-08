@@ -1,5 +1,5 @@
 import { BiRegularRefresh } from "solid-icons/bi";
-import { Component } from "solid-js";
+import type { Component } from "solid-js";
 import { useRawsProvider } from "../../providers/RawsProvider";
 
 const ReloadRawsButton: Component = () => {

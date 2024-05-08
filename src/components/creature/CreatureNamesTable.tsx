@@ -1,5 +1,5 @@
-import { Component, For, Show } from "solid-js";
-import { Caste } from "../../definitions/Caste";
+import { type Component, For, Show } from "solid-js";
+import type { Caste } from "../../definitions/DFRawJson";
 import { FormatName, toTitleCase } from "../../lib/Utils";
 
 const CreatureNamesTable: Component<{ castes: Caste[] }> = (props) => {

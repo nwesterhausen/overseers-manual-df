@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { appDataDir } from "@tauri-apps/api/path";
 import { BiSolidFolderOpen } from "solid-icons/bi";
-import { JSX, createResource } from "solid-js";
+import { type JSX, createResource } from "solid-js";
 import RawLocationCheckboxes from "../components/filtering/RawLocationCheckboxes";
 import RawTypeCheckboxes from "../components/filtering/RawTypeCheckboxes";
 import DirectoryOptions from "../components/settings/DirectoryOptions";
