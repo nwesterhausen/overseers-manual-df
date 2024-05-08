@@ -6,6 +6,24 @@ use tauri::State;
 
 use crate::state::Storage;
 
+/// Gets the search string for an object.
+///
+/// # Arguments
+///
+/// * `object_id` - The ID of the object to get the search string for.
+/// * `storage` - (Passed transparently) The storage to get the object from.
+///
+/// # Returns
+///
+/// Returns the search string for the object.
+///
+/// # Errors
+///
+/// Returns an empty string if the object is not found.
+///
+/// # Panics
+///
+/// This function will panic if the storage mutex is poisoned.
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
 pub async fn get_search_string_for_object(

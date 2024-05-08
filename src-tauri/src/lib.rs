@@ -10,11 +10,15 @@ use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
 
 use dotenvy_macro::dotenv;
 
-mod biome;
-mod graphics;
-mod info;
+/// A biome lookup module that provides descriptions for biomes.
+pub mod biome;
+/// Containers for the graphics data and search results.
+pub mod graphics;
+/// This module contains the information about the application, such as the version and build information.
+pub mod info;
 mod open_explorer;
-mod search_handler;
+/// This module contains the handlers for the search functionality of the application.
+pub mod search_handler;
 /// This module contains the state of the application, including the storage of raws and the search lookup.
 pub mod state;
 /// This module contains the tracking of events in the application.

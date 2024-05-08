@@ -10,6 +10,24 @@ use crate::state::Storage;
 
 use super::{options::SearchOptions, results::SearchResults};
 
+/// Searches the raws for matching objects based on the search options.
+///
+/// # Arguments
+///
+/// * `search_options` - The options for the search.
+/// * `storage` - (Passed transparently) The storage state.
+///
+/// # Returns
+///
+/// The results of the search.
+///
+/// # Errors
+///
+/// This function will error if results cannot be returned.
+///
+/// # Panics
+///
+/// This function will panic if the storage mutex is poisoned.
 #[tauri::command]
 #[allow(
     clippy::needless_pass_by_value,
