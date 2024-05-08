@@ -17,21 +17,19 @@ jobs:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           token: ${{ secrets.PAT_GH_TOKEN }}
-      - uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3
-        with:
-          version: latest
       - name: Setup Node
         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
         with:
           node-version-file: .nvmrc
-          cache: pnpm
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@8f24390df009a496891208e5e36b8a1de1f45135 #v1
+
       - name: Process Semantic-release
         id: get-next-version
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GH_TOKEN }}
-        run: |
-          pnpm install
-          pnpm semantic-release
+        run: bunx semantic-release
     outputs:
       new-release-published: ${{ steps.get-next-version.outputs.new-release-published }}
       new-release-version: ${{ steps.get-next-version.outputs.new-release-version }}
