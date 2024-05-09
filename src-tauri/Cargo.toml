@@ -56,7 +56,7 @@ features = ["typescript", "export"]
 [dependencies.dfraw_json_parser]
 version = "0.17"
 features = ["tauri"]
-path = "../../dfraw_json_parser/lib"
+# path = "../../dfraw_json_parser/lib"
 
 # Used to provide centralized logging
 [dependencies.tauri-plugin-log]
