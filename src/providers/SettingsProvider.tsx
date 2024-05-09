@@ -3,7 +3,7 @@ import { message } from "@tauri-apps/plugin-dialog";
 import { Store as TauriStore } from "@tauri-apps/plugin-store";
 import { type JSX, type ParentProps, createContext, createEffect, createSignal, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
-import type { Biome, ObjectType, RawModuleLocation } from "../definitions/DFRawJson";
+import type { Biome, ObjectType, RawModuleLocation } from "../../src-tauri/bindings/Bindings";
 import { SETTINGS_DEFAULTS, SETTINGS_FILE_NAME } from "../lib/Constants";
 import { getDwarfDirectoryPath } from "../lib/DirectoryActions";
 

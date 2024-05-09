@@ -1,4 +1,4 @@
-import type { BodySize, Caste, CasteTag, Creature } from "../definitions/DFRawJson";
+import type { BodySize, Caste, CasteTag, Creature } from "../../src-tauri/bindings/Bindings";
 import { SimplifyVolume, toTitleCase } from "./Utils";
 
 /**

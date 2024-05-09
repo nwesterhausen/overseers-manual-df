@@ -1,5 +1,5 @@
 import type { Component } from "solid-js";
-import type { InfoFile } from "../../definitions/DFRawJson";
+import type { InfoFile } from "../../../src-tauri/bindings/Bindings";
 
 const RawModuleInfoTable: Component<{ module: InfoFile }> = (props) => {
 	if (!props.module) {

@@ -1,4 +1,4 @@
-import type { Creature, Material, Name, SingPlurName, StateName } from "../definitions/DFRawJson";
+import type { Creature, Material, Name, SingPlurName, StateName } from "../../src-tauri/bindings/Bindings";
 import { DepthRanges, M3_to_CM3 } from "./Constants";
 import { GAME_TICKS_ADVENTURE, GAME_TICKS_FORTRESS, SpecificTickToCalendarConversion } from "./GameTicks";
 
