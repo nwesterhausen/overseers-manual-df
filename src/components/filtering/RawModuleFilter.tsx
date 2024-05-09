@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { type Component, For } from "solid-js";
 import { labelForModule } from "../../lib/Raw";
 import { useRawsProvider } from "../../providers/RawsProvider";
 import { useSearchProvider } from "../../providers/SearchProvider";

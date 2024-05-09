@@ -1,4 +1,4 @@
-import { For, JSX, Show, createMemo } from "solid-js";
+import { For, type JSX, Show, createMemo } from "solid-js";
 import { useRawsProvider } from "../../providers/RawsProvider";
 import { useSettingsContext } from "../../providers/SettingsProvider";
 

@@ -1,11 +1,7 @@
-import { Update } from "@tauri-apps/plugin-updater";
-import { Biome } from "../definitions/Biome";
-import { ObjectType } from "../definitions/ObjectType";
-import { ProgressPayload } from "../definitions/ProgressPayload";
-import { RawModuleLocation } from "../definitions/RawModuleLocation";
-import { SearchResults } from "../definitions/SearchResults";
-import { Summary } from "../definitions/Summary";
-import { FilteringSettings, ParsingSettings } from "../providers/SettingsProvider";
+import type { Update } from "@tauri-apps/plugin-updater";
+import type { SearchResults } from "../definitions/SearchResults";
+import type { Summary, Biome, ObjectType, ProgressPayload, RawModuleLocation } from "../../src-tauri/bindings/Bindings";
+import type { FilteringSettings, ParsingSettings } from "../providers/SettingsProvider";
 
 /**
  * Default update object. This is an empty update object which is used
@@ -93,12 +89,15 @@ export const DEFAULT_SEARCH_RESULT: SearchResults = {
  * This is an empty default value.
  */
 export const DEFAULT_PARSING_STATUS: ProgressPayload = {
-	currentModule: "",
-	currentFile: "",
-	currentLocation: "",
-	currentTask: "",
+	details: {
+		fileLocation: "",
+		location: "Unknown",
+		module: "",
+		rawFile: "",
+	},
+	currentTask: "idle",
 	percentage: 0.0,
-	runningTotal: 0,
+	runningTotal: "0",
 };
 
 /**
@@ -115,7 +114,7 @@ export const DEFAULT_SUMMARY: Summary = {
 	parsingDuration: "",
 	saveToStoreDuration: "",
 	locationTotals: [],
-	totalRaws: 0,
+	totalRaws: "0",
 };
 
 /**

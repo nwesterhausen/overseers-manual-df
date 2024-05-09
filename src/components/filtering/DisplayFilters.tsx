@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import type { Component } from "solid-js";
 import { useSettingsContext } from "../../providers/SettingsProvider";
 
 const DisplayFilters: Component = () => {
@@ -43,7 +43,7 @@ const DisplayFilters: Component = () => {
 						max="100"
 						value={settings.resultsPerPage}
 						onChange={(e) => {
-							const value = parseInt((e.target as HTMLInputElement).value);
+							const value = Number.parseInt((e.target as HTMLInputElement).value);
 							if (value >= 1 && value <= 100) {
 								setResultsPerPage(value);
 							} else {

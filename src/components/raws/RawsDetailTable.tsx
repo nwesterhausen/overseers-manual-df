@@ -1,5 +1,5 @@
-import { Component } from "solid-js";
-import { Raw } from "../../definitions/types";
+import type { Component } from "solid-js";
+import type { Raw } from "../../definitions/types";
 
 const RawJsonTable: Component<{ raw: Raw }> = (props) => {
 	return (

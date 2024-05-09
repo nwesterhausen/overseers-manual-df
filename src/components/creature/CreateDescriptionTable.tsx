@@ -1,5 +1,5 @@
-import { Component, For, Show } from "solid-js";
-import { Creature } from "../../definitions/Creature";
+import { type Component, For, Show } from "solid-js";
+import type { Creature } from "../../../src-tauri/bindings/Bindings";
 import {
 	CasteTrainableStatus,
 	ClusterSizeStatus,

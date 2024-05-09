@@ -1,5 +1,5 @@
-import { Component, Show } from "solid-js";
-import { Creature } from "../../definitions/Creature";
+import { type Component, Show } from "solid-js";
+import type { Creature } from "../../../src-tauri/bindings/Bindings";
 import {
 	CanLearn,
 	CanSpeak,
@@ -25,7 +25,7 @@ const CreatureBadges: Component<{ creature: Creature }> = (props) => {
 				)}
 				{/* EGG BADGE */}
 				{IsEggLayer(props.creature) ? (
-					<TwoPartBadge bg="primary" name="Egg" value={"" + CondensedEggSize(props.creature)} />
+					<TwoPartBadge bg="primary" name="Egg" value={`${CondensedEggSize(props.creature)}`} />
 				) : (
 					<></>
 				)}

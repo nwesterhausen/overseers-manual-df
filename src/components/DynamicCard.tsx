@@ -7,10 +7,9 @@ import {
 	BiSolidSearch,
 	BiSolidTree,
 } from "solid-icons/bi";
-import { Component, Match, Show, Switch, createResource } from "solid-js";
-import { Creature } from "../definitions/Creature";
-import { Plant } from "../definitions/Plant";
-import { Raw } from "../definitions/types";
+import { type Component, Match, Show, Switch, createResource } from "solid-js";
+import type { Creature, Plant } from "../../src-tauri/bindings/Bindings";
+import type { Raw } from "../definitions/types";
 import { COMMAND_GET_SEARCH_STRING_FOR_OBJECT } from "../lib/Constants";
 import { nameForRaw } from "../lib/Raw";
 import SpriteImage from "./SpriteImage";
@@ -21,7 +20,7 @@ import PlantDescriptionTable from "./plant/PlantDescriptionTable";
 import RawJsonTable from "./raws/RawsDetailTable";
 
 const DynamicCard: Component<{ raw: Raw }> = (props) => {
-	const listingId = props.raw.objectId + "listing";
+	const listingId = `${props.raw.objectId} listing`;
 
 	const [searchString] = createResource<string>(
 		async (): Promise<string> => {
@@ -76,7 +75,7 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
 						<SpriteImage identifier={props.raw.identifier} />
 					</div>
 				</div>
-				<Switch fallback={<></>}>
+				<Switch fallback={""}>
 					<Match when={props.raw.metadata.objectType === "Plant"}>
 						<BotanicalCard plant={props.raw as unknown as Plant} />
 					</Match>
@@ -91,6 +90,7 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
 
 			<div class="flex flex-row justify-between">
 				<button
+					type="button"
 					class="btn btn-primary btn-sm"
 					onClick={() => {
 						const dialog = document.getElementById(`${props.raw.objectId}-details`) as HTMLDialogElement;
@@ -100,6 +100,7 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
 					Show All Details
 				</button>
 				<button
+					type="button"
 					onClick={() => {
 						const dialog = document.getElementById(`${props.raw.objectId}-raws`) as HTMLDialogElement;
 						dialog?.showModal();
@@ -114,7 +115,7 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
 			<dialog class="modal" id={`${props.raw.objectId}-details`}>
 				<div class="modal-box w-11/12 max-w-5xl">
 					<h3 class="font-bold text-lg">{nameForRaw(props.raw)} Details</h3>
-					<Switch fallback={<></>}>
+					<Switch fallback={""}>
 						<Match when={props.raw.metadata.objectType === "Plant"}>
 							<PlantDescriptionTable plant={props.raw as unknown as Plant} />
 						</Match>
@@ -124,7 +125,7 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
 					</Switch>
 				</div>
 				<form method="dialog" class="modal-backdrop">
-					<button>close</button>
+					<button type="button">close</button>
 				</form>
 			</dialog>
 
@@ -135,7 +136,7 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
 					<RawJsonTable raw={props.raw} />
 				</div>
 				<form method="dialog" class="modal-backdrop">
-					<button>close</button>
+					<button type="button">close</button>
 				</form>
 			</dialog>
 		</div>

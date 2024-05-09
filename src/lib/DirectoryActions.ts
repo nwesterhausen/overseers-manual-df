@@ -44,9 +44,8 @@ export async function getDwarfDirectoryPath(presetPath?: string | string[]): Pro
 		if (hasGamelogTxt) {
 			console.debug("Found a gamelog.txt file");
 			return splitPath;
-		} else {
-			return [];
 		}
+		return [];
 	} catch (e) {
 		console.error(e);
 		return [];

@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import type { Component } from "solid-js";
 import RawLocationCheckboxes from "../filtering/RawLocationCheckboxes";
 
 const LocationOptions: Component = () => {

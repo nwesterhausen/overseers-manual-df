@@ -1,7 +1,4 @@
-import { BodySize } from "../definitions/BodySize";
-import { Caste } from "../definitions/Caste";
-import { CasteTag } from "../definitions/CasteTag";
-import { Creature } from "../definitions/Creature";
+import type { BodySize, Caste, CasteTag, Creature } from "../../src-tauri/bindings/Bindings";
 import { SimplifyVolume, toTitleCase } from "./Utils";
 
 /**
@@ -130,9 +127,8 @@ export function BodySizeStatus(size: BodySize): string {
 	if (size.years === 0) {
 		if (size.days === 0) {
 			return `${SimplifyVolume(size.sizeCm3)} at birth`;
-		} else {
-			return `${SimplifyVolume(size.sizeCm3)} at ${size.days} days;`;
 		}
+		return `${SimplifyVolume(size.sizeCm3)} at ${size.days} days;`;
 	}
 	if (size.days === 0) {
 		return `${SimplifyVolume(size.sizeCm3)} at ${size.years} years`;
@@ -173,19 +169,19 @@ export function GrownAtStatus(creature: Creature): string {
 export function CasteActiveTimeStatus(caste: Caste): string {
 	const strArr: string[] = [];
 	if (caste.tags) {
-		if (caste.tags.indexOf("ActiveDiurnal") !== -1) {
+		if (caste.tags.indexOf("Diurnal") !== -1) {
 			strArr.push("during the day");
 		}
-		if (caste.tags.indexOf("ActiveNocturnal") !== -1) {
+		if (caste.tags.indexOf("Nocturnal") !== -1) {
 			strArr.push("at night");
 		}
-		if (caste.tags.indexOf("ActiveCrepuscular") !== -1) {
+		if (caste.tags.indexOf("Crepuscular") !== -1) {
 			strArr.push("at dawn and dusk");
 		}
-		if (caste.tags.indexOf("ActiveMatutinal") !== -1) {
+		if (caste.tags.indexOf("Matutinal") !== -1) {
 			strArr.push("at dawn");
 		}
-		if (caste.tags.indexOf("ActiveVespertine") !== -1) {
+		if (caste.tags.indexOf("Vespertine") !== -1) {
 			strArr.push("at evening");
 		}
 	}
@@ -331,7 +327,7 @@ export function CanSpeak(creature: Creature): boolean {
  * @returns True if the creature gnaws cages, false otherwise.
  */
 export function IsGnawer(creature: Creature): boolean {
-	return HasCasteTag(creature, "Gnawer");
+	return HasCasteTag(creature, { Gnawer: { verb: "" } });
 }
 
 /**
@@ -346,6 +342,8 @@ export function HasCasteTag(creature: Creature, tag: CasteTag): boolean {
 		return false;
 	}
 	for (const caste of creature.castes) {
+		// It's unclear if this is the correct way to check for a tag, especially with the object
+		// notation.
 		if (caste.tags && caste.tags.indexOf(tag) !== -1) {
 			return true;
 		}

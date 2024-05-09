@@ -1,5 +1,5 @@
 import { BiSolidCat, BiSolidCity, BiSolidDiamond, BiSolidTree } from "solid-icons/bi";
-import { Component } from "solid-js";
+import type { Component } from "solid-js";
 import { useSettingsContext } from "../../providers/SettingsProvider";
 
 const RawTypeCheckboxes: Component<{ parsingOnly?: boolean }> = (props) => {

@@ -19,6 +19,14 @@ use super::{options::GraphicsOptions, results::GraphicsResults};
 /// # Returns
 ///
 /// The results of the search.
+///
+/// # Errors
+///
+/// This function will return an error if the graphics store mutex is poisoned.
+///
+/// # Panics
+///
+/// This function will panic if the graphics store mutex is poisoned.
 pub async fn get_graphics_for_identifier(
     options: GraphicsOptions,
     state: State<'_, GraphicStorage>,

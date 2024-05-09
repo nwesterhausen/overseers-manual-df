@@ -5,7 +5,7 @@ use dfraw_json_parser::{
     helpers::clone_raw_object_box,
     inorganic::Inorganic,
     plant::Plant,
-    ModuleInfoFile, ObjectType, ParserOptions, ProgressPayload, RawObject,
+    ModuleInfoFile, ObjectType, ParserOptions, ProgressPayload, ProgressTask, RawObject,
 };
 use serde_json::json;
 use tauri::{AppHandle, Manager, State, Window};
@@ -17,6 +17,28 @@ use crate::{
     tracking::ParseAndStoreRaws,
 };
 
+/// Parses the raws with the given options and stores them in the storage.
+///
+/// # Arguments
+///
+/// * `options` - The options to use for parsing the raws.
+/// * `window` - (Passed transparently) The window to emit progress events to.
+/// * `storage` - (Passed transparently) The storage to store the raws in.
+/// * `graphics_storage` - (Passed transparently) The graphics storage to store the graphics in.
+/// * `module_info_storage` - (Passed transparently) The module info storage to store the module info files in.
+/// * `app_handle` - (Passed transparently) The handle to the application to track events with.
+///
+/// # Returns
+///
+/// Returns `Ok(())` if the raws were parsed and stored successfully, or `Err(())` if there was an error.
+///
+/// # Errors
+///
+/// This function will return an error if there was an error parsing the raws.
+///
+/// # Panics
+///
+/// This function panics if any of the storage mutexes are poisoned.
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
 pub async fn parse_and_store_raws(
@@ -106,7 +128,7 @@ pub async fn parse_and_store_raws(
         .emit(
             "PROGRESS",
             ProgressPayload {
-                current_task: "PrepareLookups".to_string(),
+                current_task: ProgressTask::ParseRaws,
                 ..Default::default()
             },
         )
@@ -286,6 +308,23 @@ fn update_tile_page_store(storage: &State<Storage>, graphics_storage: &State<Gra
     );
 }
 
+/// Returns the module info files stored in the module info storage.
+///
+/// # Arguments
+///
+/// * `module_info_storage` - (Passed transparently) The module info storage to get the module info files from.
+///
+/// # Returns
+///
+/// Returns a vector of the module info files stored in the module info storage.
+///
+/// # Panics
+///
+/// This function panics if the module info storage mutex is poisoned.
+///
+/// # Errors
+///
+/// This function will return an error if the module info files cannot be retrieved.
 #[tauri::command]
 pub async fn get_module_info_files(
     module_info_storage: State<'_, ModuleInfoStorage>,

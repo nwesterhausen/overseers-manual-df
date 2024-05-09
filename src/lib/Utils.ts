@@ -1,8 +1,4 @@
-import { Creature } from "../definitions/Creature";
-import { Material } from "../definitions/Material";
-import { Name } from "../definitions/Name";
-import { SingPlurName } from "../definitions/SingPlurName";
-import { StateName } from "../definitions/StateName";
+import type { Creature, Material, Name, SingPlurName, StateName } from "../../src-tauri/bindings/Bindings";
 import { DepthRanges, M3_to_CM3 } from "./Constants";
 import { GAME_TICKS_ADVENTURE, GAME_TICKS_FORTRESS, SpecificTickToCalendarConversion } from "./GameTicks";
 
@@ -164,9 +160,9 @@ export function FormatName(name: string | Name | SingPlurName | StateName): stri
 export function TicksToCalendarDuration(gameTicks: number, fortressMode = true): string {
 	if (fortressMode) {
 		return SpecificTickToCalendarConversion(gameTicks, GAME_TICKS_FORTRESS);
-	} else {
-		return SpecificTickToCalendarConversion(gameTicks, GAME_TICKS_ADVENTURE);
 	}
+
+	return SpecificTickToCalendarConversion(gameTicks, GAME_TICKS_ADVENTURE);
 }
 
 /**
