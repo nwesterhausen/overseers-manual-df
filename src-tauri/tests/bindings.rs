@@ -13,7 +13,7 @@ fn generate_ts_bindings() {
     // Create a config to use for the specta::ts::export function
     let config = specta::ts::ExportConfiguration::default()
         .export_by_default(Some(true))
-        .bigint(specta::ts::BigIntExportBehavior::String);
+        .bigint(specta::ts::BigIntExportBehavior::Number);
 
     let bindings: Vec<String> = vec![
         export_type::<app_lib::search_handler::options::SearchOptions>(&config),

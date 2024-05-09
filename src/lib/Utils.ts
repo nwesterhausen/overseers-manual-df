@@ -1,3 +1,4 @@
+import { type DirEntry, readDir } from "@tauri-apps/plugin-fs";
 import type { Creature, Material, Name, SingPlurName, StateName } from "../../src-tauri/bindings/Bindings";
 import { DepthRanges, M3_to_CM3 } from "./Constants";
 import { GAME_TICKS_ADVENTURE, GAME_TICKS_FORTRESS, SpecificTickToCalendarConversion } from "./GameTicks";
@@ -221,4 +222,21 @@ export function UndergroundDepthDescription(depth_range: number[]): string {
 		return `from ${topDepth.replace(" Cavern Layer", "")} to ${bottomDepth}`;
 	}
 	return `from ${DepthRanges[topLevel]} to ${DepthRanges[bottomLevel]}`;
+}
+
+/**
+ * Recursively process entries in a directory
+ */
+export async function readDirRecursive(directory: string): Promise<DirEntry[]> {
+	const entries: DirEntry[] = await readDir(directory);
+
+	for (const entry of entries) {
+		console.log(`Entry: ${entry.name}`);
+		if (entry.isDirectory) {
+			const dir = directory + entry.name;
+			entries.push(...(await readDirRecursive(dir)));
+		}
+	}
+
+	return entries;
 }

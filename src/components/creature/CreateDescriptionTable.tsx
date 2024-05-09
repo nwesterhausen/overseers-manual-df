@@ -8,6 +8,7 @@ import {
 	LifeExpectancyStatus,
 	PetValueStatus,
 	PopulationNumberStatus,
+	TagToString,
 } from "../../lib/CreatureUtil";
 import { UndergroundDepthDescription, toTitleCase } from "../../lib/Utils";
 import CreatureActivityDisplay from "./CreatureActivityDisplay";
@@ -90,7 +91,7 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
 								<tbody>
 									<tr>
 										<td>Creature Tags</td>
-										<td>{props.creature.tags.join(", ")}</td>
+										<td>{props.creature.tags.map(TagToString).join(", ")}</td>
 									</tr>
 									<Show when={Array.isArray(props.creature.castes)}>
 										<For each={props.creature.castes}>
