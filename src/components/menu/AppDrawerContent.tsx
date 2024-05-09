@@ -1,8 +1,8 @@
 import { A, useMatch } from "@solidjs/router";
 import { getTauriVersion, getVersion } from "@tauri-apps/api/app";
 import { invoke } from "@tauri-apps/api/core";
-import { Component, createMemo, createResource } from "solid-js";
-import { Info } from "../../definitions/Info";
+import { type Component, createMemo, createResource } from "solid-js";
+import type { Info } from "../../../src-tauri/bindings/Bindings";
 import { COMMAND_GET_BUILD_INFO } from "../../lib/Constants";
 
 const AppDrawerContent: Component = () => {
@@ -53,7 +53,7 @@ const AppDrawerContent: Component = () => {
 	const inMain = useMatch(() => "/");
 	return (
 		<div class="drawer-side">
-			<label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+			<label for="my-drawer" aria-label="close sidebar" class="drawer-overlay" />
 			<ul class="menu menu-vertical p-2 w-80 min-h-full bg-base-200 text-base-content">
 				{/* <!-- Sidebar content here --> */}
 				<li>
@@ -83,15 +83,15 @@ const AppDrawerContent: Component = () => {
 					</A>
 				</li>
 				<li class="disabled">
-					<a>
+					<button type="button">
 						<code>info.txt</code> Utility
-					</a>
+					</button>
 				</li>
 				<li class="disabled">
-					<a>Raw Viewer</a>
+					<button type="button">Raw Viewer</button>
 				</li>
 				<li class="disabled">
-					<a>Embark Planning</a>
+					<button type="button">Embark Planning</button>
 				</li>
 			</ul>
 			{/* Show some details about the app */}

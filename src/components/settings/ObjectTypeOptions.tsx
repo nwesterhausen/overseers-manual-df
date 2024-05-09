@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import type { Component } from "solid-js";
 import RawTypeCheckboxes from "../filtering/RawTypeCheckboxes";
 
 const ObjectTypeOptions: Component = () => {

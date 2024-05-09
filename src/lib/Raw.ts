@@ -1,7 +1,5 @@
-import { ModuleInfoFile } from "../definitions/ModuleInfoFile";
-import { Name } from "../definitions/Name";
-import { SingPlurName } from "../definitions/SingPlurName";
-import { Raw } from "../definitions/types";
+import type { InfoFile, Name, SingPlurName } from "../../src-tauri/bindings/Bindings";
+import type { Raw } from "../definitions/types";
 import { toTitleCase } from "./Utils";
 
 /**
@@ -12,7 +10,7 @@ import { toTitleCase } from "./Utils";
  * @param moduleId - The module ID to use if the module info is undefined.
  * @returns A formatted label for the module.
  */
-export function labelForModule(moduleInfo: ModuleInfoFile | undefined, moduleId?: string): string {
+export function labelForModule(moduleInfo: InfoFile | undefined, moduleId?: string): string {
 	if (typeof moduleId !== "undefined") {
 		return moduleId || "";
 	}
@@ -32,7 +30,8 @@ export function nameForRaw(raw: Raw): string {
 	const namedRaw = raw as unknown as { name?: string | Name | SingPlurName };
 	if (typeof namedRaw.name === "string") {
 		return toTitleCase(namedRaw.name);
-	} else if (typeof namedRaw.name === "object") {
+	}
+	if (typeof namedRaw.name === "object") {
 		return toTitleCase(namedRaw.name.singular || namedRaw.name.plural || raw.identifier.replace(/_/g, " "));
 	}
 	return toTitleCase(raw.identifier.replace(/_/g, " "));

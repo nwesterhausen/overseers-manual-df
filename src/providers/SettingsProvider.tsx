@@ -1,11 +1,9 @@
-import { Event, listen } from "@tauri-apps/api/event";
+import { type Event, listen } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/plugin-dialog";
 import { Store as TauriStore } from "@tauri-apps/plugin-store";
-import { JSX, ParentProps, createContext, createEffect, createSignal, useContext } from "solid-js";
+import { type JSX, type ParentProps, createContext, createEffect, createSignal, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
-import { Biome } from "../definitions/Biome";
-import { ObjectType } from "../definitions/ObjectType";
-import { RawModuleLocation } from "../definitions/RawModuleLocation";
+import type { Biome, ObjectType, RawModuleLocation } from "../../src-tauri/bindings/Bindings";
 import { SETTINGS_DEFAULTS, SETTINGS_FILE_NAME } from "../lib/Constants";
 import { getDwarfDirectoryPath } from "../lib/DirectoryActions";
 
@@ -362,7 +360,7 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
 		let failedValidation = false;
 		console.info("Validating settings.");
 		// Check each setting
-		Object.keys(SETTINGS_DEFAULTS).forEach((key) => {
+		for (const key of Object.keys(SETTINGS_DEFAULTS)) {
 			if (key === "ready") return; // Don't check the ready flag.
 
 			const setting = key as keyof typeof SETTINGS_DEFAULTS;
@@ -372,7 +370,7 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
 				setState(setting, SETTINGS_DEFAULTS[setting]);
 				failedValidation = true;
 			}
-		});
+		}
 		// If we failed validation, set the settings changed flag
 		if (failedValidation) {
 			setSettingsChanged(true);
@@ -691,7 +689,7 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
 			setTotalResults(num: number) {
 				setState("totalResults", num);
 				// Guard against divide by zero
-				if (state.resultsPerPage === 0 || isNaN(state.resultsPerPage)) {
+				if (state.resultsPerPage === 0 || Number.isNaN(state.resultsPerPage)) {
 					setState("resultsPerPage", SETTINGS_DEFAULTS.resultsPerPage);
 					setSettingsChanged(true);
 				}

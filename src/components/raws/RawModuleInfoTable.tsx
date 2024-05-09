@@ -1,7 +1,7 @@
-import { Component } from "solid-js";
-import { ModuleInfoFile } from "../../definitions/ModuleInfoFile";
+import type { Component } from "solid-js";
+import type { InfoFile } from "../../../src-tauri/bindings/Bindings";
 
-const RawModuleInfoTable: Component<{ module: ModuleInfoFile }> = (props) => {
+const RawModuleInfoTable: Component<{ module: InfoFile }> = (props) => {
 	if (!props.module) {
 		return <></>;
 	}

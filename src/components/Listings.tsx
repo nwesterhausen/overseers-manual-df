@@ -1,4 +1,4 @@
-import { Component, For, Show } from "solid-js";
+import { type Component, For, Show } from "solid-js";
 import { STS_IDLE } from "../lib/Constants";
 import { useRawsProvider } from "../providers/RawsProvider";
 import DynamicCard from "./DynamicCard";

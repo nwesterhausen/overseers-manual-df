@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import type { Component } from "solid-js";
 import { useSettingsContext } from "../../providers/SettingsProvider";
 
 const RawLocationCheckboxes: Component<{ parsingOnly?: boolean }> = (props) => {

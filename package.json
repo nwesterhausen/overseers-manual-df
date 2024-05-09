@@ -34,7 +34,7 @@
     "@solid-primitives/context": "0.2.3",
     "@solid-primitives/scheduled": "1.4.3",
     "@tailwindcss/typography": "0.5.12",
-    "@tauri-apps/cli": "2.0.0-beta.12",
+    "@tauri-apps/cli": "2.0.0-beta.16",
     "@types/node": "20.12.7",
     "@typescript-eslint/eslint-plugin": "7.6.0",
     "@typescript-eslint/parser": "7.6.0",
@@ -58,62 +58,12 @@
     "@aptabase/tauri": "^0.4.1",
     "@solidjs/router": "^0.13.0",
     "@tauri-apps/api": "2.0.0-beta.7",
-    "@tauri-apps/plugin-dialog": "github:tauri-apps/tauri-plugin-dialog#v2",
-    "@tauri-apps/plugin-fs": "github:tauri-apps/tauri-plugin-fs#v2",
-    "@tauri-apps/plugin-log": "github:tauri-apps/tauri-plugin-log#v2",
-    "@tauri-apps/plugin-process": "github:tauri-apps/tauri-plugin-process#v2",
-    "@tauri-apps/plugin-store": "github:tauri-apps/tauri-plugin-store#v2",
-    "@tauri-apps/plugin-updater": "github:tauri-apps/tauri-plugin-updater#v2",
+    "@tauri-apps/plugin-dialog": "git@github.com:tauri-apps/tauri-plugin-dialog#v2",
+    "@tauri-apps/plugin-fs": "git@github.com:tauri-apps/tauri-plugin-fs#v2",
+    "@tauri-apps/plugin-log": "git@github.com:tauri-apps/tauri-plugin-log#v2",
+    "@tauri-apps/plugin-process": "git@github.com:tauri-apps/tauri-plugin-process#v2",
+    "@tauri-apps/plugin-store": "git@github.com:tauri-apps/tauri-plugin-store#v2",
+    "@tauri-apps/plugin-updater": "git@github.com:tauri-apps/tauri-plugin-updater#v2",
     "solid-js": "^1.8.7"
-  },
-  "release": {
-    "branches": [
-      "main"
-    ],
-    "plugins": [
-      [
-        "@semantic-release/commit-analyzer",
-        {
-          "preset": "conventionalcommits"
-        }
-      ],
-      [
-        "@semantic-release/release-notes-generator",
-        {
-          "preset": "conventionalcommits"
-        }
-      ],
-      [
-        "@semantic-release/changelog",
-        {
-          "changelogFile": "docs/CHANGELOG.md"
-        }
-      ],
-      [
-        "@semantic-release/npm",
-        {
-          "npmPublish": false
-        }
-      ],
-      [
-        "semantic-release-export-data"
-      ],
-      [
-        "@semantic-release/git",
-        {
-          "assets": [
-            "docs/CHANGELOG.md",
-            "package.json"
-          ],
-          "message": "chore: 🔖 release ${nextRelease.version}\n\n${nextRelease.notes}"
-        }
-      ],
-      "@semantic-release/github"
-    ]
-  },
-  "overrides": {
-    "vite-plugin-solid": {
-      "vite": "^5.0.0"
-    }
   }
 }

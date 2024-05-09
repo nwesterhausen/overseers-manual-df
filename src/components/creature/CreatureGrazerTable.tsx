@@ -1,11 +1,11 @@
-import { Component, For, Show } from "solid-js";
-import { Caste } from "../../definitions/Caste";
+import { type Component, For, Show } from "solid-js";
+import type { Caste } from "../../../src-tauri/bindings/Bindings";
 import { toTitleCase } from "../../lib/Utils";
 
 function rawToTiles(grazeVal: number): number {
 	const mathTile = 20000 / grazeVal;
 	if (mathTile >= 1) return Math.round(mathTile);
-	return parseFloat(mathTile.toFixed(1));
+	return Number.parseFloat(mathTile.toFixed(1));
 }
 
 const CreatureGrazerTable: Component<{ castes: Caste[]; fallbackDesc: string }> = (props) => {

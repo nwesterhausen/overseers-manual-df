@@ -4,8 +4,8 @@ version = "../package.json"
 identifier = "one.nwest.games.dwarffortress.overseers-manual"
 
 [build]
-beforeBuildCommand = "pnpm build"
-beforeDevCommand = "pnpm dev"
+beforeBuildCommand = "bun run build"
+beforeDevCommand = "bun dev"
 devUrl = "http://localhost:5173"
 frontendDist = "../dist"
 

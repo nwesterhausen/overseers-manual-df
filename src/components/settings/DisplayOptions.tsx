@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import type { Component } from "solid-js";
 import DisplayFilters from "../filtering/DisplayFilters";
 
 const DisplayOptions: Component = () => {

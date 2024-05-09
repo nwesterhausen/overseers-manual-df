@@ -1,5 +1,5 @@
 import { A, useLocation } from "@solidjs/router";
-import { ParentComponent, Show, createMemo } from "solid-js";
+import { type ParentComponent, Show, createMemo } from "solid-js";
 import { STS_IDLE } from "../../lib/Constants";
 import { useRawsProvider } from "../../providers/RawsProvider";
 import ScrollToTopBtn from "../ScrollToTopBtn";

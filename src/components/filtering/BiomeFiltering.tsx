@@ -1,7 +1,7 @@
 import { Combobox } from "@kobalte/core";
 import { BiRegularCaretDown, BiRegularCheck, BiRegularX } from "solid-icons/bi";
-import { Component, For, createEffect, createSignal } from "solid-js";
-import { BIOMES, BiomeItem } from "../../lib/Biomes";
+import { type Component, For, createEffect, createSignal } from "solid-js";
+import { BIOMES, type BiomeItem } from "../../lib/Biomes";
 import { useSettingsContext } from "../../providers/SettingsProvider";
 
 const BiomeFiltering: Component = () => {

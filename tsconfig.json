@@ -11,5 +11,5 @@
     "noEmit": true,
     "isolatedModules": true
   },
-  "exclude": ["src-tauri/**/*", "node_modules/**/*", "dist/**/*"]
+  "include": ["src-tauri/bindings/*","src/**/*","public/**/*"],
 }

@@ -1,4 +1,4 @@
-import { Component, For, Show, createEffect, createSignal } from "solid-js";
+import { type Component, For, Show, createEffect, createSignal } from "solid-js";
 import { useRawsProvider } from "../../providers/RawsProvider";
 import RawModuleInfoTable from "./RawModuleInfoTable";
 

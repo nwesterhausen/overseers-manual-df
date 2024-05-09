@@ -1,5 +1,5 @@
 import { useNavigate } from "@solidjs/router";
-import { JSX, Show } from "solid-js";
+import { type JSX, Show } from "solid-js";
 import { useUpdateProvider } from "../providers/UpdateProvider";
 
 function UpdateDetails(): JSX.Element {
@@ -14,7 +14,7 @@ function UpdateDetails(): JSX.Element {
 			<pre>{updateContext.updateDetails()}</pre>
 			<p>
 				Full changelog available{" "}
-				<a href="https://github.com/nwesterhausen/overseers-manual-df/blob/main/docs/CHANGELOG.md" target="_blank">
+				<a href="https://github.com/nwesterhausen/overseers-manual-df/blob/main/docs/CHANGELOG.md" target="_blank" rel="noreferrer">
 					online
 				</a>
 				.
