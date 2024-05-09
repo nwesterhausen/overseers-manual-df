@@ -1,5 +1,5 @@
 use dfraw_json_parser::{
-    creature::Creature,
+    creature::{Creature, Token},
     helpers::{clone_raw_object_box, clone_raw_vector_with_limit_and_page},
     plant::Plant,
     ObjectType, RawObject,
@@ -126,7 +126,7 @@ pub async fn search_raws(
                         // Filter by does_not_exist (if `show_does_not_exist` is false)
                         if raw.get_type() == &ObjectType::Creature {
                             let creature = raw.as_any().downcast_ref::<Creature>().unwrap();
-                            !creature.does_not_exist()
+                            !creature.get_tags().contains(&Token::DoesNotExist)
                         } else {
                             true
                         }
@@ -256,7 +256,9 @@ pub async fn search_raws(
                         }
                     }
                     // Check for does_not_exist if `show_does_not_exist` is false
-                    if !search_options.show_does_not_exist && creature.does_not_exist() {
+                    if !search_options.show_does_not_exist
+                        && creature.get_tags().contains(&Token::DoesNotExist)
+                    {
                         return None;
                     }
                 }
