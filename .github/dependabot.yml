@@ -1,0 +1,59 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      major-updates:
+        update-types:
+          - major
+      minor-updates:
+        update-types:
+          - minor
+          - patch
+  - package-ecosystem: cargo
+    directory: /src-tauri/
+    schedule:
+      interval: weekly
+    groups:
+      dev-dependencies:
+        dependency-type: development
+        update-types:
+          - minor
+          - major
+          - patch
+      prod-dependencies:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      prod-dependencies-major:
+        dependency-type: production
+        update-types:
+          - major
+  - directory: /
+    package-ecosystem: npm
+    schedule:
+      interval: weekly
+    groups:
+      dev-dependencies:
+        dependency-type: development
+        update-types:
+          - minor
+          - major
+          - patch
+      prod-dependencies:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      prod-dependencies-major:
+        dependency-type: production
+        update-types:
+          - major
