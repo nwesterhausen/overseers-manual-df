@@ -1,7 +1,6 @@
 import type { Update } from "@tauri-apps/plugin-updater";
-import type { Biome, ObjectType, ProgressPayload, RawModuleLocation } from "../definitions/DFRawJson";
 import type { SearchResults } from "../definitions/SearchResults";
-import type { Summary } from "../../src-tauri/bindings/Bindings";
+import type { Summary, Biome, ObjectType, ProgressPayload, RawModuleLocation } from "../../src-tauri/bindings/Bindings";
 import type { FilteringSettings, ParsingSettings } from "../providers/SettingsProvider";
 
 /**

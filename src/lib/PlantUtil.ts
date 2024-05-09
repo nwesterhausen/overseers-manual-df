@@ -1,4 +1,4 @@
-import type { Plant } from "../definitions/DFRawJson";
+import type { Plant } from "../../src-tauri/bindings/Bindings";
 
 export function GetPlantProvidesList(plant: Plant): string[] {
 	const provides: string[] = [];

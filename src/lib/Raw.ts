@@ -1,4 +1,4 @@
-import type { InfoFile, Name, SingPlurName } from "../definitions/DFRawJson";
+import type { InfoFile, Name, SingPlurName } from "../../src-tauri/bindings/Bindings";
 import type { Raw } from "../definitions/types";
 import { toTitleCase } from "./Utils";
 

@@ -11,8 +11,7 @@ import { createContextProvider } from "@solid-primitives/context";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrent } from "@tauri-apps/api/window";
 import { createEffect, createResource, createSignal } from "solid-js";
-import type { InfoFile, ObjectType, ProgressPayload } from "../definitions/DFRawJson";
-import type { Summary, ParserOptions } from "../../src-tauri/bindings/Bindings";
+import type { Summary, ParserOptions, InfoFile, ObjectType, ProgressPayload } from "../../src-tauri/bindings/Bindings";
 import {
 	COMMAND_GET_RAWS_INFO,
 	COMMAND_PARSE_AND_STORE_RAWS,

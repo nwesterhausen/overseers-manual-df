@@ -8,7 +8,7 @@ import {
 	BiSolidTree,
 } from "solid-icons/bi";
 import { type Component, Match, Show, Switch, createResource } from "solid-js";
-import type { Creature, Plant } from "../definitions/DFRawJson";
+import type { Creature, Plant } from "../../src-tauri/bindings/Bindings";
 import type { Raw } from "../definitions/types";
 import { COMMAND_GET_SEARCH_STRING_FOR_OBJECT } from "../lib/Constants";
 import { nameForRaw } from "../lib/Raw";

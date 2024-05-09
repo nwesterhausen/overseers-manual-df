@@ -1,4 +1,4 @@
-import type { Metadata } from "./DFRawJson";
+import type { Metadata } from "../../src-tauri/bindings/Bindings";
 
 /**
  * The common similarities amongst all raw definitions.
