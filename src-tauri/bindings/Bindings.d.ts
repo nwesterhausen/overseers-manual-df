@@ -6,8 +6,8 @@
  * Options for searching for objects in the game.
  */
 export type SearchOptions = {
-  limit: string;
-  page: string;
+  limit: number;
+  page: number;
   objectTypes: ObjectType[];
   query: string;
   locations: RawModuleLocation[];
@@ -20,9 +20,9 @@ export type SearchOptions = {
  * A summary of the parsing process.
  */
 export type Summary = {
-  totalRaws: string;
-  counts: [ObjectType, string][];
-  locationTotals: [RawModuleLocation, string][];
+  totalRaws: number;
+  counts: [ObjectType, number][];
+  locationTotals: [RawModuleLocation, number][];
   parsingDuration: string;
   saveToStoreDuration: string;
   filteringDuration: string;
@@ -81,7 +81,7 @@ export type Info = {
  * Tracked data is the duration of the event and the total number of files parsed, which
  * can allow for some interesting analysis.
  */
-export type ParseAllRawsInfo = { duration: string; total_files: string };
+export type ParseAllRawsInfo = { duration: string; total_files: number };
 /**
  * Function: `parse_and_store_raws`
  *
@@ -94,7 +94,7 @@ export type ParseAllRawsInfo = { duration: string; total_files: string };
  * frontend.
  */
 export type ParseAndStoreRaws = {
-  total_raws_parsed: string;
+  total_raws_parsed: number;
   elapsed_time: string;
   parsed_raw_types: string;
   parsed_raw_locations: string;
@@ -977,7 +977,7 @@ export type CreatureVariation = {
   identifier: string;
   objectId: string;
   rules: CreatureVariationRule[];
-  argumentCount: string;
+  argumentCount: number;
 };
 /**
  * A variation rule for a creature.
@@ -998,7 +998,7 @@ export type CreatureVariationRule =
       ConditionalNewTag: {
         tag: string;
         value: string | null;
-        argument_index: string;
+        argument_index: number;
         argument_requirement: string;
       };
     }
@@ -1006,7 +1006,7 @@ export type CreatureVariationRule =
       ConditionalAddTag: {
         tag: string;
         value: string | null;
-        argument_index: string;
+        argument_index: number;
         argument_requirement: string;
       };
     }
@@ -1014,7 +1014,7 @@ export type CreatureVariationRule =
       ConditionalRemoveTag: {
         tag: string;
         value: string | null;
-        argument_index: string;
+        argument_index: number;
         argument_requirement: string;
       };
     }
@@ -1023,7 +1023,7 @@ export type CreatureVariationRule =
         tag: string;
         target: string | null;
         replacement: string | null;
-        argument_index: string;
+        argument_index: number;
         argument_requirement: string;
       };
     };
@@ -2427,7 +2427,7 @@ export type SteamData = {
   keyValueTags: string[] | null;
   metadata: string[] | null;
   changelog: string | null;
-  fileId: string;
+  fileId: number;
 };
 /**
  * Represents the name of a materials 3 states (solid, liquid, gas)
@@ -2564,7 +2564,7 @@ export type ProgressPayload = {
   details: ProgressDetails;
   currentTask: ProgressTask;
   percentage: number;
-  runningTotal: string;
+  runningTotal: number;
 };
 /**
  * Tasks that describe what the parser is currently doing.

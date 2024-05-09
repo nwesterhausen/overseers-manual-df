@@ -1,5 +1,5 @@
 import { open as tauriOpen } from "@tauri-apps/plugin-dialog";
-import { readDir } from "@tauri-apps/plugin-fs";
+import { readDirRecursive } from "./Utils";
 
 /**
  * Get the path to the Dwarf Fortress directory. This is done by opening a file dialog and
@@ -36,7 +36,7 @@ export async function getDwarfDirectoryPath(presetPath?: string | string[]): Pro
 	// Determine what kind of path it is
 	try {
 		// Use the tauri fs.readDir API
-		const dirContents = await readDir(splitPath.join("/"), { recursive: true });
+		const dirContents = await readDirRecursive(splitPath.join("/"));
 
 		console.debug(`Read ${dirContents.length} children of ${splitPath.join("/")}`);
 

@@ -1,4 +1,4 @@
-import type { Update } from "@tauri-apps/plugin-updater";
+import { Update } from "@tauri-apps/plugin-updater";
 import type { SearchResults } from "../definitions/SearchResults";
 import type { Summary, Biome, ObjectType, ProgressPayload, RawModuleLocation } from "../../src-tauri/bindings/Bindings";
 import type { FilteringSettings, ParsingSettings } from "../providers/SettingsProvider";
@@ -8,13 +8,14 @@ import type { FilteringSettings, ParsingSettings } from "../providers/SettingsPr
  * when there is no update available or we are waiting for a response
  * from the update server.
  */
-export const NO_UPDATE: Update = {
+export const NO_UPDATE: Update = new Update({
 	currentVersion: "0.0.0",
 	version: "0.0.0",
-	downloadAndInstall: async (_cb) => {},
 	body: "No update currently available.",
 	date: new Date().toISOString(),
-};
+	available: false,
+	rid: 0,
+});
 
 export const SETTINGS_PARSING_DEFAULTS: ParsingSettings = {
 	directoryPath: "",
@@ -97,7 +98,7 @@ export const DEFAULT_PARSING_STATUS: ProgressPayload = {
 	},
 	currentTask: "idle",
 	percentage: 0.0,
-	runningTotal: "0",
+	runningTotal: 0,
 };
 
 /**
@@ -114,7 +115,7 @@ export const DEFAULT_SUMMARY: Summary = {
 	parsingDuration: "",
 	saveToStoreDuration: "",
 	locationTotals: [],
-	totalRaws: "0",
+	totalRaws: 0,
 };
 
 /**

@@ -412,7 +412,7 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
 					{
 						okLabel: "Acknowledge",
 						title: `Overseer's Manual Settings Check`,
-						type: "warning",
+						kind: "warning",
 					},
 				);
 				await resetSavedSettingsToDefaults();
