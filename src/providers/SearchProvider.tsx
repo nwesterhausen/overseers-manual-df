@@ -3,13 +3,21 @@
  * This takes into account not only the search string, but also the advanced filtering options.
  */
 import { createContextProvider } from "@solid-primitives/context";
-import { createMemo, createSignal } from "solid-js";
+import { createEffect, createMemo, createResource, createSignal } from "solid-js";
 import type { SearchOptions } from "../../src-tauri/bindings/Bindings";
 import { useSettingsContext } from "./SettingsProvider";
+import { getCurrent } from "@tauri-apps/api/window";
+import { invoke } from "@tauri-apps/api/core";
+import type { SearchResults } from "../definitions/SearchResults";
+import { COMMAND_SEARCH_RAWS, DEFAULT_SEARCH_RESULT } from "../lib/Constants";
 
 export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
+	/**
+	 * The current window (used for listening to events)
+	 */
+	const appWindow = getCurrent();
 	// Grab the settings context. We actually keep many search options cached on disk via settings.
-	const [settings] = useSettingsContext();
+	const [settings, { setTotalResults }] = useSettingsContext();
 
 	// The typed search query (basically the value of the search box input)
 	const [searchString, setSearchString] = createSignal("");
@@ -142,10 +150,51 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
 		return options;
 	});
 
+	// A signal to hold the previous search options (used to determine if the search options have changed)
+	const [previousSearchOptions, setPreviousSearchOptions] = createSignal(searchOptions());
+	createEffect(() => {
+		setPreviousSearchOptions(searchOptions());
+	});
+
+	// Whether the search options have changed
+	const searchOptionsChanged = createMemo(() => {
+		return JSON.stringify(searchOptions()) !== JSON.stringify(previousSearchOptions());
+	});
+
+	/**
+	 * Get raws from the backend and update the total results. This executes a search.
+	 *
+	 * @returns The search results
+	 */
+	async function updateSearchResults(): Promise<SearchResults> {
+		const results = (await invoke(COMMAND_SEARCH_RAWS, {
+			window: appWindow,
+			searchOptions: searchOptions(),
+		})) as SearchResults;
+		setTotalResults(results.totalResults);
+
+		return results;
+	}
+
+	// The resource for raws which is exposed to the rest of the application.
+	const [searchResults, { refetch: refetchSearchResults }] = createResource<SearchResults, boolean>(
+		searchOptionsChanged(),
+		updateSearchResults,
+		{
+			name: "pageOfParsedRaws",
+			initialValue: DEFAULT_SEARCH_RESULT,
+		},
+	);
+
 	return {
 		// The basics (i.e. expose setting the search string and retrieval of the search options)
 		setSearchString,
 		searchOptions,
+		searchOptionsChanged,
+
+		// The search results
+		searchResults,
+		refetchSearchResults,
 
 		// Raw Module Filtering
 		filteredModules,
