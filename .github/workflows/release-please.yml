@@ -4,6 +4,7 @@ on:
       - main
 permissions: read-all
 
+permissions: read-all
 env:
   CARGO_TERM_COLOR: always
   # sccache enablement
