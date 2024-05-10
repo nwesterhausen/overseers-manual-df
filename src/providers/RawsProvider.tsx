@@ -9,15 +9,13 @@
  */
 import { createContextProvider } from "@solid-primitives/context";
 import { invoke } from "@tauri-apps/api/core";
-import { getCurrent } from "@tauri-apps/api/window";
 import { createEffect, createResource, createSignal } from "solid-js";
-import type { Summary, ParserOptions, InfoFile, ObjectType, ProgressPayload } from "../../src-tauri/bindings/Bindings";
+import { useSearchProvider } from "./SearchProvider";
+import { useSettingsContext } from "./SettingsProvider";
 import {
 	COMMAND_GET_RAWS_INFO,
 	COMMAND_PARSE_AND_STORE_RAWS,
-	COMMAND_SEARCH_RAWS,
 	DEFAULT_PARSING_STATUS,
-	DEFAULT_SEARCH_RESULT,
 	DEFAULT_SUMMARY,
 	PARSING_PROGRESS_EVENT,
 	PARSING_SUMMARY_EVENT,
@@ -25,31 +23,22 @@ import {
 	STS_IDLE,
 	STS_PARSING,
 } from "../lib/Constants";
-import { useSearchProvider } from "./SearchProvider";
-import { useSettingsContext } from "./SettingsProvider";
-import type { SearchResults } from "../definitions/SearchResults";
+import { getCurrent } from "@tauri-apps/api/window";
+import type { InfoFile, ObjectType, ParserOptions, ProgressPayload, Summary } from "../../src-tauri/bindings/Bindings";
 
-export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
+const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 	/**
 	 * The current window (used for listening to events)
 	 */
 	const appWindow = getCurrent();
-
 	// Search context provides the compiled search options
 	const searchContext = useSearchProvider();
 	// Settings context provides the directory path and the parsing options
 	// We reset page when we parse the raws
 	const [settings, { setTotalResults, resetPage }] = useSettingsContext();
 
-	// Signal for setting raw parse status
-	// This signal is exposed and is used in many components to affect how they render
-	const [parsingStatus, setParsingStatus] = createSignal(STS_IDLE);
-
 	// Signal for loading raws
 	const [loadRaws, setLoadRaws] = createSignal(false);
-
-	// Signal for previous search options
-	const [previousSearchOptions, setPreviousSearchOptions] = createSignal(searchContext.searchOptions());
 
 	// This effect is responsible for telling the backend to parse the raws. It will go off
 	// whenever the loadRaws signal is set to true. It will also reset the page to 1 and clear
@@ -65,25 +54,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 		}
 	});
 
-	// The resource for raws which is exposed to the rest of the application.
-	const [searchResults, { refetch }] = createResource(updateSearchResults, {
-		name: "pageOfParsedRaws",
-		initialValue: DEFAULT_SEARCH_RESULT,
-	});
-
-	// Effect to update the search results when the search options change
-	createEffect(() => {
-		// Only update if the search options have changed (deep compare) OR if the total results is 0 (optimistic update)
-		if (
-			searchResults.latest.totalResults === 0 ||
-			JSON.stringify(searchContext.searchOptions()) !== JSON.stringify(previousSearchOptions())
-		) {
-			refetch();
-		} else {
-			console.log("Search options have not changed and were loaded before, skipping update.");
-		}
-	});
-
 	// Signal to update the raw module info files data
 	const [updateRawsInfo, setUpdateRawsInfo] = createSignal(false);
 	/**
@@ -91,7 +61,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 	 *
 	 * @returns The raws' modules info.txt files
 	 */
-	const [rawModulesInfo] = createResource(
+	const [rawModulesInfo] = createResource<InfoFile[], boolean>(
 		updateRawsInfo,
 		async () => {
 			const results = (await invoke(COMMAND_GET_RAWS_INFO)) as InfoFile[];
@@ -102,6 +72,9 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 		},
 	);
 
+	// Signal for setting raw parse status
+	// This signal is exposed and is used in many components to affect how they render
+	const [parsingStatus, setParsingStatus] = createSignal(STS_IDLE);
 	// Signal for raw parsing progress
 	const [parsingProgress, setParsingProgress] = createSignal<ProgressPayload>(DEFAULT_PARSING_STATUS);
 
@@ -190,7 +163,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 			setParsingStatus(STS_IDLE);
 
 			// Update the search results
-			refetch();
+			searchContext.refetchSearchResults();
 			// Update the raw modules
 			setUpdateRawsInfo(true);
 		} catch (e) {
@@ -198,24 +171,6 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 			setParsingProgress(DEFAULT_PARSING_STATUS);
 			setParsingStatus(STS_EMPTY);
 		}
-	}
-
-	/**
-	 * Get raws from the backend and update the total results. This executes a search.
-	 *
-	 * @returns The search results
-	 */
-	async function updateSearchResults(): Promise<SearchResults> {
-		const results = (await invoke(COMMAND_SEARCH_RAWS, {
-			window: appWindow,
-			searchOptions: searchContext.searchOptions(),
-		})) as SearchResults;
-		setTotalResults(results.totalResults);
-
-		// Update the previous search options
-		setPreviousSearchOptions(searchContext.searchOptions());
-
-		return results;
 	}
 
 	// We can check if the directory is valid and if so, load the raws
@@ -231,6 +186,7 @@ export const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 		parsingProgress,
 		summary,
 		rawModulesInfo,
-		parsedRaws: searchResults,
 	};
 });
+
+export { RawsProvider, useRawsProvider };
