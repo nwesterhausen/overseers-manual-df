@@ -4,6 +4,7 @@ on:
     branches:
       - main
 
+permissions: read-all
 env:
   # sccache enablement
   SCCACHE_GHA_ENABLED: true
