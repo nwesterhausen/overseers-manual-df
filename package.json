@@ -58,7 +58,7 @@
   "dependencies": {
     "@aptabase/tauri": "^0.4.1",
     "@solidjs/router": "^0.13.0",
-    "@tauri-apps/api": "2.0.0-beta.7",
+    "@tauri-apps/api": "2.0.0-beta.11",
     "@tauri-apps/plugin-dialog": "git@github.com:tauri-apps/tauri-plugin-dialog#v2",
     "@tauri-apps/plugin-fs": "git@github.com:tauri-apps/tauri-plugin-fs#v2",
     "@tauri-apps/plugin-log": "git@github.com:tauri-apps/tauri-plugin-log#v2",
