@@ -76,7 +76,7 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
 					</tr>
 					<tr>
 						<th>Trainable</th>
-						<td>{props.creature.castes.map((v) => CasteTrainableStatus(v)).join(", ")}</td>
+						<td>{[...new Set(props.creature.castes.map((v) => CasteTrainableStatus(v)))].join(", ")}</td>
 					</tr>
 					<tr>
 						<th>Defining Classes</th>

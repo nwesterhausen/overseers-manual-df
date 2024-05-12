@@ -150,23 +150,13 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
 		return options;
 	});
 
-	// A signal to hold the previous search options (used to determine if the search options have changed)
-	const [previousSearchOptions, setPreviousSearchOptions] = createSignal(searchOptions());
-	createEffect(() => {
-		setPreviousSearchOptions(searchOptions());
-	});
-
-	// Whether the search options have changed
-	const searchOptionsChanged = createMemo(() => {
-		return JSON.stringify(searchOptions()) !== JSON.stringify(previousSearchOptions());
-	});
-
 	/**
 	 * Get raws from the backend and update the total results. This executes a search.
 	 *
 	 * @returns The search results
 	 */
 	async function updateSearchResults(): Promise<SearchResults> {
+		console.log("Updating search results");
 		const results = (await invoke(COMMAND_SEARCH_RAWS, {
 			window: appWindow,
 			searchOptions: searchOptions(),
@@ -177,20 +167,25 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
 	}
 
 	// The resource for raws which is exposed to the rest of the application.
-	const [searchResults, { refetch: refetchSearchResults }] = createResource<SearchResults, boolean>(
-		searchOptionsChanged(),
-		updateSearchResults,
-		{
-			name: "pageOfParsedRaws",
-			initialValue: DEFAULT_SEARCH_RESULT,
-		},
-	);
+	const [searchResults, { refetch: refetchSearchResults }] = createResource<SearchResults>(updateSearchResults, {
+		name: "pageOfParsedRaws",
+		initialValue: DEFAULT_SEARCH_RESULT,
+	});
+
+	// A signal to hold the previous search options (used to determine if the search options have changed)
+	const [previousSearchOptions, setPreviousSearchOptions] = createSignal(searchOptions());
+	createEffect(() => {
+		if (JSON.stringify(searchOptions()) !== JSON.stringify(previousSearchOptions())) {
+			console.log("Search options have changed");
+			refetchSearchResults();
+		}
+		setPreviousSearchOptions(searchOptions());
+	});
 
 	return {
 		// The basics (i.e. expose setting the search string and retrieval of the search options)
 		setSearchString,
 		searchOptions,
-		searchOptionsChanged,
 
 		// The search results
 		searchResults,
