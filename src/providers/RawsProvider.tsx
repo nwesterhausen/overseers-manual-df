@@ -162,8 +162,6 @@ const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 			setParsingProgress(DEFAULT_PARSING_STATUS);
 			setParsingStatus(STS_IDLE);
 
-			// Update the search results
-			searchContext.refetchSearchResults();
 			// Update the raw modules
 			setUpdateRawsInfo(true);
 		} catch (e) {

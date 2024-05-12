@@ -116,16 +116,16 @@ export function EggLayingStatus(creature: Creature): string {
 	}
 	const ret: string[] = [];
 	for (const caste of creature.castes) {
-		if (caste.eggSize > 0) {
-			ret.push(
-				`${toTitleCase(caste.identifier)}s lay ${
-					caste.clutchSize !== null ? caste.clutchSize.join(" - ") : 0
-				} eggs with volume ${SimplifyVolume(caste.eggSize)}.`,
-			);
-		} else {
-			ret.push(
-				`${toTitleCase(caste.identifier)}s lay ${caste.clutchSize !== null ? caste.clutchSize.join(" - ") : 0} eggs.`,
-			);
+		if (caste.clutchSize && Array.isArray(caste.clutchSize)) {
+			if (caste.eggSize > 0) {
+				ret.push(
+					`${toTitleCase(caste.identifier)}s lay ${
+						caste.clutchSize !== null ? caste.clutchSize.join(" - ") : 0
+					} eggs with volume ${SimplifyVolume(caste.eggSize)}.`,
+				);
+			} else {
+				ret.push(`${toTitleCase(caste.identifier)}s lay ${caste.clutchSize.join(" - ")} eggs.`);
+			}
 		}
 	}
 	return ret.join(" ");
@@ -142,7 +142,11 @@ export function LifeExpectancyStatus(creature: Creature): string {
 	if (Array.isArray(creature.castes)) {
 		for (const caste of creature.castes) {
 			if (caste.maxAge && caste.maxAge.length > 1 && caste.maxAge[0] > 0 && caste.maxAge[1] > 0) {
-				ret.push(`${caste} lives ${caste.maxAge.join(" - ")} years.`);
+				if (caste.identifier === "ALL") {
+					ret.push(`${caste.maxAge.join(" - ")} years.`);
+				} else {
+					ret.push(`${caste.identifier} lives ${caste.maxAge.join(" - ")} years.`);
+				}
 			}
 		}
 	}
@@ -319,9 +323,9 @@ export function CasteTrainableStatus(caste: Caste): string {
 	}
 
 	if (strArr.length) {
-		return `Trainable for ${strArr.join(" and ")}.`;
+		return `${caste.identifier}: trainable for ${strArr.join(" and ")}.`;
 	}
-	return "Not trainable.";
+	return "Not trainable";
 }
 
 /**
