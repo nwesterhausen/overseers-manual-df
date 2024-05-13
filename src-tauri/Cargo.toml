@@ -13,7 +13,7 @@ keywords = ["tauri", "dwarf_fortress", "gaming", "utility"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies.tauri-build]
-version = "2.0.0-beta.11"
+version = "2.0.0-beta.15"
 features = ['config-toml']
 
 [build-dependencies.built]
