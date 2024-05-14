@@ -29,19 +29,12 @@ jobs:
         with:
           egress-policy: audit
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      - name: Node Setup
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
-        with:
-          node-version-file: .nvmrc
-
       - name: Install bun
         uses: oven-sh/setup-bun@8f24390df009a496891208e5e36b8a1de1f45135 #v1
-
       - name: Create Fake .env File (dotenvy_macro requirement)
         run: |
           touch src-tauri/.env
           echo APTABASE_KEY=${{ secrets.APTABASE_KEY }} >> src-tauri/.env
-
       - name: Install Dependencies
         # You can remove libayatana-appindicator3-dev if you don't use the system tray feature.
         run: |
@@ -58,8 +51,6 @@ jobs:
           sudo apt-get install --no-install-recommends javascriptcoregtk-4.1 \
               libsoup-3.0 \
               webkit2gtk-4.1
-
-
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@2e7f9ec7921547d4b46598398ca573513895d0bd # 0.0.4
       - name: Rust setup
@@ -70,13 +61,11 @@ jobs:
         run: |
           bun install
           bun run build
-
       - name: Build the Tauri App
         run: bunx tauri build
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_PRIVATE_KEY_PASSWORD }}
-
       - name: Show sccache stats
         shell: bash
         run: |
@@ -95,10 +84,6 @@ jobs:
         with:
           egress-policy: audit
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      - name: Node Setup
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
-        with:
-          node-version-file: .nvmrc
       - name: Install bun
         uses: oven-sh/setup-bun@8f24390df009a496891208e5e36b8a1de1f45135 #v1
       - name: Install Dependencies
@@ -117,7 +102,6 @@ jobs:
           sudo apt-get install --no-install-recommends javascriptcoregtk-4.1 \
               libsoup-3.0 \
               webkit2gtk-4.1
-
       - name: Create .env
         run: |
           touch src-tauri/.env
