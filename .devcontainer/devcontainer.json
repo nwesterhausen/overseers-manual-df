@@ -3,7 +3,7 @@
 {
   "name": "Rust",
   // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-  "image": "ghcr.io/devcontainers/features/rust:1",
+  "image": "ghcr.io/devcontainers/features/rust:1@sha256:aba6f47303b197976902bf544c786b5efecc03c238ff593583e5e74dfa9c7ccb",
 
   // Use 'mounts' to make the cargo cache persistent in a Docker Volume.
   "mounts": [
@@ -28,12 +28,12 @@
   "features": {
     "node": "lts",
     "rust": "latest",
-    "ghcr.io/devcontainers/features/node:1": {
+    "ghcr.io/devcontainers/features/node:1@sha256:6c4f444d8e3eb68594d60ec128bce76a80647edc2b9a94960ca377895855145f": {
       "nodeGypDependencies": true,
       "version": "lts",
       "nvmVersion": "latest"
     },
-    "ghcr.io/devcontainers/features/rust:1": {
+    "ghcr.io/devcontainers/features/rust:1@sha256:aba6f47303b197976902bf544c786b5efecc03c238ff593583e5e74dfa9c7ccb": {
       "version": "latest",
       "profile": "minimal"
     }
