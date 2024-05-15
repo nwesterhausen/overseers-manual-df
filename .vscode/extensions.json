@@ -1,12 +1,16 @@
 {
 	"recommendations": [
-		"dbaeumer.vscode-eslint",
-		"rust-lang.rust-analyzer",
 		"aaron-bond.better-comments",
+		"biomejs.biome",
+		"vadimcn.vscode-lldb",
 		"serayuzgur.crates",
 		"mikestead.dotenv",
+		"usernamehw.errorlens",
 		"tamasfe.even-better-toml",
-		"tauri-apps.tauri-vscode",
-		"biomejs.biome"
+		"ms-vscode.vscode-typescript-next",
+		"lllllllqw.jsdoc",
+		"rust-lang.rust-analyzer",
+		"bradlc.vscode-tailwindcss",
+		"tauri-apps.tauri-vscode"
 	]
 }

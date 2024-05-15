@@ -45,6 +45,25 @@
     "vivaxy",
     "vocabulum"
   ],
-  "githubPullRequests.ignoredPullRequestBranches": ["main"],
-  "css.lint.unknownAtRules": "ignore"
+  "githubPullRequests.ignoredPullRequestBranches": [
+    "main"
+  ],
+  "css.lint.unknownAtRules": "ignore",
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "dist": true,
+    "**/target": true,
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "dist": true,
+    "**/node_modules": true,
+  }
 }
