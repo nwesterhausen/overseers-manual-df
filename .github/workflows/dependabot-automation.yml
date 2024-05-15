@@ -4,6 +4,25 @@ on: pull_request
 permissions: read-all
 
 jobs:
+  update-bun-lockb:
+    name: Update bun.lockb
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: oven-sh/setup-bun@v1
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+      - run: |
+          bun install
+          git add bun.lockb
+          git config --global user.name 'dependabot[bot]'
+          git config --global user.email 'dependabot[bot]@users.noreply.github.com'
+          git commit --amend --no-edit
+          git push --force
   dependabot:
     name: Automerge Dependabot PRs (if possible)
     permissions:
@@ -11,6 +30,7 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
+    needs: update-bun-lockb
     steps:
       - name: Dependabot metadata
         id: metadata
