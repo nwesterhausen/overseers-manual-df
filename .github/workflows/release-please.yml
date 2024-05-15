@@ -77,7 +77,7 @@ jobs:
         with:
           toolchain: stable
       - name: Run sccache-cache
-        uses: mozilla-actions/sccache-action@2e7f9ec7921547d4b46598398ca573513895d0bd # 0.0.4
+        uses: mozilla-actions/sccache-action@2e7f9ec7921547d4b46598398ca573513895d0bd # v0.0.4
       - name: Install Dependencies and Build
         run: |
           bun install
