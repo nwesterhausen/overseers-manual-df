@@ -45,10 +45,10 @@ jobs:
           gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.PAT_GH_TOKEN}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Approve Github Actions PRs
         if: contains(github.event.pull_request.labels.*.name, 'github_actions')
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.PAT_GH_TOKEN}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
