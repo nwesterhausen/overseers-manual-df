@@ -30,7 +30,6 @@ jobs:
           if [[ -n $(git status --porcelain) ]]; then
               echo "changes=true" >> "$GITHUB_OUTPUT";
           fi
-        continue-on-error: true
       - name: Update bun.lockb
         if: steps.check-lockfile.outputs.changes == 'true'
         run: |
