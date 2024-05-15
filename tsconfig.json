@@ -1,15 +1,29 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js",
-    "types": ["vite/client"],
-    "noEmit": true,
-    "isolatedModules": true
-  },
-  "include": ["src-tauri/bindings/*","src/**/*","public/**/*"],
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"jsx": "preserve",
+		"jsxImportSource": "solid-js",
+		"types": [
+			"vite/client"
+		],
+		"noEmit": true,
+		"isolatedModules": true
+	},
+	"include": [
+		"src-tauri/bindings/Bindings.d.ts",
+		"src/**/*.{ts,tsx}",
+		"index.html"
+	],
+	"exclude": [
+		"node_modules",
+		"dist"
+	],
+	"files": [
+		"src-tauri/bindings/Bindings.d.ts",
+		"index.html"
+	]
 }

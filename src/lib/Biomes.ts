@@ -81,8 +81,7 @@ export const BIOMES: BiomeItem[] = [
 	{
 		disabled: false,
 		value: "AnyTropical",
-		label:
-			"All Tropical land biomes - marshes, swamps (including Mangrove), forests, grassland, savanna, and shrubland",
+		label: "All Tropical land biomes - marshes, swamps (including Mangrove), forests, grassland, savanna, and shrubland",
 	},
 	{ disabled: false, value: "AnyForest", label: "All Forest biomes (excluding Taiga)" },
 	{ disabled: false, value: "AnyShrubland", label: "Temperate and Tropical Shrubland" },

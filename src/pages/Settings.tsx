@@ -27,10 +27,7 @@ function Settings(): JSX.Element {
 		<div class="p-2 flex flex-col gap-3">
 			<section class="bg-slate-800 bg-opacity-75 rounded-lg p-2">
 				<h3 class="text-lg font-semibold mb-2">Parsing Options</h3>
-				<p>
-					Set restrictions for when the raws are parsed. To filter results after searching, use the filters on the main
-					page.
-				</p>
+				<p>Set restrictions for when the raws are parsed. To filter results after searching, use the filters on the main page.</p>
 				<hr class="mt-4 opacity-25" />
 
 				<legend class="font-semibold text-md my-1">Locations</legend>

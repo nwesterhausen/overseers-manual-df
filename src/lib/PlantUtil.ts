@@ -14,12 +14,7 @@ export function GetPlantProvidesList(plant: Plant): string[] {
 					provides.push(material.stateNames.liquid);
 				}
 			}
-			if (
-				material.name === "WOOD" ||
-				material.name === "MILL" ||
-				material.name === "SOAP" ||
-				material.name === "PAPER"
-			) {
+			if (material.name === "WOOD" || material.name === "MILL" || material.name === "SOAP" || material.name === "PAPER") {
 				if (material.stateNames && material.stateNames.solid) {
 					provides.push(material.stateNames.solid);
 				}
@@ -38,12 +33,7 @@ export function GetPlantProvidesList(plant: Plant): string[] {
 	// Then we can look through the growths for specific things
 	if (Array.isArray(plant.growths)) {
 		for (const growth of plant.growths) {
-			if (
-				growth.growthType === "Fruit" ||
-				growth.growthType === "SeedCatkins" ||
-				growth.growthType === "Cone" ||
-				growth.growthType === "Nut"
-			) {
+			if (growth.growthType === "Fruit" || growth.growthType === "SeedCatkins" || growth.growthType === "Cone" || growth.growthType === "Nut") {
 				if (growth.name && growth.name.singular) {
 					provides.push(growth.name.singular);
 				}

@@ -20,10 +20,7 @@ const ParsedModInfo: Component = () => {
 				<h2>Summary</h2>
 				<ul>
 					<li>Total read raw modules: {rawsContext.rawModulesInfo.latest.length}</li>
-					<li>
-						From installed_mods:{" "}
-						{rawsContext.rawModulesInfo.latest.filter((v) => v.location === "InstalledMods").length}
-					</li>
+					<li>From installed_mods: {rawsContext.rawModulesInfo.latest.filter((v) => v.location === "InstalledMods").length}</li>
 					<li>From mods: {rawsContext.rawModulesInfo.latest.filter((v) => v.location === "Mods").length}</li>
 					<li>From mods: {rawsContext.rawModulesInfo.latest.filter((v) => v.location === "Vanilla").length}</li>
 				</ul>

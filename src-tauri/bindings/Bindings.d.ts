@@ -6,28 +6,28 @@
  * Options for searching for objects in the game.
  */
 export type SearchOptions = {
-  limit: number;
-  page: number;
-  objectTypes: ObjectType[];
-  query: string;
-  locations: RawModuleLocation[];
-  biomes: Biome[];
-  modules: string[];
-  onlyEggLayers: boolean;
-  showDoesNotExist: boolean;
+	limit: number;
+	page: number;
+	objectTypes: ObjectType[];
+	query: string;
+	locations: RawModuleLocation[];
+	biomes: Biome[];
+	modules: string[];
+	onlyEggLayers: boolean;
+	showDoesNotExist: boolean;
 };
 /**
  * A summary of the parsing process.
  */
 export type Summary = {
-  totalRaws: number;
-  counts: [ObjectType, number][];
-  locationTotals: [RawModuleLocation, number][];
-  parsingDuration: string;
-  saveToStoreDuration: string;
-  filteringDuration: string;
-  objectsAllowed: ObjectType[];
-  locations: RawModuleLocation[];
+	totalRaws: number;
+	counts: [ObjectType, number][];
+	locationTotals: [RawModuleLocation, number][];
+	parsingDuration: string;
+	saveToStoreDuration: string;
+	filteringDuration: string;
+	objectsAllowed: ObjectType[];
+	locations: RawModuleLocation[];
 };
 /**
  * Options for getting graphics for an object.
@@ -37,8 +37,8 @@ export type GraphicsOptions = { identifier: string; allGraphics: boolean };
  * Graphics search results
  */
 export type GraphicsResults = {
-  matchingGraphics: Graphic[] | null;
-  tilePages: TilePage[];
+	matchingGraphics: Graphic[] | null;
+	tilePages: TilePage[];
 };
 /**
  * Specific storage for graphics and tile pages.
@@ -52,8 +52,8 @@ export type GraphicsResults = {
  * parse the raws every time we want to get a graphic or tile page.
  */
 export type GraphicStorage = {
-  graphics_store: { [key: string]: Graphic[] };
-  tile_page_store: { [key: string]: TilePage };
+	graphics_store: { [key: string]: Graphic[] };
+	tile_page_store: { [key: string]: TilePage };
 };
 /**
  * Storage for module info files.
@@ -67,13 +67,13 @@ export type ModuleInfoStorage = { module_info_store: InfoFile[] };
  * Information about the build, including version, Rust version, optimization level, debug status, dependencies, build time, and git commit hash.
  */
 export type Info = {
-  version: string;
-  rustVersion: string;
-  optimizationLevel: string;
-  inDebug: boolean;
-  dependencies: [string, string][];
-  buildTime: string;
-  gitCommitHash: string;
+	version: string;
+	rustVersion: string;
+	optimizationLevel: string;
+	inDebug: boolean;
+	dependencies: [string, string][];
+	buildTime: string;
+	gitCommitHash: string;
 };
 /**
  * Function: `parse_all_raws_info`
@@ -94,10 +94,10 @@ export type ParseAllRawsInfo = { duration: string; total_files: number };
  * frontend.
  */
 export type ParseAndStoreRaws = {
-  total_raws_parsed: number;
-  elapsed_time: string;
-  parsed_raw_types: string;
-  parsed_raw_locations: string;
+	total_raws_parsed: number;
+	elapsed_time: string;
+	parsed_raw_types: string;
+	parsed_raw_locations: string;
 };
 /**
  * Update Skipped
@@ -160,105 +160,105 @@ export type AppExited<> = null;
  *
  */
 export type ParserOptions = {
-  attachMetadataToRaws: boolean;
-  skipApplyCopyTagsFrom: boolean;
-  skipApplyCreatureVariations: boolean;
-  objectTypesToParse: ObjectType[];
-  locationsToParse: RawModuleLocation[];
-  dwarfFortressDirectory: string;
-  legendsExportsToParse: string[];
-  rawFilesToParse: string[];
-  rawModulesToParse: string[];
-  moduleInfoFilesToParse: string[];
-  logSummary: boolean;
+	attachMetadataToRaws: boolean;
+	skipApplyCopyTagsFrom: boolean;
+	skipApplyCreatureVariations: boolean;
+	objectTypesToParse: ObjectType[];
+	locationsToParse: RawModuleLocation[];
+	dwarfFortressDirectory: string;
+	legendsExportsToParse: string[];
+	rawFilesToParse: string[];
+	rawModulesToParse: string[];
+	moduleInfoFilesToParse: string[];
+	logSummary: boolean;
 };
 /**
  * An enum representing a biome.
  */
 export type Biome =
-  | "Mountain"
-  | "Mountains"
-  | "Glacier"
-  | "Tundra"
-  | "SwampTemperateFreshwater"
-  | "SwampTemperateSaltwater"
-  | "MarshTemperateFreshwater"
-  | "MarshTemperateSaltwater"
-  | "SwampTropicalFreshwater"
-  | "SwampTropicalSaltwater"
-  | "SwampMangrove"
-  | "MarshTropicalFreshwater"
-  | "MarshTropicalSaltwater"
-  | "ForestTaiga"
-  | "Taiga"
-  | "ForestTemperateConifer"
-  | "ForestTemperateBroadleaf"
-  | "ForestTropicalConifer"
-  | "ForestTropicalDryBroadleaf"
-  | "ForestTropicalMoistBroadleaf"
-  | "GrasslandTemperate"
-  | "SavannaTemperate"
-  | "ShrublandTemperate"
-  | "GrasslandTropical"
-  | "SavannaTropical"
-  | "ShrublandTropical"
-  | "DesertBadland"
-  | "DesertRock"
-  | "DesertSand"
-  | "OceanTropical"
-  | "OceanTemperate"
-  | "OceanArctic"
-  | "PoolTemperateFreshwater"
-  | "PoolTemperateBrackishwater"
-  | "PoolTemperateSaltwater"
-  | "PoolTropicalFreshwater"
-  | "PoolTropicalBrackishwater"
-  | "PoolTropicalSaltwater"
-  | "LakeTemperateFreshwater"
-  | "LakeTemperateBrackishwater"
-  | "LakeTemperateSaltwater"
-  | "LakeTropicalFreshwater"
-  | "LakeTropicalBrackishwater"
-  | "LakeTropicalSaltwater"
-  | "RiverTemperateFreshwater"
-  | "RiverTemperateBrackishwater"
-  | "RiverTemperateSaltwater"
-  | "RiverTropicalFreshwater"
-  | "RiverTropicalBrackishwater"
-  | "RiverTropicalSaltwater"
-  | "SubterraneanWater"
-  | "SubterraneanChasm"
-  | "SubterraneanLava"
-  | "AllMain"
-  | "AnyLand"
-  | "AnyOcean"
-  | "AnyLake"
-  | "AnyTemperateLake"
-  | "AnyTropicalLake"
-  | "AnyRiver"
-  | "AnyTemperateRiver"
-  | "AnyTropicalRiver"
-  | "AnyPool"
-  | "NotFreezing"
-  | "AnyTemperate"
-  | "AnyTropical"
-  | "AnyForest"
-  | "AnyShrubland"
-  | "AnyGrassland"
-  | "AnySavanna"
-  | "AnyTemperateForest"
-  | "AnyTropicalForest"
-  | "AnyTemperateBroadleaf"
-  | "AnyTropicalBroadleaf"
-  | "AnyWetland"
-  | "AnyTemperateWetland"
-  | "AnyTropicalWetland"
-  | "AnyTropicalMarsh"
-  | "AnyTemperateMarsh"
-  | "AnyTropicalSwamp"
-  | "AnyTemperateSwamp"
-  | "AnyDesert"
-  | "Unknown";
+	| "Mountain"
+	| "Mountains"
+	| "Glacier"
+	| "Tundra"
+	| "SwampTemperateFreshwater"
+	| "SwampTemperateSaltwater"
+	| "MarshTemperateFreshwater"
+	| "MarshTemperateSaltwater"
+	| "SwampTropicalFreshwater"
+	| "SwampTropicalSaltwater"
+	| "SwampMangrove"
+	| "MarshTropicalFreshwater"
+	| "MarshTropicalSaltwater"
+	| "ForestTaiga"
+	| "Taiga"
+	| "ForestTemperateConifer"
+	| "ForestTemperateBroadleaf"
+	| "ForestTropicalConifer"
+	| "ForestTropicalDryBroadleaf"
+	| "ForestTropicalMoistBroadleaf"
+	| "GrasslandTemperate"
+	| "SavannaTemperate"
+	| "ShrublandTemperate"
+	| "GrasslandTropical"
+	| "SavannaTropical"
+	| "ShrublandTropical"
+	| "DesertBadland"
+	| "DesertRock"
+	| "DesertSand"
+	| "OceanTropical"
+	| "OceanTemperate"
+	| "OceanArctic"
+	| "PoolTemperateFreshwater"
+	| "PoolTemperateBrackishwater"
+	| "PoolTemperateSaltwater"
+	| "PoolTropicalFreshwater"
+	| "PoolTropicalBrackishwater"
+	| "PoolTropicalSaltwater"
+	| "LakeTemperateFreshwater"
+	| "LakeTemperateBrackishwater"
+	| "LakeTemperateSaltwater"
+	| "LakeTropicalFreshwater"
+	| "LakeTropicalBrackishwater"
+	| "LakeTropicalSaltwater"
+	| "RiverTemperateFreshwater"
+	| "RiverTemperateBrackishwater"
+	| "RiverTemperateSaltwater"
+	| "RiverTropicalFreshwater"
+	| "RiverTropicalBrackishwater"
+	| "RiverTropicalSaltwater"
+	| "SubterraneanWater"
+	| "SubterraneanChasm"
+	| "SubterraneanLava"
+	| "AllMain"
+	| "AnyLand"
+	| "AnyOcean"
+	| "AnyLake"
+	| "AnyTemperateLake"
+	| "AnyTropicalLake"
+	| "AnyRiver"
+	| "AnyTemperateRiver"
+	| "AnyTropicalRiver"
+	| "AnyPool"
+	| "NotFreezing"
+	| "AnyTemperate"
+	| "AnyTropical"
+	| "AnyForest"
+	| "AnyShrubland"
+	| "AnyGrassland"
+	| "AnySavanna"
+	| "AnyTemperateForest"
+	| "AnyTropicalForest"
+	| "AnyTemperateBroadleaf"
+	| "AnyTropicalBroadleaf"
+	| "AnyWetland"
+	| "AnyTemperateWetland"
+	| "AnyTropicalWetland"
+	| "AnyTropicalMarsh"
+	| "AnyTemperateMarsh"
+	| "AnyTropicalSwamp"
+	| "AnyTemperateSwamp"
+	| "AnyDesert"
+	| "Unknown";
 /**
  * The `Creature` struct represents a creature in a Dwarf Fortress, with the properties
  * that can be set in the raws. Not all the raws are represented here, only the ones that
@@ -272,103 +272,103 @@ export type Biome =
  * they are saved and can be applied later (at the consumer's discretion).
  */
 export type Creature = {
-  metadata: Metadata | null;
-  identifier: string;
-  castes: Caste[];
-  tags: CreatureTag[] | null;
-  biomes: Biome[] | null;
-  prefStrings: string[] | null;
-  tile: Tile | null;
-  frequency: number | null;
-  clusterNumber: number[] | null;
-  populationNumber: number[] | null;
-  undergroundDepth: number[] | null;
-  generalBabyName: SingPlurName | null;
-  generalChildName: SingPlurName | null;
-  name: Name;
-  copyTagsFrom: string | null;
-  applyCreatureVariation: string[] | null;
-  objectId: string;
-  selectCreatureVariation: SelectCreature[] | null;
+	metadata: Metadata | null;
+	identifier: string;
+	castes: Caste[];
+	tags: CreatureTag[] | null;
+	biomes: Biome[] | null;
+	prefStrings: string[] | null;
+	tile: Tile | null;
+	frequency: number | null;
+	clusterNumber: number[] | null;
+	populationNumber: number[] | null;
+	undergroundDepth: number[] | null;
+	generalBabyName: SingPlurName | null;
+	generalChildName: SingPlurName | null;
+	name: Name;
+	copyTagsFrom: string | null;
+	applyCreatureVariation: string[] | null;
+	objectId: string;
+	selectCreatureVariation: SelectCreature[] | null;
 };
 /**
  * An enum representing a creature tag.
  */
 export type CreatureTag =
-  | { AltTile: { character: number } }
-  | { ApplyCreatureVariation: { id: string; args: string[] } }
-  | "ApplyCurrentCreatureVariation"
-  | "ArtificialHiveable"
-  | { Biome: { id: string } }
-  | { Caste: { name: string } }
-  | { ChangeFrequencyPercent: { percent: number } }
-  | { ClusterNumber: { min: number; max: number } }
-  | { CopyTagsFrom: { creature: string } }
-  | { CreatureSoldierTile: { character: number } }
-  | { CreatureTile: { character: number } }
-  | { Color: { foreground: number; background: number; brightness: number } }
-  | "DoesNotExist"
-  | "EquipmentWagon"
-  | "Evil"
-  | "Fanciful"
-  | { Frequency: { frequency: number } }
-  | { GeneralBabyName: { singular: string; plural: string } }
-  | { GeneralChildName: { singular: string; plural: string } }
-  | "Generated"
-  | {
-      GlowColor: { foreground: number; background: number; brightness: number };
-    }
-  | { GlowTile: { character: number } }
-  | "Good"
-  | "GoToEnd"
-  | "GoToStart"
-  | { GoToTag: { tag: string } }
-  | { HarvestProduct: { number: number; time: number; item_tokens: string[] } }
-  | "LargeRoaming"
-  | "LocalPopsControllable"
-  | "LocalPopsProduceHeroes"
-  | "LooseClusters"
-  | "Mundane"
-  | { Name: { name: string; plural_name: string; adjective: string } }
-  | { PlusMaterial: { material: string } }
-  | { PopulationNumber: { min: number; max: number } }
-  | { PrefString: { pref_string: string } }
-  | { ProfessionName: { id: string; name: string; plural_name: string } }
-  | { RemoveMaterial: { material: string } }
-  | { RemoveTissue: { tissue: string } }
-  | "Savage"
-  | { SelectAdditionalCaste: { caste: string } }
-  | { SelectCaste: { caste: string } }
-  | { SelectMaterial: { material: string } }
-  | { SelectTissue: { tissue: string } }
-  | { SlainSpeech: { slain_speech: string } }
-  | { SmellTrigger: { smell_trigger: number } }
-  | { SoldierAltTile: { tile: string } }
-  | { SourceHfid: { hfid: number } }
-  | { Sphere: { sphere: string } }
-  | { Tissue: { name: string } }
-  | { TriggerableGroup: { min: number; max: number } }
-  | "Ubiquitous"
-  | { UndergroundDepth: { min: number; max: number } }
-  | { UseCaste: { caste: string; original_caste: string } }
-  | { UseMaterial: { material: string; original_material: string } }
-  | { UseMaterialTemplate: { material: string; template: string } }
-  | { UseTissue: { tissue: string; original_tissue: string } }
-  | { UseTissueTemplate: { tissue: string; template: string } }
-  | "Utterances"
-  | "VerminEater"
-  | "VerminFish"
-  | "VerminGrounder"
-  | "VerminRotter"
-  | "VerminSoil"
-  | "VerminSoilColony"
-  | "Unknown"
-  | "MatesToBreed"
-  | "TwoGenders"
-  | "AllCastesAlive"
-  | "SmallRace"
-  | "OccursAsEntityRace"
-  | "Equipment";
+	| { AltTile: { character: number } }
+	| { ApplyCreatureVariation: { id: string; args: string[] } }
+	| "ApplyCurrentCreatureVariation"
+	| "ArtificialHiveable"
+	| { Biome: { id: string } }
+	| { Caste: { name: string } }
+	| { ChangeFrequencyPercent: { percent: number } }
+	| { ClusterNumber: { min: number; max: number } }
+	| { CopyTagsFrom: { creature: string } }
+	| { CreatureSoldierTile: { character: number } }
+	| { CreatureTile: { character: number } }
+	| { Color: { foreground: number; background: number; brightness: number } }
+	| "DoesNotExist"
+	| "EquipmentWagon"
+	| "Evil"
+	| "Fanciful"
+	| { Frequency: { frequency: number } }
+	| { GeneralBabyName: { singular: string; plural: string } }
+	| { GeneralChildName: { singular: string; plural: string } }
+	| "Generated"
+	| {
+			GlowColor: { foreground: number; background: number; brightness: number };
+	  }
+	| { GlowTile: { character: number } }
+	| "Good"
+	| "GoToEnd"
+	| "GoToStart"
+	| { GoToTag: { tag: string } }
+	| { HarvestProduct: { number: number; time: number; item_tokens: string[] } }
+	| "LargeRoaming"
+	| "LocalPopsControllable"
+	| "LocalPopsProduceHeroes"
+	| "LooseClusters"
+	| "Mundane"
+	| { Name: { name: string; plural_name: string; adjective: string } }
+	| { PlusMaterial: { material: string } }
+	| { PopulationNumber: { min: number; max: number } }
+	| { PrefString: { pref_string: string } }
+	| { ProfessionName: { id: string; name: string; plural_name: string } }
+	| { RemoveMaterial: { material: string } }
+	| { RemoveTissue: { tissue: string } }
+	| "Savage"
+	| { SelectAdditionalCaste: { caste: string } }
+	| { SelectCaste: { caste: string } }
+	| { SelectMaterial: { material: string } }
+	| { SelectTissue: { tissue: string } }
+	| { SlainSpeech: { slain_speech: string } }
+	| { SmellTrigger: { smell_trigger: number } }
+	| { SoldierAltTile: { tile: string } }
+	| { SourceHfid: { hfid: number } }
+	| { Sphere: { sphere: string } }
+	| { Tissue: { name: string } }
+	| { TriggerableGroup: { min: number; max: number } }
+	| "Ubiquitous"
+	| { UndergroundDepth: { min: number; max: number } }
+	| { UseCaste: { caste: string; original_caste: string } }
+	| { UseMaterial: { material: string; original_material: string } }
+	| { UseMaterialTemplate: { material: string; template: string } }
+	| { UseTissue: { tissue: string; original_tissue: string } }
+	| { UseTissueTemplate: { tissue: string; template: string } }
+	| "Utterances"
+	| "VerminEater"
+	| "VerminFish"
+	| "VerminGrounder"
+	| "VerminRotter"
+	| "VerminSoil"
+	| "VerminSoilColony"
+	| "Unknown"
+	| "MatesToBreed"
+	| "TwoGenders"
+	| "AllCastesAlive"
+	| "SmallRace"
+	| "OccursAsEntityRace"
+	| "Equipment";
 /**
  * Gaits are a way to describe how a creature moves. Defined in the raws with:
  *
@@ -394,936 +394,929 @@ export type CreatureTag =
  * `[CV_NEW_TAG:GAIT:WALK:Creep:!ARG6:NO_BUILD_UP:0]`
  */
 export type Gait = {
-  gaitType: GaitType;
-  name: string;
-  maxSpeed: number;
-  energyUse: number;
-  modifiers: Modifier[];
+	gaitType: GaitType;
+	name: string;
+	maxSpeed: number;
+	energyUse: number;
+	modifiers: Modifier[];
 };
 /**
  * An enum representing a gait type.
  */
-export type GaitType =
-  | "walk"
-  | "crawl"
-  | "climb"
-  | "swim"
-  | "fly"
-  | { other: string }
-  | "unknown";
+export type GaitType = "walk" | "crawl" | "climb" | "swim" | "fly" | { other: string } | "unknown";
 /**
  * An enum representing a gait modifier.
  */
 export type Modifier =
-  | "layersSlow"
-  | "strength"
-  | "agility"
-  | { stealthSlows: { percentage: number } }
-  | "noBuildUp"
-  | { buildUp: { time: number; turning_max: number; start_speed: number } };
+	| "layersSlow"
+	| "strength"
+	| "agility"
+	| { stealthSlows: { percentage: number } }
+	| "noBuildUp"
+	| { buildUp: { time: number; turning_max: number; start_speed: number } };
 /**
  * Tokens that can be found in a creature's caste definitions.
  */
 export type CasteTag =
-  | "AdoptsOwner"
-  | "AlcoholDependent"
-  | "AllActive"
-  | { AltTile: { tile: string } }
-  | "AmbushPredator"
-  | "Amphibious"
-  | { ApplyCreatureVariation: { id: string; args: string[] } }
-  | "ApplyCurrentCreatureVariation"
-  | "Aquatic"
-  | "ArenaRestricted"
-  | "AtPeaceWithWildlife"
-  | { Attack: { name: string; body_part: string } }
-  | {
-      AttackTrigger: {
-        population: number;
-        exported_wealth: number;
-        created_wealth: number;
-      };
-    }
-  | { Baby: { age: number } }
-  | { BabyName: { singular: string; plural: string } }
-  | { BeachFrequency: { frequency: number } }
-  | "Benign"
-  | { Blood: { material: string; state: string } }
-  | "BloodSucker"
-  | { Body: { body_parts: string[] } }
-  | { BodyAppearanceModifier: { attribute: string; values: number[] } }
-  | { BodyDetailPlan: { body_plan: string; arguments: string[] } }
-  | { BodySize: { year: number; days: number; size: number } }
-  | { BodyGloss: { gloss: string } }
-  | "BoneCarn"
-  | { BodyPartAddType: { body_part_type: string } }
-  | { BodyPartAppearanceModifier: { quality: string; spread: number[] } }
-  | { BodyPartRemoveType: { body_part_type: string } }
-  | { BuildingDestroyer: { door_and_furniture_focused: boolean } }
-  | { CanDoInteraction: { interaction: string } }
-  | "CanLearn"
-  | "CanSpeak"
-  | "CannotClimb"
-  | "CannotJump"
-  | "CannotUndead"
-  | "CanOpenDoors"
-  | "Carnivore"
-  | "CaveAdaptation"
-  | { ChangeBodySizePercent: { percent: number } }
-  | { Child: { age: number } }
-  | { ChildName: { singular: string; plural: string } }
-  | { ClutchSize: { min: number; max: number } }
-  | { Color: { foreground: number; background: number; brightness: number } }
-  | "CommonDomestic"
-  | "ConvertedSpouse"
-  | "CookableLive"
-  | "Crazed"
-  | { CreatureClass: { class: string } }
-  | "Crepuscular"
-  | "CuriousBeastEater"
-  | "CuriousBeastGuzzler"
-  | "CuriousBeastItem"
-  | { CreatureVariationAddTag: { tag: string } }
-  | { CreatureVariationRemoveTag: { tag: string } }
-  | "Demon"
-  | { Description: { description: string } }
-  | "DieWhenVerminBite"
-  | { Difficulty: { difficulty: number } }
-  | "Diurnal"
-  | "DiveHuntsVermin"
-  | { ExtraButcherObjectItem: { item: string; material: string } }
-  | { ExtraButcherObjectShape: { shape: string } }
-  | { EggMaterial: { material: string; state: string } }
-  | { EggSize: { size: number } }
-  | "Equips"
-  | { ExtraButcherObject: { object_type: string; arguments: string[] } }
-  | { Extract: { material: string } }
-  | "Extravision"
-  | "FeatureAttackGroup"
-  | "FeatureBeast"
-  | "Female"
-  | "FireImmune"
-  | "FireImmuneSuper"
-  | "FishItem"
-  | { FixedTemp: { temperature: number } }
-  | "FleeQuick"
-  | "Flier"
-  | { Gait: { gait: string } }
-  | { GeneralMaterialForceMultiplier: { value_a: number; value_b: number } }
-  | "GetsInfectionsFromRot"
-  | "GetsWoundInfections"
-  | {
-      GlowColor: { foreground: number; background: number; brightness: number };
-    }
-  | { GlowTile: { tile: string } }
-  | { Gnawer: { verb: string } }
-  | { GobbleVerminClass: { vermin_class: string } }
-  | { GobbleVerminCreature: { vermin_creature: string; vermin_caste: string } }
-  | { GrassTrample: { trample: number } }
-  | { GravitateBodySize: { target: number } }
-  | { Grazer: { grazer: number } }
-  | { Habit: { habit: string } }
-  | { HabitNumber: { number: number } }
-  | "HasNerves"
-  | "HasShell"
-  | { Homeotherm: { temperature: number | null } }
-  | "HuntsVermin"
-  | "Immobile"
-  | "ImmobileLand"
-  | "Immolate"
-  | "Intelligent"
-  | { InteractionDetail: { args: string[] } }
-  | { ItemCorpse: { item: string; material: string } }
-  | { ItemCorpseQuality: { quality: number } }
-  | { Lair: { lair: string; probability: number } }
-  | { LairCharacteristic: { characteristic: string } }
-  | "LairHunter"
-  | { LairHunterSpeech: { speech_file: string } }
-  | "LargePredator"
-  | "LaysEggs"
-  | { LaysUnusualEggs: { item: string; material: string } }
-  | { Ligaments: { material: string; healing_rate: number } }
-  | "LightGen"
-  | "LikesFighting"
-  | "Lisp"
-  | { LitterSize: { min: number; max: number } }
-  | "LockPicker"
-  | { LowLightVision: { vision: number } }
-  | "Magical"
-  | "MagmaVision"
-  | "Male"
-  | "MannerismLaugh"
-  | "MannerismSmile"
-  | "MannerismWalk"
-  | "MannerismSit"
-  | "MannerismBreath"
-  | "MannerismPosture"
-  | "MannerismStretch"
-  | "MannerismEyelids"
-  | { MannerismFingers: { finger: string; fingers: string } }
-  | { MannerismNose: { nose: string } }
-  | { MannerismEar: { ear: string } }
-  | { MannerismHead: { head: string } }
-  | { MannerismEyes: { eyes: string } }
-  | { MannerismMouth: { mouth: string } }
-  | { MannerismHair: { hair: string } }
-  | { MannerismKnuckles: { knuckles: string } }
-  | { MannerismLips: { lips: string } }
-  | { MannerismCheek: { cheek: string } }
-  | { MannerismNails: { nails: string } }
-  | { MannerismFeet: { feet: string } }
-  | { MannerismArms: { arms: string } }
-  | { MannerismHands: { hands: string } }
-  | { MannerismTongue: { tongue: string } }
-  | { MannerismLeg: { leg: string } }
-  | "Matutinal"
-  | { MaxAge: { min: number; max: number } }
-  | "Meanderer"
-  | "Megabeast"
-  | { MentalAttributeCapPercentage: { attribute: string; percentage: number } }
-  | { MentalAttributeRange: { attribute: string; ranges: number[] } }
-  | {
-      MentalAttributeRate: {
-        attribute: string;
-        improvement_cost: number;
-        decay_rate_unused: number;
-        decay_rate_rusty: number;
-        decay_rate_demotion: number;
-      };
-    }
-  | { Milkable: { material: string; frequency: number } }
-  | "Mischievous"
-  | { ModValue: { value: string } }
-  | "Mount"
-  | "MountExotic"
-  | "MultipartFullVision"
-  | "MultipleLitterRare"
-  | { Name: { singular: string; plural: string; adjective: string } }
-  | "Natural"
-  | { NaturalSkill: { skill: string; level: number } }
-  | "NightCreatureBogeyman"
-  | "NightCreatureExperimenter"
-  | "NightCreatureHunter"
-  | "NightCreatureNightmare"
-  | "NoConnectionsForMovement"
-  | "NoDizziness"
-  | "NoDrink"
-  | "NoEat"
-  | "NoFall"
-  | "NoFevers"
-  | "NoGender"
-  | "NoPhysicalAttributeGain"
-  | "NoPhysicalAttributeRust"
-  | "NoSleep"
-  | "NoSpring"
-  | "NoSummer"
-  | "NoThoughtCenterForMovement"
-  | "NoUnitTypeColor"
-  | "NoVegetationDisturbance"
-  | "NoWinter"
-  | "NoBones"
-  | "NoBreathe"
-  | "Nocturnal"
-  | "NoEmotion"
-  | "NoExert"
-  | "NoFear"
-  | "NoMeat"
-  | "NoNausea"
-  | "NoPain"
-  | "NoSkin"
-  | "NoSkull"
-  | "NoSmellyRot"
-  | "NoStuckIns"
-  | "NoStun"
-  | "NotButcherable"
-  | "NotLiving"
-  | "NoThought"
-  | { OdorLevel: { odor_level: number } }
-  | { OdorString: { odor_string: string } }
-  | "OpposedToLife"
-  | {
-      Orientation: {
-        caste: string;
-        disinterested_chance: number;
-        casual_chance: number;
-        strong_chance: number;
-      };
-    }
-  | "OutsiderControllable"
-  | "PackAnimal"
-  | "ParalyzeImmune"
-  | "PatternFlier"
-  | "Pearl"
-  | { PenetratePower: { penetrate_power: number } }
-  | {
-      Personality: {
-        personality_trait: string;
-        low: number;
-        median: number;
-        high: number;
-      };
-    }
-  | "Pet"
-  | "PetExotic"
-  | { PetValue: { pet_value: number } }
-  | { PetValueDivisor: { divisor: number } }
-  | {
-      PhysicalAttributeCapPercentage: { attribute: string; percentage: number };
-    }
-  | { PhysicalAttributeRange: { attribute: string; ranges: number[] } }
-  | {
-      PhysicalAttributeRate: {
-        attribute: string;
-        improvement_cost: number;
-        decay_rate_unused: number;
-        decay_rate_rusty: number;
-        decay_rate_demotion: number;
-      };
-    }
-  | {
-      PlusBodyPartGroup: {
-        body_part_selector: string;
-        body_part_group: string;
-      };
-    }
-  | { PopulationRatio: { pop_ratio: number } }
-  | "Power"
-  | { ProfessionName: { profession: string; singular: string; plural: string } }
-  | { ProneToRage: { rage_chance: number } }
-  | { Pus: { material: string; material_state: string } }
-  | {
-      RelativeSize: {
-        body_part_selector: string;
-        body_part: string;
-        relative_size: number;
-      };
-    }
-  | { Remains: { singular: string; plural: string } }
-  | { RemainsColor: { remains_color: string } }
-  | "RemainsOnVerminBiteDeath"
-  | "RemainsUndetermined"
-  | {
-      RetractIntoBodyPart: {
-        body_part_selector: string;
-        body_part: string;
-        second_person: string;
-        third_person: string;
-        second_person_cancel: string;
-        third_person_cancel: string;
-      };
-    }
-  | "ReturnsVerminKillsToOwner"
-  | {
-      RootAround: {
-        body_part_selector: string;
-        body_part: string;
-        second_person_verb: string;
-        third_person_verb: string;
-      };
-    }
-  | {
-      Secretion: {
-        material_token: string;
-        material_state: string;
-        body_part_selector: string;
-        body_part: string;
-        tissue_layer: string;
-        trigger: string;
-      };
-    }
-  | "SemiMegabeast"
-  | {
-      SenseCreatureClass: {
-        creature_class: string;
-        tile: string;
-        foreground: number;
-        background: number;
-        brightness: number;
-      };
-    }
-  | { SetBodyPartGroup: { body_part_selector: string; body_part: string } }
-  | { SkillLearnRate: { skill: string; rate: number } }
-  | { SkillLearnRates: { rate: number } }
-  | {
-      SkillRate: {
-        skill: string;
-        improvement_rate: number;
-        decay_rate_unused: number;
-        decay_rate_rusty: number;
-        decay_rate_demotion: number;
-      };
-    }
-  | {
-      SkillRates: {
-        improvement_rate: number;
-        decay_rate_unused: number;
-        decay_rate_rusty: number;
-        decay_rate_demotion: number;
-      };
-    }
-  | {
-      SkillRustRate: {
-        skill: string;
-        decay_rate_unused: number;
-        decay_rate_rusty: number;
-        decay_rate_demotion: number;
-      };
-    }
-  | {
-      SkillRustRates: {
-        decay_rate_unused: number;
-        decay_rate_rusty: number;
-        decay_rate_demotion: number;
-      };
-    }
-  | { SlainSpeech: { speech_file: string } }
-  | "SlowLearner"
-  | "SmallRemains"
-  | { SoldierTile: { tile: string } }
-  | { SoldierAltTile: { tile: string } }
-  | {
-      Sound: {
-        sound_type: string;
-        sound_range: number;
-        sound_interval: number;
-        requires_breathing: boolean;
-        first_person: string;
-        third_person: string;
-        out_of_sight: string;
-      };
-    }
-  | { SpecificFood: { is_plant: boolean; identifier: string } }
-  | "SpouseConversionTarget"
-  | "SpouseConverter"
-  | "SpreadEvilSpheresIfRuler"
-  | "StanceClimber"
-  | "StandardGrazer"
-  | "StrangeMoods"
-  | "Supernatural"
-  | "SwimsInnate"
-  | "SwimsLearned"
-  | { SyndromeDilutionFactor: { syndrome: string; percentage: number } }
-  | { Tendons: { material: string; healing_rate: number } }
-  | "ThickWeb"
-  | { Tile: { tile: string } }
-  | {
-      TissueLayer: {
-        body_part_selector: string;
-        body_part: string;
-        tissue: string;
-        location: string;
-      };
-    }
-  | {
-      TissueLayerUnder: {
-        body_part_selector: string;
-        body_part: string;
-        tissue: string;
-      };
-    }
-  | "Titan"
-  | { TradeCapacity: { capacity: number } }
-  | "Trainable"
-  | "TrainableHunting"
-  | "TrainableWar"
-  | "Trances"
-  | "TrapAvoid"
-  | "UnderSwim"
-  | "UniqueDemon"
-  | "Vegetation"
-  | {
-      VerminBite: {
-        chance: number;
-        verb: string;
-        material: string;
-        material_state: string;
-      };
-    }
-  | "VerminHateable"
-  | "VerminMicro"
-  | "VerminNoFish"
-  | "VerminNoRoam"
-  | "VerminNoTrap"
-  | "VerminHunter"
-  | "Vespertine"
-  | { ViewRange: { view_range: number } }
-  | { VisionArc: { binocular: number; non_binocular: number } }
-  | "WagonPuller"
-  | { Webber: { material: string } }
-  | "WebImmune"
-  | "Unknown"
-  | "NightCreature"
-  | "NotFireImmune"
-  | "HasBlood"
-  | "Grasp"
-  | "RaceGait"
-  | "CannotBreatheWater"
-  | "NaturalAnimal"
-  | "CuriousBeast"
-  | "CannotBreatheAir";
+	| "AdoptsOwner"
+	| "AlcoholDependent"
+	| "AllActive"
+	| { AltTile: { tile: string } }
+	| "AmbushPredator"
+	| "Amphibious"
+	| { ApplyCreatureVariation: { id: string; args: string[] } }
+	| "ApplyCurrentCreatureVariation"
+	| "Aquatic"
+	| "ArenaRestricted"
+	| "AtPeaceWithWildlife"
+	| { Attack: { name: string; body_part: string } }
+	| {
+			AttackTrigger: {
+				population: number;
+				exported_wealth: number;
+				created_wealth: number;
+			};
+	  }
+	| { Baby: { age: number } }
+	| { BabyName: { singular: string; plural: string } }
+	| { BeachFrequency: { frequency: number } }
+	| "Benign"
+	| { Blood: { material: string; state: string } }
+	| "BloodSucker"
+	| { Body: { body_parts: string[] } }
+	| { BodyAppearanceModifier: { attribute: string; values: number[] } }
+	| { BodyDetailPlan: { body_plan: string; arguments: string[] } }
+	| { BodySize: { year: number; days: number; size: number } }
+	| { BodyGloss: { gloss: string } }
+	| "BoneCarn"
+	| { BodyPartAddType: { body_part_type: string } }
+	| { BodyPartAppearanceModifier: { quality: string; spread: number[] } }
+	| { BodyPartRemoveType: { body_part_type: string } }
+	| { BuildingDestroyer: { door_and_furniture_focused: boolean } }
+	| { CanDoInteraction: { interaction: string } }
+	| "CanLearn"
+	| "CanSpeak"
+	| "CannotClimb"
+	| "CannotJump"
+	| "CannotUndead"
+	| "CanOpenDoors"
+	| "Carnivore"
+	| "CaveAdaptation"
+	| { ChangeBodySizePercent: { percent: number } }
+	| { Child: { age: number } }
+	| { ChildName: { singular: string; plural: string } }
+	| { ClutchSize: { min: number; max: number } }
+	| { Color: { foreground: number; background: number; brightness: number } }
+	| "CommonDomestic"
+	| "ConvertedSpouse"
+	| "CookableLive"
+	| "Crazed"
+	| { CreatureClass: { class: string } }
+	| "Crepuscular"
+	| "CuriousBeastEater"
+	| "CuriousBeastGuzzler"
+	| "CuriousBeastItem"
+	| { CreatureVariationAddTag: { tag: string } }
+	| { CreatureVariationRemoveTag: { tag: string } }
+	| "Demon"
+	| { Description: { description: string } }
+	| "DieWhenVerminBite"
+	| { Difficulty: { difficulty: number } }
+	| "Diurnal"
+	| "DiveHuntsVermin"
+	| { ExtraButcherObjectItem: { item: string; material: string } }
+	| { ExtraButcherObjectShape: { shape: string } }
+	| { EggMaterial: { material: string; state: string } }
+	| { EggSize: { size: number } }
+	| "Equips"
+	| { ExtraButcherObject: { object_type: string; arguments: string[] } }
+	| { Extract: { material: string } }
+	| "Extravision"
+	| "FeatureAttackGroup"
+	| "FeatureBeast"
+	| "Female"
+	| "FireImmune"
+	| "FireImmuneSuper"
+	| "FishItem"
+	| { FixedTemp: { temperature: number } }
+	| "FleeQuick"
+	| "Flier"
+	| { Gait: { gait: string } }
+	| { GeneralMaterialForceMultiplier: { value_a: number; value_b: number } }
+	| "GetsInfectionsFromRot"
+	| "GetsWoundInfections"
+	| {
+			GlowColor: { foreground: number; background: number; brightness: number };
+	  }
+	| { GlowTile: { tile: string } }
+	| { Gnawer: { verb: string } }
+	| { GobbleVerminClass: { vermin_class: string } }
+	| { GobbleVerminCreature: { vermin_creature: string; vermin_caste: string } }
+	| { GrassTrample: { trample: number } }
+	| { GravitateBodySize: { target: number } }
+	| { Grazer: { grazer: number } }
+	| { Habit: { habit: string } }
+	| { HabitNumber: { number: number } }
+	| "HasNerves"
+	| "HasShell"
+	| { Homeotherm: { temperature: number | null } }
+	| "HuntsVermin"
+	| "Immobile"
+	| "ImmobileLand"
+	| "Immolate"
+	| "Intelligent"
+	| { InteractionDetail: { args: string[] } }
+	| { ItemCorpse: { item: string; material: string } }
+	| { ItemCorpseQuality: { quality: number } }
+	| { Lair: { lair: string; probability: number } }
+	| { LairCharacteristic: { characteristic: string } }
+	| "LairHunter"
+	| { LairHunterSpeech: { speech_file: string } }
+	| "LargePredator"
+	| "LaysEggs"
+	| { LaysUnusualEggs: { item: string; material: string } }
+	| { Ligaments: { material: string; healing_rate: number } }
+	| "LightGen"
+	| "LikesFighting"
+	| "Lisp"
+	| { LitterSize: { min: number; max: number } }
+	| "LockPicker"
+	| { LowLightVision: { vision: number } }
+	| "Magical"
+	| "MagmaVision"
+	| "Male"
+	| "MannerismLaugh"
+	| "MannerismSmile"
+	| "MannerismWalk"
+	| "MannerismSit"
+	| "MannerismBreath"
+	| "MannerismPosture"
+	| "MannerismStretch"
+	| "MannerismEyelids"
+	| { MannerismFingers: { finger: string; fingers: string } }
+	| { MannerismNose: { nose: string } }
+	| { MannerismEar: { ear: string } }
+	| { MannerismHead: { head: string } }
+	| { MannerismEyes: { eyes: string } }
+	| { MannerismMouth: { mouth: string } }
+	| { MannerismHair: { hair: string } }
+	| { MannerismKnuckles: { knuckles: string } }
+	| { MannerismLips: { lips: string } }
+	| { MannerismCheek: { cheek: string } }
+	| { MannerismNails: { nails: string } }
+	| { MannerismFeet: { feet: string } }
+	| { MannerismArms: { arms: string } }
+	| { MannerismHands: { hands: string } }
+	| { MannerismTongue: { tongue: string } }
+	| { MannerismLeg: { leg: string } }
+	| "Matutinal"
+	| { MaxAge: { min: number; max: number } }
+	| "Meanderer"
+	| "Megabeast"
+	| { MentalAttributeCapPercentage: { attribute: string; percentage: number } }
+	| { MentalAttributeRange: { attribute: string; ranges: number[] } }
+	| {
+			MentalAttributeRate: {
+				attribute: string;
+				improvement_cost: number;
+				decay_rate_unused: number;
+				decay_rate_rusty: number;
+				decay_rate_demotion: number;
+			};
+	  }
+	| { Milkable: { material: string; frequency: number } }
+	| "Mischievous"
+	| { ModValue: { value: string } }
+	| "Mount"
+	| "MountExotic"
+	| "MultipartFullVision"
+	| "MultipleLitterRare"
+	| { Name: { singular: string; plural: string; adjective: string } }
+	| "Natural"
+	| { NaturalSkill: { skill: string; level: number } }
+	| "NightCreatureBogeyman"
+	| "NightCreatureExperimenter"
+	| "NightCreatureHunter"
+	| "NightCreatureNightmare"
+	| "NoConnectionsForMovement"
+	| "NoDizziness"
+	| "NoDrink"
+	| "NoEat"
+	| "NoFall"
+	| "NoFevers"
+	| "NoGender"
+	| "NoPhysicalAttributeGain"
+	| "NoPhysicalAttributeRust"
+	| "NoSleep"
+	| "NoSpring"
+	| "NoSummer"
+	| "NoThoughtCenterForMovement"
+	| "NoUnitTypeColor"
+	| "NoVegetationDisturbance"
+	| "NoWinter"
+	| "NoBones"
+	| "NoBreathe"
+	| "Nocturnal"
+	| "NoEmotion"
+	| "NoExert"
+	| "NoFear"
+	| "NoMeat"
+	| "NoNausea"
+	| "NoPain"
+	| "NoSkin"
+	| "NoSkull"
+	| "NoSmellyRot"
+	| "NoStuckIns"
+	| "NoStun"
+	| "NotButcherable"
+	| "NotLiving"
+	| "NoThought"
+	| { OdorLevel: { odor_level: number } }
+	| { OdorString: { odor_string: string } }
+	| "OpposedToLife"
+	| {
+			Orientation: {
+				caste: string;
+				disinterested_chance: number;
+				casual_chance: number;
+				strong_chance: number;
+			};
+	  }
+	| "OutsiderControllable"
+	| "PackAnimal"
+	| "ParalyzeImmune"
+	| "PatternFlier"
+	| "Pearl"
+	| { PenetratePower: { penetrate_power: number } }
+	| {
+			Personality: {
+				personality_trait: string;
+				low: number;
+				median: number;
+				high: number;
+			};
+	  }
+	| "Pet"
+	| "PetExotic"
+	| { PetValue: { pet_value: number } }
+	| { PetValueDivisor: { divisor: number } }
+	| {
+			PhysicalAttributeCapPercentage: { attribute: string; percentage: number };
+	  }
+	| { PhysicalAttributeRange: { attribute: string; ranges: number[] } }
+	| {
+			PhysicalAttributeRate: {
+				attribute: string;
+				improvement_cost: number;
+				decay_rate_unused: number;
+				decay_rate_rusty: number;
+				decay_rate_demotion: number;
+			};
+	  }
+	| {
+			PlusBodyPartGroup: {
+				body_part_selector: string;
+				body_part_group: string;
+			};
+	  }
+	| { PopulationRatio: { pop_ratio: number } }
+	| "Power"
+	| { ProfessionName: { profession: string; singular: string; plural: string } }
+	| { ProneToRage: { rage_chance: number } }
+	| { Pus: { material: string; material_state: string } }
+	| {
+			RelativeSize: {
+				body_part_selector: string;
+				body_part: string;
+				relative_size: number;
+			};
+	  }
+	| { Remains: { singular: string; plural: string } }
+	| { RemainsColor: { remains_color: string } }
+	| "RemainsOnVerminBiteDeath"
+	| "RemainsUndetermined"
+	| {
+			RetractIntoBodyPart: {
+				body_part_selector: string;
+				body_part: string;
+				second_person: string;
+				third_person: string;
+				second_person_cancel: string;
+				third_person_cancel: string;
+			};
+	  }
+	| "ReturnsVerminKillsToOwner"
+	| {
+			RootAround: {
+				body_part_selector: string;
+				body_part: string;
+				second_person_verb: string;
+				third_person_verb: string;
+			};
+	  }
+	| {
+			Secretion: {
+				material_token: string;
+				material_state: string;
+				body_part_selector: string;
+				body_part: string;
+				tissue_layer: string;
+				trigger: string;
+			};
+	  }
+	| "SemiMegabeast"
+	| {
+			SenseCreatureClass: {
+				creature_class: string;
+				tile: string;
+				foreground: number;
+				background: number;
+				brightness: number;
+			};
+	  }
+	| { SetBodyPartGroup: { body_part_selector: string; body_part: string } }
+	| { SkillLearnRate: { skill: string; rate: number } }
+	| { SkillLearnRates: { rate: number } }
+	| {
+			SkillRate: {
+				skill: string;
+				improvement_rate: number;
+				decay_rate_unused: number;
+				decay_rate_rusty: number;
+				decay_rate_demotion: number;
+			};
+	  }
+	| {
+			SkillRates: {
+				improvement_rate: number;
+				decay_rate_unused: number;
+				decay_rate_rusty: number;
+				decay_rate_demotion: number;
+			};
+	  }
+	| {
+			SkillRustRate: {
+				skill: string;
+				decay_rate_unused: number;
+				decay_rate_rusty: number;
+				decay_rate_demotion: number;
+			};
+	  }
+	| {
+			SkillRustRates: {
+				decay_rate_unused: number;
+				decay_rate_rusty: number;
+				decay_rate_demotion: number;
+			};
+	  }
+	| { SlainSpeech: { speech_file: string } }
+	| "SlowLearner"
+	| "SmallRemains"
+	| { SoldierTile: { tile: string } }
+	| { SoldierAltTile: { tile: string } }
+	| {
+			Sound: {
+				sound_type: string;
+				sound_range: number;
+				sound_interval: number;
+				requires_breathing: boolean;
+				first_person: string;
+				third_person: string;
+				out_of_sight: string;
+			};
+	  }
+	| { SpecificFood: { is_plant: boolean; identifier: string } }
+	| "SpouseConversionTarget"
+	| "SpouseConverter"
+	| "SpreadEvilSpheresIfRuler"
+	| "StanceClimber"
+	| "StandardGrazer"
+	| "StrangeMoods"
+	| "Supernatural"
+	| "SwimsInnate"
+	| "SwimsLearned"
+	| { SyndromeDilutionFactor: { syndrome: string; percentage: number } }
+	| { Tendons: { material: string; healing_rate: number } }
+	| "ThickWeb"
+	| { Tile: { tile: string } }
+	| {
+			TissueLayer: {
+				body_part_selector: string;
+				body_part: string;
+				tissue: string;
+				location: string;
+			};
+	  }
+	| {
+			TissueLayerUnder: {
+				body_part_selector: string;
+				body_part: string;
+				tissue: string;
+			};
+	  }
+	| "Titan"
+	| { TradeCapacity: { capacity: number } }
+	| "Trainable"
+	| "TrainableHunting"
+	| "TrainableWar"
+	| "Trances"
+	| "TrapAvoid"
+	| "UnderSwim"
+	| "UniqueDemon"
+	| "Vegetation"
+	| {
+			VerminBite: {
+				chance: number;
+				verb: string;
+				material: string;
+				material_state: string;
+			};
+	  }
+	| "VerminHateable"
+	| "VerminMicro"
+	| "VerminNoFish"
+	| "VerminNoRoam"
+	| "VerminNoTrap"
+	| "VerminHunter"
+	| "Vespertine"
+	| { ViewRange: { view_range: number } }
+	| { VisionArc: { binocular: number; non_binocular: number } }
+	| "WagonPuller"
+	| { Webber: { material: string } }
+	| "WebImmune"
+	| "Unknown"
+	| "NightCreature"
+	| "NotFireImmune"
+	| "HasBlood"
+	| "Grasp"
+	| "RaceGait"
+	| "CannotBreatheWater"
+	| "NaturalAnimal"
+	| "CuriousBeast"
+	| "CannotBreatheAir";
 /**
  * A struct representing a creature caste.
  */
 export type Caste = {
-  identifier: string;
-  tags: CasteTag[] | null;
-  description: string | null;
-  babyName: SingPlurName | null;
-  casteName: Name | null;
-  childName: SingPlurName | null;
-  clutchSize: number[] | null;
-  litterSize: number[] | null;
-  maxAge: number[] | null;
-  baby: number | null;
-  child: number | null;
-  difficulty: number | null;
-  eggSize: number | null;
-  grassTrample: number | null;
-  grazer: number | null;
-  lowLightVision: number | null;
-  petValue: number | null;
-  popRatio: number | null;
-  changeBodySizePercentage: number | null;
-  creatureClass: string[] | null;
-  bodySize: BodySize[] | null;
-  milkable: Milkable | null;
-  tile: Tile | null;
-  gaits: Gait[] | null;
+	identifier: string;
+	tags: CasteTag[] | null;
+	description: string | null;
+	babyName: SingPlurName | null;
+	casteName: Name | null;
+	childName: SingPlurName | null;
+	clutchSize: number[] | null;
+	litterSize: number[] | null;
+	maxAge: number[] | null;
+	baby: number | null;
+	child: number | null;
+	difficulty: number | null;
+	eggSize: number | null;
+	grassTrample: number | null;
+	grazer: number | null;
+	lowLightVision: number | null;
+	petValue: number | null;
+	popRatio: number | null;
+	changeBodySizePercentage: number | null;
+	creatureClass: string[] | null;
+	bodySize: BodySize[] | null;
+	milkable: Milkable | null;
+	tile: Tile | null;
+	gaits: Gait[] | null;
 };
 /**
  * An enum representing a creature effect property.
  */
 export type CreatureEffectProperty =
-  | "Severity"
-  | "Probability"
-  | "Resistible"
-  | "SizeDilutes"
-  | "SizeDelays"
-  | "Localized"
-  | "VascularOnly"
-  | "MuscularOnly"
-  | "BodyPart"
-  | "ByCategory"
-  | "ByType"
-  | "ByToken"
-  | "Start"
-  | "Peak"
-  | "End"
-  | "DwfStretch"
-  | "AbruptStart"
-  | "AbruptEnd"
-  | "Abrupt"
-  | "CanBeHidden"
-  | "Unknown";
+	| "Severity"
+	| "Probability"
+	| "Resistible"
+	| "SizeDilutes"
+	| "SizeDelays"
+	| "Localized"
+	| "VascularOnly"
+	| "MuscularOnly"
+	| "BodyPart"
+	| "ByCategory"
+	| "ByType"
+	| "ByToken"
+	| "Start"
+	| "Peak"
+	| "End"
+	| "DwfStretch"
+	| "AbruptStart"
+	| "AbruptEnd"
+	| "Abrupt"
+	| "CanBeHidden"
+	| "Unknown";
 /**
  * An enum representing a creature effect token.
  */
 export type CreatureEffectToken =
-  | "Pain"
-  | "Swelling"
-  | "Oozing"
-  | "Bruising"
-  | "Blisters"
-  | "Numbness"
-  | "Paralysis"
-  | "Fever"
-  | "Bleeding"
-  | "CoughingBlood"
-  | "VomitingBlood"
-  | "Nausea"
-  | "Unconsciousness"
-  | "Necrosis"
-  | "ImpairFunction"
-  | "Drowsiness"
-  | "Dizziness"
-  | "ReducePain"
-  | "ReduceSwelling"
-  | "ReduceParalysis"
-  | "ReduceDizziness"
-  | "ReduceNausea"
-  | "ReduceFever"
-  | "StopBleeding"
-  | "CloseOpenWounds"
-  | "CureInfection"
-  | "HealTissues"
-  | "HealNerves"
-  | "RegrowParts"
-  | "AddTag"
-  | "RemoveTag"
-  | "DisplayName"
-  | "DisplayTile"
-  | "FlashTile"
-  | "PhysAttChange"
-  | "MentAttChange"
-  | "SpeedChange"
-  | "SkillRollAdjust"
-  | "BodyAppearanceModifier"
-  | "BodyPartAppearanceModifier"
-  | "BodyTransformation"
-  | "MaterialForceMultiplier"
-  | "CanDoInteraction"
-  | "SpecialAttackInteraction"
-  | "BodyMatInteraction"
-  | "SenseCreatureClass"
-  | "FeelEmotion"
-  | "ChangePersonality"
-  | "ErraticBehavior"
-  | "Unknown";
+	| "Pain"
+	| "Swelling"
+	| "Oozing"
+	| "Bruising"
+	| "Blisters"
+	| "Numbness"
+	| "Paralysis"
+	| "Fever"
+	| "Bleeding"
+	| "CoughingBlood"
+	| "VomitingBlood"
+	| "Nausea"
+	| "Unconsciousness"
+	| "Necrosis"
+	| "ImpairFunction"
+	| "Drowsiness"
+	| "Dizziness"
+	| "ReducePain"
+	| "ReduceSwelling"
+	| "ReduceParalysis"
+	| "ReduceDizziness"
+	| "ReduceNausea"
+	| "ReduceFever"
+	| "StopBleeding"
+	| "CloseOpenWounds"
+	| "CureInfection"
+	| "HealTissues"
+	| "HealNerves"
+	| "RegrowParts"
+	| "AddTag"
+	| "RemoveTag"
+	| "DisplayName"
+	| "DisplayTile"
+	| "FlashTile"
+	| "PhysAttChange"
+	| "MentAttChange"
+	| "SpeedChange"
+	| "SkillRollAdjust"
+	| "BodyAppearanceModifier"
+	| "BodyPartAppearanceModifier"
+	| "BodyTransformation"
+	| "MaterialForceMultiplier"
+	| "CanDoInteraction"
+	| "SpecialAttackInteraction"
+	| "BodyMatInteraction"
+	| "SenseCreatureClass"
+	| "FeelEmotion"
+	| "ChangePersonality"
+	| "ErraticBehavior"
+	| "Unknown";
 /**
  * A creature variation.
  */
 export type CreatureVariation = {
-  metadata: Metadata | null;
-  identifier: string;
-  objectId: string;
-  rules: CreatureVariationRule[];
-  argumentCount: number;
+	metadata: Metadata | null;
+	identifier: string;
+	objectId: string;
+	rules: CreatureVariationRule[];
+	argumentCount: number;
 };
 /**
  * A variation rule for a creature.
  */
 export type CreatureVariationRule =
-  | "Unknown"
-  | { RemoveTag: { tag: string; value: string | null } }
-  | { NewTag: { tag: string; value: string | null } }
-  | { AddTag: { tag: string; value: string | null } }
-  | {
-      ConvertTag: {
-        tag: string;
-        target: string | null;
-        replacement: string | null;
-      };
-    }
-  | {
-      ConditionalNewTag: {
-        tag: string;
-        value: string | null;
-        argument_index: number;
-        argument_requirement: string;
-      };
-    }
-  | {
-      ConditionalAddTag: {
-        tag: string;
-        value: string | null;
-        argument_index: number;
-        argument_requirement: string;
-      };
-    }
-  | {
-      ConditionalRemoveTag: {
-        tag: string;
-        value: string | null;
-        argument_index: number;
-        argument_requirement: string;
-      };
-    }
-  | {
-      ConditionalConvertTag: {
-        tag: string;
-        target: string | null;
-        replacement: string | null;
-        argument_index: number;
-        argument_requirement: string;
-      };
-    };
+	| "Unknown"
+	| { RemoveTag: { tag: string; value: string | null } }
+	| { NewTag: { tag: string; value: string | null } }
+	| { AddTag: { tag: string; value: string | null } }
+	| {
+			ConvertTag: {
+				tag: string;
+				target: string | null;
+				replacement: string | null;
+			};
+	  }
+	| {
+			ConditionalNewTag: {
+				tag: string;
+				value: string | null;
+				argument_index: number;
+				argument_requirement: string;
+			};
+	  }
+	| {
+			ConditionalAddTag: {
+				tag: string;
+				value: string | null;
+				argument_index: number;
+				argument_requirement: string;
+			};
+	  }
+	| {
+			ConditionalRemoveTag: {
+				tag: string;
+				value: string | null;
+				argument_index: number;
+				argument_requirement: string;
+			};
+	  }
+	| {
+			ConditionalConvertTag: {
+				tag: string;
+				target: string | null;
+				replacement: string | null;
+				argument_index: number;
+				argument_requirement: string;
+			};
+	  };
 /**
  * An enum representing a creature variation tag.
  */
 export type CVTag =
-  | "NewTag"
-  | "AddTag"
-  | "RemoveTag"
-  | "ConvertTag"
-  | "ConvertTagMaster"
-  | "ConvertTagTarget"
-  | "ConvertTagReplacement"
-  | "ConditionalNewTag"
-  | "ConditionalAddTag"
-  | "ConditionalRemoveTag"
-  | "ConditionalConvertTag"
-  | "Unknown";
+	| "NewTag"
+	| "AddTag"
+	| "RemoveTag"
+	| "ConvertTag"
+	| "ConvertTagMaster"
+	| "ConvertTagTarget"
+	| "ConvertTagReplacement"
+	| "ConditionalNewTag"
+	| "ConditionalAddTag"
+	| "ConditionalRemoveTag"
+	| "ConditionalConvertTag"
+	| "Unknown";
 /**
  * A struct representing an Entity object.
  */
 export type Entity = {
-  metadata: Metadata | null;
-  identifier: string;
-  objectId: string;
-  tags: EntityToken[];
-  creature: string | null;
-  translation: string | null;
-  exclusiveStartBiome: string | null;
-  biomeSupport: [string, number][] | null;
-  settlementBiome: string[] | null;
-  startBiome: string[] | null;
-  likesSites: string[] | null;
-  toleratesSites: string[] | null;
-  worldConstructions: string[] | null;
-  maxPopNumber: number | null;
-  maxSitePopNumber: number | null;
-  maxStartingCivNumber: number | null;
-  permittedBuildings: string[] | null;
-  permittedJobs: string[] | null;
-  permittedReactions: string[] | null;
-  currency: [string, number][] | null;
-  artFacetModifier: [string, number][] | null;
-  artImageElementModifier: [string, number][] | null;
-  itemImprovementModifier: [string, number][] | null;
-  selectSymbols: [string, string][] | null;
-  subselectSymbols: [string, string][] | null;
-  cullSymbols: [string, string][] | null;
-  friendlyColor: Color | null;
-  religion: string | null;
-  religionSpheres: string[] | null;
-  sphereAlignments: string[] | null;
-  positions: Position[] | null;
-  landHolderTrigger: string | null;
-  siteVariablePositions: string[] | null;
-  variablePositions: string[] | null;
-  ethics: [string, string][] | null;
-  values: [string, number][] | null;
-  variableValues: [string, number, number][] | null;
-  activeSeason: string | null;
-  banditry: number | null;
-  progressTriggerPopulation: number | null;
-  progressTriggerProduction: number | null;
-  progressTriggerTrade: number | null;
-  progressTriggerPopulationSiege: number | null;
-  progressTriggerProductionSiege: number | null;
-  progressTriggerTradeSiege: number | null;
-  scholars: string[] | null;
-  ammo: string[] | null;
-  armors: [string, number][] | null;
-  diggers: string[] | null;
-  gloves: [string, number][] | null;
-  helms: [string, number][] | null;
-  instrument: string[] | null;
-  pants: [string, number][] | null;
-  shields: string[] | null;
-  shoes: [string, number][] | null;
-  siegeAmmo: string[] | null;
-  tool: string[] | null;
-  toys: string[] | null;
-  trapComponents: string[] | null;
-  weapons: string[] | null;
-  gemShape: string[] | null;
-  stoneShape: string[] | null;
-  sourceHfid: number | null;
+	metadata: Metadata | null;
+	identifier: string;
+	objectId: string;
+	tags: EntityToken[];
+	creature: string | null;
+	translation: string | null;
+	exclusiveStartBiome: string | null;
+	biomeSupport: [string, number][] | null;
+	settlementBiome: string[] | null;
+	startBiome: string[] | null;
+	likesSites: string[] | null;
+	toleratesSites: string[] | null;
+	worldConstructions: string[] | null;
+	maxPopNumber: number | null;
+	maxSitePopNumber: number | null;
+	maxStartingCivNumber: number | null;
+	permittedBuildings: string[] | null;
+	permittedJobs: string[] | null;
+	permittedReactions: string[] | null;
+	currency: [string, number][] | null;
+	artFacetModifier: [string, number][] | null;
+	artImageElementModifier: [string, number][] | null;
+	itemImprovementModifier: [string, number][] | null;
+	selectSymbols: [string, string][] | null;
+	subselectSymbols: [string, string][] | null;
+	cullSymbols: [string, string][] | null;
+	friendlyColor: Color | null;
+	religion: string | null;
+	religionSpheres: string[] | null;
+	sphereAlignments: string[] | null;
+	positions: Position[] | null;
+	landHolderTrigger: string | null;
+	siteVariablePositions: string[] | null;
+	variablePositions: string[] | null;
+	ethics: [string, string][] | null;
+	values: [string, number][] | null;
+	variableValues: [string, number, number][] | null;
+	activeSeason: string | null;
+	banditry: number | null;
+	progressTriggerPopulation: number | null;
+	progressTriggerProduction: number | null;
+	progressTriggerTrade: number | null;
+	progressTriggerPopulationSiege: number | null;
+	progressTriggerProductionSiege: number | null;
+	progressTriggerTradeSiege: number | null;
+	scholars: string[] | null;
+	ammo: string[] | null;
+	armors: [string, number][] | null;
+	diggers: string[] | null;
+	gloves: [string, number][] | null;
+	helms: [string, number][] | null;
+	instrument: string[] | null;
+	pants: [string, number][] | null;
+	shields: string[] | null;
+	shoes: [string, number][] | null;
+	siegeAmmo: string[] | null;
+	tool: string[] | null;
+	toys: string[] | null;
+	trapComponents: string[] | null;
+	weapons: string[] | null;
+	gemShape: string[] | null;
+	stoneShape: string[] | null;
+	sourceHfid: number | null;
 };
 /**
  * Tokens that can be found in an entity raw file.
  */
 export type EntityToken =
-  | "AllMainPopsControllable"
-  | "SiteControllable"
-  | "Creature"
-  | "SourceHfid"
-  | "BiomeSupport"
-  | "SettlementBiome"
-  | "StartBiome"
-  | "ExclusiveStartBiome"
-  | "DefaultSiteType"
-  | "LikesSite"
-  | "ToleratesSite"
-  | "WorldConstruction"
-  | "MaxPopNumber"
-  | "MaxSitePopNumber"
-  | "MaxStartingCivNumber"
-  | "PermittedBuilding"
-  | "PermittedJob"
-  | "PermittedReaction"
-  | "CurrencyByYear"
-  | "Currency"
-  | "ArtFacetModifier"
-  | "ArtImageElementModifier"
-  | "ItemImprovementModifier"
-  | "Translation"
-  | "SelectSymbol"
-  | "SubselectSymbol"
-  | "CullSymbol"
-  | "FriendlyColor"
-  | "Religion"
-  | "ReligionSphere"
-  | "SphereAlignment"
-  | "Position"
-  | "LandHolderTrigger"
-  | "SiteVariablePositions"
-  | "VariablePositions"
-  | "Ethic"
-  | "Value"
-  | "VariableValue"
-  | "WillAcceptTribute"
-  | "Wanderer"
-  | "BeastHunter"
-  | "Scout"
-  | "Mercenary"
-  | "AbuseBodies"
-  | "ActiveSeason"
-  | "Ambusher"
-  | "AtPeaceWithWildlife"
-  | "BabySnatcher"
-  | "BuildsOutdoorFortifications"
-  | "BuildsOutdoorTombs"
-  | "Banditry"
-  | "DiplomatBodyguards"
-  | "Generated"
-  | "InvadersIgnoreNeutrals"
-  | "ItemThief"
-  | "LocalBanditry"
-  | "MerchantBodyguards"
-  | "MerchantNobility"
-  | "ProgressTriggerPopulation"
-  | "ProgressTriggerProduction"
-  | "ProgressTriggerTrade"
-  | "ProgressTriggerPopulationSiege"
-  | "ProgressTriggerProductionSiege"
-  | "ProgressTriggerTradeSiege"
-  | "Sieger"
-  | "SiteGuardian"
-  | "Skulking"
-  | "TreeCapDiplomacy"
-  | "LayerLinked"
-  | "GenerateKeyboardInstruments"
-  | "GeneratePercussionInstruments"
-  | "GenerateStringedInstruments"
-  | "GenerateWindInstruments"
-  | "GenerateDanceForms"
-  | "GenerateMusicalForms"
-  | "GeneratePoeticForms"
-  | "Scholar"
-  | "SetScholarsOnValuesAndJobs"
-  | "NoArtifactClaims"
-  | "MiningUnderworldDisasters"
-  | "Ammo"
-  | "Armor"
-  | "Digger"
-  | "Gloves"
-  | "Helm"
-  | "Instrument"
-  | "Pants"
-  | "Shield"
-  | "Shoes"
-  | "SiegeAmmo"
-  | "Tool"
-  | "Toy"
-  | "TrapComponent"
-  | "Weapon"
-  | "UseAnimalProducts"
-  | "UseAnyPetRace"
-  | "UseCaveAnimals"
-  | "UseEvilAnimals"
-  | "UseEvilPlants"
-  | "UseEvilWood"
-  | "UseGoodAnimals"
-  | "UseGoodPlants"
-  | "UseGoodWood"
-  | "UseMiscProcessedWoodProducts"
-  | "UseNoneExoticPetRace"
-  | "CommonDomesticMount"
-  | "CommonDomesticPackAnimal"
-  | "CommonDomesticPet"
-  | "CommonDomesticPullAnimal"
-  | "RiverProducts"
-  | "OceanProducts"
-  | "IndoorFarming"
-  | "OutdoorFarming"
-  | "IndoorGardens"
-  | "OutdoorGardens"
-  | "IndoorOrchards"
-  | "OutdoorOrchards"
-  | "Clothing"
-  | "SubterraneanClothing"
-  | "EquipmentImprovements"
-  | "ImprovedBows"
-  | "MetalPref"
-  | "StonePref"
-  | "WoodWeapons"
-  | "WoodArmor"
-  | "GemPref"
-  | "IndoorWood"
-  | "OutdoorWood"
-  | "GemShape"
-  | "StoneShape"
-  | "DivineMatClothing"
-  | "DivineMatCrafts"
-  | "DivineMatWeapons"
-  | "DivineMatArmor"
-  | "Animal"
-  | "AnimalToken"
-  | "AnimalCasteToken"
-  | "AnimalClass"
-  | "AnimalForbiddenClass"
-  | "AnimalAlwaysPresent"
-  | "AnimalNeverMount"
-  | "AnimalAlwaysMount"
-  | "AnimalNeverWagonPuller"
-  | "AnimalAlwaysWagonPuller"
-  | "AnimalNeverSiege"
-  | "AnimalAlwaysSiege"
-  | "AnimalNeverPet"
-  | "AnimalAlwaysPet"
-  | "AnimalNeverPackAnimal"
-  | "AnimalAlwaysPackAnimal"
-  | "TissueStyle"
-  | "TissueStyleMaintainLength"
-  | "TissueStylePreferredShaping"
-  | "Unknown"
-  | "WoodPref"
-  | "UndeadCandidate"
-  | "CutEntity"
-  | "SelectEntity";
+	| "AllMainPopsControllable"
+	| "SiteControllable"
+	| "Creature"
+	| "SourceHfid"
+	| "BiomeSupport"
+	| "SettlementBiome"
+	| "StartBiome"
+	| "ExclusiveStartBiome"
+	| "DefaultSiteType"
+	| "LikesSite"
+	| "ToleratesSite"
+	| "WorldConstruction"
+	| "MaxPopNumber"
+	| "MaxSitePopNumber"
+	| "MaxStartingCivNumber"
+	| "PermittedBuilding"
+	| "PermittedJob"
+	| "PermittedReaction"
+	| "CurrencyByYear"
+	| "Currency"
+	| "ArtFacetModifier"
+	| "ArtImageElementModifier"
+	| "ItemImprovementModifier"
+	| "Translation"
+	| "SelectSymbol"
+	| "SubselectSymbol"
+	| "CullSymbol"
+	| "FriendlyColor"
+	| "Religion"
+	| "ReligionSphere"
+	| "SphereAlignment"
+	| "Position"
+	| "LandHolderTrigger"
+	| "SiteVariablePositions"
+	| "VariablePositions"
+	| "Ethic"
+	| "Value"
+	| "VariableValue"
+	| "WillAcceptTribute"
+	| "Wanderer"
+	| "BeastHunter"
+	| "Scout"
+	| "Mercenary"
+	| "AbuseBodies"
+	| "ActiveSeason"
+	| "Ambusher"
+	| "AtPeaceWithWildlife"
+	| "BabySnatcher"
+	| "BuildsOutdoorFortifications"
+	| "BuildsOutdoorTombs"
+	| "Banditry"
+	| "DiplomatBodyguards"
+	| "Generated"
+	| "InvadersIgnoreNeutrals"
+	| "ItemThief"
+	| "LocalBanditry"
+	| "MerchantBodyguards"
+	| "MerchantNobility"
+	| "ProgressTriggerPopulation"
+	| "ProgressTriggerProduction"
+	| "ProgressTriggerTrade"
+	| "ProgressTriggerPopulationSiege"
+	| "ProgressTriggerProductionSiege"
+	| "ProgressTriggerTradeSiege"
+	| "Sieger"
+	| "SiteGuardian"
+	| "Skulking"
+	| "TreeCapDiplomacy"
+	| "LayerLinked"
+	| "GenerateKeyboardInstruments"
+	| "GeneratePercussionInstruments"
+	| "GenerateStringedInstruments"
+	| "GenerateWindInstruments"
+	| "GenerateDanceForms"
+	| "GenerateMusicalForms"
+	| "GeneratePoeticForms"
+	| "Scholar"
+	| "SetScholarsOnValuesAndJobs"
+	| "NoArtifactClaims"
+	| "MiningUnderworldDisasters"
+	| "Ammo"
+	| "Armor"
+	| "Digger"
+	| "Gloves"
+	| "Helm"
+	| "Instrument"
+	| "Pants"
+	| "Shield"
+	| "Shoes"
+	| "SiegeAmmo"
+	| "Tool"
+	| "Toy"
+	| "TrapComponent"
+	| "Weapon"
+	| "UseAnimalProducts"
+	| "UseAnyPetRace"
+	| "UseCaveAnimals"
+	| "UseEvilAnimals"
+	| "UseEvilPlants"
+	| "UseEvilWood"
+	| "UseGoodAnimals"
+	| "UseGoodPlants"
+	| "UseGoodWood"
+	| "UseMiscProcessedWoodProducts"
+	| "UseNoneExoticPetRace"
+	| "CommonDomesticMount"
+	| "CommonDomesticPackAnimal"
+	| "CommonDomesticPet"
+	| "CommonDomesticPullAnimal"
+	| "RiverProducts"
+	| "OceanProducts"
+	| "IndoorFarming"
+	| "OutdoorFarming"
+	| "IndoorGardens"
+	| "OutdoorGardens"
+	| "IndoorOrchards"
+	| "OutdoorOrchards"
+	| "Clothing"
+	| "SubterraneanClothing"
+	| "EquipmentImprovements"
+	| "ImprovedBows"
+	| "MetalPref"
+	| "StonePref"
+	| "WoodWeapons"
+	| "WoodArmor"
+	| "GemPref"
+	| "IndoorWood"
+	| "OutdoorWood"
+	| "GemShape"
+	| "StoneShape"
+	| "DivineMatClothing"
+	| "DivineMatCrafts"
+	| "DivineMatWeapons"
+	| "DivineMatArmor"
+	| "Animal"
+	| "AnimalToken"
+	| "AnimalCasteToken"
+	| "AnimalClass"
+	| "AnimalForbiddenClass"
+	| "AnimalAlwaysPresent"
+	| "AnimalNeverMount"
+	| "AnimalAlwaysMount"
+	| "AnimalNeverWagonPuller"
+	| "AnimalAlwaysWagonPuller"
+	| "AnimalNeverSiege"
+	| "AnimalAlwaysSiege"
+	| "AnimalNeverPet"
+	| "AnimalAlwaysPet"
+	| "AnimalNeverPackAnimal"
+	| "AnimalAlwaysPackAnimal"
+	| "TissueStyle"
+	| "TissueStyleMaintainLength"
+	| "TissueStylePreferredShaping"
+	| "Unknown"
+	| "WoodPref"
+	| "UndeadCandidate"
+	| "CutEntity"
+	| "SelectEntity";
 /**
  * A struct representing a Graphic object.
  */
 export type Graphic = {
-  metadata: Metadata | null;
-  identifier: string;
-  objectId: string;
-  casteIdentifier: string | null;
-  kind: GraphicType;
-  sprites: SpriteGraphic[] | null;
-  layers: [string, SpriteLayer[]][] | null;
-  growths: [string, SpriteGraphic[]][] | null;
-  customExtensions: CustomGraphicExtension[] | null;
-  tags: string[] | null;
+	metadata: Metadata | null;
+	identifier: string;
+	objectId: string;
+	casteIdentifier: string | null;
+	kind: GraphicType;
+	sprites: SpriteGraphic[] | null;
+	layers: [string, SpriteLayer[]][] | null;
+	growths: [string, SpriteGraphic[]][] | null;
+	customExtensions: CustomGraphicExtension[] | null;
+	tags: string[] | null;
 };
 /**
  * A struct representing a sprite graphic.
  */
 export type SpriteGraphic = {
-  primaryCondition: Condition;
-  tilePageId: string;
-  offset: Dimensions;
-  color: ColorModification | null;
-  largeImage: boolean | null;
-  offset2: Dimensions | null;
-  secondaryCondition: Condition | null;
-  colorPalletSwap: number | null;
-  targetIdentifier: string | null;
-  extraDescriptor: string | null;
+	primaryCondition: Condition;
+	tilePageId: string;
+	offset: Dimensions;
+	color: ColorModification | null;
+	largeImage: boolean | null;
+	offset2: Dimensions | null;
+	secondaryCondition: Condition | null;
+	colorPalletSwap: number | null;
+	targetIdentifier: string | null;
+	extraDescriptor: string | null;
 };
 /**
  * A struct representing a `SpriteLayer` object.
  */
 export type SpriteLayer = {
-  layerName: string;
-  tilePageId: string;
-  offset: Dimensions;
-  offset2: Dimensions | null;
-  largeImage: boolean | null;
-  conditions: [Condition, string][] | null;
+	layerName: string;
+	tilePageId: string;
+	offset: Dimensions;
+	offset2: Dimensions | null;
+	largeImage: boolean | null;
+	conditions: [Condition, string][] | null;
 };
 /**
  * A struct representing a `TilePage` object.
  */
 export type TilePage = {
-  metadata: Metadata | null;
-  identifier: string;
-  objectId: string;
-  file: string;
-  tileDim: Dimensions;
-  pageDim: Dimensions;
+	metadata: Metadata | null;
+	identifier: string;
+	objectId: string;
+	file: string;
+	tileDim: Dimensions;
+	pageDim: Dimensions;
 };
 /**
  * The color modification of the tile
@@ -1333,266 +1326,260 @@ export type ColorModification = "asIs";
  * A condition that can be applied to a tile/entity
  */
 export type Condition =
-  | "none"
-  | "condition"
-  | "default"
-  | "animated"
-  | "corpse"
-  | "child"
-  | "baby"
-  | "trainedHunter"
-  | "trainedWar"
-  | "listIcon"
-  | "skeleton"
-  | "skeletonWithSkull"
-  | "zombie"
-  | "necromancer"
-  | "male"
-  | "female"
-  | "vampireCursed"
-  | "ghoul"
-  | "disturbedDead"
-  | "remains"
-  | "vermin"
-  | "lightVermin"
-  | "hive"
-  | "swarmSmall"
-  | "swarmMedium"
-  | "swarmLarge"
-  | "notArtifact"
-  | "craftedArtifact"
-  | "dye"
-  | "notDyed"
-  | "crop"
-  | "seed"
-  | "picked"
-  | "shrub"
-  | "sapling"
-  | "cropSprout"
-  | "cropL"
-  | "cropM"
-  | "cropR"
-  | "shrubDead"
-  | "notChild"
-  | "haulCountMin"
-  | "haulCountMax"
-  | "itemWorn"
-  | "professionCategory"
-  | "class"
-  | "syndromeClass"
-  | "caste"
-  | "tissueLayer"
-  | "materialFlag"
-  | "materialType"
-  | "shutOffIfItemPresent"
-  | "randomPartIndex"
-  | "ghost"
-  | "tissueMayHaveColor"
-  | "tissueMinLength"
-  | "tissueMaxLength"
-  | "tissueMinCurly"
-  | "tissueMaxCurly"
-  | "tissueMayHaveShaping"
-  | "tissueNotShaped"
-  | "tissueSwap"
-  | "layer"
-  | "layerSet"
-  | "layerGroup"
-  | "endLayerGroup"
-  | "bodyUpper"
-  | "copyOfTemplate"
-  | "hammerman"
-  | "masterHammerman"
-  | "spearman"
-  | "masterSpearman"
-  | "wrestler"
-  | "masterWrestler"
-  | "axeman"
-  | "masterAxeman"
-  | "swordsman"
-  | "masterSwordsman"
-  | "maceman"
-  | "masterMaceman"
-  | "pikeman"
-  | "masterPikeman"
-  | "recruit"
-  | "thief"
-  | "masterThief"
-  | "lasher"
-  | "masterLasher"
-  | "monsterSlayer"
-  | "crossbowman"
-  | "masterCrossbowman"
-  | "bowman"
-  | "masterBowman"
-  | "blowgunman"
-  | "masterBlowgunman"
-  | "beastHunter"
-  | "scout"
-  | "ranger"
-  | "hunter"
-  | "sage"
-  | "scholar"
-  | "philosopher"
-  | "mathematician"
-  | "historian"
-  | "astronomer"
-  | "naturalist"
-  | "chemist"
-  | "geographer"
-  | "scribe"
-  | "bookbinder"
-  | "performer"
-  | "poet"
-  | "bard"
-  | "dancer";
+	| "none"
+	| "condition"
+	| "default"
+	| "animated"
+	| "corpse"
+	| "child"
+	| "baby"
+	| "trainedHunter"
+	| "trainedWar"
+	| "listIcon"
+	| "skeleton"
+	| "skeletonWithSkull"
+	| "zombie"
+	| "necromancer"
+	| "male"
+	| "female"
+	| "vampireCursed"
+	| "ghoul"
+	| "disturbedDead"
+	| "remains"
+	| "vermin"
+	| "lightVermin"
+	| "hive"
+	| "swarmSmall"
+	| "swarmMedium"
+	| "swarmLarge"
+	| "notArtifact"
+	| "craftedArtifact"
+	| "dye"
+	| "notDyed"
+	| "crop"
+	| "seed"
+	| "picked"
+	| "shrub"
+	| "sapling"
+	| "cropSprout"
+	| "cropL"
+	| "cropM"
+	| "cropR"
+	| "shrubDead"
+	| "notChild"
+	| "haulCountMin"
+	| "haulCountMax"
+	| "itemWorn"
+	| "professionCategory"
+	| "class"
+	| "syndromeClass"
+	| "caste"
+	| "tissueLayer"
+	| "materialFlag"
+	| "materialType"
+	| "shutOffIfItemPresent"
+	| "randomPartIndex"
+	| "ghost"
+	| "tissueMayHaveColor"
+	| "tissueMinLength"
+	| "tissueMaxLength"
+	| "tissueMinCurly"
+	| "tissueMaxCurly"
+	| "tissueMayHaveShaping"
+	| "tissueNotShaped"
+	| "tissueSwap"
+	| "layer"
+	| "layerSet"
+	| "layerGroup"
+	| "endLayerGroup"
+	| "bodyUpper"
+	| "copyOfTemplate"
+	| "hammerman"
+	| "masterHammerman"
+	| "spearman"
+	| "masterSpearman"
+	| "wrestler"
+	| "masterWrestler"
+	| "axeman"
+	| "masterAxeman"
+	| "swordsman"
+	| "masterSwordsman"
+	| "maceman"
+	| "masterMaceman"
+	| "pikeman"
+	| "masterPikeman"
+	| "recruit"
+	| "thief"
+	| "masterThief"
+	| "lasher"
+	| "masterLasher"
+	| "monsterSlayer"
+	| "crossbowman"
+	| "masterCrossbowman"
+	| "bowman"
+	| "masterBowman"
+	| "blowgunman"
+	| "masterBlowgunman"
+	| "beastHunter"
+	| "scout"
+	| "ranger"
+	| "hunter"
+	| "sage"
+	| "scholar"
+	| "philosopher"
+	| "mathematician"
+	| "historian"
+	| "astronomer"
+	| "naturalist"
+	| "chemist"
+	| "geographer"
+	| "scribe"
+	| "bookbinder"
+	| "performer"
+	| "poet"
+	| "bard"
+	| "dancer";
 /**
  * The graphic type of the tile
  */
 export type GraphicType =
-  | "creature"
-  | "creatureCaste"
-  | "statueCreature"
-  | "statueCreatureCaste"
-  | "statuesSurfaceGiant"
-  | "tile"
-  | "empty"
-  | "plant"
-  | "unknown"
-  | "template"
-  | "soilBackground"
-  | "grass1"
-  | "grass2"
-  | "grass3"
-  | "grass4"
-  | "customEdging"
-  | "customRamp"
-  | "customEdgeW"
-  | "customEdgeE"
-  | "customEdgeN"
-  | "customEdgeS"
-  | "customEdgeNW"
-  | "customEdgeNE"
-  | "customEdgeSW"
-  | "customEdgeSE"
-  | "customWorkshop"
-  | "listIcon"
-  | "addTool"
-  | "ammo"
-  | "ammoStraightDefault"
-  | "ammoStraightWood"
-  | "ammoDiagonalDefault"
-  | "ammoDiagonalWood"
-  | "armor"
-  | "food"
-  | "gloves"
-  | "helm"
-  | "pants"
-  | "roughGem"
-  | "shapeLargeGem"
-  | "shapeSmallGem"
-  | "shield"
-  | "shieldWooden"
-  | "shoes"
-  | "shoesMetal"
-  | "siegeAmmo"
-  | "siegeAmmoStraightDefault"
-  | "siegeAmmoStraightWood"
-  | "siegeAmmoDiagonalDefault"
-  | "siegeAmmoDiagonalWood"
-  | "tool"
-  | "toolWood"
-  | "toolStone"
-  | "toolMetal"
-  | "toolHiveBuilding"
-  | "toolGlass"
-  | "toolShape"
-  | "toolGlassVariant"
-  | "toolMetalVariant"
-  | "toolStoneVariant"
-  | "toolWoodVariant"
-  | "toolMud"
-  | "toolWater"
-  | "toolVomit"
-  | "toolBlood"
-  | "toolDamage"
-  | "toolBands"
-  | "toolEngraving"
-  | "toolStuds"
-  | "toolRings"
-  | "toolSpikes"
-  | "toy"
-  | "trapComponent"
-  | "trapComponentWeaponTrap"
-  | "trapComponentUpright1T"
-  | "trapComponentUpright2T"
-  | "trapComponentUpright3T"
-  | "trapComponentUpright4T"
-  | "trapComponentUpright5T"
-  | "trapComponentUpright6T"
-  | "trapComponentUpright7T"
-  | "trapComponentUpright8T"
-  | "trapComponentUpright9T"
-  | "trapComponentUpright10T"
-  | "trapComponentUpright1B"
-  | "trapComponentUpright2B"
-  | "trapComponentUpright3B"
-  | "trapComponentUpright4B"
-  | "trapComponentUpright5B"
-  | "trapComponentUpright6B"
-  | "trapComponentUpright7B"
-  | "trapComponentUpright8B"
-  | "trapComponentUpright9B"
-  | "trapComponentUpright10B"
-  | "weapon"
-  | "weaponDefault"
-  | "weaponWood"
-  | "weaponWoodGrown"
-  | "weaponMaterial"
-  | "weaponTrap"
-  | "weaponUpright1T"
-  | "weaponUpright2T"
-  | "weaponUpright3T"
-  | "weaponUpright4T"
-  | "weaponUpright5T"
-  | "weaponUpright6T"
-  | "weaponUpright7T"
-  | "weaponUpright8T"
-  | "weaponUpright9T"
-  | "weaponUpright10T"
-  | "weaponUpright1B"
-  | "weaponUpright2B"
-  | "weaponUpright3B"
-  | "weaponUpright4B"
-  | "weaponUpright5B"
-  | "weaponUpright6B"
-  | "weaponUpright7B"
-  | "weaponUpright8B"
-  | "weaponUpright9B"
-  | "weaponUpright10B";
+	| "creature"
+	| "creatureCaste"
+	| "statueCreature"
+	| "statueCreatureCaste"
+	| "statuesSurfaceGiant"
+	| "tile"
+	| "empty"
+	| "plant"
+	| "unknown"
+	| "template"
+	| "soilBackground"
+	| "grass1"
+	| "grass2"
+	| "grass3"
+	| "grass4"
+	| "customEdging"
+	| "customRamp"
+	| "customEdgeW"
+	| "customEdgeE"
+	| "customEdgeN"
+	| "customEdgeS"
+	| "customEdgeNW"
+	| "customEdgeNE"
+	| "customEdgeSW"
+	| "customEdgeSE"
+	| "customWorkshop"
+	| "listIcon"
+	| "addTool"
+	| "ammo"
+	| "ammoStraightDefault"
+	| "ammoStraightWood"
+	| "ammoDiagonalDefault"
+	| "ammoDiagonalWood"
+	| "armor"
+	| "food"
+	| "gloves"
+	| "helm"
+	| "pants"
+	| "roughGem"
+	| "shapeLargeGem"
+	| "shapeSmallGem"
+	| "shield"
+	| "shieldWooden"
+	| "shoes"
+	| "shoesMetal"
+	| "siegeAmmo"
+	| "siegeAmmoStraightDefault"
+	| "siegeAmmoStraightWood"
+	| "siegeAmmoDiagonalDefault"
+	| "siegeAmmoDiagonalWood"
+	| "tool"
+	| "toolWood"
+	| "toolStone"
+	| "toolMetal"
+	| "toolHiveBuilding"
+	| "toolGlass"
+	| "toolShape"
+	| "toolGlassVariant"
+	| "toolMetalVariant"
+	| "toolStoneVariant"
+	| "toolWoodVariant"
+	| "toolMud"
+	| "toolWater"
+	| "toolVomit"
+	| "toolBlood"
+	| "toolDamage"
+	| "toolBands"
+	| "toolEngraving"
+	| "toolStuds"
+	| "toolRings"
+	| "toolSpikes"
+	| "toy"
+	| "trapComponent"
+	| "trapComponentWeaponTrap"
+	| "trapComponentUpright1T"
+	| "trapComponentUpright2T"
+	| "trapComponentUpright3T"
+	| "trapComponentUpright4T"
+	| "trapComponentUpright5T"
+	| "trapComponentUpright6T"
+	| "trapComponentUpright7T"
+	| "trapComponentUpright8T"
+	| "trapComponentUpright9T"
+	| "trapComponentUpright10T"
+	| "trapComponentUpright1B"
+	| "trapComponentUpright2B"
+	| "trapComponentUpright3B"
+	| "trapComponentUpright4B"
+	| "trapComponentUpright5B"
+	| "trapComponentUpright6B"
+	| "trapComponentUpright7B"
+	| "trapComponentUpright8B"
+	| "trapComponentUpright9B"
+	| "trapComponentUpright10B"
+	| "weapon"
+	| "weaponDefault"
+	| "weaponWood"
+	| "weaponWoodGrown"
+	| "weaponMaterial"
+	| "weaponTrap"
+	| "weaponUpright1T"
+	| "weaponUpright2T"
+	| "weaponUpright3T"
+	| "weaponUpright4T"
+	| "weaponUpright5T"
+	| "weaponUpright6T"
+	| "weaponUpright7T"
+	| "weaponUpright8T"
+	| "weaponUpright9T"
+	| "weaponUpright10T"
+	| "weaponUpright1B"
+	| "weaponUpright2B"
+	| "weaponUpright3B"
+	| "weaponUpright4B"
+	| "weaponUpright5B"
+	| "weaponUpright6B"
+	| "weaponUpright7B"
+	| "weaponUpright8B"
+	| "weaponUpright9B"
+	| "weaponUpright10B";
 /**
  * The growth token of the tile
  */
-export type GrowthToken =
-  | "fruit"
-  | "growth1"
-  | "growth2"
-  | "growth3"
-  | "growth4"
-  | "asIs";
+export type GrowthToken = "fruit" | "growth1" | "growth2" | "growth3" | "growth4" | "asIs";
 /**
  * The graphic of the tile
  */
 export type PlantGraphicTemplate =
-  | "standardLeaves"
-  | "standardFruit1"
-  | "standardFruit2"
-  | "standardFruit3"
-  | "standardFruit4"
-  | "standardFlowers1"
-  | "standardFlowers2"
-  | "standardFlowers3"
-  | "standardFlowers4";
+	| "standardLeaves"
+	| "standardFruit1"
+	| "standardFruit2"
+	| "standardFruit3"
+	| "standardFruit4"
+	| "standardFlowers1"
+	| "standardFlowers2"
+	| "standardFlowers3"
+	| "standardFlowers4";
 /**
  * The tokens used to define the tile page
  */
@@ -1601,98 +1588,93 @@ export type TilePageTag = "tileDim" | "pageDim" | "file" | "unknown";
  * The raw representation of an inorganic object.
  */
 export type Inorganic = {
-  identifier: string;
-  metadata: Metadata | null;
-  objectId: string;
-  material: Material;
-  metalOreChance: [string, number][] | null;
-  threadMetalChance: [string, number][] | null;
-  environmentClass: EnvironmentClass | null;
-  environmentInclusionType: InclusionType | null;
-  environmentInclusionFrequency: number | null;
-  environmentClassSpecific: string[] | null;
-  tags: InorganicToken[] | null;
+	identifier: string;
+	metadata: Metadata | null;
+	objectId: string;
+	material: Material;
+	metalOreChance: [string, number][] | null;
+	threadMetalChance: [string, number][] | null;
+	environmentClass: EnvironmentClass | null;
+	environmentInclusionType: InclusionType | null;
+	environmentInclusionFrequency: number | null;
+	environmentClassSpecific: string[] | null;
+	tags: InorganicToken[] | null;
 };
 /**
  * The class of environment that the stone appears in.
  */
 export type EnvironmentClass =
-  | "AllStone"
-  | "IgneousAll"
-  | "IgneousExtrusive"
-  | "IgneousIntrusive"
-  | "Soil"
-  | "SoilSand"
-  | "SoilOcean"
-  | "Sedimentary"
-  | "Metamorphic"
-  | "Alluvial"
-  | "None";
+	| "AllStone"
+	| "IgneousAll"
+	| "IgneousExtrusive"
+	| "IgneousIntrusive"
+	| "Soil"
+	| "SoilSand"
+	| "SoilOcean"
+	| "Sedimentary"
+	| "Metamorphic"
+	| "Alluvial"
+	| "None";
 /**
  * The type of inclusion that the stone has.
  */
-export type InclusionType =
-  | "Cluster"
-  | "ClusterSmall"
-  | "ClusterOne"
-  | "Vein"
-  | "None";
+export type InclusionType = "Cluster" | "ClusterSmall" | "ClusterOne" | "Vein" | "None";
 /**
  * Tokens that can be used in inorganic raws.
  */
 export type InorganicToken =
-  | "Wafers"
-  | "DeepSpecial"
-  | "MetalOre"
-  | "ThreadMetal"
-  | "DeepSurface"
-  | "Aquifer"
-  | "Metamorphic"
-  | "Sedimentary"
-  | "Soil"
-  | "SoilOcean"
-  | "SoilSand"
-  | "SedimentaryOceanShallow"
-  | "SedimentaryOceanDeep"
-  | "IgneousExtrusive"
-  | "IgneousIntrusive"
-  | "Environment"
-  | "EnvironmentSpecific"
-  | "Lava"
-  | "Special"
-  | "Generated"
-  | "Divine"
-  | "Sphere"
-  | "Unknown";
+	| "Wafers"
+	| "DeepSpecial"
+	| "MetalOre"
+	| "ThreadMetal"
+	| "DeepSurface"
+	| "Aquifer"
+	| "Metamorphic"
+	| "Sedimentary"
+	| "Soil"
+	| "SoilOcean"
+	| "SoilSand"
+	| "SedimentaryOceanShallow"
+	| "SedimentaryOceanDeep"
+	| "IgneousExtrusive"
+	| "IgneousIntrusive"
+	| "Environment"
+	| "EnvironmentSpecific"
+	| "Lava"
+	| "Special"
+	| "Generated"
+	| "Divine"
+	| "Sphere"
+	| "Unknown";
 /**
  * A struct representing a material
  */
 export type Material = {
-  materialType: MaterialType | null;
-  name: string | null;
-  fuelType: FuelType | null;
-  creatureIdentifier: string | null;
-  plantIdentifier: string | null;
-  isLocalMaterial: boolean | null;
-  reagentIdentifier: string | null;
-  reactionProductIdentifier: string | null;
-  templateIdentifier: string | null;
-  usage: MaterialUsage[] | null;
-  value: number | null;
-  color: Color | null;
-  stateNames: StateName | null;
-  stateAdjectives: StateName | null;
-  stateColors: StateName | null;
-  temperatures: Temperatures | null;
-  properties: string[] | null;
-  syndromes: Syndrome[] | null;
-  mechanicalProperties: MaterialMechanics | null;
-  liquidDensity: number | null;
-  molarMass: number | null;
-  buildColor: Color | null;
-  displayColor: Color | null;
-  tile: Tile | null;
-  itemSymbol: string | null;
+	materialType: MaterialType | null;
+	name: string | null;
+	fuelType: FuelType | null;
+	creatureIdentifier: string | null;
+	plantIdentifier: string | null;
+	isLocalMaterial: boolean | null;
+	reagentIdentifier: string | null;
+	reactionProductIdentifier: string | null;
+	templateIdentifier: string | null;
+	usage: MaterialUsage[] | null;
+	value: number | null;
+	color: Color | null;
+	stateNames: StateName | null;
+	stateAdjectives: StateName | null;
+	stateColors: StateName | null;
+	temperatures: Temperatures | null;
+	properties: string[] | null;
+	syndromes: Syndrome[] | null;
+	mechanicalProperties: MaterialMechanics | null;
+	liquidDensity: number | null;
+	molarMass: number | null;
+	buildColor: Color | null;
+	displayColor: Color | null;
+	tile: Tile | null;
+	itemSymbol: string | null;
 };
 /**
  * A material fuel type that can be set in a material definition.
@@ -1702,469 +1684,456 @@ export type FuelType = "Charcoal" | "Coke" | "NoMaterialGloss" | "None";
  * A material property that can be set in a material definition.
  */
 export type MaterialProperty =
-  | "UseMaterialTemplate"
-  | "Prefix"
-  | "StoneName"
-  | "IsGem"
-  | "TempDietInfo"
-  | "PowderDye"
-  | "Tile"
-  | "ItemSymbol"
-  | "DisplayColor"
-  | "BuildColor"
-  | "TileColor"
-  | "BasicColor"
-  | "StateColor"
-  | "StateName"
-  | "StateAdjective"
-  | "StateNameAdjective"
-  | "Absorption"
-  | "ImpactYield"
-  | "ImpactFracture"
-  | "ImpactElasticity"
-  | "CompressiveYield"
-  | "CompressiveFracture"
-  | "CompressiveElasticity"
-  | "TensileYield"
-  | "TensileFracture"
-  | "TensileElasticity"
-  | "TorsionYield"
-  | "TorsionFracture"
-  | "TorsionElasticity"
-  | "ShearYield"
-  | "ShearFracture"
-  | "ShearElasticity"
-  | "BendingYield"
-  | "BendingFracture"
-  | "BendingElasticity"
-  | "MaxEdge"
-  | "MaterialValue"
-  | "MultiplyValue"
-  | "SpecificHeat"
-  | "HeatDamagePoint"
-  | "ColdDamagePoint"
-  | "IgnitionPoint"
-  | "MeltingPoint"
-  | "BoilingPoint"
-  | "MaterialFixedTemperature"
-  | "IfExistsSetHeatDamagePoint"
-  | "IfExistsSetColdDamagePoint"
-  | "IfExistsSetIgnitePoint"
-  | "IfExistsSetMeltingPoint"
-  | "IfExistsSetBoilingPoint"
-  | "IfExistsSetMatFixedTemp"
-  | "SolidDensity"
-  | "LiquidDensity"
-  | "MolarMass"
-  | "ExtractStorage"
-  | "ButcherSpecial"
-  | "MeatName"
-  | "BlockName"
-  | "Wafers"
-  | "MaterialReactionProduct"
-  | "ItemReactionProduct"
-  | "ReactionClass"
-  | "MetalOre"
-  | "ThreadMetal"
-  | "HardensWithWater"
-  | "SoapLevel"
-  | "Syndrome"
-  | "Antler"
-  | "Hair"
-  | "Feather"
-  | "Scale"
-  | "Hoof"
-  | "Chitin"
-  | "Cartilage"
-  | "NervousTissue"
-  | "MeatCategory"
-  | "Unknown";
+	| "UseMaterialTemplate"
+	| "Prefix"
+	| "StoneName"
+	| "IsGem"
+	| "TempDietInfo"
+	| "PowderDye"
+	| "Tile"
+	| "ItemSymbol"
+	| "DisplayColor"
+	| "BuildColor"
+	| "TileColor"
+	| "BasicColor"
+	| "StateColor"
+	| "StateName"
+	| "StateAdjective"
+	| "StateNameAdjective"
+	| "Absorption"
+	| "ImpactYield"
+	| "ImpactFracture"
+	| "ImpactElasticity"
+	| "CompressiveYield"
+	| "CompressiveFracture"
+	| "CompressiveElasticity"
+	| "TensileYield"
+	| "TensileFracture"
+	| "TensileElasticity"
+	| "TorsionYield"
+	| "TorsionFracture"
+	| "TorsionElasticity"
+	| "ShearYield"
+	| "ShearFracture"
+	| "ShearElasticity"
+	| "BendingYield"
+	| "BendingFracture"
+	| "BendingElasticity"
+	| "MaxEdge"
+	| "MaterialValue"
+	| "MultiplyValue"
+	| "SpecificHeat"
+	| "HeatDamagePoint"
+	| "ColdDamagePoint"
+	| "IgnitionPoint"
+	| "MeltingPoint"
+	| "BoilingPoint"
+	| "MaterialFixedTemperature"
+	| "IfExistsSetHeatDamagePoint"
+	| "IfExistsSetColdDamagePoint"
+	| "IfExistsSetIgnitePoint"
+	| "IfExistsSetMeltingPoint"
+	| "IfExistsSetBoilingPoint"
+	| "IfExistsSetMatFixedTemp"
+	| "SolidDensity"
+	| "LiquidDensity"
+	| "MolarMass"
+	| "ExtractStorage"
+	| "ButcherSpecial"
+	| "MeatName"
+	| "BlockName"
+	| "Wafers"
+	| "MaterialReactionProduct"
+	| "ItemReactionProduct"
+	| "ReactionClass"
+	| "MetalOre"
+	| "ThreadMetal"
+	| "HardensWithWater"
+	| "SoapLevel"
+	| "Syndrome"
+	| "Antler"
+	| "Hair"
+	| "Feather"
+	| "Scale"
+	| "Hoof"
+	| "Chitin"
+	| "Cartilage"
+	| "NervousTissue"
+	| "MeatCategory"
+	| "Unknown";
 /**
  * A material state that can be set in a material definition.
  */
-export type MaterialState =
-  | "Solid"
-  | "Liquid"
-  | "Gas"
-  | "Powder"
-  | "Paste"
-  | "Pressed"
-  | "Unknown"
-  | "All"
-  | "AllSolid";
+export type MaterialState = "Solid" | "Liquid" | "Gas" | "Powder" | "Paste" | "Pressed" | "Unknown" | "All" | "AllSolid";
 /**
  * A material template
  */
 export type MaterialType =
-  | "Inorganic"
-  | "Stone"
-  | "Metal"
-  | "Coal"
-  | "CreatureMaterial"
-  | "LocalCreatureMaterial"
-  | "PlantMaterial"
-  | "LocalPlantMaterial"
-  | "GetMaterialFromReagent"
-  | "Amber"
-  | "Coral"
-  | "GlassGreen"
-  | "GlassClear"
-  | "GlassCrystal"
-  | "Water"
-  | "Potash"
-  | "Ash"
-  | "PearlAsh"
-  | "Lye"
-  | "Mud"
-  | "Vomit"
-  | "Salt"
-  | "FilthB"
-  | "FilthY"
-  | "UnknownSubstance"
-  | "Grime"
-  | "Unknown";
+	| "Inorganic"
+	| "Stone"
+	| "Metal"
+	| "Coal"
+	| "CreatureMaterial"
+	| "LocalCreatureMaterial"
+	| "PlantMaterial"
+	| "LocalPlantMaterial"
+	| "GetMaterialFromReagent"
+	| "Amber"
+	| "Coral"
+	| "GlassGreen"
+	| "GlassClear"
+	| "GlassCrystal"
+	| "Water"
+	| "Potash"
+	| "Ash"
+	| "PearlAsh"
+	| "Lye"
+	| "Mud"
+	| "Vomit"
+	| "Salt"
+	| "FilthB"
+	| "FilthY"
+	| "UnknownSubstance"
+	| "Grime"
+	| "Unknown";
 /**
  * A material usage that can be set in a material definition.
  */
 export type MaterialUsage =
-  | "ImpliesAnimalKill"
-  | "AlcoholPlant"
-  | "AlcoholCreature"
-  | "Alcohol"
-  | "CheesePlant"
-  | "CheeseCreature"
-  | "Cheese"
-  | "PowderMiscPlant"
-  | "PowderMiscCreature"
-  | "PowderMisc"
-  | "StockpileGlobOrStockpileGlobSolid"
-  | "StockpileGlobPaste"
-  | "StockpileGlobPressed"
-  | "StockpilePlantGrowth"
-  | "LiquidMiscPlant"
-  | "LiquidMiscCreature"
-  | "LiquidMiscOther"
-  | "LiquidMisc"
-  | "StructuralPlantMat"
-  | "SeedMat"
-  | "Bone"
-  | "Wood"
-  | "ThreadPlant"
-  | "Tooth"
-  | "Horn"
-  | "Hair"
-  | "Pearl"
-  | "Shell"
-  | "Leather"
-  | "Silk"
-  | "Soap"
-  | "GeneratesMiasma"
-  | "Meat"
-  | "Rots"
-  | "NervousTissue"
-  | "BloodMapDescriptor"
-  | "IchorMapDescriptor"
-  | "GooMapDescriptor"
-  | "SlimeMapDescriptor"
-  | "PusMapDescriptor"
-  | "SweatMapDescriptor"
-  | "TearsMapDescriptor"
-  | "SpitMapDescriptor"
-  | "Evaporates"
-  | "EntersBlood"
-  | "EdibleVermin"
-  | "EdibleRaw"
-  | "EdibleCooked"
-  | "DoNotCleanGlob"
-  | "NoStoneStockpile"
-  | "ItemsMetal"
-  | "ItemsBarred"
-  | "ItemsScaled"
-  | "ItemsLeather"
-  | "ItemsSoft"
-  | "ItemsHard"
-  | "IsStone"
-  | "IsCeramic"
-  | "Undiggable"
-  | "DisplayUnglazed"
-  | "Yarn"
-  | "StockpileThreadMetal"
-  | "IsMetal"
-  | "IsGlass"
-  | "CrystalGlassable"
-  | "ItemsWeapon"
-  | "ItemsWeaponRanged"
-  | "ItemsAnvil"
-  | "ItemsAmmo"
-  | "ItemsDigger"
-  | "ItemsArmor"
-  | "ItemsDelicate"
-  | "ItemsSiegeEngine"
-  | "ItemsQuern"
-  | "Unknown";
+	| "ImpliesAnimalKill"
+	| "AlcoholPlant"
+	| "AlcoholCreature"
+	| "Alcohol"
+	| "CheesePlant"
+	| "CheeseCreature"
+	| "Cheese"
+	| "PowderMiscPlant"
+	| "PowderMiscCreature"
+	| "PowderMisc"
+	| "StockpileGlobOrStockpileGlobSolid"
+	| "StockpileGlobPaste"
+	| "StockpileGlobPressed"
+	| "StockpilePlantGrowth"
+	| "LiquidMiscPlant"
+	| "LiquidMiscCreature"
+	| "LiquidMiscOther"
+	| "LiquidMisc"
+	| "StructuralPlantMat"
+	| "SeedMat"
+	| "Bone"
+	| "Wood"
+	| "ThreadPlant"
+	| "Tooth"
+	| "Horn"
+	| "Hair"
+	| "Pearl"
+	| "Shell"
+	| "Leather"
+	| "Silk"
+	| "Soap"
+	| "GeneratesMiasma"
+	| "Meat"
+	| "Rots"
+	| "NervousTissue"
+	| "BloodMapDescriptor"
+	| "IchorMapDescriptor"
+	| "GooMapDescriptor"
+	| "SlimeMapDescriptor"
+	| "PusMapDescriptor"
+	| "SweatMapDescriptor"
+	| "TearsMapDescriptor"
+	| "SpitMapDescriptor"
+	| "Evaporates"
+	| "EntersBlood"
+	| "EdibleVermin"
+	| "EdibleRaw"
+	| "EdibleCooked"
+	| "DoNotCleanGlob"
+	| "NoStoneStockpile"
+	| "ItemsMetal"
+	| "ItemsBarred"
+	| "ItemsScaled"
+	| "ItemsLeather"
+	| "ItemsSoft"
+	| "ItemsHard"
+	| "IsStone"
+	| "IsCeramic"
+	| "Undiggable"
+	| "DisplayUnglazed"
+	| "Yarn"
+	| "StockpileThreadMetal"
+	| "IsMetal"
+	| "IsGlass"
+	| "CrystalGlassable"
+	| "ItemsWeapon"
+	| "ItemsWeaponRanged"
+	| "ItemsAnvil"
+	| "ItemsAmmo"
+	| "ItemsDigger"
+	| "ItemsArmor"
+	| "ItemsDelicate"
+	| "ItemsSiegeEngine"
+	| "ItemsQuern"
+	| "Unknown";
 /**
  * A struct representing a material template
  */
 export type MaterialTemplate = {
-  identifier: string;
-  metadata: Metadata | null;
-  objectId: string;
-  material: Material;
+	identifier: string;
+	metadata: Metadata | null;
+	objectId: string;
+	material: Material;
 };
 /**
  * A struct representing a plant
  */
 export type Plant = {
-  metadata: Metadata | null;
-  identifier: string;
-  objectId: string;
-  name: Name;
-  prefStrings: string[] | null;
-  tags: PlantTag[] | null;
-  undergroundDepth: number[] | null;
-  frequency: number | null;
-  biomes: Biome[] | null;
-  growths: PlantGrowth[] | null;
-  treeDetails: Tree | null;
-  shrubDetails: Shrub | null;
-  materials: Material[] | null;
+	metadata: Metadata | null;
+	identifier: string;
+	objectId: string;
+	name: Name;
+	prefStrings: string[] | null;
+	tags: PlantTag[] | null;
+	undergroundDepth: number[] | null;
+	frequency: number | null;
+	biomes: Biome[] | null;
+	growths: PlantGrowth[] | null;
+	treeDetails: Tree | null;
+	shrubDetails: Shrub | null;
+	materials: Material[] | null;
 };
 /**
  * The tags of a plant
  */
 export type PlantTag =
-  | "Dry"
-  | "Evil"
-  | "Good"
-  | "Savage"
-  | "Wet"
-  | "UndergroundDepth"
-  | "Biome"
-  | "Frequency"
-  | "UseMaterialTemplate"
-  | "BasicMaterial"
-  | "UseMaterial"
-  | "Material"
-  | "PrefString"
-  | "AllNames"
-  | "NameAdjective"
-  | "NamePlural"
-  | "NameSingular"
-  | "Unknown";
+	| "Dry"
+	| "Evil"
+	| "Good"
+	| "Savage"
+	| "Wet"
+	| "UndergroundDepth"
+	| "Biome"
+	| "Frequency"
+	| "UseMaterialTemplate"
+	| "BasicMaterial"
+	| "UseMaterial"
+	| "Material"
+	| "PrefString"
+	| "AllNames"
+	| "NameAdjective"
+	| "NamePlural"
+	| "NameSingular"
+	| "Unknown";
 /**
  * A struct representing a plant growth
  */
 export type PlantGrowth = {
-  growthType: GrowthType;
-  name: SingPlurName;
-  item: string;
-  hostTiles: PlantPart[] | null;
-  trunkHeightPercentage: number[] | null;
-  density: number | null;
-  print: string | null;
-  timing: number[] | null;
-  tags: GrowthTag[] | null;
+	growthType: GrowthType;
+	name: SingPlurName;
+	item: string;
+	hostTiles: PlantPart[] | null;
+	trunkHeightPercentage: number[] | null;
+	density: number | null;
+	print: string | null;
+	timing: number[] | null;
+	tags: GrowthTag[] | null;
 };
 /**
  * The growth tag of a plant
  */
 export type GrowthTag =
-  | "Growth"
-  | "GrowthName"
-  | "GrowthItem"
-  | "GrowthHostTile"
-  | "GrowthTrunkHeightPercent"
-  | "GrowthDensity"
-  | "GrowthTiming"
-  | "GrowthPrint"
-  | "GrowthHasSeed"
-  | "GrowthDropsOff"
-  | "GrowthDropsOffNoCloud"
-  | "Unknown";
+	| "Growth"
+	| "GrowthName"
+	| "GrowthItem"
+	| "GrowthHostTile"
+	| "GrowthTrunkHeightPercent"
+	| "GrowthDensity"
+	| "GrowthTiming"
+	| "GrowthPrint"
+	| "GrowthHasSeed"
+	| "GrowthDropsOff"
+	| "GrowthDropsOffNoCloud"
+	| "Unknown";
 /**
  * The types of growths
  */
 export type GrowthType =
-  | "Leaves"
-  | "Spathes"
-  | "Fruit"
-  | "Flowers"
-  | "Nut"
-  | "SeedCatkins"
-  | "PollenCatkins"
-  | "Cone"
-  | "SeedCone"
-  | "PollenCone"
-  | "Feathers"
-  | "Eggs"
-  | "Pod"
-  | "None";
+	| "Leaves"
+	| "Spathes"
+	| "Fruit"
+	| "Flowers"
+	| "Nut"
+	| "SeedCatkins"
+	| "PollenCatkins"
+	| "Cone"
+	| "SeedCone"
+	| "PollenCone"
+	| "Feathers"
+	| "Eggs"
+	| "Pod"
+	| "None";
 /**
  * Parts of a plant
  */
 export type PlantPart =
-  | "Twigs"
-  | "Branches"
-  | "BranchesAndTwigs"
-  | "AllBranchesAndTwigs"
-  | "HeavyBranches"
-  | "HeavyBranchesAndTrunk"
-  | "Trunk"
-  | "Roots"
-  | "Cap"
-  | "Sapling"
-  | "Unknown";
+	| "Twigs"
+	| "Branches"
+	| "BranchesAndTwigs"
+	| "AllBranchesAndTwigs"
+	| "HeavyBranches"
+	| "HeavyBranchesAndTrunk"
+	| "Trunk"
+	| "Roots"
+	| "Cap"
+	| "Sapling"
+	| "Unknown";
 /**
  * Represents a position in the government of an entity
  */
 export type Position = {
-  identifier: string;
-  allowedClasses: string[] | null;
-  allowedCreatures: string[] | null;
-  appointedBy: string | null;
-  color: Color | null;
-  commander: string | null;
-  demandMax: number | null;
-  executionSkill: string | null;
-  gender: string | null;
-  landHolder: number | null;
-  landName: string | null;
-  mandateMax: number | null;
-  name: SingPlurName | null;
-  nameMale: SingPlurName | null;
-  nameFemale: SingPlurName | null;
-  number: number | null;
-  precedence: number | null;
-  rejectedClasses: string[] | null;
-  rejectedCreatures: string[] | null;
-  replacedBy: string | null;
-  requiredBedroom: number | null;
-  requiredBoxes: number | null;
-  requiredCabinets: number | null;
-  requiredDining: number | null;
-  requiredOffice: number | null;
-  requiredRacks: number | null;
-  requiredStands: number | null;
-  requiredTomb: number | null;
-  requiresPopulation: number | null;
-  responsibilities: string[] | null;
-  spouse: SingPlurName | null;
-  spouseFemale: SingPlurName | null;
-  spouseMale: SingPlurName | null;
-  squad: string | null;
-  succession: string | null;
-  tags: PositionToken[];
+	identifier: string;
+	allowedClasses: string[] | null;
+	allowedCreatures: string[] | null;
+	appointedBy: string | null;
+	color: Color | null;
+	commander: string | null;
+	demandMax: number | null;
+	executionSkill: string | null;
+	gender: string | null;
+	landHolder: number | null;
+	landName: string | null;
+	mandateMax: number | null;
+	name: SingPlurName | null;
+	nameMale: SingPlurName | null;
+	nameFemale: SingPlurName | null;
+	number: number | null;
+	precedence: number | null;
+	rejectedClasses: string[] | null;
+	rejectedCreatures: string[] | null;
+	replacedBy: string | null;
+	requiredBedroom: number | null;
+	requiredBoxes: number | null;
+	requiredCabinets: number | null;
+	requiredDining: number | null;
+	requiredOffice: number | null;
+	requiredRacks: number | null;
+	requiredStands: number | null;
+	requiredTomb: number | null;
+	requiresPopulation: number | null;
+	responsibilities: string[] | null;
+	spouse: SingPlurName | null;
+	spouseFemale: SingPlurName | null;
+	spouseMale: SingPlurName | null;
+	squad: string | null;
+	succession: string | null;
+	tags: PositionToken[];
 };
 /**
  * Represents a position token
  */
 export type PositionToken =
-  | "AccountExempt"
-  | "AllowedClass"
-  | "AllowedCreature"
-  | "AppointedBy"
-  | "BragOnKill"
-  | "ChatWorthy"
-  | "Color"
-  | "Commander"
-  | "ConqueredSite"
-  | "DemandMax"
-  | "DeterminesCoinDesign"
-  | "DoNotCull"
-  | "DutyBound"
-  | "Elected"
-  | "ExecutionSkill"
-  | "ExportedInLegends"
-  | "Flashes"
-  | "Gender"
-  | "KillQuest"
-  | "LandHolder"
-  | "LandName"
-  | "MandateMax"
-  | "MenialWorkExemption"
-  | "MenialWorkExemptionSpouse"
-  | "MilitaryScreenOnly"
-  | "Name"
-  | "NameMale"
-  | "NameFemale"
-  | "Description"
-  | "Number"
-  | "Precedence"
-  | "PunishmentExemption"
-  | "QuestGiver"
-  | "RejectedClass"
-  | "RejectedCreature"
-  | "ReplacedBy"
-  | "RequiredBedroom"
-  | "RequiredBoxes"
-  | "RequiredCabinets"
-  | "RequiredDining"
-  | "RequiredOffice"
-  | "RequiredRacks"
-  | "RequiredStands"
-  | "RequiredTomb"
-  | "RequiresMarket"
-  | "RequiresPopulation"
-  | "Responsibility"
-  | "RulesFromLocation"
-  | "Site"
-  | "SleepPretension"
-  | "SpecialBurial"
-  | "Spouse"
-  | "SpouseFemale"
-  | "SpouseMale"
-  | "Squad"
-  | "Succession"
-  | "Unknown";
+	| "AccountExempt"
+	| "AllowedClass"
+	| "AllowedCreature"
+	| "AppointedBy"
+	| "BragOnKill"
+	| "ChatWorthy"
+	| "Color"
+	| "Commander"
+	| "ConqueredSite"
+	| "DemandMax"
+	| "DeterminesCoinDesign"
+	| "DoNotCull"
+	| "DutyBound"
+	| "Elected"
+	| "ExecutionSkill"
+	| "ExportedInLegends"
+	| "Flashes"
+	| "Gender"
+	| "KillQuest"
+	| "LandHolder"
+	| "LandName"
+	| "MandateMax"
+	| "MenialWorkExemption"
+	| "MenialWorkExemptionSpouse"
+	| "MilitaryScreenOnly"
+	| "Name"
+	| "NameMale"
+	| "NameFemale"
+	| "Description"
+	| "Number"
+	| "Precedence"
+	| "PunishmentExemption"
+	| "QuestGiver"
+	| "RejectedClass"
+	| "RejectedCreature"
+	| "ReplacedBy"
+	| "RequiredBedroom"
+	| "RequiredBoxes"
+	| "RequiredCabinets"
+	| "RequiredDining"
+	| "RequiredOffice"
+	| "RequiredRacks"
+	| "RequiredStands"
+	| "RequiredTomb"
+	| "RequiresMarket"
+	| "RequiresPopulation"
+	| "Responsibility"
+	| "RulesFromLocation"
+	| "Site"
+	| "SleepPretension"
+	| "SpecialBurial"
+	| "Spouse"
+	| "SpouseFemale"
+	| "SpouseMale"
+	| "Squad"
+	| "Succession"
+	| "Unknown";
 /**
  * A struct representing a seed material
  */
 export type SeedMaterial = {
-  name: SingPlurName;
-  color: Color;
-  material: string;
+	name: SingPlurName;
+	color: Color;
+	material: string;
 };
 /**
  * A struct representing a creature selection
  */
 export type SelectCreature = {
-  metadata: Metadata | null;
-  identifier: string;
-  objectId: string;
-  tags: string[];
+	metadata: Metadata | null;
+	identifier: string;
+	objectId: string;
+	tags: string[];
 };
 /**
  * The rules for selecting a creature
  */
-export type SelectRules =
-  | { selectCaste: string }
-  | { selectMaterial: string }
-  | { selectTissue: string }
-  | { selectAdditionalCaste: string };
+export type SelectRules = { selectCaste: string } | { selectMaterial: string } | { selectTissue: string } | { selectAdditionalCaste: string };
 /**
  * A shrub in the raws.
  */
 export type Shrub = {
-  growingSeason: SeasonToken[] | null;
-  growDuration: number | null;
-  value: number | null;
-  pickedTile: number | null;
-  deadPickedTile: number | null;
-  shrubTile: number | null;
-  deadShrubTile: number | null;
-  clusterSize: number | null;
-  pickedColor: Color | null;
-  deadPickedColor: Color | null;
-  shrubColor: Color | null;
-  deadShrubColor: Color | null;
-  shrubDrownLevel: number | null;
-  drink: string | null;
-  mill: string | null;
-  thread: string | null;
-  seed: SeedMaterial | null;
-  extractStillVial: string | null;
-  extractVial: string | null;
-  extractBarrel: string | null;
+	growingSeason: SeasonToken[] | null;
+	growDuration: number | null;
+	value: number | null;
+	pickedTile: number | null;
+	deadPickedTile: number | null;
+	shrubTile: number | null;
+	deadShrubTile: number | null;
+	clusterSize: number | null;
+	pickedColor: Color | null;
+	deadPickedColor: Color | null;
+	shrubColor: Color | null;
+	deadShrubColor: Color | null;
+	shrubDrownLevel: number | null;
+	drink: string | null;
+	mill: string | null;
+	thread: string | null;
+	seed: SeedMaterial | null;
+	extractStillVial: string | null;
+	extractVial: string | null;
+	extractBarrel: string | null;
 };
 /**
  * The tokens for the seasons
@@ -2174,193 +2143,193 @@ export type SeasonToken = "Spring" | "Summer" | "Autumn" | "Winter" | "Unknown";
  * The tokens for the shrubs
  */
 export type ShrubToken =
-  | "Spring"
-  | "Summer"
-  | "Autumn"
-  | "Winter"
-  | "GrowDuration"
-  | "Value"
-  | "PickedTile"
-  | "DeadPickedTile"
-  | "ShrubTile"
-  | "DeadShrubTile"
-  | "ClusterSize"
-  | "PickedColor"
-  | "DeadPickedColor"
-  | "ShrubColor"
-  | "DeadShrubColor"
-  | "ShrubDrownLevel"
-  | "Drink"
-  | "Mill"
-  | "Thread"
-  | "Seed"
-  | "ExtractStillVial"
-  | "ExtractVial"
-  | "ExtractBarrel"
-  | "Unknown";
+	| "Spring"
+	| "Summer"
+	| "Autumn"
+	| "Winter"
+	| "GrowDuration"
+	| "Value"
+	| "PickedTile"
+	| "DeadPickedTile"
+	| "ShrubTile"
+	| "DeadShrubTile"
+	| "ClusterSize"
+	| "PickedColor"
+	| "DeadPickedColor"
+	| "ShrubColor"
+	| "DeadShrubColor"
+	| "ShrubDrownLevel"
+	| "Drink"
+	| "Mill"
+	| "Thread"
+	| "Seed"
+	| "ExtractStillVial"
+	| "ExtractVial"
+	| "ExtractBarrel"
+	| "Unknown";
 /**
  * A struct representing a syndrome
  */
 export type Syndrome = {
-  identifier: string | null;
-  name: string | null;
-  affectedClasses: string[] | null;
-  immuneClasses: string[] | null;
-  affectedCreatures: [string, string][] | null;
-  immuneCreatures: [string, string][] | null;
-  classes: string[] | null;
-  concentrationAdded: number[] | null;
-  tags: SyndromeToken[] | null;
-  conditions: string[] | null;
+	identifier: string | null;
+	name: string | null;
+	affectedClasses: string[] | null;
+	immuneClasses: string[] | null;
+	affectedCreatures: [string, string][] | null;
+	immuneCreatures: [string, string][] | null;
+	classes: string[] | null;
+	concentrationAdded: number[] | null;
+	tags: SyndromeToken[] | null;
+	conditions: string[] | null;
 };
 /**
  * Represents the tokens that can be used in a syndrome definition.
  */
 export type SyndromeToken =
-  | "Name"
-  | "Class"
-  | "Injected"
-  | "Contact"
-  | "Inhaled"
-  | "Ingested"
-  | "AffectedClass"
-  | "ImmuneClass"
-  | "AffectedCreature"
-  | "ImmuneCreature"
-  | "ConcentrationAdded"
-  | "NoHospital"
-  | "Identifier"
-  | "Unknown";
+	| "Name"
+	| "Class"
+	| "Injected"
+	| "Contact"
+	| "Inhaled"
+	| "Ingested"
+	| "AffectedClass"
+	| "ImmuneClass"
+	| "AffectedCreature"
+	| "ImmuneCreature"
+	| "ConcentrationAdded"
+	| "NoHospital"
+	| "Identifier"
+	| "Unknown";
 /**
  * A struct representing a tree.
  */
 export type Tree = {
-  material: string;
-  trunkName: Name | null;
-  maxTrunkHeight: number | null;
-  maxTrunkDiameter: number | null;
-  trunkPeriod: number | null;
-  trunkWidthPeriod: number | null;
-  branchName: Name | null;
-  branchDensity: number | null;
-  branchRadius: number | null;
-  heavyBranchesName: Name | null;
-  heavyBranchDensity: number | null;
-  heavyBranchRadius: number | null;
-  trunkBranching: number | null;
-  rootName: Name | null;
-  rootDensity: number | null;
-  rootRadius: number | null;
-  twigsName: Name | null;
-  twigsPlacement: TwigPlacement[] | null;
-  capName: Name | null;
-  capPeriod: number | null;
-  capRadius: number | null;
-  treeTile: string | null;
-  deadTreeTile: string | null;
-  saplingTile: string | null;
-  deadSaplingTile: string | null;
-  treeColor: Color | null;
-  deadTreeColor: Color | null;
-  saplingColor: Color | null;
-  deadSaplingColor: Color | null;
-  saplingDrownLevel: number | null;
-  treeDrownLevel: number | null;
-  tags: TreeToken[] | null;
+	material: string;
+	trunkName: Name | null;
+	maxTrunkHeight: number | null;
+	maxTrunkDiameter: number | null;
+	trunkPeriod: number | null;
+	trunkWidthPeriod: number | null;
+	branchName: Name | null;
+	branchDensity: number | null;
+	branchRadius: number | null;
+	heavyBranchesName: Name | null;
+	heavyBranchDensity: number | null;
+	heavyBranchRadius: number | null;
+	trunkBranching: number | null;
+	rootName: Name | null;
+	rootDensity: number | null;
+	rootRadius: number | null;
+	twigsName: Name | null;
+	twigsPlacement: TwigPlacement[] | null;
+	capName: Name | null;
+	capPeriod: number | null;
+	capRadius: number | null;
+	treeTile: string | null;
+	deadTreeTile: string | null;
+	saplingTile: string | null;
+	deadSaplingTile: string | null;
+	treeColor: Color | null;
+	deadTreeColor: Color | null;
+	saplingColor: Color | null;
+	deadSaplingColor: Color | null;
+	saplingDrownLevel: number | null;
+	treeDrownLevel: number | null;
+	tags: TreeToken[] | null;
 };
 /**
  * The tokens for the tree parser
  */
 export type TreeToken =
-  | "Tree"
-  | "TrunkName"
-  | "MaxTrunkHeight"
-  | "MaxTrunkDiameter"
-  | "TrunkPeriod"
-  | "TrunkWidthPeriod"
-  | "BranchName"
-  | "BranchDensity"
-  | "BranchRadius"
-  | "HeavyBranchesName"
-  | "HeavyBranchDensity"
-  | "HeavyBranchRadius"
-  | "TrunkBranching"
-  | "RootName"
-  | "RootDensity"
-  | "RootRadius"
-  | "TwigsName"
-  | "TwigsSideBranches"
-  | "TwigsAboveBranches"
-  | "TwigsBelowBranches"
-  | "TwigsSideHeavyBranches"
-  | "TwigsAboveHeavyBranches"
-  | "TwigsBelowHeavyBranches"
-  | "TwigsSideTrunk"
-  | "TwigsAboveTrunk"
-  | "TwigsBelowTrunk"
-  | "CapName"
-  | "CapPeriod"
-  | "CapRadius"
-  | "TreeTile"
-  | "DeadTreeTile"
-  | "SaplingTile"
-  | "DeadSaplingTile"
-  | "TreeColor"
-  | "DeadTreeColor"
-  | "SaplingColor"
-  | "DeadSaplingColor"
-  | "SaplingDrownLevel"
-  | "TreeDrownLevel"
-  | "TreeHasMushroomCap"
-  | "StandardTileNames"
-  | "Sapling"
-  | "Unknown";
+	| "Tree"
+	| "TrunkName"
+	| "MaxTrunkHeight"
+	| "MaxTrunkDiameter"
+	| "TrunkPeriod"
+	| "TrunkWidthPeriod"
+	| "BranchName"
+	| "BranchDensity"
+	| "BranchRadius"
+	| "HeavyBranchesName"
+	| "HeavyBranchDensity"
+	| "HeavyBranchRadius"
+	| "TrunkBranching"
+	| "RootName"
+	| "RootDensity"
+	| "RootRadius"
+	| "TwigsName"
+	| "TwigsSideBranches"
+	| "TwigsAboveBranches"
+	| "TwigsBelowBranches"
+	| "TwigsSideHeavyBranches"
+	| "TwigsAboveHeavyBranches"
+	| "TwigsBelowHeavyBranches"
+	| "TwigsSideTrunk"
+	| "TwigsAboveTrunk"
+	| "TwigsBelowTrunk"
+	| "CapName"
+	| "CapPeriod"
+	| "CapRadius"
+	| "TreeTile"
+	| "DeadTreeTile"
+	| "SaplingTile"
+	| "DeadSaplingTile"
+	| "TreeColor"
+	| "DeadTreeColor"
+	| "SaplingColor"
+	| "DeadSaplingColor"
+	| "SaplingDrownLevel"
+	| "TreeDrownLevel"
+	| "TreeHasMushroomCap"
+	| "StandardTileNames"
+	| "Sapling"
+	| "Unknown";
 /**
  * The placement of twigs on a tree
  */
 export type TwigPlacement =
-  | "SideBranches"
-  | "AboveBranches"
-  | "BelowBranches"
-  | "SideHeavyBranches"
-  | "AboveHeavyBranches"
-  | "BelowHeavyBranches"
-  | "SideTrunk"
-  | "AboveTrunk"
-  | "BelowTrunk"
-  | "Unknown";
+	| "SideBranches"
+	| "AboveBranches"
+	| "BelowBranches"
+	| "SideHeavyBranches"
+	| "AboveHeavyBranches"
+	| "BelowHeavyBranches"
+	| "SideTrunk"
+	| "AboveTrunk"
+	| "BelowTrunk"
+	| "Unknown";
 /**
  * An unprocessed raw object
  */
 export type UnprocessedRaw = {
-  rawType: ObjectType;
-  modifications: Modification[];
-  metadata: Metadata;
-  identifier: string;
+	rawType: ObjectType;
+	modifications: Modification[];
+	metadata: Metadata;
+	identifier: string;
 };
 /**
  * A struct representing a modification to a creature
  */
 export type Modification =
-  | { copyTagsFrom: { identifier: string } }
-  | { applyCreatureVariation: { identifier: string } }
-  | { addToEnding: { raws: string[] } }
-  | { addToBeginning: { raws: string[] } }
-  | { addBeforeTag: { tag: string; raws: string[] } }
-  | { mainRawBody: { raws: string[] } };
+	| { copyTagsFrom: { identifier: string } }
+	| { applyCreatureVariation: { identifier: string } }
+	| { addToEnding: { raws: string[] } }
+	| { addToBeginning: { raws: string[] } }
+	| { addBeforeTag: { tag: string; raws: string[] } }
+	| { mainRawBody: { raws: string[] } };
 /**
  * Represents the specific yield, fracture, and elasticity of a material for the various
  * types of mechanical stress.
  */
 export type MaterialMechanics = {
-  impact: MechanicalProperties | null;
-  compressive: MechanicalProperties | null;
-  tensile: MechanicalProperties | null;
-  torsion: MechanicalProperties | null;
-  shear: MechanicalProperties | null;
-  bending: MechanicalProperties | null;
-  maxEdge: number | null;
-  solidDensity: number | null;
+	impact: MechanicalProperties | null;
+	compressive: MechanicalProperties | null;
+	tensile: MechanicalProperties | null;
+	torsion: MechanicalProperties | null;
+	shear: MechanicalProperties | null;
+	bending: MechanicalProperties | null;
+	maxEdge: number | null;
+	solidDensity: number | null;
 };
 /**
  * The `RawMetadata` struct represents metadata about a raw module in Rust, including its name,
@@ -2388,46 +2357,46 @@ export type MaterialMechanics = {
  * be hidden unless specified in the `ParsingOptions` struct.
  */
 export type Metadata = {
-  moduleObjectId: string;
-  moduleName: string;
-  moduleVersion: string;
-  rawFilePath: string;
-  rawIdentifier: string;
-  objectType: ObjectType;
-  rawModuleLocation: RawModuleLocation;
+	moduleObjectId: string;
+	moduleName: string;
+	moduleVersion: string;
+	rawFilePath: string;
+	rawIdentifier: string;
+	objectType: ObjectType;
+	rawModuleLocation: RawModuleLocation;
 };
 /**
  * Represents the `info.txt` file for a raw module
  */
 export type InfoFile = {
-  identifier: string;
-  objectId: string;
-  location: RawModuleLocation;
-  parentDirectory: string;
-  numericVersion: number;
-  displayedVersion: string;
-  earliestCompatibleNumericVersion: number;
-  earliestCompatibleDisplayedVersion: string;
-  author: string;
-  name: string;
-  description: string;
-  requiresIds: string[] | null;
-  conflictsWithIds: string[] | null;
-  requiresIdsBefore: string[] | null;
-  requiresIdsAfter: string[] | null;
-  steamData: SteamData | null;
+	identifier: string;
+	objectId: string;
+	location: RawModuleLocation;
+	parentDirectory: string;
+	numericVersion: number;
+	displayedVersion: string;
+	earliestCompatibleNumericVersion: number;
+	earliestCompatibleDisplayedVersion: string;
+	author: string;
+	name: string;
+	description: string;
+	requiresIds: string[] | null;
+	conflictsWithIds: string[] | null;
+	requiresIdsBefore: string[] | null;
+	requiresIdsAfter: string[] | null;
+	steamData: SteamData | null;
 };
 /**
  * The additional data specific to the steam workshop
  */
 export type SteamData = {
-  title: string | null;
-  description: string | null;
-  tags: string[] | null;
-  keyValueTags: string[] | null;
-  metadata: string[] | null;
-  changelog: string | null;
-  fileId: number;
+	title: string | null;
+	description: string | null;
+	tags: string[] | null;
+	keyValueTags: string[] | null;
+	metadata: string[] | null;
+	changelog: string | null;
+	fileId: number;
 };
 /**
  * Represents the name of a materials 3 states (solid, liquid, gas)
@@ -2437,9 +2406,9 @@ export type StateName = { solid: string; liquid: string; gas: string };
  * Represents the mechanical properties of a material via the yield, fracture, and elasticity
  */
 export type MechanicalProperties = {
-  yield: number;
-  fracture: number;
-  elasticity: number;
+	yield: number;
+	fracture: number;
+	elasticity: number;
 };
 /**
  * A name with a singular, plural, and adjective form
@@ -2453,59 +2422,54 @@ export type SingPlurName = { singular: string; plural: string };
  * The object types that can be parsed by the parser.
  */
 export type ObjectType =
-  | "Creature"
-  | "Inorganic"
-  | "Plant"
-  | "Item"
-  | "ItemAmmo"
-  | "ItemArmor"
-  | "ItemFood"
-  | "ItemGloves"
-  | "ItemHelm"
-  | "ItemInstrument"
-  | "ItemPants"
-  | "ItemShield"
-  | "ItemShoes"
-  | "ItemSiegeAmmo"
-  | "ItemTool"
-  | "ItemToy"
-  | "ItemTrapComponent"
-  | "ItemWeapon"
-  | "Building"
-  | "BuildingWorkshop"
-  | "BuildingFurnace"
-  | "Reaction"
-  | "Graphics"
-  | "MaterialTemplate"
-  | "BodyDetailPlan"
-  | "Body"
-  | "Entity"
-  | "Language"
-  | "Translation"
-  | "TissueTemplate"
-  | "CreatureVariation"
-  | "TextSet"
-  | "TilePage"
-  | "DescriptorColor"
-  | "DescriptorPattern"
-  | "DescriptorShape"
-  | "Palette"
-  | "Music"
-  | "Sound"
-  | "Interaction"
-  | "Unknown"
-  | "SelectCreature"
-  | "CreatureCaste";
+	| "Creature"
+	| "Inorganic"
+	| "Plant"
+	| "Item"
+	| "ItemAmmo"
+	| "ItemArmor"
+	| "ItemFood"
+	| "ItemGloves"
+	| "ItemHelm"
+	| "ItemInstrument"
+	| "ItemPants"
+	| "ItemShield"
+	| "ItemShoes"
+	| "ItemSiegeAmmo"
+	| "ItemTool"
+	| "ItemToy"
+	| "ItemTrapComponent"
+	| "ItemWeapon"
+	| "Building"
+	| "BuildingWorkshop"
+	| "BuildingFurnace"
+	| "Reaction"
+	| "Graphics"
+	| "MaterialTemplate"
+	| "BodyDetailPlan"
+	| "Body"
+	| "Entity"
+	| "Language"
+	| "Translation"
+	| "TissueTemplate"
+	| "CreatureVariation"
+	| "TextSet"
+	| "TilePage"
+	| "DescriptorColor"
+	| "DescriptorPattern"
+	| "DescriptorShape"
+	| "Palette"
+	| "Music"
+	| "Sound"
+	| "Interaction"
+	| "Unknown"
+	| "SelectCreature"
+	| "CreatureCaste";
 /**
  * Raws are part of modules since 50.xx. Raw modules are loaded from 3 common locations:
  * `{df_directory}/data/vanilla`, `{df_directory}/mods`, and `{df_directory/data/installed_mods}`
  */
-export type RawModuleLocation =
-  | "InstalledMods"
-  | "Mods"
-  | "Vanilla"
-  | "Unknown"
-  | "LegendsExport";
+export type RawModuleLocation = "InstalledMods" | "Mods" | "Vanilla" | "Unknown" | "LegendsExport";
 /**
  * A struct representing a body size in the format `years:days:size_cm3`
  */
@@ -2514,9 +2478,9 @@ export type BodySize = { years: number; days: number; sizeCm3: number };
  * A struct representing a color in the format "foreground:background:brightness".
  */
 export type Color = {
-  foreground: number;
-  background: number;
-  brightness: number;
+	foreground: number;
+	background: number;
+	brightness: number;
 };
 /**
  * How often a creature can be milked and what material it produces
@@ -2526,23 +2490,23 @@ export type Milkable = { material: string; frequency: number };
  * The temperature properties of a material
  */
 export type Temperatures = {
-  specificHeat: number | null;
-  ignitionPoint: number | null;
-  meltingPoint: number | null;
-  boilingPoint: number | null;
-  heatDamagePoint: number | null;
-  coldDamagePoint: number | null;
-  materialFixedTemperature: number | null;
+	specificHeat: number | null;
+	ignitionPoint: number | null;
+	meltingPoint: number | null;
+	boilingPoint: number | null;
+	heatDamagePoint: number | null;
+	coldDamagePoint: number | null;
+	materialFixedTemperature: number | null;
 };
 /**
  * Representation of a character tile (literally a single character) that is used in DF Classic
  */
 export type Tile = {
-  character: string;
-  altCharacter: string | null;
-  color: Color | null;
-  glowCharacter: string | null;
-  glowColor: Color | null;
+	character: string;
+	altCharacter: string | null;
+	color: Color | null;
+	glowCharacter: string | null;
+	glowColor: Color | null;
 };
 /**
  * A struct representing a Dimensions object.
@@ -2552,35 +2516,30 @@ export type Dimensions = { x: number; y: number };
  * A custom graphic extension.
  */
 export type CustomGraphicExtension = {
-  extensionType: GraphicType;
-  tilePageId: string | null;
-  value1: number | null;
-  value2: number | null;
+	extensionType: GraphicType;
+	tilePageId: string | null;
+	value1: number | null;
+	value2: number | null;
 };
 /**
  * A payload that can be used to gauge the progress of the parsing process.
  */
 export type ProgressPayload = {
-  details: ProgressDetails;
-  currentTask: ProgressTask;
-  percentage: number;
-  runningTotal: number;
+	details: ProgressDetails;
+	currentTask: ProgressTask;
+	percentage: number;
+	runningTotal: number;
 };
 /**
  * Tasks that describe what the parser is currently doing.
  */
-export type ProgressTask =
-  | "parseRaws"
-  | "parseLegends"
-  | "parseModuleInfoFiles"
-  | "resolveRaws"
-  | "idle";
+export type ProgressTask = "parseRaws" | "parseLegends" | "parseModuleInfoFiles" | "resolveRaws" | "idle";
 /**
  * Details about the current file being parsed, specifically where and what it is.
  */
 export type ProgressDetails = {
-  location: RawModuleLocation;
-  module: string | null;
-  rawFile: string | null;
-  fileLocation: string | null;
+	location: RawModuleLocation;
+	module: string | null;
+	rawFile: string | null;
+	fileLocation: string | null;
 };

@@ -1,12 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import {
-	BiRegularQuestionMark,
-	BiSolidCat,
-	BiSolidCity,
-	BiSolidDiamond,
-	BiSolidSearch,
-	BiSolidTree,
-} from "solid-icons/bi";
+import { BiRegularQuestionMark, BiSolidCat, BiSolidCity, BiSolidDiamond, BiSolidSearch, BiSolidTree } from "solid-icons/bi";
 import { type Component, Match, Show, Switch, createResource } from "solid-js";
 import type { Creature, Plant } from "../../src-tauri/bindings/Bindings";
 import type { Raw } from "../definitions/types";

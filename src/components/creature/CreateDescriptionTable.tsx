@@ -30,10 +30,7 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
 				<tr>
 					<th>Likeable Features</th>
 					<td>
-						<Show
-							when={Array.isArray(props.creature.prefStrings) && props.creature.prefStrings.length > 0}
-							fallback="None"
-						>
+						<Show when={Array.isArray(props.creature.prefStrings) && props.creature.prefStrings.length > 0} fallback="None">
 							{props.creature.prefStrings.join(", ")}
 						</Show>
 					</td>

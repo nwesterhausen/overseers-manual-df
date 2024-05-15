@@ -24,22 +24,14 @@ function Pagination(): JSX.Element {
 		return searchContext.searchResults.latest.totalPages > 10 && settings.currentPage > 6;
 	});
 	const showLastPageAndEllipses = createMemo(() => {
-		return (
-			pageNumbers().length > 0 &&
-			pageNumbers()[pageNumbers().length - 1] !== searchContext.searchResults.latest.totalPages
-		);
+		return pageNumbers().length > 0 && pageNumbers()[pageNumbers().length - 1] !== searchContext.searchResults.latest.totalPages;
 	});
 	return (
 		<Show when={searchContext.searchResults.latest.totalPages > 1}>
 			<div class="fixed bottom-0 w-full">
 				<div class="flex justify-center my-2">
 					<div class="join">
-						<button
-							type="button"
-							class="join-item btn btn-xs"
-							classList={{ disabled: settings.currentPage === 0 }}
-							onClick={() => prevPage()}
-						>
+						<button type="button" class="join-item btn btn-xs" classList={{ disabled: settings.currentPage === 0 }} onClick={() => prevPage()}>
 							«
 						</button>
 						<Show when={showFirstPageAndEllipses()}>

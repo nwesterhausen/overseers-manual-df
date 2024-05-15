@@ -50,10 +50,7 @@ const ModuleFiltering: Component = () => {
 				onChange={setValues}
 				placeholder="Search module options"
 				itemComponent={(props) => (
-					<Combobox.Item
-						class="join-item cursor-pointer flex justify-between items-center hover:underline pb-1"
-						item={props.item}
-					>
+					<Combobox.Item class="join-item cursor-pointer flex justify-between items-center hover:underline pb-1" item={props.item}>
 						<Combobox.ItemLabel>{props.item.rawValue.label}</Combobox.ItemLabel>
 						<Combobox.ItemIndicator class="bg-success/75 rounded-full p-1 float-right">
 							<BiRegularCheck />
@@ -73,9 +70,7 @@ const ModuleFiltering: Component = () => {
 							width: "20rem",
 						}}
 					>
-						<span class="join-item bg-base-100 border-b border-b-slate-500 font-medium text-center">
-							Available Modules
-						</span>
+						<span class="join-item bg-base-100 border-b border-b-slate-500 font-medium text-center">Available Modules</span>
 						<Combobox.Listbox />
 					</Combobox.Content>
 				</Combobox.Portal>
@@ -87,11 +82,7 @@ const ModuleFiltering: Component = () => {
 									<For each={state.selectedOptions()}>
 										{(option) => (
 											<div class="join-item flex justify-between max-w-xs">
-												<span
-													class="text-xs cursor-default truncate"
-													title={option.label}
-													onPointerDown={(e) => e.stopPropagation()}
-												>
+												<span class="text-xs cursor-default truncate" title={option.label} onPointerDown={(e) => e.stopPropagation()}>
 													{option.label}
 												</span>
 												<button
@@ -110,10 +101,7 @@ const ModuleFiltering: Component = () => {
 									<Combobox.Input class="input input-xs input-bordered w-full max-w-xs" />
 								</div>
 								<div class="flex flex-row justify-between">
-									<Combobox.Trigger
-										class="self-center tooltip tooltip-right bg-info rounded hover:text-black/50"
-										data-tip="Show All Options"
-									>
+									<Combobox.Trigger class="self-center tooltip tooltip-right bg-info rounded hover:text-black/50" data-tip="Show All Options">
 										<Combobox.Icon>
 											<BiRegularCaretDown />
 										</Combobox.Icon>

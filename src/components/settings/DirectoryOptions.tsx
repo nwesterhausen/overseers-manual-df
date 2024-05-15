@@ -22,12 +22,7 @@ function DirectoryOptions(): JSX.Element {
 						<BiSolidFolderOpen size={"1.5rem"} />
 					</button>
 				</div>
-				<input
-					type="text"
-					placeholder={settings.parsing.directoryPath}
-					class="input input-primary input-ghost grow"
-					disabled
-				/>
+				<input type="text" placeholder={settings.parsing.directoryPath} class="input input-primary input-ghost grow" disabled />
 			</div>
 			<div class="flex justify-around my-2">
 				<button

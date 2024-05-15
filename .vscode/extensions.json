@@ -1,12 +1,12 @@
 {
-  "recommendations": [
-    "dbaeumer.vscode-eslint",
-    "rust-lang.rust-analyzer",
-    "aaron-bond.better-comments",
-    "serayuzgur.crates",
-    "mikestead.dotenv",
-    "tamasfe.even-better-toml",
-    "tauri-apps.tauri-vscode",
-    "biomejs.biome"
-  ]
+	"recommendations": [
+		"dbaeumer.vscode-eslint",
+		"rust-lang.rust-analyzer",
+		"aaron-bond.better-comments",
+		"serayuzgur.crates",
+		"mikestead.dotenv",
+		"tamasfe.even-better-toml",
+		"tauri-apps.tauri-vscode",
+		"biomejs.biome"
+	]
 }

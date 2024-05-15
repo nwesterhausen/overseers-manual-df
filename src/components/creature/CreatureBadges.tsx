@@ -1,15 +1,6 @@
 import { type Component, Show } from "solid-js";
 import type { Creature } from "../../../src-tauri/bindings/Bindings";
-import {
-	CanLearn,
-	CanSpeak,
-	CondensedEggSize,
-	FirstPetValue,
-	HasIntelligence,
-	IsEggLayer,
-	IsFlier,
-	IsGnawer,
-} from "../../lib/CreatureUtil";
+import { CanLearn, CanSpeak, CondensedEggSize, FirstPetValue, HasIntelligence, IsEggLayer, IsFlier, IsGnawer } from "../../lib/CreatureUtil";
 import TwoPartBadge from "../TwoPartBadge";
 
 const CreatureBadges: Component<{ creature: Creature }> = (props) => {
@@ -24,11 +15,7 @@ const CreatureBadges: Component<{ creature: Creature }> = (props) => {
 					</div>
 				)}
 				{/* EGG BADGE */}
-				{IsEggLayer(props.creature) ? (
-					<TwoPartBadge bg="primary" name="Egg" value={`${CondensedEggSize(props.creature)}`} />
-				) : (
-					<></>
-				)}
+				{IsEggLayer(props.creature) ? <TwoPartBadge bg="primary" name="Egg" value={`${CondensedEggSize(props.creature)}`} /> : <></>}
 
 				{/* FLIER BADGE */}
 				{IsFlier(props.creature) ? <TwoPartBadge bg="primary" name="Flier" value={""} /> : <></>}
@@ -47,26 +34,14 @@ const CreatureBadges: Component<{ creature: Creature }> = (props) => {
 				{IsGnawer(props.creature) ? <TwoPartBadge bg="primary" name="Gnawer" value={""} /> : <></>}
 
 				{/* PET VALUE BADGE */}
-				{FirstPetValue(props.creature) > 0 ? (
-					<TwoPartBadge bg="primary" name="Pet" value={`${FirstPetValue(props.creature)}`} />
-				) : (
-					<></>
-				)}
+				{FirstPetValue(props.creature) > 0 ? <TwoPartBadge bg="primary" name="Pet" value={`${FirstPetValue(props.creature)}`} /> : <></>}
 
 				<Show when={Array.isArray(props.creature.tags) && props.creature.tags.length > 0}>
 					{/* PLAYABLE BADGE */}
-					{props.creature.tags.indexOf("LocalPopsProduceHeroes") === -1 ? (
-						<></>
-					) : (
-						<TwoPartBadge bg="primary" name="Playable" value={""} />
-					)}
+					{props.creature.tags.indexOf("LocalPopsProduceHeroes") === -1 ? <></> : <TwoPartBadge bg="primary" name="Playable" value={""} />}
 
 					{/* CIVILIZED BADGE */}
-					{props.creature.tags.indexOf("LocalPopsControllable") === -1 ? (
-						<></>
-					) : (
-						<TwoPartBadge bg="primary" name="Civilized" value={""} />
-					)}
+					{props.creature.tags.indexOf("LocalPopsControllable") === -1 ? <></> : <TwoPartBadge bg="primary" name="Civilized" value={""} />}
 				</Show>
 			</div>
 		</div>

@@ -121,34 +121,12 @@ export const DEFAULT_SUMMARY: Summary = {
 /**
  * A list of common words to ignore when searching.
  */
-export const IgnoredSearchTerms = [
-	"a",
-	"and",
-	"but",
-	"for",
-	"in",
-	"it",
-	"its",
-	"of",
-	"on",
-	"that",
-	"the",
-	"they",
-	"their",
-	"with",
-];
+export const IgnoredSearchTerms = ["a", "and", "but", "for", "in", "it", "its", "of", "on", "that", "the", "they", "their", "with"];
 
 /**
  * The available depths as represented by the `UndergroundDepth` token.
  */
-export const DepthRanges = [
-	"Aboveground",
-	"1st Cavern Layer",
-	"2nd Cavern Layer",
-	"3rd Cavern Layer",
-	"Magma Sea Layer",
-	"HFS",
-];
+export const DepthRanges = ["Aboveground", "1st Cavern Layer", "2nd Cavern Layer", "3rd Cavern Layer", "Magma Sea Layer", "HFS"];
 
 /**
  * How many cubic centimeters are in a cubic meter.
