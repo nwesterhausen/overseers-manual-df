@@ -26,11 +26,15 @@ jobs:
           # this assumes that you have created a personal access token
           # (PAT) and configured it as a GitHub action secret named
           # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
-          token: ${{ secrets.PAT_GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           # this is a built-in strategy in release-please, see "Action Inputs"
           # for more options
           release-type: node
-
+          # a configuration file that tells release-please how to bump
+          # versions and create releases
+          config-file: .github/release-please-config.json
+          # manifest file for initial version
+          manifest-file: .github/release-please-manifest.json
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
   publish-tauri:
