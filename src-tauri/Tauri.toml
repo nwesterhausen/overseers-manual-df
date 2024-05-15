@@ -5,7 +5,7 @@ identifier = "one.nwest.games.dwarffortress.overseers-manual"
 
 [build]
 beforeBuildCommand = "bun run build"
-beforeDevCommand = "bun dev"
+beforeDevCommand = "bun run dev"
 devUrl = "http://localhost:5173"
 frontendDist = "../dist"
 

@@ -1,44 +1,46 @@
-name: 'Semantic Release (and Publish)'
 on:
   push:
     branches:
       - main
+permissions: read-all
 
 env:
+  CARGO_TERM_COLOR: always
   # sccache enablement
   SCCACHE_GHA_ENABLED: true
   RUSTC_WRAPPER: sccache
 
+name: Release Please
+
 jobs:
-  semantic-release:
-    name: 'Semantic Release'
+  release-please:
+    name: Release Please
+    permissions:
+      contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: google-github-actions/release-please-action@v4
+        id: release
         with:
-          token: ${{ secrets.PAT_GH_TOKEN }}
-      - name: Setup Node
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
-        with:
-          node-version-file: .nvmrc
-
-      - name: Install bun
-        uses: oven-sh/setup-bun@8f24390df009a496891208e5e36b8a1de1f45135 #v1
-
-      - name: Process Semantic-release
-        id: get-next-version
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_GH_TOKEN }}
-        run: |
-          bun install
-          bunx semantic-release
+          # this assumes that you have created a personal access token
+          # (PAT) and configured it as a GitHub action secret named
+          # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # this is a built-in strategy in release-please, see "Action Inputs"
+          # for more options
+          release-type: node
+          # a configuration file that tells release-please how to bump
+          # versions and create releases
+          config-file: .github/release-please-config.json
+          # manifest file for initial version
+          manifest-file: .github/release-please-manifest.json
     outputs:
-      new-release-published: ${{ steps.get-next-version.outputs.new-release-published }}
-      new-release-version: ${{ steps.get-next-version.outputs.new-release-version }}
+      releases_created: ${{ steps.release.outputs.releases_created }}
   publish-tauri:
     needs:
-      - semantic-release
-    if: needs.semantic-release.outputs.new-release-published == 'true'
+      - release-please
+    if: needs.release-please.outputs.releases_created == 'true'
     name: 'Publish Tauri App'
     strategy:
       fail-fast: false
@@ -47,21 +49,12 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      - name: Setup Node
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
-        with:
-          node-version-file: .nvmrc
       - name: Install bun
         uses: oven-sh/setup-bun@8f24390df009a496891208e5e36b8a1de1f45135 #v1
-
-      - name: Set Updated Version
-        run: bash version ${{ needs.semantic-release.outputs.new-release-version }}
-
       - name: Create Fake .env File (dotenvy_macro requirement)
         run: |
           touch src-tauri/.env
           echo APTABASE_KEY=${{ secrets.APTABASE_KEY }} >> src-tauri/.env
-
       - name: Install Dependencies (Ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
         # You can remove libayatana-appindicator3-dev if you don't use the system tray feature.
@@ -79,7 +72,6 @@ jobs:
           sudo apt-get install -y javascriptcoregtk-4.1 \
               libsoup-3.0 \
               webkit2gtk-4.1
-
       - name: Install Rust
         uses: dtolnay/rust-toolchain@bb45937a053e097f8591208d8e74c90db1873d07 # master
         with:
@@ -90,7 +82,6 @@ jobs:
         run: |
           bun install
           bun run build
-
       - name: Build the Tauri App
         uses: tauri-apps/tauri-action@32165c22c317182abb119ad267da7eeb375cb8aa # dev
         env:
@@ -102,12 +93,3 @@ jobs:
           releaseName: 'v__VERSION__'
           releaseDraft: true
           prerelease: false
-
-      - name: Show sccache stats
-        shell: bash
-        run: |
-          echo '## SCCACHE STATS' >> $GITHUB_STEP_SUMMARY
-          echo '| Metric | Value |' >> $GITHUB_STEP_SUMMARY
-          echo '|--------|-------|' >> $GITHUB_STEP_SUMMARY
-          ${SCCACHE_PATH} --show-stats | awk -F'[[:space:]][[:space:]]+' 'NR<=22{ print "| "$1" | "$2" |"}' >> $GITHUB_STEP_SUMMARY
-          echo '</hr>' >> $GITHUB_STEP_SUMMARY
