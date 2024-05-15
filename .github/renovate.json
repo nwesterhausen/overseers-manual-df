@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "configMigration": true,
   "extends": [
-    "config:bext-practices",
+    "config:best-practices",
     "group:allNonMajor",
     "security:openssf-scorecard",
     ":semanticCommits"
