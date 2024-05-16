@@ -51,7 +51,11 @@ export type Filter =
  * Using this, you can specify that the filter array is connected by an `AND` or an `OR`.
  * * `filter` - A list of filters that must resolve to true for the object to be included in the search results.
  */
-export type SearchFilter = { required: boolean; filters: Filter[] };
+export type SearchFilter = {
+  required: boolean;
+  inverted: boolean;
+  filters: Filter[];
+};
 /**
  * A summary of the parsing process.
  */

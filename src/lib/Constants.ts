@@ -1,7 +1,7 @@
 import { Update } from "@tauri-apps/plugin-updater";
 import type { SearchResults } from "../definitions/SearchResults";
-import type { Summary, Biome, ObjectType, ProgressPayload, RawModuleLocation } from "../../src-tauri/bindings/Bindings";
-import type { FilteringSettings, ParsingSettings } from "../providers/SettingsProvider";
+import type { Summary, Biome, ObjectType, ProgressPayload, RawModuleLocation, SearchFilter } from "../../src-tauri/bindings/Bindings";
+import type { ParsingSettings } from "../providers/SettingsProvider";
 
 /**
  * Default update object. This is an empty update object which is used
@@ -27,12 +27,7 @@ export const SETTINGS_PARSING_DEFAULTS: ParsingSettings = {
 	moduleInfoFiles: [] as string[],
 };
 
-export const SETTINGS_FILTERING_DEFAULTS: FilteringSettings = {
-	biomes: [] as Biome[],
-	locations: ["Vanilla"] as RawModuleLocation[],
-	objectTypes: ["Creature", "Plant"] as ObjectType[],
-	modules: [] as string[],
-};
+export const SETTINGS_FILTERING_DEFAULTS: SearchFilter[] = [];
 
 /**
  * Default settings for the application. These are used when the application

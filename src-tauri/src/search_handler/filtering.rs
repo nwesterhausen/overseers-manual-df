@@ -43,6 +43,10 @@ pub enum Filter {
     Module(String),
     /// Filter objects that exist in specific locations
     Location(RawModuleLocation),
+    /// Filter objects that match part of the search query
+    SearchQuery(String),
+    /// Filter specifically by part of the identifier of the raw object
+    Identifier(String),
     #[default]
     /// A dummy filter
     None,
@@ -69,7 +73,10 @@ impl Filter {
             Filter::Plant(_) => matches!(object_type, ObjectType::Plant),
             Filter::Object(filter_object_type) => object_type == filter_object_type,
             Filter::Biome(_) => matches!(object_type, ObjectType::Creature | ObjectType::Plant),
-            Filter::Module(_) | Filter::Location(_) => true,
+            Filter::Module(_)
+            | Filter::Location(_)
+            | Filter::SearchQuery(_)
+            | Filter::Identifier(_) => true,
             Filter::None => false,
         }
     }
@@ -123,6 +130,11 @@ impl Filter {
                 raw_object.get_metadata().get_module_object_id() == module_id
             }
             Filter::Location(location) => raw_object.get_metadata().get_location() == location,
+            Filter::SearchQuery(query) => raw_object
+                .get_search_vec()
+                .iter()
+                .any(|search| search.contains(query)),
+            Filter::Identifier(identifier) => raw_object.get_identifier().contains(identifier),
             Filter::None => false,
         }
     }
@@ -141,66 +153,149 @@ impl Filter {
 pub struct SearchFilter {
     /// Whether the filter is required (or just optional) to be part of an object
     pub required: bool,
+    /// Whether the filter is inverted (i.e. the object must not match the filter)
+    pub inverted: bool,
     /// The filter to check against.
     pub filters: Vec<Filter>,
 }
 
-impl SearchFilter {
-    /// Add a filter to the search filter.
-    pub fn add_filter(&mut self, filter: Filter) -> &mut Self {
-        // Reject the dummy filter
-        if matches!(filter, Filter::None) {
-            return self;
-        }
-        self.filters.push(filter);
-        self
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_allowed_object_type() {
+        let filter = Filter::Creature(CreatureTag::Dwarf);
+        let object_type = ObjectType::Creature;
+        assert!(filter.allowed_object_type(&object_type));
+
+        let filter = Filter::Inorganic(InorganicTag::Gold);
+        let object_type = ObjectType::Inorganic;
+        assert!(filter.allowed_object_type(&object_type));
+
+        let filter = Filter::Biome(Biome::Ocean);
+        let object_type = ObjectType::Creature;
+        assert!(filter.allowed_object_type(&object_type));
+
+        let filter = Filter::Object(ObjectType::Building);
+        let object_type = ObjectType::Building;
+        assert!(filter.allowed_object_type(&object_type));
+
+        let filter = Filter::None;
+        let object_type = ObjectType::Creature;
+        assert!(!filter.allowed_object_type(&object_type));
     }
 
-    /// Sets the filter to be optional.
-    pub fn optional(&mut self) -> &mut Self {
-        self.required = false;
-        self
+    #[test]
+    fn test_allow() {
+        let raw_object: Box<dyn RawObject> = Box::new(Creature::new());
+        let filter = Filter::Creature(CreatureTag::Dwarf);
+        assert!(filter.allow(&raw_object));
+
+        let raw_object: Box<dyn RawObject> = Box::new(Inorganic::new());
+        let filter = Filter::Inorganic(InorganicTag::Gold);
+        assert!(filter.allow(&raw_object));
+
+        let raw_object: Box<dyn RawObject> = Box::new(Creature::new());
+        let filter = Filter::Biome(Biome::Ocean);
+        assert!(filter.allow(&raw_object));
+
+        let raw_object: Box<dyn RawObject> = Box::new(Building::new());
+        let filter = Filter::Object(ObjectType::Building);
+        assert!(filter.allow(&raw_object));
+
+        let raw_object: Box<dyn RawObject> = Box::new(Creature::new());
+        let filter = Filter::None;
+        assert!(!filter.allow(&raw_object));
     }
 
-    /// Sets the filter to be required.
-    pub fn required(&mut self) -> &mut Self {
-        self.required = true;
-        self
+    #[test]
+    fn test_add_filter() {
+        let mut search_filter = SearchFilter::default();
+        let filter = Filter::Creature(CreatureTag::Dwarf);
+        search_filter.add_filter(filter.clone());
+        assert_eq!(search_filter.filters.len(), 1);
+        assert_eq!(search_filter.filters[0], filter);
     }
 
-    /// Returns whether the filter is optional.
-    pub fn is_optional(&self) -> bool {
-        !self.required
+    #[test]
+    fn test_optional() {
+        let mut search_filter = SearchFilter::default();
+        search_filter.optional();
+        assert!(!search_filter.required);
     }
 
-    /// Returns whether the filter is required.
-    pub fn is_required(&self) -> bool {
-        self.required
+    #[test]
+    fn test_required() {
+        let mut search_filter = SearchFilter::default();
+        search_filter.required();
+        assert!(search_filter.required);
     }
 
-    /// Returns a filtered list of filters by the given object type.
-    ///
-    /// # Arguments
-    ///
-    /// * `object_type` - The object type to filter by.
-    ///
-    /// # Returns
-    ///
-    /// A list of filters that match the given object type.
-    pub fn for_object_type(&self, object_type: &ObjectType) -> Vec<&Filter> {
-        self.filters
-            .iter()
-            .filter(|filter| match filter {
-                Filter::Creature(_) => matches!(object_type, ObjectType::Creature),
-                Filter::CreatureCaste(_) => matches!(object_type, ObjectType::CreatureCaste),
-                Filter::Inorganic(_) => matches!(object_type, ObjectType::Inorganic),
-                Filter::Plant(_) => matches!(object_type, ObjectType::Plant),
-                Filter::Object(filter_object_type) => object_type == filter_object_type,
-                Filter::Biome(_) => matches!(object_type, ObjectType::Creature | ObjectType::Plant),
-                Filter::Module(_) | Filter::Location(_) => true,
-                Filter::None => false,
-            })
-            .collect()
+    #[test]
+    fn test_is_optional() {
+        let search_filter = SearchFilter {
+            required: false,
+            inverted: false,
+            filters: vec![],
+        };
+        assert!(search_filter.is_optional());
+    }
+
+    #[test]
+    fn test_is_required() {
+        let search_filter = SearchFilter {
+            required: true,
+            inverted: false,
+            filters: vec![],
+        };
+        assert!(search_filter.is_required());
+    }
+
+    #[test]
+    fn test_for_object_type() {
+        let search_filter = SearchFilter {
+            required: true,
+            inverted: false,
+            filters: vec![
+                Filter::Creature(CreatureTag::Dwarf),
+                Filter::Object(ObjectType::Building),
+                Filter::Biome(Biome::Ocean),
+            ],
+        };
+
+        let object_type = ObjectType::Creature;
+        let expected_filters = vec![&Filter::Creature(CreatureTag::Dwarf)];
+        assert_eq!(search_filter.for_object_type(&object_type), expected_filters);
+
+        let object_type = ObjectType::Building;
+        let expected_filters = vec![&Filter::Object(ObjectType::Building)];
+        assert_eq!(search_filter.for_object_type(&object_type), expected_filters);
+
+        let object_type = ObjectType::Inorganic;
+        let expected_filters = vec![];
+        assert_eq!(search_filter.for_object_type(&object_type), expected_filters);
+    }
+
+    #[test]
+    fn test_allow_search_filter() {
+        let raw_object: Box<dyn RawObject> = Box::new(Creature::new());
+        let filter1 = Filter::Creature(CreatureTag::Dwarf);
+        let filter2 = Filter::Biome(Biome::Ocean);
+        let mut search_filter = SearchFilter::default();
+        search_filter.add_filter(filter1.clone());
+        search_filter.add_filter(filter2.clone());
+
+        assert!(search_filter.allow(&raw_object));
+
+        let raw_object: Box<dyn RawObject> = Box::new(Creature::new());
+        let filter1 = Filter::Creature(CreatureTag::Elf);
+        let filter2 = Filter::Biome(Biome::Ocean);
+        let mut search_filter = SearchFilter::default();
+        search_filter.add_filter(filter1.clone());
+        search_filter.add_filter(filter2.clone());
+
+        assert!(!search_filter.allow(&raw_object));
     }
 }
 

@@ -3,9 +3,11 @@ import { message } from "@tauri-apps/plugin-dialog";
 import { Store as TauriStore } from "@tauri-apps/plugin-store";
 import { type JSX, type ParentProps, createContext, createEffect, createSignal, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
-import type { Biome, ObjectType, RawModuleLocation, SearchFilter } from "../../src-tauri/bindings/Bindings";
+import type { Biome, Filter, ObjectType, RawModuleLocation, SearchFilter } from "../../src-tauri/bindings/Bindings";
 import { SETTINGS_DEFAULTS, SETTINGS_FILE_NAME } from "../lib/Constants";
 import { getDwarfDirectoryPath } from "../lib/DirectoryActions";
+import { remove } from "@tauri-apps/plugin-fs";
+import { isBiomeIncluded, isLocationIncluded, isObjectTypeIncluded } from "../lib/Filters";
 
 export type ParsingSettings = {
 	/**
@@ -37,18 +39,9 @@ export type ParsingSettings = {
 	 */
 	directoryPath: string;
 };
-
-export type FilteringSettings = {
-	/**
-	 * The tags to include when filtering results
-	 *
-	 * Todo!: implement a way to add SearchFilter based on the existing functions for the Settings Context
-	 *
-	 * Need to handle settings AND vs OR too..
-	 */
-	tags: SearchFilter[];
-};
-
+/**
+ * The settings store that is used to store settings to disk.
+ */
 export type SettingsStore = [
 	{
 		/**
@@ -62,7 +55,7 @@ export type SettingsStore = [
 		/**
 		 * Filtering settings.
 		 */
-		filtering: FilteringSettings;
+		filtering: SearchFilter[];
 		/**
 		 * Whether or not to display the results as a grid.
 		 */
@@ -472,6 +465,7 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
 	const defaultSettings = [
 		state,
 		{
+			// -- Change other settings --
 			toggleLayoutAsGrid() {
 				setState("layoutAsGrid", !state.layoutAsGrid);
 				setSettingsChanged(true);
@@ -493,11 +487,33 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
 				});
 				setSettingsChanged(true);
 			},
+			resetToDefaults() {
+				setState({ ...SETTINGS_DEFAULTS });
+				setSettingsChanged(true);
+			},
+			addSearchFilter(filter: SearchFilter) {
+				setState({
+					filtering: [...state.filtering, filter],
+				});
+				setSettingsChanged(true);
+			},
+			removeSearchFilter(index: number) {
+				const original_length = state.filtering.length;
+				setState({
+					filtering: state.filtering.filter((_, i) => i !== index),
+				});
+				if (original_length === state.filtering.length) {
+					console.error("Failed to remove search filter at index", index);
+					return;
+				}
+				setSettingsChanged(true);
+			},
+			// -- Ways to check which filters are enabled --
 			objectTypeIncluded(type: ObjectType, parsingOnly: boolean) {
 				if (parsingOnly) {
 					return state.parsing.objectTypes.includes(type);
 				}
-				return state.filtering.objectTypes.includes(type);
+				return isObjectTypeIncluded(state.filtering, type);
 			},
 			toggleObjectType(type: ObjectType, parsingOnly: boolean) {
 				if (parsingOnly) {
@@ -517,79 +533,121 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
 						});
 					}
 				} else {
-					if (state.filtering.objectTypes.includes(type)) {
+					if (isObjectTypeIncluded(state.filtering, type)) {
+						// Find the filter that includes the object type and remove it
+						const filterIndex = state.filtering.findIndex((filter) => isObjectTypeIncluded([filter], type));
+						if (filterIndex === -1) {
+							console.error("Failed to find filter for object type", type);
+							return;
+						}
+						const targetFilter = state.filtering[filterIndex];
+						const newFilters = targetFilter.filters.filter((f) => !(Object.keys(f).includes("object") && Object.values(f).includes(type)));
+						if (newFilters.length === targetFilter.filters.length) {
+							console.error("Failed to remove object type from filter", type);
+							return;
+						}
 						setState({
-							filtering: {
-								...state.filtering,
-								objectTypes: state.filtering.objectTypes.filter((t) => t !== type),
-							},
+							filtering: [
+								...state.filtering.slice(0, filterIndex),
+								{ ...targetFilter, filters: newFilters },
+								...state.filtering.slice(filterIndex + 1),
+							],
 						});
 					} else {
 						setState({
-							filtering: {
+							filtering: [
 								...state.filtering,
-								objectTypes: [...state.filtering.objectTypes, type],
-							},
+								{
+									filters: [{ object: type }],
+									required: false,
+									inverted: false,
+								},
+							],
 						});
 					}
 				}
 				setSettingsChanged(true);
 			},
-			resetToDefaults() {
-				setState({ ...SETTINGS_DEFAULTS });
-				setSettingsChanged(true);
-			},
 			biomeIncluded(biome: Biome) {
-				return state.filtering.biomes.includes(biome);
+				return isBiomeIncluded(state.filtering, biome);
 			},
 			toggleBiome(biome: Biome) {
-				if (state.filtering.biomes.includes(biome)) {
+				if (isBiomeIncluded(state.filtering, biome)) {
+					// Find the filter that includes the biome and remove it
+					const filterIndex = state.filtering.findIndex((filter) => isBiomeIncluded([filter], biome));
+					if (filterIndex === -1) {
+						console.error("Failed to find filter for biome", biome);
+						return;
+					}
+					const targetFilter = state.filtering[filterIndex];
+					const newFilters = targetFilter.filters.filter((f) => !(Object.keys(f).includes("biome") && Object.values(f).includes(biome)));
+					if (newFilters.length === targetFilter.filters.length) {
+						console.error("Failed to remove biome from filter", biome);
+						return;
+					}
 					setState({
-						filtering: {
-							...state.filtering,
-							biomes: state.filtering.biomes.filter((t) => t !== biome),
-						},
+						filtering: [
+							...state.filtering.slice(0, filterIndex),
+							{ ...targetFilter, filters: newFilters },
+							...state.filtering.slice(filterIndex + 1),
+						],
 					});
 				} else {
 					setState({
-						filtering: {
+						filtering: [
 							...state.filtering,
-							biomes: [...state.filtering.biomes, biome],
-						},
+							{
+								filters: [{ biome }],
+								required: false,
+								inverted: false,
+							},
+						],
 					});
 				}
 				setSettingsChanged(true);
 			},
 			updateFilteredBiomes(biomes: Biome[]) {
-				// Avoid setting the state if the biomes are the same
-				if (biomes.length === state.filtering.biomes.length && biomes.every((v, i) => v === state.filtering.biomes[i])) {
-					return;
-				}
+				// might want to check if the biomes are the same before setting the state.. but for now, just set it
 
-				setState({
-					filtering: {
-						...state.filtering,
-						biomes,
-					},
+				// 1. remove all biomes from the filters
+				const newFilters = state.filtering.map((filter) => {
+					const newFilters = filter.filters.filter((f) => !Object.keys(f).includes("biome"));
+					return { ...filter, filters: newFilters };
 				});
-				console.log("Updated biomes", biomes);
+				// 2. add the new biomes to the filters
+				const newFilter = {
+					filters: biomes.map((biome) => ({ biome })),
+					required: false,
+					inverted: false,
+				};
+				setState({
+					filtering: [...newFilters, newFilter],
+				});
 				setSettingsChanged(true);
 			},
 			updateFilteredLocations(locations: RawModuleLocation[]) {
-				setState({
-					filtering: {
-						...state.filtering,
-						locations,
-					},
+				// 1. remove all locations from the filters
+				const newFilters = state.filtering.map((filter) => {
+					const newFilters = filter.filters.filter((f) => !Object.keys(f).includes("location"));
+					return { ...filter, filters: newFilters };
 				});
-				console.log("Updated locations", locations);
+
+				// 2. add the new locations to the filters
+				const newFilter = {
+					filters: locations.map((location) => ({ location })),
+					required: false,
+					inverted: false,
+				};
+				setState({
+					filtering: [...newFilters, newFilter],
+				});
 				setSettingsChanged(true);
 			},
 			locationIncluded(location: RawModuleLocation, forParsing: boolean) {
 				if (forParsing) {
 					return state.parsing.locations.includes(location);
 				}
-				return state.filtering.locations.includes(location);
+				return isLocationIncluded(state.filtering, location);
 			},
 			toggleLocation(location: RawModuleLocation, forParsing: boolean) {
 				if (forParsing) {
@@ -609,39 +667,63 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
 						});
 					}
 				} else {
-					if (state.filtering.locations.includes(location)) {
+					if (isLocationIncluded(state.filtering, location)) {
+						// Find the filter that includes the location and remove it
+						const filterIndex = state.filtering.findIndex((filter) => isLocationIncluded([filter], location));
+						if (filterIndex === -1) {
+							console.error("Failed to find filter for location", location);
+							return;
+						}
+						const targetFilter = state.filtering[filterIndex];
+						const newFilters = targetFilter.filters.filter(
+							(f) => !(Object.keys(f).includes("location") && Object.values(f).includes(location)),
+						);
+						if (newFilters.length === targetFilter.filters.length) {
+							console.error("Failed to remove location from filter", location);
+							return;
+						}
 						setState({
-							filtering: {
-								...state.filtering,
-								locations: state.filtering.locations.filter((t) => t !== location),
-							},
+							filtering: [
+								...state.filtering.slice(0, filterIndex),
+								{ ...targetFilter, filters: newFilters },
+								...state.filtering.slice(filterIndex + 1),
+							],
 						});
 					} else {
 						setState({
-							filtering: {
+							filtering: [
 								...state.filtering,
-								locations: [...state.filtering.locations, location],
-							},
+								{
+									filters: [{ location }],
+									required: false,
+									inverted: false,
+								},
+							],
 						});
 					}
 				}
 				setSettingsChanged(true);
 			},
 			updateFilteredModules(modules: string[]) {
-				// Avoid setting the state if the modules are the same
-				if (modules.length === state.filtering.modules.length && modules.every((v, i) => v === state.filtering.modules[i])) {
-					return;
-				}
-
-				setState({
-					filtering: {
-						...state.filtering,
-						modules,
-					},
+				// 1. remove all modules from the filters
+				const newFilters = state.filtering.map((filter) => {
+					const newFilters = filter.filters.filter((f) => !Object.keys(f).includes("module"));
+					return { ...filter, filters: newFilters };
 				});
-				console.log("Updated modules", modules);
+
+				// 2. add the new modules to the filters
+				const newFilter = {
+					filters: modules.map((module) => ({ module })),
+					required: false,
+					inverted: false,
+				};
+				setState({
+					filtering: [...newFilters, newFilter],
+				});
+
 				setSettingsChanged(true);
 			},
+			// ---- Page Controls ----
 			nextPage() {
 				if (state.currentPage >= state.totalPages) {
 					setState("currentPage", state.totalPages);
@@ -672,6 +754,7 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
 			resetPage() {
 				setState("currentPage", 1);
 			},
+			// --- RESULT METADATA ---
 			setTotalResults(num: number) {
 				setState("totalResults", num);
 				// Guard against divide by zero
@@ -681,6 +764,7 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
 				}
 				setState("totalPages", Math.ceil(num / state.resultsPerPage));
 			},
+			// --- DIRECTORY SELECTION ---
 			openDirectorySelection() {
 				getDwarfDirectoryPath()
 					.then((directory) => {
