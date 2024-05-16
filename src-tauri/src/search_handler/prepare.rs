@@ -49,7 +49,7 @@ pub async fn parse_and_store_raws(
     module_info_storage: State<'_, ModuleInfoStorage>,
     app_handle: AppHandle,
 ) -> Result<(), ()> {
-    log::info!(
+    tracing::info!(
         "parse_and_store_raws: parsing raws with options\n{:#?}",
         options
     );
@@ -63,7 +63,7 @@ pub async fn parse_and_store_raws(
             info_vec.extend(result.info_files);
         }
         Err(e) => {
-            log::error!("Failure parsing: {e:?}");
+            tracing::error!("Failure parsing: {e:?}");
         }
     };
     let total_raws = raws_vec.len();
@@ -101,7 +101,7 @@ pub async fn parse_and_store_raws(
     let duration2_total = start.elapsed();
     let start3 = std::time::Instant::now();
     // Tracking data.
-    log::info!(
+    tracing::info!(
         "parse_and_store_raws: {} raws stored in {}; search lookup updated in {}; total time: {}; objects allowed: {:?}; locations: {:?}",
         total_raws,
         format!("{:?}", duration),
@@ -133,7 +133,7 @@ pub async fn parse_and_store_raws(
             },
         )
         .unwrap_or_else(|err| {
-            log::warn!("parse_and_store_raws: failed to emit progress event\n{err:?}");
+            tracing::warn!("parse_and_store_raws: failed to emit progress event\n{err:?}");
         });
 
     // Update the search lookup table
@@ -151,9 +151,9 @@ pub async fn parse_and_store_raws(
     summary.set_save_to_store_duration(duration2);
     summary.set_filtering_duration(duration3);
 
-    log::info!("{:#?}", summary);
+    tracing::info!("{:#?}", summary);
     window.emit("PARSE_SUMMARY", summary).unwrap_or_else(|err| {
-        log::warn!("parse_and_store_raws: failed to emit summary event\n{err:?}");
+        tracing::warn!("parse_and_store_raws: failed to emit summary event\n{err:?}");
     });
 
     Ok(())
@@ -221,7 +221,7 @@ fn update_search_lookup(storage: &State<Storage>) {
     #[allow(clippy::unwrap_used)]
     let current_length = storage.search_lookup.lock().unwrap().len();
 
-    log::info!(
+    tracing::info!(
         "update_search_lookup: Search Tables Updates. Previous: {} entries Current: {} entries\nTimes: reset: {}, clone: {}, filter: {}, total: {}",
         previous_length,
         current_length,
@@ -264,7 +264,7 @@ fn update_graphics_store(storage: &State<Storage>, graphics_storage: &State<Grap
     }
     let duration = start.elapsed();
 
-    log::info!(
+    tracing::info!(
         "update_graphics_store: Graphics Store Updated. Total: {} entries in {}",
         total_graphics,
         format!("{:?}", duration),
@@ -301,7 +301,7 @@ fn update_tile_page_store(storage: &State<Storage>, graphics_storage: &State<Gra
     }
     let duration = start.elapsed();
 
-    log::info!(
+    tracing::info!(
         "update_tile_page_store: Tile Page Store Updated. Total: {} entries in {}",
         total_tile_pages,
         format!("{:?}", duration),

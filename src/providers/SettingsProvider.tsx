@@ -3,7 +3,7 @@ import { message } from "@tauri-apps/plugin-dialog";
 import { Store as TauriStore } from "@tauri-apps/plugin-store";
 import { type JSX, type ParentProps, createContext, createEffect, createSignal, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
-import type { Biome, ObjectType, RawModuleLocation } from "../../src-tauri/bindings/Bindings";
+import type { Biome, ObjectType, RawModuleLocation, SearchFilter } from "../../src-tauri/bindings/Bindings";
 import { SETTINGS_DEFAULTS, SETTINGS_FILE_NAME } from "../lib/Constants";
 import { getDwarfDirectoryPath } from "../lib/DirectoryActions";
 
@@ -40,21 +40,13 @@ export type ParsingSettings = {
 
 export type FilteringSettings = {
 	/**
-	 * The object types to include when filtering results.
+	 * The tags to include when filtering results
+	 *
+	 * Todo!: implement a way to add SearchFilter based on the existing functions for the Settings Context
+	 *
+	 * Need to handle settings AND vs OR too..
 	 */
-	objectTypes: ObjectType[];
-	/**
-	 * The biomes to include when filtering results.
-	 */
-	biomes: Biome[];
-	/**
-	 * The locations to include when filtering results.
-	 */
-	locations: RawModuleLocation[];
-	/**
-	 * The modules to include when filtering results (by objectId).
-	 */
-	modules: string[];
+	tags: SearchFilter[];
 };
 
 export type SettingsStore = [

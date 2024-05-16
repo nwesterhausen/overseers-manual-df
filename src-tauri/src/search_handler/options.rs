@@ -2,6 +2,8 @@ use dfraw_json_parser::{biome::Token as Biome, ObjectType, RawModuleLocation};
 use serde::{Deserialize, Serialize};
 use specta::Type;
 
+use super::filtering::SearchFilter;
+
 /// Options for searching for objects in the game.
 #[derive(Serialize, Deserialize, Debug, Clone, Default, Type)]
 #[serde(rename_all = "camelCase")]
@@ -35,4 +37,7 @@ pub struct SearchOptions {
     pub only_egg_layers: bool,
     /// Default: false ; Requires creatures
     pub show_does_not_exist: bool,
+    /// Search filters to apply.
+    /// Default: None
+    pub filters: Vec<SearchFilter>,
 }

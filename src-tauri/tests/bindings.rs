@@ -17,6 +17,8 @@ fn generate_ts_bindings() {
 
     let bindings: Vec<String> = vec![
         export_type::<app_lib::search_handler::options::SearchOptions>(&config),
+        export_type::<app_lib::search_handler::filtering::Filter>(&config),
+        export_type::<app_lib::search_handler::filtering::SearchFilter>(&config),
         // Note that search_handler::results::SearchResults is not exported because it contains a Box<dyn RawObject>
         // which cannot be exported to TypeScript.
         //
