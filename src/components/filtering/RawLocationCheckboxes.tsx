@@ -1,7 +1,7 @@
 import type { Component } from "solid-js";
 import { useSettingsContext } from "../../providers/SettingsProvider";
 
-const RawLocationCheckboxes: Component<{ parsingOnly?: boolean }> = (props) => {
+const RawLocationCheckboxes: Component = () => {
 	const [_settings, { locationIncluded, toggleLocation }] = useSettingsContext();
 	return (
 		<>
@@ -12,8 +12,8 @@ const RawLocationCheckboxes: Component<{ parsingOnly?: boolean }> = (props) => {
 						type="checkbox"
 						class="toggle toggle-primary"
 						name="settingsEnableVanilla"
-						checked={locationIncluded("Vanilla", props.parsingOnly)}
-						onClick={() => toggleLocation("Vanilla", props.parsingOnly)}
+						checked={locationIncluded("Vanilla")}
+						onClick={() => toggleLocation("Vanilla")}
 					/>
 				</label>
 			</div>
@@ -24,8 +24,8 @@ const RawLocationCheckboxes: Component<{ parsingOnly?: boolean }> = (props) => {
 						type="checkbox"
 						class="toggle toggle-primary"
 						name="settingsEnableInstalled"
-						checked={locationIncluded("InstalledMods", props.parsingOnly)}
-						onClick={() => toggleLocation("InstalledMods", props.parsingOnly)}
+						checked={locationIncluded("InstalledMods")}
+						onClick={() => toggleLocation("InstalledMods")}
 					/>
 				</label>
 			</div>
@@ -36,8 +36,8 @@ const RawLocationCheckboxes: Component<{ parsingOnly?: boolean }> = (props) => {
 						type="checkbox"
 						class="toggle toggle-primary"
 						name="settingsEnableWorkshop"
-						checked={locationIncluded("Mods", props.parsingOnly)}
-						onClick={() => toggleLocation("Mods", props.parsingOnly)}
+						checked={locationIncluded("Mods")}
+						onClick={() => toggleLocation("Mods")}
 					/>
 				</label>
 			</div>

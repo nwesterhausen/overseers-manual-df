@@ -7,11 +7,11 @@ import { useRawsProvider } from "../../providers/RawsProvider";
 import { useSettingsContext } from "../../providers/SettingsProvider";
 
 const ModuleFiltering: Component = () => {
-	const [settings, { updateFilteredModules }] = useSettingsContext();
+	const [settings, { updateParsedModules }] = useSettingsContext();
 	const rawsContext = useRawsProvider();
 	const [values, setValues] = createSignal<ModuleItem[]>([]);
 	createEffect(() => {
-		updateFilteredModules(values().map((module) => module.objectId));
+		updateParsedModules(values().map((module) => module.objectId));
 	});
 
 	type Category = {
@@ -19,7 +19,7 @@ const ModuleFiltering: Component = () => {
 		options: ModuleItem[];
 	};
 	const options = createMemo<Category[]>(() => {
-		return settings.filtering.locations.map((location) => {
+		return settings.parsing.locations.map((location) => {
 			return {
 				location,
 				options: rawsContext.rawModulesInfo.latest

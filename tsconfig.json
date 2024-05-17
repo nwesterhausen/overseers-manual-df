@@ -1,29 +1,32 @@
 {
 	"compilerOptions": {
 		"target": "ES2020",
+		"useDefineForClassFields": true,
 		"module": "ESNext",
-		"moduleResolution": "node",
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true,
+		"lib": [
+			"ES2020",
+			"DOM",
+			"DOM.Iterable"
+		],
+		"skipLibCheck": true,
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js",
 		"types": [
-			"vite/client"
+			"bun-types"
 		],
-		"noEmit": true,
-		"isolatedModules": true
 	},
 	"include": [
-		"src-tauri/bindings/Bindings.d.ts",
-		"src/**/*.{ts,tsx}",
-		"index.html"
+		"src"
 	],
-	"exclude": [
-		"node_modules",
-		"dist"
-	],
-	"files": [
-		"src-tauri/bindings/Bindings.d.ts",
-		"index.html"
+	"references": [
+		{
+			"path": "./tsconfig.node.json"
+		}
 	]
 }

@@ -41,30 +41,30 @@ const ParsingProgressBar: Component = () => {
 					<li
 						class="step"
 						classList={{
-							"step-neutral": !locationIncluded("Vanilla", true),
+							"step-neutral": !locationIncluded("Vanilla"),
 							"step-success": progress.vanilla,
 						}}
-						data-content={locationIncluded("Vanilla", true) ? "2" : "✗"}
+						data-content={locationIncluded("Vanilla") ? "2" : "✗"}
 					>
 						Parse Vanilla Raws
 					</li>
 					<li
 						class="step"
 						classList={{
-							"step-neutral": !locationIncluded("InstalledMods", true),
+							"step-neutral": !locationIncluded("InstalledMods"),
 							"step-success": progress.installed,
 						}}
-						data-content={locationIncluded("InstalledMods", true) ? "2" : "✗"}
+						data-content={locationIncluded("InstalledMods") ? "2" : "✗"}
 					>
 						Parse Installed Mods Raws
 					</li>
 					<li
 						class="step"
 						classList={{
-							"step-neutral": !locationIncluded("Mods", true),
+							"step-neutral": !locationIncluded("Mods"),
 							"step-success": progress.downloaded,
 						}}
-						data-content={locationIncluded("Mods", true) ? "2" : "✗"}
+						data-content={locationIncluded("Mods") ? "2" : "✗"}
 					>
 						Parse Downloaded Mods Raws
 					</li>

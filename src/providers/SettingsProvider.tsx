@@ -53,10 +53,6 @@ export type SettingsStore = [
 		 */
 		parsing: ParsingSettings;
 		/**
-		 * Filtering settings.
-		 */
-		filtering: SearchFilter[];
-		/**
 		 * Whether or not to display the results as a grid.
 		 */
 		layoutAsGrid: boolean;
@@ -102,34 +98,30 @@ export type SettingsStore = [
 		 * Check if a given object type is included. This can represent either parsing or filtering.
 		 *
 		 * @param type - The object type to check
-		 * @param forParsing - Whether or not to only check parsing. By default, this is false (and it will check filtering).
 		 * @returns Whether or not the object type is included
 		 */
-		objectTypeIncluded: (type: ObjectType, forParsing: boolean) => boolean;
+		objectTypeIncluded: (type: ObjectType) => boolean;
 		/**
 		 * Toggle a given object type. This can affect either parsing or filtering.
 		 *
 		 * @param type - The object type to toggle
-		 * @param forParsing - Whether or not to only affect parsing. By default, this is false (and it will affect filtering).
 		 * @returns void
 		 */
-		toggleObjectType: (type: ObjectType, forParsing: boolean) => void;
+		toggleObjectType: (type: ObjectType) => void;
 		/**
 		 * Check if a given location is included. This can represent either parsing or filtering.
 		 *
 		 * @param type - The location to check
-		 * @param forParsing - Whether or not to only check parsing. By default, this is false (and it will check filtering).
 		 * @returns Whether or not the location is included
 		 */
-		locationIncluded: (type: RawModuleLocation, forParsing: boolean) => boolean;
+		locationIncluded: (type: RawModuleLocation) => boolean;
 		/**
 		 * Toggle a given location. This can affect either parsing or filtering.
 		 *
 		 * @param type - The location to toggle
-		 * @param forParsing - Whether or not to only affect parsing. By default, this is false (and it will affect filtering).
 		 * @returns void
 		 */
-		toggleLocation: (type: RawModuleLocation, forParsing: boolean) => void;
+		toggleLocation: (type: RawModuleLocation) => void;
 		/**
 		 * Set the path to the game directory.
 		 *
@@ -145,26 +137,19 @@ export type SettingsStore = [
 		 */
 		resetToDefaults: () => void;
 		/**
-		 * Add biomes to the list of biomes to filter in the results.
-		 *
-		 * @param biomes - The biomes to add
-		 * @returns void
-		 */
-		updateFilteredBiomes: (biomes: Biome[]) => void;
-		/**
 		 * Add locations to the list of locations to filter in the results.
 		 *
 		 * @param locations - The locations to add
 		 * @returns void
 		 */
-		updateFilteredLocations: (locations: RawModuleLocation[]) => void;
+		updateParsedLocations: (locations: RawModuleLocation[]) => void;
 		/**
 		 * Add modules to the list of modules to filter in the results.
 		 *
 		 * @param modules - The modules to add
 		 * @returns void
 		 */
-		updateFilteredModules: (modules: string[]) => void;
+		updateParsedModules: (modules: string[]) => void;
 		// These are for page-related functions
 		/**
 		 * Load the next page of results.
@@ -250,30 +235,27 @@ const SettingsContext = createContext<SettingsStore>([
 		setDirectoryPath(path: string) {
 			console.log("Un-initialized settings provider.", path);
 		},
-		objectTypeIncluded(type: ObjectType, parsingOnly: boolean) {
-			console.log("Un-initialized settings provider.", type, parsingOnly);
+		objectTypeIncluded(type: ObjectType) {
+			console.log("Un-initialized settings provider.", type);
 			return false;
 		},
-		toggleObjectType(type: ObjectType, parsingOnly: boolean) {
-			console.log("Un-initialized settings provider.", type, parsingOnly);
+		toggleObjectType(type: ObjectType) {
+			console.log("Un-initialized settings provider.", type);
 		},
 		resetToDefaults() {
 			console.log("Un-initialized settings provider.");
 		},
-		updateFilteredBiomes(biomes: string[]) {
-			console.log("Un-initialized settings provider.", biomes);
-		},
-		updateFilteredLocations(locations: RawModuleLocation[]) {
+		updateParsedLocations(locations: RawModuleLocation[]) {
 			console.log("Un-initialized settings provider.", locations);
 		},
-		locationIncluded(location: RawModuleLocation, parsingOnly: boolean) {
-			console.log("Un-initialized settings provider.", location, parsingOnly);
+		locationIncluded(location: RawModuleLocation) {
+			console.log("Un-initialized settings provider.", location);
 			return false;
 		},
-		toggleLocation(location: RawModuleLocation, parsingOnly: boolean) {
-			console.log("Un-initialized settings provider.", location, parsingOnly);
+		toggleLocation(location: RawModuleLocation) {
+			console.log("Un-initialized settings provider.", location);
 		},
-		updateFilteredModules(modules: string[]) {
+		updateParsedModules(modules: string[]) {
 			console.log("Un-initialized settings provider.", modules);
 		},
 		nextPage() {
@@ -491,236 +473,57 @@ export function SettingsProvider(props: ParentProps): JSX.Element {
 				setState({ ...SETTINGS_DEFAULTS });
 				setSettingsChanged(true);
 			},
-			addSearchFilter(filter: SearchFilter) {
-				setState({
-					filtering: [...state.filtering, filter],
-				});
-				setSettingsChanged(true);
+			objectTypeIncluded(type: ObjectType) {
+				return state.parsing.objectTypes.includes(type);
 			},
-			removeSearchFilter(index: number) {
-				const original_length = state.filtering.length;
-				setState({
-					filtering: state.filtering.filter((_, i) => i !== index),
-				});
-				if (original_length === state.filtering.length) {
-					console.error("Failed to remove search filter at index", index);
-					return;
-				}
-				setSettingsChanged(true);
-			},
-			// -- Ways to check which filters are enabled --
-			objectTypeIncluded(type: ObjectType, parsingOnly: boolean) {
-				if (parsingOnly) {
-					return state.parsing.objectTypes.includes(type);
-				}
-				return isObjectTypeIncluded(state.filtering, type);
-			},
-			toggleObjectType(type: ObjectType, parsingOnly: boolean) {
-				if (parsingOnly) {
-					if (state.parsing.objectTypes.includes(type)) {
-						setState({
-							parsing: {
-								...state.parsing,
-								objectTypes: state.parsing.objectTypes.filter((t) => t !== type),
-							},
-						});
-					} else {
-						setState({
-							parsing: {
-								...state.parsing,
-								objectTypes: [...state.parsing.objectTypes, type],
-							},
-						});
-					}
-				} else {
-					if (isObjectTypeIncluded(state.filtering, type)) {
-						// Find the filter that includes the object type and remove it
-						const filterIndex = state.filtering.findIndex((filter) => isObjectTypeIncluded([filter], type));
-						if (filterIndex === -1) {
-							console.error("Failed to find filter for object type", type);
-							return;
-						}
-						const targetFilter = state.filtering[filterIndex];
-						const newFilters = targetFilter.filters.filter((f) => !(Object.keys(f).includes("object") && Object.values(f).includes(type)));
-						if (newFilters.length === targetFilter.filters.length) {
-							console.error("Failed to remove object type from filter", type);
-							return;
-						}
-						setState({
-							filtering: [
-								...state.filtering.slice(0, filterIndex),
-								{ ...targetFilter, filters: newFilters },
-								...state.filtering.slice(filterIndex + 1),
-							],
-						});
-					} else {
-						setState({
-							filtering: [
-								...state.filtering,
-								{
-									filters: [{ object: type }],
-									required: false,
-									inverted: false,
-								},
-							],
-						});
-					}
-				}
-				setSettingsChanged(true);
-			},
-			biomeIncluded(biome: Biome) {
-				return isBiomeIncluded(state.filtering, biome);
-			},
-			toggleBiome(biome: Biome) {
-				if (isBiomeIncluded(state.filtering, biome)) {
-					// Find the filter that includes the biome and remove it
-					const filterIndex = state.filtering.findIndex((filter) => isBiomeIncluded([filter], biome));
-					if (filterIndex === -1) {
-						console.error("Failed to find filter for biome", biome);
-						return;
-					}
-					const targetFilter = state.filtering[filterIndex];
-					const newFilters = targetFilter.filters.filter((f) => !(Object.keys(f).includes("biome") && Object.values(f).includes(biome)));
-					if (newFilters.length === targetFilter.filters.length) {
-						console.error("Failed to remove biome from filter", biome);
-						return;
-					}
+			toggleObjectType(type: ObjectType) {
+				if (state.parsing.objectTypes.includes(type)) {
 					setState({
-						filtering: [
-							...state.filtering.slice(0, filterIndex),
-							{ ...targetFilter, filters: newFilters },
-							...state.filtering.slice(filterIndex + 1),
-						],
+						parsing: {
+							...state.parsing,
+							objectTypes: state.parsing.objectTypes.filter((t) => t !== type),
+						},
 					});
 				} else {
 					setState({
-						filtering: [
-							...state.filtering,
-							{
-								filters: [{ biome }],
-								required: false,
-								inverted: false,
-							},
-						],
+						parsing: {
+							...state.parsing,
+							objectTypes: [...state.parsing.objectTypes, type],
+						},
 					});
 				}
-				setSettingsChanged(true);
-			},
-			updateFilteredBiomes(biomes: Biome[]) {
-				// might want to check if the biomes are the same before setting the state.. but for now, just set it
 
-				// 1. remove all biomes from the filters
-				const newFilters = state.filtering.map((filter) => {
-					const newFilters = filter.filters.filter((f) => !Object.keys(f).includes("biome"));
-					return { ...filter, filters: newFilters };
-				});
-				// 2. add the new biomes to the filters
-				const newFilter = {
-					filters: biomes.map((biome) => ({ biome })),
-					required: false,
-					inverted: false,
-				};
-				setState({
-					filtering: [...newFilters, newFilter],
-				});
 				setSettingsChanged(true);
 			},
-			updateFilteredLocations(locations: RawModuleLocation[]) {
-				// 1. remove all locations from the filters
-				const newFilters = state.filtering.map((filter) => {
-					const newFilters = filter.filters.filter((f) => !Object.keys(f).includes("location"));
-					return { ...filter, filters: newFilters };
-				});
-
-				// 2. add the new locations to the filters
-				const newFilter = {
-					filters: locations.map((location) => ({ location })),
-					required: false,
-					inverted: false,
-				};
-				setState({
-					filtering: [...newFilters, newFilter],
-				});
-				setSettingsChanged(true);
+			locationIncluded(location: RawModuleLocation) {
+				return state.parsing.locations.includes(location);
 			},
-			locationIncluded(location: RawModuleLocation, forParsing: boolean) {
-				if (forParsing) {
-					return state.parsing.locations.includes(location);
-				}
-				return isLocationIncluded(state.filtering, location);
-			},
-			toggleLocation(location: RawModuleLocation, forParsing: boolean) {
-				if (forParsing) {
-					if (state.parsing.locations.includes(location)) {
-						setState({
-							parsing: {
-								...state.parsing,
-								locations: state.parsing.locations.filter((t) => t !== location),
-							},
-						});
-					} else {
-						setState({
-							parsing: {
-								...state.parsing,
-								locations: [...state.parsing.locations, location],
-							},
-						});
-					}
+			toggleLocation(location: RawModuleLocation) {
+				if (state.parsing.locations.includes(location)) {
+					setState({
+						parsing: {
+							...state.parsing,
+							locations: state.parsing.locations.filter((t) => t !== location),
+						},
+					});
 				} else {
-					if (isLocationIncluded(state.filtering, location)) {
-						// Find the filter that includes the location and remove it
-						const filterIndex = state.filtering.findIndex((filter) => isLocationIncluded([filter], location));
-						if (filterIndex === -1) {
-							console.error("Failed to find filter for location", location);
-							return;
-						}
-						const targetFilter = state.filtering[filterIndex];
-						const newFilters = targetFilter.filters.filter(
-							(f) => !(Object.keys(f).includes("location") && Object.values(f).includes(location)),
-						);
-						if (newFilters.length === targetFilter.filters.length) {
-							console.error("Failed to remove location from filter", location);
-							return;
-						}
-						setState({
-							filtering: [
-								...state.filtering.slice(0, filterIndex),
-								{ ...targetFilter, filters: newFilters },
-								...state.filtering.slice(filterIndex + 1),
-							],
-						});
-					} else {
-						setState({
-							filtering: [
-								...state.filtering,
-								{
-									filters: [{ location }],
-									required: false,
-									inverted: false,
-								},
-							],
-						});
-					}
+					setState({
+						parsing: {
+							...state.parsing,
+							locations: [...state.parsing.locations, location],
+						},
+					});
 				}
+
 				setSettingsChanged(true);
 			},
-			updateFilteredModules(modules: string[]) {
-				// 1. remove all modules from the filters
-				const newFilters = state.filtering.map((filter) => {
-					const newFilters = filter.filters.filter((f) => !Object.keys(f).includes("module"));
-					return { ...filter, filters: newFilters };
-				});
-
-				// 2. add the new modules to the filters
-				const newFilter = {
-					filters: modules.map((module) => ({ module })),
-					required: false,
-					inverted: false,
-				};
+			updateParsedModules(modules: string[]) {
 				setState({
-					filtering: [...newFilters, newFilter],
+					parsing: {
+						...state.parsing,
+						rawModules: modules,
+					},
 				});
-
 				setSettingsChanged(true);
 			},
 			// ---- Page Controls ----

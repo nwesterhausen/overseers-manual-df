@@ -143,6 +143,7 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
 			modules: settings.filtering.modules,
 			onlyEggLayers: onlyEggLayers(),
 			showDoesNotExist: showDoesNotExist(),
+			filters: settings.filtering,
 		};
 
 		// Todo: include advanced filtering options (tags) once supported by the backend

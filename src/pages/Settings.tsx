@@ -16,9 +16,9 @@ function Settings(): JSX.Element {
 		async () => {
 			const baseDir = await appDataDir();
 			if (baseDir.indexOf("\\") !== -1) {
-				return baseDir + "\\settings.json";
+				return `${baseDir}\\settings.json`;
 			}
-			return baseDir + "/settings.json";
+			return `${baseDir}/settings.json`;
 		},
 		{ initialValue: "" },
 	);
@@ -32,13 +32,13 @@ function Settings(): JSX.Element {
 
 				<legend class="font-semibold text-md my-1">Locations</legend>
 				<div class="grid grid-cols-1 sm:grid-cols-2 mb-3">
-					<RawLocationCheckboxes parsingOnly />
+					<RawLocationCheckboxes />
 				</div>
 				<hr class="mt-4 opacity-25" />
 
 				<legend class="font-semibold text-md my-1">Object Type Inclusion</legend>
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-3">
-					<RawTypeCheckboxes parsingOnly />
+					<RawTypeCheckboxes />
 				</div>
 				<hr class="mt-4 opacity-25" />
 
@@ -66,6 +66,7 @@ function Settings(): JSX.Element {
 						<div class="p-2 text-slate-400 text-opacity-75 flex-grow">{`${settingsFilePath.latest}`}</div>
 						<div class="tooltip tooltip-left" data-tip="Show in Explorer">
 							<button
+								type="button"
 								class="btn btn-sm btn-primary btn-outline border-none"
 								onClick={() => {
 									invoke(COMMAND_SHOW_IN_FOLDER, {
@@ -80,7 +81,7 @@ function Settings(): JSX.Element {
 					<SavedSettingsDataTable />
 				</div>
 				<div class="flex justify-around my-2">
-					<button class="btn btn-sm btn-error self-center" onClick={() => resetToDefaults()}>
+					<button type="button" class="btn btn-sm btn-error self-center" onClick={() => resetToDefaults()}>
 						Clear All Stored Data (Reset to Defaults)
 					</button>
 				</div>
