@@ -1,8 +1,8 @@
 import { type Component, For, Show } from "solid-js";
 import { STS_IDLE } from "../lib/Constants";
 import { useRawsProvider } from "../providers/RawsProvider";
-import DynamicCard from "./DynamicCard";
 import { useSearchProvider } from "../providers/SearchProvider";
+import DynamicCard from "./DynamicCard";
 
 const Listings: Component = () => {
 	const rawsContext = useRawsProvider();

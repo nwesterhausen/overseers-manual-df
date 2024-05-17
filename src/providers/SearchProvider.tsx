@@ -3,13 +3,13 @@
  * This takes into account not only the search string, but also the advanced filtering options.
  */
 import { createContextProvider } from "@solid-primitives/context";
+import { invoke } from "@tauri-apps/api/core";
+import { getCurrent } from "@tauri-apps/api/window";
 import { createEffect, createMemo, createResource, createSignal } from "solid-js";
 import type { SearchOptions } from "../../src-tauri/bindings/Bindings";
-import { useSettingsContext } from "./SettingsProvider";
-import { getCurrent } from "@tauri-apps/api/window";
-import { invoke } from "@tauri-apps/api/core";
 import type { SearchResults } from "../definitions/SearchResults";
 import { COMMAND_SEARCH_RAWS, DEFAULT_SEARCH_RESULT } from "../lib/Constants";
+import { useSettingsContext } from "./SettingsProvider";
 
 export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
 	/**

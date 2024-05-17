@@ -9,9 +9,9 @@
  */
 import { createContextProvider } from "@solid-primitives/context";
 import { invoke } from "@tauri-apps/api/core";
+import { getCurrent } from "@tauri-apps/api/window";
 import { createEffect, createResource, createSignal } from "solid-js";
-import { useSearchProvider } from "./SearchProvider";
-import { useSettingsContext } from "./SettingsProvider";
+import type { InfoFile, ObjectType, ParserOptions, ProgressPayload, Summary } from "../../src-tauri/bindings/Bindings";
 import {
 	COMMAND_GET_RAWS_INFO,
 	COMMAND_PARSE_AND_STORE_RAWS,
@@ -23,8 +23,8 @@ import {
 	STS_IDLE,
 	STS_PARSING,
 } from "../lib/Constants";
-import { getCurrent } from "@tauri-apps/api/window";
-import type { InfoFile, ObjectType, ParserOptions, ProgressPayload, Summary } from "../../src-tauri/bindings/Bindings";
+import { useSearchProvider } from "./SearchProvider";
+import { useSettingsContext } from "./SettingsProvider";
 
 const [RawsProvider, useRawsProvider] = createContextProvider(() => {
 	/**

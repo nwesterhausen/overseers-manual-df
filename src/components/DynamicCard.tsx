@@ -57,7 +57,7 @@ const DynamicCard: Component<{ raw: Raw }> = (props) => {
 				<div>
 					<div class="card-title">{nameForRaw(props.raw)}</div>
 					<Show
-						when={props.raw && props.raw.metadata && props.raw.metadata.moduleName && props.raw.metadata.moduleVersion}
+						when={props.raw?.metadata?.moduleName && props.raw.metadata.moduleVersion}
 						fallback={<div class="text-muted italic text-xs">No metadata {props.raw.objectId}</div>}
 					>
 						<div class="text-muted italic text-xs">

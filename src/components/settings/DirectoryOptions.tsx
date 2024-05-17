@@ -12,6 +12,7 @@ function DirectoryOptions(): JSX.Element {
 				<span class="label">Current Dwarf Fortress Directory:</span>
 				<div class="tooltip" data-tip="Show in Explorer">
 					<button
+						type="button"
 						class="btn btn-sm btn-primary btn-outline border-none"
 						onClick={() => {
 							invoke(COMMAND_SHOW_IN_FOLDER, {
@@ -26,6 +27,7 @@ function DirectoryOptions(): JSX.Element {
 			</div>
 			<div class="flex justify-around my-2">
 				<button
+					type="button"
 					class="btn btn-sm btn-error btn-outline"
 					onClick={async () => {
 						resetDirectorySelection();
@@ -34,6 +36,7 @@ function DirectoryOptions(): JSX.Element {
 					Clear Dwarf Fortress Directory
 				</button>
 				<button
+					type="button"
 					class="btn btn-sm btn-primary"
 					onClick={async () => {
 						openDirectorySelection();

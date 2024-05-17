@@ -13,12 +13,13 @@ const RawModuleFilter: Component = () => {
 				<div class="me-2 font-bold flex-1 align-middle">Enabled Raw Modules</div>
 				<div class="m-2 join">
 					<button
+						type="button"
 						class="btn join-item btn-xs btn-secondary"
 						onClick={() => searchContext.addFilteredModule(rawsContext.rawModulesInfo.latest.map((m) => m.identifier))}
 					>
 						Uncheck All
 					</button>
-					<button class="btn join-item btn-xs btn-error" onClick={searchContext.removeAllFilteredModules}>
+					<button type="button" class="btn join-item btn-xs btn-error" onClick={searchContext.removeAllFilteredModules}>
 						Reset
 					</button>
 				</div>

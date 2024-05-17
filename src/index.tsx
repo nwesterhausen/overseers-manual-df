@@ -11,6 +11,7 @@ import { attachConsole } from "@tauri-apps/plugin-log";
 import { UpdateProvider } from "./providers/UpdateProvider";
 
 import { lazy } from "solid-js";
+import type { ParentComponent } from "solid-js";
 import MenuBar from "./components/menu/MenuBar";
 import ReferenceManual from "./pages/ReferenceManual";
 const Settings = lazy(() => import("./pages/Settings"));
@@ -19,12 +20,12 @@ const UpdateDetails = lazy(() => import("./pages/UpdateDetails"));
 
 // Attach our console to the tauri logs
 try {
-	const detach = await attachConsole();
+	const _detach = await attachConsole();
 } catch (e) {
 	console.log("Failed to attach console:", e);
 }
 
-const App = (props) => (
+const App: ParentComponent = (props) => (
 	<SettingsProvider>
 		<SearchProvider>
 			<RawsProvider>

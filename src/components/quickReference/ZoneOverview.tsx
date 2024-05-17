@@ -6,7 +6,7 @@ const ZoneOverview: Component = () => {
 			<div class="menu bg-base-200 w-56 rounded-box">
 				<h2>Quick Game Reference</h2>
 				<li>
-					<a class="disabled">Zones</a>
+					<h4>Zones</h4>
 					<ul>
 						<li>
 							<a href="#animal-training">Animal Training</a>

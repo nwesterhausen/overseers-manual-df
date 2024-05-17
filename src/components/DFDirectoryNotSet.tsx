@@ -7,7 +7,7 @@ function DFDirectoryNotSet(): JSX.Element {
 	return (
 		<div class="hero min-h-fit pt-16">
 			<div class="hero-content flex-col md:flex-row">
-				<img src="/icon.png" class="max-w-sm" />
+				<img alt="app logo" src="/icon.png" class="max-w-sm" />
 				<div>
 					<h1 class="text-5xl font-bold">Overseer's Reference Manual</h1>
 					<p class="py-6">
@@ -20,6 +20,7 @@ function DFDirectoryNotSet(): JSX.Element {
 					</p>
 					<div class="float-right mt-8">
 						<button
+							type="button"
 							class="btn btn-primary"
 							onClick={() => {
 								openDirectorySelection();

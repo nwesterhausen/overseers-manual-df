@@ -59,7 +59,12 @@ const BiomeFiltering: Component = () => {
 												<span class="text-xs cursor-default truncate" title={option.label} onPointerDown={(e) => e.stopPropagation()}>
 													{option.label}
 												</span>
-												<button class="hover:text-error tooltip tooltip-left" data-tip="Remove" onClick={() => state.remove(option)}>
+												<button
+													type="button"
+													class="hover:text-error tooltip tooltip-left"
+													data-tip="Remove"
+													onClick={() => state.remove(option)}
+												>
 													<BiRegularX />
 												</button>
 											</div>
@@ -76,6 +81,7 @@ const BiomeFiltering: Component = () => {
 										</Combobox.Icon>
 									</Combobox.Trigger>
 									<button
+										type="button"
 										class="bg-error hover:text-black/50 rounded self-center tooltip tooltip-left"
 										data-tip="Clear All"
 										onPointerDown={(e) => e.stopPropagation()}

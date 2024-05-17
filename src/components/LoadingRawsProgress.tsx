@@ -7,7 +7,7 @@ const LoadingRawsProgress: Component = () => {
 	return (
 		<Show when={rawsContext.parsingStatus() === STS_LOADING}>
 			<div class="join gap-3">
-				<span class="loading loading-ring loading-sm"></span>
+				<span class="loading loading-ring loading-sm" />
 				<span>Sorting, combining and loading raws...</span>
 			</div>
 		</Show>

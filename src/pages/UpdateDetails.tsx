@@ -21,6 +21,7 @@ function UpdateDetails(): JSX.Element {
 			</p>
 			<div class="flex flex-row justify-between">
 				<button
+					type="button"
 					class="btn btn-secondary"
 					onClick={() => {
 						updateContext.skipUpdate();
@@ -30,6 +31,7 @@ function UpdateDetails(): JSX.Element {
 					Skip this version
 				</button>
 				<button
+					type="button"
 					class="btn btn-primary"
 					onClick={async () => {
 						await updateContext.applyUpdate();

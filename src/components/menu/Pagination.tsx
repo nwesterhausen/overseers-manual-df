@@ -1,6 +1,6 @@
 import { For, type JSX, Show, createMemo } from "solid-js";
-import { useSettingsContext } from "../../providers/SettingsProvider";
 import { useSearchProvider } from "../../providers/SearchProvider";
+import { useSettingsContext } from "../../providers/SettingsProvider";
 
 function Pagination(): JSX.Element {
 	const [settings, { gotoPage, nextPage, prevPage }] = useSettingsContext();
