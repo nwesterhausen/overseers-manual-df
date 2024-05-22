@@ -83,7 +83,7 @@ jobs:
           bun install
           bun run build
       - name: Build the Tauri App
-        uses: tauri-apps/tauri-action@ede250cf1ae6fda99f9cd25bf92853221941d94c # dev
+        uses: tauri-apps/tauri-action@09fec517e6a3b0e1806532f2d9e17c364d05b26c # dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
