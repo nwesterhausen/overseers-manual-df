@@ -40,7 +40,7 @@ tracing = "0.1.26"
 tauri-plugin-updater = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
 
 [dependencies.tauri]
-version = "2.0.0-beta.17"
+version = "2.0.0-beta.20"
 features = ["protocol-asset"]
 
 # Required for adding invoke commands to tauri app
