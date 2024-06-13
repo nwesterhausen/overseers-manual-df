@@ -50,7 +50,7 @@ jobs:
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@2e7f9ec7921547d4b46598398ca573513895d0bd # v0.0.4
       - name: Rust setup
-        uses: dtolnay/rust-toolchain@d8352f6b1d2e870bc5716e7a6d9b65c4cc244a1a # master
+        uses: dtolnay/rust-toolchain@21dc36fb71dd22e3317045c0c31a3f4249868b17 # master
         with:
           toolchain: stable
       - name: Install Client Dependencies & Build
@@ -109,7 +109,7 @@ jobs:
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@2e7f9ec7921547d4b46598398ca573513895d0bd # v0.0.4
       - name: Rust setup
-        uses: dtolnay/rust-toolchain@d8352f6b1d2e870bc5716e7a6d9b65c4cc244a1a # master
+        uses: dtolnay/rust-toolchain@21dc36fb71dd22e3317045c0c31a3f4249868b17 # master
         with:
           toolchain: stable
       - name: Run clippy
