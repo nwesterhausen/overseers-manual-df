@@ -1,4 +1,4 @@
-import type { BodySize, Caste, CasteTag, Creature } from "../../src-tauri/bindings/Bindings";
+import type { BodySize, Caste, CasteTag, Creature, CreatureTag } from "../../src-tauri/bindings/Bindings";
 import { SimplifyVolume, toTitleCase } from "./Utils";
 
 /**
@@ -9,6 +9,63 @@ import { SimplifyVolume, toTitleCase } from "./Utils";
  */
 export function IsEggLayer(creature: Creature): boolean {
 	return HasCasteTag(creature, "LaysEggs");
+}
+
+/**
+ * Turn a CreatureTag into a string
+ */
+export function TagToString(tag: CreatureTag): string {
+	if (typeof tag === "string") {
+		return tag;
+	}
+	const keys = Object.keys(tag);
+	if (keys.length === 0) {
+		return "";
+	}
+	const key = keys[0];
+
+	switch (key) {
+		case "AltTile":
+			return `Alt Tile: ${tag[key].character}`;
+		case "ApplyCreatureVariation":
+			return `Apply Creature Variation: ${tag[key].id} with ${tag[key].args.join(", ")}`;
+		case "Biome":
+			return `Biome: ${tag[key].id}`;
+		case "Caste":
+			return `Caste: ${tag[key].name}`;
+		case "ClusterNumber":
+			return `Cluster Number: ${tag[key].min} - ${tag[key].max}`;
+		case "CopyTagsFrom":
+			return `Copy Tags From: ${tag[key].creature}`;
+		case "CreatureSoldierTile":
+			return `Soldier Tile: ${tag[key].character}`;
+		case "Color":
+			return `Color: f:${tag[key].foreground}, b:${tag[key].background}, br:${tag[key].brightness}`;
+		case "Frequency":
+			return `Frequency: ${tag[key].frequency}`;
+		case "GeneralBabyName":
+			return `General Baby Name: ${tag[key].singular}, ${tag[key].plural}`;
+		case "GeneralChildName":
+			return `General Child Name: ${tag[key].singular}, ${tag[key].plural}`;
+		case "GlowColor":
+			return `Glow Color: f:${tag[key].foreground}, b:${tag[key].background}, br:${tag[key].brightness}`;
+		case "GlowTile":
+			return `Glow Tile: ${tag[key].character}`;
+		case "GoToTag":
+			return `GoToTag: ${tag[key].tag}`;
+		case "HarvestProduct":
+			return `Harvest Product: ${tag[key].number} ${tag[key].item_tokens.join(", ")} every ${tag[key].time}`;
+		case "Name":
+			return `Name: ${tag[key].name}, ${tag[key].plural_name}, ${tag[key].adjective}`;
+		case "PlusMaterial":
+			return `Plus Material: ${tag[key].material}`;
+		case "PopulationNumber":
+			return `Population Number: ${tag[key].min} - ${tag[key].max}`;
+		case "PrefString":
+			return `Pref String: ${tag[key].pref_string}`;
+		default:
+			return key;
+	}
 }
 
 /**
@@ -59,14 +116,16 @@ export function EggLayingStatus(creature: Creature): string {
 	}
 	const ret: string[] = [];
 	for (const caste of creature.castes) {
-		if (caste.eggSize > 0) {
-			ret.push(
-				`${toTitleCase(caste.identifier)}s lay ${caste.clutchSize.join(" - ")} eggs with volume ${SimplifyVolume(
-					caste.eggSize,
-				)}.`,
-			);
-		} else {
-			ret.push(`${toTitleCase(caste.identifier)}s lay ${caste.clutchSize.join(" - ")} eggs.`);
+		if (caste.clutchSize && Array.isArray(caste.clutchSize)) {
+			if (caste.eggSize > 0) {
+				ret.push(
+					`${toTitleCase(caste.identifier)}s lay ${
+						caste.clutchSize !== null ? caste.clutchSize.join(" - ") : 0
+					} eggs with volume ${SimplifyVolume(caste.eggSize)}.`,
+				);
+			} else {
+				ret.push(`${toTitleCase(caste.identifier)}s lay ${caste.clutchSize.join(" - ")} eggs.`);
+			}
 		}
 	}
 	return ret.join(" ");
@@ -83,7 +142,11 @@ export function LifeExpectancyStatus(creature: Creature): string {
 	if (Array.isArray(creature.castes)) {
 		for (const caste of creature.castes) {
 			if (caste.maxAge && caste.maxAge.length > 1 && caste.maxAge[0] > 0 && caste.maxAge[1] > 0) {
-				ret.push(`${caste} lives ${caste.maxAge.join(" - ")} years.`);
+				if (caste.identifier === "ALL") {
+					ret.push(`${caste.maxAge.join(" - ")} years.`);
+				} else {
+					ret.push(`${caste.identifier} lives ${caste.maxAge.join(" - ")} years.`);
+				}
 			}
 		}
 	}
@@ -260,9 +323,9 @@ export function CasteTrainableStatus(caste: Caste): string {
 	}
 
 	if (strArr.length) {
-		return `Trainable for ${strArr.join(" and ")}.`;
+		return `${caste.identifier}: trainable for ${strArr.join(" and ")}.`;
 	}
-	return "Not trainable.";
+	return "Not trainable";
 }
 
 /**

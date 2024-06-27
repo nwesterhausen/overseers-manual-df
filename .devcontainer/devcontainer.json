@@ -1,56 +1,55 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.236.0/containers/debian
 {
-  "name": "Rust",
-  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-  "image": "ghcr.io/devcontainers/features/rust:1@sha256:aba6f47303b197976902bf544c786b5efecc03c238ff593583e5e74dfa9c7ccb",
+	"name": "Rust",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "ghcr.io/devcontainers/features/rust:1@sha256:aba6f47303b197976902bf544c786b5efecc03c238ff593583e5e74dfa9c7ccb",
 
-  // Use 'mounts' to make the cargo cache persistent in a Docker Volume.
-  "mounts": [
-    {
-      "source": "devcontainer-cargo-cache-${devcontainerId}",
-      "target": "/usr/local/cargo",
-      "type": "volume"
-    }
-  ],
+	// Use 'mounts' to make the cargo cache persistent in a Docker Volume.
+	"mounts": [
+		{
+			"source": "devcontainer-cargo-cache-${devcontainerId}",
+			"target": "/usr/local/cargo",
+			"type": "volume"
+		}
+	],
 
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  // "forwardPorts": [],
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
 
-  // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
-  // "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
+	// Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
+	// "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
 
-  // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
-  "runArgs": ["--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined"],
+	// Uncomment when using a ptrace-based debugger like C++, Go, and Rust
+	"runArgs": ["--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined"],
 
-  // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-  "remoteUser": "vscode",
-  "features": {
-    "node": "lts",
-    "rust": "latest",
-    "ghcr.io/devcontainers/features/node:1@sha256:6c4f444d8e3eb68594d60ec128bce76a80647edc2b9a94960ca377895855145f": {
-      "nodeGypDependencies": true,
-      "version": "lts",
-      "nvmVersion": "latest"
-    },
-    "ghcr.io/devcontainers/features/rust:1@sha256:aba6f47303b197976902bf544c786b5efecc03c238ff593583e5e74dfa9c7ccb": {
-      "version": "latest",
-      "profile": "minimal"
-    }
-  },
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "rust-lang.rust-analyzer",
-        "aaron-bond.better-comments",
-        "serayuzgur.crates",
-        "mikestead.dotenv",
-        "tamasfe.even-better-toml",
-        "tauri-apps.tauri-vscode"
-      ]
-    }
-  },
-  "updateContentCommand": "pnpm i && cargo install tauri-cli --version \"^2.0.0-alpha\" && cd src-tauri && bash update-bindings.sh"
+	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "vscode",
+	"features": {
+		"rust": "latest",
+		"ghcr.io/devcontainers/features/rust:1": {
+			"version": "latest",
+			"profile": "default"
+		},
+		"ghcr.io/shyim/devcontainers-features/bun:0": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"aaron-bond.better-comments",
+				"biomejs.biome",
+				"vadimcn.vscode-lldb",
+				"serayuzgur.crates",
+				"mikestead.dotenv",
+				"usernamehw.errorlens",
+				"tamasfe.even-better-toml",
+				"ms-vscode.vscode-typescript-next",
+				"lllllllqw.jsdoc",
+				"rust-lang.rust-analyzer",
+				"bradlc.vscode-tailwindcss",
+				"tauri-apps.tauri-vscode"
+			]
+		}
+	},
+	"updateContentCommand": "bun install && cargo install tauri-cli --version \"^2.0.0-alpha\" && cd src-tauri && bash update-bindings.sh"
 }

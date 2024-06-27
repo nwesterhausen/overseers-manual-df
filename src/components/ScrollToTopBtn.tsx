@@ -17,6 +17,7 @@ const ScrollToTopBtn: Component = () => {
 			{isVisible() ? (
 				<div class="tooltip tooltip-left" data-tip="Scroll to Top">
 					<button
+						type="button"
 						class="btn btn-circle btn-secondary btn-sm"
 						onClick={() => {
 							window.scrollTo(0, 0);

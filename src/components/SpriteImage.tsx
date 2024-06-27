@@ -166,9 +166,7 @@ const SpriteImage: Component<SpriteImageProps> = (props) => {
 		return spriteDetails()[currentIndex()].tileDim.y * scale;
 	});
 	const positionOffset = createMemo(() => {
-		return `${
-			spriteDetails()[currentIndex()].pageDim.x - (offsetX() + 1) * spriteDetails()[currentIndex()].tileDim.x + dimX()
-		}px ${
+		return `${spriteDetails()[currentIndex()].pageDim.x - (offsetX() + 1) * spriteDetails()[currentIndex()].tileDim.x + dimX()}px ${
 			spriteDetails()[currentIndex()].pageDim.y - (offsetY() + 1) * spriteDetails()[currentIndex()].tileDim.y + dimY()
 		}px`;
 	});

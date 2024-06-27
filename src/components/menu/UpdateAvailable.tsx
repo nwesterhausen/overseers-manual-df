@@ -11,6 +11,7 @@ const UpdateAvailable: Component = () => {
 		<Show when={updateContext.updateAvailable()}>
 			<div class="tooltip tooltip-left" data-tip={`Update Available: Version ${updateContext.updateVersion()}`}>
 				<button
+					type="button"
 					class="btn btn-sm btn-ghost btn-circle hover:text-accent"
 					onClick={async () => {
 						navigate("/update-details");

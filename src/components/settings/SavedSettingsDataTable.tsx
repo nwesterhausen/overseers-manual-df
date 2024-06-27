@@ -64,26 +64,6 @@ const SavedSettingsDataTable: Component = () => {
 					<td>parsing → moduleInfoFiles</td>
 					<td>{settings.parsing.moduleInfoFiles.join(", ")}</td>
 				</tr>
-				{/* Filter Locations */}
-				<tr>
-					<td>filtering → locations</td>
-					<td>{settings.filtering.locations.join(", ")}</td>
-				</tr>
-				{/* Filtered Object Types */}
-				<tr>
-					<td>filtering → objectTypes</td>
-					<td>{settings.filtering.objectTypes.join(", ")}</td>
-				</tr>
-				{/* Filter Biomes */}
-				<tr>
-					<td>filtering → biomes</td>
-					<td>{settings.filtering.biomes.length === 0 ? "All" : settings.filtering.biomes.join(", ")}</td>
-				</tr>
-				{/* Filter Modules */}
-				<tr>
-					<td>filtering → modules</td>
-					<td>{settings.filtering.modules.length === 0 ? "All" : settings.filtering.modules.join(", ")}</td>
-				</tr>
 				{/* Results Per Page */}
 				<tr>
 					<td>resultsPerPage</td>

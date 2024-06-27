@@ -3,12 +3,11 @@
   "version": "0.32.0",
   "description": "Tauri app to provide Dwarf Fortress players with personalized, raws-accurate references.",
   "scripts": {
+    "start": "vite",
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "tauri": "tauri",
-    "af": "prettier --write src docs README.md index.html .github/workflows",
-    "lint": "eslint --fix ."
+    "tauri": "tauri"
   },
   "repository": {
     "type": "git",
@@ -19,7 +18,7 @@
     "email": "nwesterhausen@gmail.com",
     "url": "https://github.com/nwesterhausen/overseers-manual-df/issues"
   },
-  "type": "commonjs",
+  "type": "module",
   "author": "Nicholas Westerhausen <nwesterhausen@gmail.com>",
   "private": true,
   "license": "MIT",

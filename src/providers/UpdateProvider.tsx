@@ -40,11 +40,7 @@ export const [UpdateProvider, useUpdateProvider] = createContextProvider(() => {
 	}
 
 	const updateAvailable = createMemo(() => {
-		return (
-			update.latest.version !== update.latest.currentVersion &&
-			update.latest.version !== NO_UPDATE.version &&
-			updateSkipped() === false
-		);
+		return update.latest.version !== update.latest.currentVersion && update.latest.version !== NO_UPDATE.version && updateSkipped() === false;
 	});
 
 	async function applyUpdate() {

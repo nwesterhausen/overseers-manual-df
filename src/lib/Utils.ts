@@ -1,3 +1,4 @@
+import { type DirEntry, readDir } from "@tauri-apps/plugin-fs";
 import type { Creature, Material, Name, SingPlurName, StateName } from "../../src-tauri/bindings/Bindings";
 import { DepthRanges, M3_to_CM3 } from "./Constants";
 import { GAME_TICKS_ADVENTURE, GAME_TICKS_FORTRESS, SpecificTickToCalendarConversion } from "./GameTicks";
@@ -63,34 +64,40 @@ export function toTitleCase(str: string): string {
  * @returns A string with all names inside of it
  */
 export function SearchableNames(creature: Creature): string {
-	const flatNames: string[] = [];
+	const flatNames: Set<string> = new Set<string>();
 
 	if (creature.name && creature.name.singular.length > 0) {
-		flatNames.push(...creature.name.singular, ...creature.name.plural, ...creature.name.adjective);
+		flatNames.add(creature.name.singular);
+		flatNames.add(creature.name.plural);
+		flatNames.add(creature.name.adjective);
 	}
 	if (creature.generalBabyName && creature.generalBabyName.singular.length > 0) {
-		flatNames.push(...creature.generalBabyName.singular, ...creature.generalBabyName.plural);
+		flatNames.add(creature.generalBabyName.singular);
+		flatNames.add(creature.generalBabyName.plural);
 	}
 	if (creature.generalChildName && creature.generalChildName.singular.length > 0) {
-		flatNames.push(...creature.generalChildName.singular, ...creature.generalChildName.plural);
+		flatNames.add(creature.generalChildName.singular);
+		flatNames.add(creature.generalChildName.plural);
 	}
 
 	if (Array.isArray(creature.castes)) {
 		for (const caste of creature.castes) {
 			if (caste.casteName && caste.casteName.singular.length > 0) {
-				flatNames.push(...caste.casteName.singular, ...caste.casteName.plural);
+				flatNames.add(caste.casteName.singular);
+				flatNames.add(caste.casteName.plural);
 			}
 			if (caste.childName && caste.childName.singular.length > 0) {
-				flatNames.push(...caste.childName.singular, ...caste.childName.plural);
-			}
-			if (caste.babyName && caste.babyName.singular.length > 0) {
-				flatNames.push(...caste.babyName.singular, ...caste.babyName.plural);
+				flatNames.add(caste.childName.singular);
+				flatNames.add(caste.childName.plural);
+				if (caste.babyName && caste.babyName.singular.length > 0) {
+					flatNames.add(caste.babyName.singular);
+					flatNames.add(caste.babyName.plural);
+				}
 			}
 		}
+		// Return all names as a single string, joined by ", "
+		return Array.from(flatNames).join(", ");
 	}
-
-	const uniqueNames = [...new Set(flatNames)];
-	return uniqueNames.join(" ");
 }
 
 /**
@@ -101,7 +108,9 @@ export function SearchableNames(creature: Creature): string {
  */
 export function CleanName(names: string[]): string {
 	if (names.length < 2) {
-		return [...new Set(names)].filter((n) => n.length > 0).join(", ");
+		return Array.from(new Set(names))
+			.filter((n) => n.length > 0)
+			.join(", ");
 	}
 	const singular = names[0];
 	const plural = names[1];
@@ -221,4 +230,21 @@ export function UndergroundDepthDescription(depth_range: number[]): string {
 		return `from ${topDepth.replace(" Cavern Layer", "")} to ${bottomDepth}`;
 	}
 	return `from ${DepthRanges[topLevel]} to ${DepthRanges[bottomLevel]}`;
+}
+
+/**
+ * Recursively process entries in a directory
+ */
+export async function readDirRecursive(directory: string): Promise<DirEntry[]> {
+	const entries: DirEntry[] = await readDir(directory);
+
+	for (const entry of entries) {
+		console.log(`Entry: ${entry.name}`);
+		if (entry.isDirectory) {
+			const dir = directory + entry.name;
+			entries.push(...(await readDirRecursive(dir)));
+		}
+	}
+
+	return entries;
 }

@@ -1,3 +1,5 @@
+/// Search filter utilities
+pub mod filtering;
 /// Search options
 pub mod options;
 /// Prepare search results

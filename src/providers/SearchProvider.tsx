@@ -3,13 +3,21 @@
  * This takes into account not only the search string, but also the advanced filtering options.
  */
 import { createContextProvider } from "@solid-primitives/context";
-import { createMemo, createSignal } from "solid-js";
+import { invoke } from "@tauri-apps/api/core";
+import { getCurrent } from "@tauri-apps/api/window";
+import { createEffect, createMemo, createResource, createSignal } from "solid-js";
 import type { SearchOptions } from "../../src-tauri/bindings/Bindings";
+import type { SearchResults } from "../definitions/SearchResults";
+import { COMMAND_SEARCH_RAWS, DEFAULT_SEARCH_RESULT } from "../lib/Constants";
 import { useSettingsContext } from "./SettingsProvider";
 
 export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
+	/**
+	 * The current window (used for listening to events)
+	 */
+	const appWindow = getCurrent();
 	// Grab the settings context. We actually keep many search options cached on disk via settings.
-	const [settings] = useSettingsContext();
+	const [settings, { setTotalResults }] = useSettingsContext();
 
 	// The typed search query (basically the value of the search box input)
 	const [searchString, setSearchString] = createSignal("");
@@ -126,8 +134,8 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
 	// The actual search options object that is used for searching (see `RawsProvider`)
 	const searchOptions = createMemo<SearchOptions>(() => {
 		const options: SearchOptions = {
-			limit: `${settings.resultsPerPage}`,
-			page: `${settings.currentPage}`,
+			limit: settings.resultsPerPage,
+			page: settings.currentPage,
 			objectTypes: settings.filtering.objectTypes,
 			query: searchString(),
 			locations: settings.filtering.locations,
@@ -135,6 +143,7 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
 			modules: settings.filtering.modules,
 			onlyEggLayers: onlyEggLayers(),
 			showDoesNotExist: showDoesNotExist(),
+			filters: settings.filtering,
 		};
 
 		// Todo: include advanced filtering options (tags) once supported by the backend
@@ -142,10 +151,46 @@ export const [SearchProvider, useSearchProvider] = createContextProvider(() => {
 		return options;
 	});
 
+	/**
+	 * Get raws from the backend and update the total results. This executes a search.
+	 *
+	 * @returns The search results
+	 */
+	async function updateSearchResults(): Promise<SearchResults> {
+		console.log("Updating search results");
+		const results = (await invoke(COMMAND_SEARCH_RAWS, {
+			window: appWindow,
+			searchOptions: searchOptions(),
+		})) as SearchResults;
+		setTotalResults(results.totalResults);
+
+		return results;
+	}
+
+	// The resource for raws which is exposed to the rest of the application.
+	const [searchResults, { refetch: refetchSearchResults }] = createResource<SearchResults>(updateSearchResults, {
+		name: "pageOfParsedRaws",
+		initialValue: DEFAULT_SEARCH_RESULT,
+	});
+
+	// A signal to hold the previous search options (used to determine if the search options have changed)
+	const [previousSearchOptions, setPreviousSearchOptions] = createSignal(searchOptions());
+	createEffect(() => {
+		if (JSON.stringify(searchOptions()) !== JSON.stringify(previousSearchOptions())) {
+			console.log("Search options have changed");
+			refetchSearchResults();
+		}
+		setPreviousSearchOptions(searchOptions());
+	});
+
 	return {
 		// The basics (i.e. expose setting the search string and retrieval of the search options)
 		setSearchString,
 		searchOptions,
+
+		// The search results
+		searchResults,
+		refetchSearchResults,
 
 		// Raw Module Filtering
 		filteredModules,

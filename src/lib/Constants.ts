@@ -1,20 +1,21 @@
-import type { Update } from "@tauri-apps/plugin-updater";
+import { Update } from "@tauri-apps/plugin-updater";
+import type { Biome, ObjectType, ProgressPayload, RawModuleLocation, SearchFilter, Summary } from "../../src-tauri/bindings/Bindings";
 import type { SearchResults } from "../definitions/SearchResults";
-import type { Summary, Biome, ObjectType, ProgressPayload, RawModuleLocation } from "../../src-tauri/bindings/Bindings";
-import type { FilteringSettings, ParsingSettings } from "../providers/SettingsProvider";
+import type { ParsingSettings } from "../providers/SettingsProvider";
 
 /**
  * Default update object. This is an empty update object which is used
  * when there is no update available or we are waiting for a response
  * from the update server.
  */
-export const NO_UPDATE: Update = {
+export const NO_UPDATE: Update = new Update({
 	currentVersion: "0.0.0",
 	version: "0.0.0",
-	downloadAndInstall: async (_cb) => {},
 	body: "No update currently available.",
 	date: new Date().toISOString(),
-};
+	available: false,
+	rid: 0,
+});
 
 export const SETTINGS_PARSING_DEFAULTS: ParsingSettings = {
 	directoryPath: "",
@@ -26,12 +27,7 @@ export const SETTINGS_PARSING_DEFAULTS: ParsingSettings = {
 	moduleInfoFiles: [] as string[],
 };
 
-export const SETTINGS_FILTERING_DEFAULTS: FilteringSettings = {
-	biomes: [] as Biome[],
-	locations: ["Vanilla"] as RawModuleLocation[],
-	objectTypes: ["Creature", "Plant"] as ObjectType[],
-	modules: [] as string[],
-};
+export const SETTINGS_FILTERING_DEFAULTS: SearchFilter[] = [];
 
 /**
  * Default settings for the application. These are used when the application
@@ -97,7 +93,7 @@ export const DEFAULT_PARSING_STATUS: ProgressPayload = {
 	},
 	currentTask: "idle",
 	percentage: 0.0,
-	runningTotal: "0",
+	runningTotal: 0,
 };
 
 /**
@@ -114,40 +110,18 @@ export const DEFAULT_SUMMARY: Summary = {
 	parsingDuration: "",
 	saveToStoreDuration: "",
 	locationTotals: [],
-	totalRaws: "0",
+	totalRaws: 0,
 };
 
 /**
  * A list of common words to ignore when searching.
  */
-export const IgnoredSearchTerms = [
-	"a",
-	"and",
-	"but",
-	"for",
-	"in",
-	"it",
-	"its",
-	"of",
-	"on",
-	"that",
-	"the",
-	"they",
-	"their",
-	"with",
-];
+export const IgnoredSearchTerms = ["a", "and", "but", "for", "in", "it", "its", "of", "on", "that", "the", "they", "their", "with"];
 
 /**
  * The available depths as represented by the `UndergroundDepth` token.
  */
-export const DepthRanges = [
-	"Aboveground",
-	"1st Cavern Layer",
-	"2nd Cavern Layer",
-	"3rd Cavern Layer",
-	"Magma Sea Layer",
-	"HFS",
-];
+export const DepthRanges = ["Aboveground", "1st Cavern Layer", "2nd Cavern Layer", "3rd Cavern Layer", "Magma Sea Layer", "HFS"];
 
 /**
  * How many cubic centimeters are in a cubic meter.

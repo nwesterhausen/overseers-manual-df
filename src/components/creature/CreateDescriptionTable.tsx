@@ -8,6 +8,7 @@ import {
 	LifeExpectancyStatus,
 	PetValueStatus,
 	PopulationNumberStatus,
+	TagToString,
 } from "../../lib/CreatureUtil";
 import { UndergroundDepthDescription, toTitleCase } from "../../lib/Utils";
 import CreatureActivityDisplay from "./CreatureActivityDisplay";
@@ -29,10 +30,7 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
 				<tr>
 					<th>Likeable Features</th>
 					<td>
-						<Show
-							when={Array.isArray(props.creature.prefStrings) && props.creature.prefStrings.length > 0}
-							fallback="None"
-						>
+						<Show when={Array.isArray(props.creature.prefStrings) && props.creature.prefStrings.length > 0} fallback="None">
 							{props.creature.prefStrings.join(", ")}
 						</Show>
 					</td>
@@ -75,7 +73,7 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
 					</tr>
 					<tr>
 						<th>Trainable</th>
-						<td>{props.creature.castes.map((v) => CasteTrainableStatus(v)).join(", ")}</td>
+						<td>{[...new Set(props.creature.castes.map((v) => CasteTrainableStatus(v)))].join(", ")}</td>
 					</tr>
 					<tr>
 						<th>Defining Classes</th>
@@ -90,7 +88,7 @@ const CreatureDescriptionTable: Component<{ creature: Creature }> = (props) => {
 								<tbody>
 									<tr>
 										<td>Creature Tags</td>
-										<td>{props.creature.tags.join(", ")}</td>
+										<td>{props.creature.tags.map(TagToString).join(", ")}</td>
 									</tr>
 									<Show when={Array.isArray(props.creature.castes)}>
 										<For each={props.creature.castes}>
