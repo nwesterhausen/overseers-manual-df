@@ -47,9 +47,9 @@ jobs:
         platform: [macos-latest, ubuntu-22.04, windows-latest]
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Install bun
-        uses: oven-sh/setup-bun@8f24390df009a496891208e5e36b8a1de1f45135 #v1
+        uses: oven-sh/setup-bun@123c6c4e2fea3eb7bffaa91a85eb6b3d505bf7af # v2
       - name: Create Fake .env File (dotenvy_macro requirement)
         run: |
           touch src-tauri/.env
@@ -73,17 +73,17 @@ jobs:
               libsoup-3.0 \
               webkit2gtk-4.1
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@d8352f6b1d2e870bc5716e7a6d9b65c4cc244a1a # master
+        uses: dtolnay/rust-toolchain@21dc36fb71dd22e3317045c0c31a3f4249868b17 # master
         with:
           toolchain: stable
       - name: Run sccache-cache
-        uses: mozilla-actions/sccache-action@2e7f9ec7921547d4b46598398ca573513895d0bd # v0.0.4
+        uses: mozilla-actions/sccache-action@89e9040de88b577a072e3760aaf59f585da083af # v0.0.5
       - name: Install Dependencies and Build
         run: |
           bun install
           bun run build
       - name: Build the Tauri App
-        uses: tauri-apps/tauri-action@ede250cf1ae6fda99f9cd25bf92853221941d94c # dev
+        uses: tauri-apps/tauri-action@f8044a1d9fa468d71dd285d9f17b467dc8c9b334 # dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
