@@ -1,5 +1,5 @@
 import type { Component } from "solid-js";
-import type { Creature } from "../../../src-tauri/bindings/Bindings";
+import type { Creature } from "../../../src-tauri/bindings/Bindings.d.ts";
 import { FormatDescription } from "../../lib/CreatureUtil";
 import CreatureBadges from "./CreatureBadges";
 

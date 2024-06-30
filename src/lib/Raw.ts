@@ -1,4 +1,4 @@
-import type { InfoFile, Name, SingPlurName } from "../../src-tauri/bindings/Bindings";
+import type { InfoFile, Name, SingPlurName } from "../../src-tauri/bindings/Bindings.d.ts";
 import type { Raw } from "../definitions/types";
 import { toTitleCase } from "./Utils";
 

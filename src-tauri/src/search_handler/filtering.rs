@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use specta::Type;
 use tracing::warn;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default, Type)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, Type, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 #[allow(clippy::module_name_repetitions)]
 /// A filter that can be applied to a search. This is to allow tags to be required or optional,
@@ -159,21 +159,98 @@ pub struct SearchFilter {
     pub filters: Vec<Filter>,
 }
 
+impl SearchFilter {
+    /// Add a filter to the search filter.
+    /// This is a helper function to add a filter to the search filter.
+    ///
+    /// # Arguments
+    ///
+    /// * `filter` - The filter to add to the search filter.
+    pub fn add_filter(&mut self, filter: Filter) {
+        self.filters.push(filter);
+    }
+
+    /// Set the search filter as required or optional.
+    ///
+    /// # Arguments
+    ///
+    /// * `required` - Whether the filter is required (or just optional) to be part of an object for a result to be included.
+    /// Using this, you can specify that the filter array is connected by an `AND` or an `OR`.
+    pub fn set_required(&mut self, required: bool) {
+        self.required = required;
+    }
+
+    pub fn is_optional(&self) -> bool {
+        !self.required
+    }
+
+    pub fn is_required(&self) -> bool {
+        self.required
+    }
+
+    /// Return only the filters that apply to the given object type.
+    ///
+    /// # Arguments
+    ///
+    /// * `object_type` - The object type to filter the filters by.
+    ///
+    /// # Returns
+    ///
+    /// The filters that apply to the given object type.
+    pub fn for_object_type(&self, object_type: &ObjectType) -> Vec<&Filter> {
+        self.filters
+            .iter()
+            .filter(|filter| filter.allowed_object_type(object_type))
+            .collect()
+    }
+
+    /// Returns whether the given raw object is allowed by this filter.
+    ///
+    /// # Arguments
+    ///
+    /// * `raw_object` - The raw object to check against.
+    ///
+    /// # Returns
+    ///
+    /// Whether the given raw object is allowed by this filter.
+    #[allow(clippy::borrowed_box)]
+    pub fn allowed(&self, raw_object: &Box<dyn RawObject>) -> bool {
+        let mut allowed = false;
+        for filter in &self.filters {
+            let filter_allowed = filter.allow(raw_object);
+            if self.inverted {
+                if filter_allowed {
+                    return false;
+                }
+            } else {
+                if filter_allowed {
+                    allowed = true;
+                } else if self.required {
+                    return false;
+                }
+            }
+        }
+        allowed
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use dfraw_json_parser::RawMetadata;
+
     use super::*;
 
     #[test]
     fn test_allowed_object_type() {
-        let filter = Filter::Creature(CreatureTag::Dwarf);
+        let filter = Filter::Creature(CreatureTag::ArtificialHiveable);
         let object_type = ObjectType::Creature;
         assert!(filter.allowed_object_type(&object_type));
 
-        let filter = Filter::Inorganic(InorganicTag::Gold);
+        let filter = Filter::Inorganic(InorganicTag::Soil);
         let object_type = ObjectType::Inorganic;
         assert!(filter.allowed_object_type(&object_type));
 
-        let filter = Filter::Biome(Biome::Ocean);
+        let filter = Filter::Biome(Biome::OceanTropical);
         let object_type = ObjectType::Creature;
         assert!(filter.allowed_object_type(&object_type));
 
@@ -188,23 +265,25 @@ mod tests {
 
     #[test]
     fn test_allow() {
-        let raw_object: Box<dyn RawObject> = Box::new(Creature::new());
-        let filter = Filter::Creature(CreatureTag::Dwarf);
+        let sample_metadata = RawMetadata::default();
+
+        let raw_object: Box<dyn RawObject> =
+            Box::new(Creature::new("sample_creature", &sample_metadata));
+        let filter = Filter::Creature(CreatureTag::ArtificialHiveable);
         assert!(filter.allow(&raw_object));
 
-        let raw_object: Box<dyn RawObject> = Box::new(Inorganic::new());
-        let filter = Filter::Inorganic(InorganicTag::Gold);
+        let raw_object: Box<dyn RawObject> =
+            Box::new(Inorganic::new("sample_inorganic", &sample_metadata));
+        let filter = Filter::Inorganic(InorganicTag::Soil);
         assert!(filter.allow(&raw_object));
 
-        let raw_object: Box<dyn RawObject> = Box::new(Creature::new());
-        let filter = Filter::Biome(Biome::Ocean);
+        let raw_object: Box<dyn RawObject> =
+            Box::new(Creature::new("sample_creature", &sample_metadata));
+        let filter = Filter::Biome(Biome::OceanTropical);
         assert!(filter.allow(&raw_object));
 
-        let raw_object: Box<dyn RawObject> = Box::new(Building::new());
-        let filter = Filter::Object(ObjectType::Building);
-        assert!(filter.allow(&raw_object));
-
-        let raw_object: Box<dyn RawObject> = Box::new(Creature::new());
+        let raw_object: Box<dyn RawObject> =
+            Box::new(Creature::new("sample_creature", &sample_metadata));
         let filter = Filter::None;
         assert!(!filter.allow(&raw_object));
     }
@@ -212,7 +291,7 @@ mod tests {
     #[test]
     fn test_add_filter() {
         let mut search_filter = SearchFilter::default();
-        let filter = Filter::Creature(CreatureTag::Dwarf);
+        let filter = Filter::Creature(CreatureTag::ArtificialHiveable);
         search_filter.add_filter(filter.clone());
         assert_eq!(search_filter.filters.len(), 1);
         assert_eq!(search_filter.filters[0], filter);
@@ -221,14 +300,14 @@ mod tests {
     #[test]
     fn test_optional() {
         let mut search_filter = SearchFilter::default();
-        search_filter.optional();
+        search_filter.set_required(false);
         assert!(!search_filter.required);
     }
 
     #[test]
     fn test_required() {
         let mut search_filter = SearchFilter::default();
-        search_filter.required();
+        search_filter.set_required(true);
         assert!(search_filter.required);
     }
 
@@ -258,44 +337,57 @@ mod tests {
             required: true,
             inverted: false,
             filters: vec![
-                Filter::Creature(CreatureTag::Dwarf),
+                Filter::Creature(CreatureTag::ArtificialHiveable),
                 Filter::Object(ObjectType::Building),
-                Filter::Biome(Biome::Ocean),
+                Filter::Biome(Biome::AnyOcean),
             ],
         };
 
         let object_type = ObjectType::Creature;
-        let expected_filters = vec![&Filter::Creature(CreatureTag::Dwarf)];
-        assert_eq!(search_filter.for_object_type(&object_type), expected_filters);
+        let expected_filters = vec![&Filter::Creature(CreatureTag::ArtificialHiveable)];
+        assert_eq!(
+            search_filter.for_object_type(&object_type),
+            expected_filters
+        );
 
         let object_type = ObjectType::Building;
         let expected_filters = vec![&Filter::Object(ObjectType::Building)];
-        assert_eq!(search_filter.for_object_type(&object_type), expected_filters);
+        assert_eq!(
+            search_filter.for_object_type(&object_type),
+            expected_filters
+        );
 
         let object_type = ObjectType::Inorganic;
-        let expected_filters = vec![];
-        assert_eq!(search_filter.for_object_type(&object_type), expected_filters);
+        let expected_filters: Vec<&Filter> = vec![];
+        assert_eq!(
+            search_filter.for_object_type(&object_type),
+            expected_filters
+        );
     }
 
     #[test]
     fn test_allow_search_filter() {
-        let raw_object: Box<dyn RawObject> = Box::new(Creature::new());
-        let filter1 = Filter::Creature(CreatureTag::Dwarf);
-        let filter2 = Filter::Biome(Biome::Ocean);
+        let sample_metadata = RawMetadata::default();
+
+        let raw_object: Box<dyn RawObject> =
+            Box::new(Creature::new("sample_creature", &sample_metadata));
+        let filter1 = Filter::Creature(CreatureTag::ArtificialHiveable);
+        let filter2 = Filter::Biome(Biome::AnyOcean);
         let mut search_filter = SearchFilter::default();
         search_filter.add_filter(filter1.clone());
         search_filter.add_filter(filter2.clone());
 
-        assert!(search_filter.allow(&raw_object));
+        assert!(search_filter.allowed(&raw_object));
 
-        let raw_object: Box<dyn RawObject> = Box::new(Creature::new());
-        let filter1 = Filter::Creature(CreatureTag::Elf);
-        let filter2 = Filter::Biome(Biome::Ocean);
+        let raw_object: Box<dyn RawObject> =
+            Box::new(Creature::new("sample_creature", &sample_metadata));
+        let filter1 = Filter::Creature(CreatureTag::ArtificialHiveable);
+        let filter2 = Filter::Biome(Biome::AnyOcean);
         let mut search_filter = SearchFilter::default();
         search_filter.add_filter(filter1.clone());
         search_filter.add_filter(filter2.clone());
 
-        assert!(!search_filter.allow(&raw_object));
+        assert!(!search_filter.allowed(&raw_object));
     }
 }
 

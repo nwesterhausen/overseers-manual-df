@@ -2,7 +2,7 @@ import { A, useMatch } from "@solidjs/router";
 import { getTauriVersion, getVersion } from "@tauri-apps/api/app";
 import { invoke } from "@tauri-apps/api/core";
 import { type Component, createMemo, createResource } from "solid-js";
-import type { Info } from "../../../src-tauri/bindings/Bindings";
+import type { Info } from "../../../src-tauri/bindings/Bindings.d.ts";
 import { COMMAND_GET_BUILD_INFO } from "../../lib/Constants";
 
 const AppDrawerContent: Component = () => {

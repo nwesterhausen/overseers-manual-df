@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { type Component, For, Show, createResource } from "solid-js";
-import type { Plant } from "../../../src-tauri/bindings/Bindings";
+import type { Plant } from "../../../src-tauri/bindings/Bindings.d.ts";
 import { COMMAND_GET_BIOME_DESCRIPTION } from "../../lib/Constants";
 import { GetPlantProvidesList } from "../../lib/PlantUtil";
 import { UndergroundDepthDescription, toTitleCase } from "../../lib/Utils";

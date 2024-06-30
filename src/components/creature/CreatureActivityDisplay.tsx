@@ -1,5 +1,5 @@
 import { type Component, For } from "solid-js";
-import type { Creature } from "../../../src-tauri/bindings/Bindings";
+import type { Creature } from "../../../src-tauri/bindings/Bindings.d.ts";
 import { CasteActiveTimeStatus, CasteSeasonActivity } from "../../lib/CreatureUtil";
 import { toTitleCase } from "../../lib/Utils";
 

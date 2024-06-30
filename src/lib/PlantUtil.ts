@@ -1,4 +1,4 @@
-import type { Plant } from "../../src-tauri/bindings/Bindings";
+import type { Plant } from "../../src-tauri/bindings/Bindings.d.ts";
 
 export function GetPlantProvidesList(plant: Plant): string[] {
 	const provides: string[] = [];

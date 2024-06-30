@@ -1,5 +1,5 @@
 import type { Component } from "solid-js";
-import type { InfoFile } from "../../../src-tauri/bindings/Bindings";
+import type { InfoFile } from "../../../src-tauri/bindings/Bindings.d.ts";
 
 const RawModuleInfoTable: Component<{ module: InfoFile }> = (props) => {
 	if (!props.module) {

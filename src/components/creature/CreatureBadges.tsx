@@ -1,5 +1,5 @@
 import { type Component, Show } from "solid-js";
-import type { Creature } from "../../../src-tauri/bindings/Bindings";
+import type { Creature } from "../../../src-tauri/bindings/Bindings.d.ts";
 import { CanLearn, CanSpeak, CondensedEggSize, FirstPetValue, HasIntelligence, IsEggLayer, IsFlier, IsGnawer } from "../../lib/CreatureUtil";
 import TwoPartBadge from "../TwoPartBadge";
 

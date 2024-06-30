@@ -1,5 +1,5 @@
 import { type Component, For, Show } from "solid-js";
-import type { Caste } from "../../../src-tauri/bindings/Bindings";
+import type { Caste } from "../../../src-tauri/bindings/Bindings.d.ts";
 import { toTitleCase } from "../../lib/Utils";
 
 function rawToTiles(grazeVal: number): number {

@@ -1,4 +1,4 @@
-import type { Metadata } from "../../src-tauri/bindings/Bindings";
+import type { Metadata } from "../../src-tauri/bindings/Bindings.d.ts";
 
 /**
  * The common similarities amongst all raw definitions.

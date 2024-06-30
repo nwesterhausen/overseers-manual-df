@@ -1,5 +1,5 @@
 import { type Component, For, Show } from "solid-js";
-import type { Caste } from "../../../src-tauri/bindings/Bindings";
+import type { Caste } from "../../../src-tauri/bindings/Bindings.d.ts";
 import { FormatName, toTitleCase } from "../../lib/Utils";
 
 const CreatureNamesTable: Component<{ castes: Caste[] }> = (props) => {

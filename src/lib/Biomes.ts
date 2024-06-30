@@ -1,4 +1,4 @@
-import type { Biome } from "../../src-tauri/bindings/Bindings";
+import type { Biome } from "../../src-tauri/bindings/Bindings.d.ts";
 // BiomeItem is used for the Combobox component which is used to select biomes.
 export type BiomeItem = { value: Biome; label: string; disabled: boolean };
 

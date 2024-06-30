@@ -1,7 +1,7 @@
 import { convertFileSrc, invoke } from "@tauri-apps/api/core";
 import { BiRegularCaretLeft, BiRegularCaretRight, BiRegularImageAlt } from "solid-icons/bi";
 import { type Component, Show, createMemo, createResource, createSignal } from "solid-js";
-import type { GraphicsResults } from "../../src-tauri/bindings/Bindings";
+import type { GraphicsResults } from "../../src-tauri/bindings/Bindings.d.ts";
 import { COMMAND_GET_GRAPHICS_FOR_IDENTIFIER } from "../lib/Constants";
 import { toTitleCase } from "../lib/Utils";
 import { useSettingsContext } from "../providers/SettingsProvider";

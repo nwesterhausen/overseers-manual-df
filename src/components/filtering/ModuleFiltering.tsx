@@ -1,7 +1,7 @@
 import { Combobox } from "@kobalte/core";
 import { BiRegularCaretDown, BiRegularCheck, BiRegularX } from "solid-icons/bi";
 import { type Component, For, createEffect, createMemo, createSignal } from "solid-js";
-import type { RawModuleLocation } from "../../../src-tauri/bindings/Bindings";
+import type { RawModuleLocation } from "../../../src-tauri/bindings/Bindings.d.ts";
 import type { ModuleItem } from "../../lib/Modules";
 import { useRawsProvider } from "../../providers/RawsProvider";
 import { useSettingsContext } from "../../providers/SettingsProvider";

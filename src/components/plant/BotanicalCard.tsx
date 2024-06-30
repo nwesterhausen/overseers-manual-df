@@ -1,5 +1,5 @@
 import { type Component, For, Show } from "solid-js";
-import type { Plant } from "../../../src-tauri/bindings/Bindings";
+import type { Plant } from "../../../src-tauri/bindings/Bindings.d.ts";
 import { GetPlantProvidesList } from "../../lib/PlantUtil";
 import { UndergroundDepthDescription, toTitleCase } from "../../lib/Utils";
 

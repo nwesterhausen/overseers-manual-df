@@ -4,7 +4,7 @@ import { remove } from "@tauri-apps/plugin-fs";
 import { Store as TauriStore } from "@tauri-apps/plugin-store";
 import { type JSX, type ParentProps, createContext, createEffect, createSignal, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
-import type { Biome, Filter, ObjectType, RawModuleLocation, SearchFilter } from "../../src-tauri/bindings/Bindings";
+import type { Biome, Filter, ObjectType, RawModuleLocation, SearchFilter } from "../../src-tauri/bindings/Bindings.d.ts";
 import { SETTINGS_DEFAULTS, SETTINGS_FILE_NAME } from "../lib/Constants";
 import { getDwarfDirectoryPath } from "../lib/DirectoryActions";
 import { isBiomeIncluded, isLocationIncluded, isObjectTypeIncluded } from "../lib/Filters";

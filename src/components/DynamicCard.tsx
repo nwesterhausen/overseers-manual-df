@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { BiRegularQuestionMark, BiSolidCat, BiSolidCity, BiSolidDiamond, BiSolidSearch, BiSolidTree } from "solid-icons/bi";
 import { type Component, Match, Show, Switch, createResource } from "solid-js";
-import type { Creature, Plant } from "../../src-tauri/bindings/Bindings";
+import type { Creature, Plant } from "../../src-tauri/bindings/Bindings.d.ts";
 import type { Raw } from "../definitions/types";
 import { COMMAND_GET_SEARCH_STRING_FOR_OBJECT } from "../lib/Constants";
 import { nameForRaw } from "../lib/Raw";

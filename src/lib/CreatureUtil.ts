@@ -1,4 +1,4 @@
-import type { BodySize, Caste, CasteTag, Creature, CreatureTag } from "../../src-tauri/bindings/Bindings";
+import type { BodySize, Caste, CasteTag, Creature, CreatureTag } from "../../src-tauri/bindings/Bindings.d.ts";
 import { SimplifyVolume, toTitleCase } from "./Utils";
 
 /**

@@ -1,5 +1,5 @@
 import { type DirEntry, readDir } from "@tauri-apps/plugin-fs";
-import type { Creature, Material, Name, SingPlurName, StateName } from "../../src-tauri/bindings/Bindings";
+import type { Creature, Material, Name, SingPlurName, StateName } from "../../src-tauri/bindings/Bindings.d.ts";
 import { DepthRanges, M3_to_CM3 } from "./Constants";
 import { GAME_TICKS_ADVENTURE, GAME_TICKS_FORTRESS, SpecificTickToCalendarConversion } from "./GameTicks";
 

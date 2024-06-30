@@ -1,5 +1,5 @@
 import { type Component, For } from "solid-js";
-import type { Caste } from "../../../src-tauri/bindings/Bindings";
+import type { Caste } from "../../../src-tauri/bindings/Bindings.d.ts";
 import { BodySizeStatus } from "../../lib/CreatureUtil";
 import { toTitleCase } from "../../lib/Utils";
 

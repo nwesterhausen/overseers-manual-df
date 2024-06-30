@@ -1,4 +1,4 @@
-import type { Filter, SearchFilter } from "../../src-tauri/bindings/Bindings";
+import type { Filter, SearchFilter } from "../../src-tauri/bindings/Bindings.d.ts";
 
 /**
  * Check if an ObjectType is included in a SearchFilter as a Filter of type objectType.
