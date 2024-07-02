@@ -181,7 +181,7 @@ fn generate_ts_bindings() {
             }
         },
         // Types used from dfraw_json_parser
-        match export::<dfraw_json_parser::biome::Token>(&config) {
+        match export::<dfraw_json_parser::tags::BiomeTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export biome::Token");
@@ -189,7 +189,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::creature::Creature>(&config) {
+        match export::<dfraw_json_parser::Creature>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export creature::Creature");
@@ -197,7 +197,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::creature::Token>(&config) {
+        match export::<dfraw_json_parser::tags::CreatureTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export creature::Token");
@@ -205,7 +205,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::creature_caste::Gait>(&config) {
+        match export::<dfraw_json_parser::Gait>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export creature_caste::Gait");
@@ -213,7 +213,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::creature_caste::GaitType>(&config) {
+        match export::<dfraw_json_parser::tags::GaitTypeTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export creature_caste::GaitType");
@@ -221,7 +221,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::creature_caste::GaitModifier>(&config) {
+        match export::<dfraw_json_parser::tags::GaitModifierTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export creature_caste::GaitModifier");
@@ -229,7 +229,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::creature_caste::Token>(&config) {
+        match export::<dfraw_json_parser::tags::CasteTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export creature_caste::Token");
@@ -237,7 +237,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::creature_caste::Caste>(&config) {
+        match export::<dfraw_json_parser::Caste>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export creature_caste::Caste");
@@ -245,7 +245,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::creature_effect::PropertyToken>(&config) {
+        match export::<dfraw_json_parser::tags::CreatureEffectPropertyTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export creature_effect::PropertyToken");
@@ -253,7 +253,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::creature_effect::Token>(&config) {
+        match export::<dfraw_json_parser::tags::CreatureEffectTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export creature_effect::Token");
@@ -261,7 +261,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::creature_variation::CreatureVariation>(&config) {
+        match export::<dfraw_json_parser::CreatureVariation>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export creature_variation::CreatureVariation");
@@ -269,7 +269,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::creature_variation::Rule>(&config) {
+        match export::<dfraw_json_parser::tags::CreatureVariationRuleTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export creature_variation::Rule");
@@ -277,7 +277,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::creature_variation::Token>(&config) {
+        match export::<dfraw_json_parser::tags::CreatureVariationTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export creature_variation::Token");
@@ -285,7 +285,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::entity::Entity>(&config) {
+        match export::<dfraw_json_parser::Entity>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export entity::Entity");
@@ -293,7 +293,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::entity::Token>(&config) {
+        match export::<dfraw_json_parser::tags::EntityTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export entity::Token");
@@ -301,7 +301,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::graphics::Graphic>(&config) {
+        match export::<dfraw_json_parser::Graphic>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export graphics::Graphic");
@@ -309,7 +309,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::graphics::SpriteGraphic>(&config) {
+        match export::<dfraw_json_parser::SpriteGraphic>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export graphics::SpriteGraphic");
@@ -317,7 +317,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::graphics::SpriteLayer>(&config) {
+        match export::<dfraw_json_parser::SpriteLayer>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export graphics::SpriteLayer");
@@ -325,7 +325,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::graphics::TilePage>(&config) {
+        match export::<dfraw_json_parser::TilePage>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export graphics::TilePage");
@@ -333,7 +333,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::graphics::ColorModificationToken>(&config) {
+        match export::<dfraw_json_parser::tags::ColorModificationTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export graphics::ColorModificationToken");
@@ -341,7 +341,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::graphics::ConditionToken>(&config) {
+        match export::<dfraw_json_parser::tags::ConditionTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export graphics::ConditionToken");
@@ -349,7 +349,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::graphics::GraphicTypeToken>(&config) {
+        match export::<dfraw_json_parser::tags::GraphicTypeTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export graphics::GraphicTypeToken");
@@ -357,7 +357,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::graphics::GrowthToken>(&config) {
+        match export::<dfraw_json_parser::tags::GrowthTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export graphics::GrowthToken");
@@ -365,7 +365,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::graphics::PlantGraphicTemplateToken>(&config) {
+        match export::<dfraw_json_parser::tags::PlantGraphicTemplateTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export graphics::PlantGraphicTemplateToken");
@@ -373,7 +373,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::graphics::TilePageToken>(&config) {
+        match export::<dfraw_json_parser::tags::TilePageTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export graphics::TilePageToken");
@@ -381,7 +381,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::inorganic::Inorganic>(&config) {
+        match export::<dfraw_json_parser::Inorganic>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export inorganic::Inorganic");
@@ -389,7 +389,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::inorganic::EnvironmentClassToken>(&config) {
+        match export::<dfraw_json_parser::tags::EnvironmentClassTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export inorganic::EnvironmentClassToken");
@@ -397,7 +397,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::inorganic::InclusionTypeToken>(&config) {
+        match export::<dfraw_json_parser::tags::InclusionTypeTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export inorganic::InclusionTypeToken");
@@ -405,7 +405,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::inorganic::Token>(&config) {
+        match export::<dfraw_json_parser::tags::InorganicTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export inorganic::Token");
@@ -413,7 +413,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::material::Material>(&config) {
+        match export::<dfraw_json_parser::Material>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export material::Material");
@@ -421,7 +421,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::material::FuelTypeToken>(&config) {
+        match export::<dfraw_json_parser::tags::FuelTypeTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export material::FuelTypeToken");
@@ -429,7 +429,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::material::PropertyToken>(&config) {
+        match export::<dfraw_json_parser::tags::MaterialPropertyTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export material::PropertyToken");
@@ -437,7 +437,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::material::StateToken>(&config) {
+        match export::<dfraw_json_parser::tags::MaterialStateTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export material::StateToken");
@@ -445,7 +445,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::material::TypeToken>(&config) {
+        match export::<dfraw_json_parser::tags::MaterialTypeTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export material::TypeToken");
@@ -453,7 +453,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::material::UsageToken>(&config) {
+        match export::<dfraw_json_parser::tags::MaterialUsageTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export material::UsageToken");
@@ -461,7 +461,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::material_template::MaterialTemplate>(&config) {
+        match export::<dfraw_json_parser::MaterialTemplate>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export material_template::MaterialTemplate");
@@ -469,7 +469,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::plant::Plant>(&config) {
+        match export::<dfraw_json_parser::Plant>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export plant::Plant");
@@ -477,7 +477,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::plant::Token>(&config) {
+        match export::<dfraw_json_parser::tags::PlantTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export plant::Token");
@@ -485,7 +485,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::plant_growth::PlantGrowth>(&config) {
+        match export::<dfraw_json_parser::PlantGrowth>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export plant_growth::PlantGrowth");
@@ -493,7 +493,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::plant_growth::Token>(&config) {
+        match export::<dfraw_json_parser::tags::PlantGrowthTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export plant_growth::Token");
@@ -501,7 +501,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::plant_growth::TypeToken>(&config) {
+        match export::<dfraw_json_parser::tags::PlantGrowthTypeTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export plant_growth::TypeTokenn");
@@ -509,7 +509,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::plant_growth::PlantPartToken>(&config) {
+        match export::<dfraw_json_parser::tags::PlantPartTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export plant_growth::PlantPartToken");
@@ -517,7 +517,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::position::Position>(&config) {
+        match export::<dfraw_json_parser::Position>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export position::Position");
@@ -525,7 +525,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::position::Token>(&config) {
+        match export::<dfraw_json_parser::tags::PositionTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export position::Token");
@@ -533,7 +533,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::seed_material::SeedMaterial>(&config) {
+        match export::<dfraw_json_parser::SeedMaterial>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export seed_material::SeedMaterial");
@@ -541,7 +541,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::select_creature::SelectCreature>(&config) {
+        match export::<dfraw_json_parser::SelectCreature>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export select_creature::SelectCreature");
@@ -549,7 +549,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::select_creature::SelectRules>(&config) {
+        match export::<dfraw_json_parser::tags::SelectCreatureRuleTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export select_creature::SelectRules");
@@ -557,7 +557,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::shrub::Shrub>(&config) {
+        match export::<dfraw_json_parser::Shrub>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export shrub::Shru");
@@ -565,7 +565,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::shrub::SeasonToken>(&config) {
+        match export::<dfraw_json_parser::tags::SeasonTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export shrub::SeasonToken");
@@ -573,7 +573,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::shrub::Token>(&config) {
+        match export::<dfraw_json_parser::tags::ShrubTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export shrub::Token");
@@ -581,7 +581,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::syndrome::Syndrome>(&config) {
+        match export::<dfraw_json_parser::Syndrome>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export syndrome::Syndrome");
@@ -589,7 +589,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::syndrome::Token>(&config) {
+        match export::<dfraw_json_parser::tags::SyndromeTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export syndrome::Token");
@@ -597,7 +597,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::tree::Tree>(&config) {
+        match export::<dfraw_json_parser::Tree>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export tree::Tree");
@@ -605,7 +605,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::tree::Token>(&config) {
+        match export::<dfraw_json_parser::tags::TreeTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export tree::Token");
@@ -613,7 +613,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::tree::TwigPlacementToken>(&config) {
+        match export::<dfraw_json_parser::tags::TwigPlacementTag>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export tree::TwigPlacementToken");
@@ -621,7 +621,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::unprocessed_raw::UnprocessedRaw>(&config) {
+        match export::<dfraw_json_parser::UnprocessedRaw>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export unprocessed_raw::UnprocessedRaw");
@@ -629,15 +629,15 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::unprocessed_raw::Modification>(&config) {
+        match export::<dfraw_json_parser::tags::ModificationTag>(&config) {
             Ok(x) => x,
             Err(e) => {
-                eprintln!("Failed to export unprocessed_raw::Modification");
+                eprintln!("Failed to export Modification");
                 eprintln!("{e:?}");
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::MaterialMechanics>(&config) {
+        match export::<dfraw_json_parser::MaterialMechanics>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::MaterialMechanics");
@@ -645,7 +645,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::RawMetadata>(&config) {
+        match export::<dfraw_json_parser::metadata::RawMetadata>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::RawMetadata");
@@ -653,7 +653,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::ModuleInfoFile>(&config) {
+        match export::<dfraw_json_parser::InfoFile>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::ModuleInfoFile");
@@ -661,7 +661,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::SteamData>(&config) {
+        match export::<dfraw_json_parser::SteamData>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::SteamData");
@@ -669,7 +669,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::StateName>(&config) {
+        match export::<dfraw_json_parser::StateNames>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::StateName");
@@ -677,7 +677,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::MechanicalProperties>(&config) {
+        match export::<dfraw_json_parser::MechanicalProperties>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::MechanicalProperties");
@@ -685,7 +685,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::Name>(&config) {
+        match export::<dfraw_json_parser::Name>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::Name");
@@ -693,15 +693,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::SingPlurName>(&config) {
-            Ok(x) => x,
-            Err(e) => {
-                eprintln!("Failed to export parser::SingPlurName");
-                eprintln!("{e:?}");
-                String::new()
-            }
-        },
-        match export::<dfraw_json_parser::parser::ObjectType>(&config) {
+        match export::<dfraw_json_parser::metadata::ObjectType>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::ObjectType");
@@ -709,7 +701,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::RawModuleLocation>(&config) {
+        match export::<dfraw_json_parser::metadata::RawModuleLocation>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::RawModuleLocation");
@@ -717,7 +709,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::BodySize>(&config) {
+        match export::<dfraw_json_parser::BodySize>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::BodySize");
@@ -725,7 +717,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::Color>(&config) {
+        match export::<dfraw_json_parser::Color>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::Color");
@@ -733,7 +725,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::Milkable>(&config) {
+        match export::<dfraw_json_parser::Milkable>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::Milkable");
@@ -741,7 +733,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::Temperatures>(&config) {
+        match export::<dfraw_json_parser::Temperatures>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::Temperatures");
@@ -749,7 +741,7 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::Tile>(&config) {
+        match export::<dfraw_json_parser::Tile>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::Tile");
@@ -757,27 +749,27 @@ fn generate_ts_bindings() {
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::graphics::Dimensions>(&config) {
+        match export::<dfraw_json_parser::Dimensions>(&config) {
             Ok(x) => x,
             Err(e) => {
-                eprintln!("Failed to export parser::graphics::Dimensions");
+                eprintln!("Failed to export parser::Dimensions");
                 eprintln!("{e:?}");
                 String::new()
             }
         },
-        match export::<dfraw_json_parser::parser::graphics::CustomGraphicExtension>(&config) {
+        match export::<dfraw_json_parser::CustomGraphicExtension>(&config) {
             Ok(x) => x,
             Err(e) => {
-                eprintln!("Failed to export parser::graphics::CustomGraphicExtension");
+                eprintln!("Failed to export parser::CustomGraphicExtension");
                 eprintln!("{e:?}");
                 String::new()
             }
         },
         // Tauri-specific exports
-        match export::<dfraw_json_parser::ParserOptions>(&config) {
+        match export::<dfraw_json_parser::metadata::ParserOptions>(&config) {
             Ok(x) => x,
             Err(e) => {
-                eprintln!("Failed to export parser::graphics::CustomGraphicExtension");
+                eprintln!("Failed to export parser::CustomGraphicExtension");
                 eprintln!("{e:?}");
                 String::new()
             }
@@ -807,7 +799,7 @@ fn generate_ts_bindings() {
             }
         },
         // add the needed type RawModuleLocation
-        match export::<dfraw_json_parser::parser::RawModuleLocation>(&config) {
+        match export::<dfraw_json_parser::metadata::RawModuleLocation>(&config) {
             Ok(x) => x,
             Err(e) => {
                 eprintln!("Failed to export parser::RawModuleLocation");

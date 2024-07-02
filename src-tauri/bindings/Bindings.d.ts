@@ -36,7 +36,7 @@ export type SearchOptions = {
    * Biomes to include in the search results
    * Default: All biomes
    */
-  biomes: Biome[];
+  biomes: BiomeTag[];
   /**
    * Modules to include in the search results
    * These are specified by their `object_id` which is unique
@@ -86,7 +86,7 @@ export type Filter =
   /**
    * An inorganic token filter
    */
-  | { inorganic: InorganicToken }
+  | { inorganic: InorganicTag }
   /**
    * A plant token filter
    */
@@ -98,7 +98,7 @@ export type Filter =
   /**
    * Filter objects that exist in specific biomes
    */
-  | { biome: Biome }
+  | { biome: BiomeTag }
   /**
    * Filter objects that exist in specific modules
    */
@@ -391,7 +391,7 @@ export type AppExited = Record<string, never>;
 /**
  * An enum representing a biome.
  */
-export type Biome =
+export type BiomeTag =
   /**
    * A mountain biome.
    */
@@ -764,7 +764,7 @@ export type Creature = {
   /**
    * The biomes that this creature can be found in
    */
-  biomes?: Biome[] | null;
+  biomes?: BiomeTag[] | null;
   /**
    * Pref strings are things that make dwarves (or others?) like or dislike the creature.
    */
@@ -815,11 +815,11 @@ export type Creature = {
   /**
    * Like `[BABYNAME]`, but applied regardless of caste.
    */
-  generalBabyName?: SingPlurName | null;
+  generalBabyName?: Name | null;
   /**
    * Like `[CHILDNAME]`, but applied regardless of caste.
    */
-  generalChildName?: SingPlurName | null;
+  generalChildName?: Name | null;
   /**
    * The generic name for any creature of this type - will be used when distinctions between caste are unimportant. For names for specific castes,
    * use `[CASTE_NAME]` instead. If left undefined, the creature will be labeled as "nothing" by the game.
@@ -1778,7 +1778,7 @@ export type Gait = {
   /**
    * The type of gait
    */
-  gaitType: GaitType;
+  gaitType: GaitTypeTag;
   /**
    * The name of the gait
    */
@@ -1796,70 +1796,70 @@ export type Gait = {
    *
    * These are optional, and may be empty.
    */
-  modifiers: Modifier[];
+  modifiers: GaitModifierTag[];
 };
 
 /**
  * An enum representing a gait type.
  */
-export type GaitType =
+export type GaitTypeTag =
   /**
    * Travel on foot/the ground
    * Used for moving normally over ground tiles.
    */
-  | "walk"
+  | "Walk"
   /**
    * Travel on foot/the ground
    * Used for moving over ground tiles whilst prone.
    */
-  | "crawl"
+  | "Crawl"
   /**
    * Climbing on walls, etc.
    * Used for moving whilst climbing.
    */
-  | "climb"
+  | "Climb"
   /**
    * Swimming in water/liquid
    * Used for moving through tiles containing water or magma at a depth of at least 4/7.
    */
-  | "swim"
+  | "Swim"
   /**
    * Flying through the air
    * Used for moving through open space.
    */
-  | "fly"
+  | "Fly"
   /**
    * Other gait type which is unexpected, but we can still handle it
    */
-  | { other: string }
+  | { Other: string }
   /**
    * Unknown gait type (unset)
    */
-  | "unknown";
+  | "Unknown";
 
 /**
  * An enum representing a gait modifier.
  */
-export type Modifier =
+export type GaitModifierTag =
   /**
    * Fat/muscle layers slow the movement (muscle-slowing counter-acted by strength bonus)
    * Makes `THICKENS_ON_ENERGY_STORAGE` and `THICKENS_ON_STRENGTH` tissue layers slow movement depending on how thick they are.
    * Adding the `STRENGTH` gait flag counteracts the impact of the latter layer.
    */
-  | "layersSlow"
+  | "LayersSlow"
   /**
    * Speeds/slows movement depending on the creature's Strength stat.
    */
-  | "strength"
+  | "Strength"
   /**
    * Speeds/slows movement depending on the creature's Agility stat.
    */
-  | "agility"
+  | "Agility"
   /**
    * Stealth slows movement by the specified percentage when the creature is sneaking.
    */
   | {
-      stealthSlows: {
+      StealthSlows: {
         /**
          * The percentage slowed
          */
@@ -1869,12 +1869,12 @@ export type Modifier =
   /**
    * No build up time
    */
-  | "noBuildUp"
+  | "NoBuildUp"
   /**
    * Build up time. Only used if the gait has a build up time.
    */
   | {
-      buildUp: {
+      BuildUp: {
         /**
          * The build up time indicates how long it will take for a creature using this gait to go from `<start speed>` to `<max speed>`.
          * For example, a value of 10 means that it should be able to reach the maximum speed by moving 10 tiles in a straight line over even terrain.
@@ -4161,7 +4161,7 @@ export type CasteTag =
    */
   | "Pet"
   /**
-   * Allows the creature to be tamed in Fortress mode. Prequisite for all other working animal roles. Civilizations cannot domesticate it in worldgen,
+   * Allows the creature to be tamed in Fortress mode. Prerequisite for all other working animal roles. Civilizations cannot domesticate it in worldgen,
    * with certain exceptions. Adding this to civilization members will classify them as pets instead of citizens, with all the problems that entails.
    *
    * Appears as `PET_EXOTIC`
@@ -5393,9 +5393,9 @@ export type Caste = {
   identifier: string;
   tags?: CasteTag[] | null;
   description?: string | null;
-  babyName?: SingPlurName | null;
+  babyName?: Name | null;
   casteName?: Name | null;
-  childName?: SingPlurName | null;
+  childName?: Name | null;
   /**
    * Default \[0,0\]
    */
@@ -5429,9 +5429,9 @@ export type Caste = {
 };
 
 /**
- * An enum representing a creature effect property.
+ * An enum representing a creature effect property tag.
  */
-export type CreatureEffectProperty =
+export type CreatureEffectPropertyTag =
   /**
    * The severity of the effect. Higher values appear to be worse, with SEV:1000 `CE_NECROSIS` causing a part to near-instantly become rotten.
    */
@@ -5528,9 +5528,9 @@ export type CreatureEffectProperty =
   | "Unknown";
 
 /**
- * An enum representing a creature effect token.
+ * An enum representing a creature effect tag.
  */
-export type CreatureEffectToken =
+export type CreatureEffectTag =
   /**
    * Afflicts the targeted body part with intense pain. If no target is specified this applies to all body parts.
    */
@@ -5756,7 +5756,7 @@ export type CreatureVariation = {
    * the creature which is being modified. The tags are applied in order EXCEPT for the convert
    * tags which are applied in a reverse order.
    */
-  rules: CreatureVariationRule[];
+  rules: CreatureVariationRuleTag[];
   /**
    * A creature variation can define any number of arguments which can be used in the rules.
    * These arguments replace instances of `!ARGn` in the rules. Use `apply_arguments` to apply
@@ -5770,7 +5770,7 @@ export type CreatureVariation = {
 /**
  * A variation rule for a creature.
  */
-export type CreatureVariationRule =
+export type CreatureVariationRuleTag =
   /**
    * An unknown rule.
    */
@@ -5939,7 +5939,7 @@ export type CreatureVariationRule =
 /**
  * An enum representing a creature variation tag.
  */
-export type CVTag =
+export type CreatureVariationTag =
   /**
    * A tag to add a new tag to the creature.
    */
@@ -5996,7 +5996,7 @@ export type Entity = {
   metadata?: Metadata | null;
   identifier: string;
   objectId: string;
-  tags: EntityToken[];
+  tags: EntityTag[];
   creature?: string | null;
   translation?: string | null;
   exclusiveStartBiome?: string | null;
@@ -6061,7 +6061,7 @@ export type Entity = {
 /**
  * Tokens that can be found in an entity raw file.
  */
-export type EntityToken =
+export type EntityTag =
   /**
    * Allows adventure mode for entities with sites.
    */
@@ -7151,7 +7151,7 @@ export type Graphic = {
   identifier: string;
   objectId: string;
   casteIdentifier?: string | null;
-  kind: GraphicType;
+  kind: GraphicTypeTag;
   sprites?: SpriteGraphic[] | null;
   layers?: [string, SpriteLayer[]][] | null;
   growths?: [string, SpriteGraphic[]][] | null;
@@ -7163,13 +7163,13 @@ export type Graphic = {
  * A struct representing a sprite graphic.
  */
 export type SpriteGraphic = {
-  primaryCondition: Condition;
+  primaryCondition: ConditionTag;
   tilePageId: string;
   offset: Dimensions;
-  color?: ColorModification | null;
+  color?: ColorModificationTag | null;
   largeImage?: boolean | null;
   offset2?: Dimensions | null;
-  secondaryCondition?: Condition | null;
+  secondaryCondition?: ConditionTag | null;
   colorPalletSwap?: number | null;
   targetIdentifier?: string | null;
   extraDescriptor?: string | null;
@@ -7184,7 +7184,7 @@ export type SpriteLayer = {
   offset: Dimensions;
   offset2?: Dimensions | null;
   largeImage?: boolean | null;
-  conditions?: [Condition, string][] | null;
+  conditions?: [ConditionTag, string][] | null;
 };
 
 /**
@@ -7202,7 +7202,7 @@ export type TilePage = {
 /**
  * The color modification of the tile
  */
-export type ColorModification =
+export type ColorModificationTag =
   /**
    * The color is as is
    */
@@ -7211,7 +7211,7 @@ export type ColorModification =
 /**
  * A condition that can be applied to a tile/entity
  */
-export type Condition =
+export type ConditionTag =
   /**
    * No condition
    */
@@ -7668,7 +7668,7 @@ export type Condition =
 /**
  * The graphic type of the tile
  */
-export type GraphicType =
+export type GraphicTypeTag =
   /**
    * The tile is a creature
    */
@@ -8151,9 +8151,9 @@ export type GraphicType =
   | "weaponUpright10B";
 
 /**
- * The growth token of the tile
+ * The growth tag of the tile
  */
-export type GrowthToken =
+export type GrowthTag =
   /**
    * The tile is a fruit
    */
@@ -8182,7 +8182,7 @@ export type GrowthToken =
 /**
  * The graphic of the tile
  */
-export type PlantGraphicTemplate =
+export type PlantGraphicTemplateTag =
   /**
    * The standard leaves
    */
@@ -8251,17 +8251,17 @@ export type Inorganic = {
   material: Material;
   metalOreChance?: [string, number][] | null;
   threadMetalChance?: [string, number][] | null;
-  environmentClass?: EnvironmentClass | null;
-  environmentInclusionType?: InclusionType | null;
+  environmentClass?: EnvironmentClassTag | null;
+  environmentInclusionType?: InclusionTypeTag | null;
   environmentInclusionFrequency?: number | null;
   environmentClassSpecific?: string[] | null;
-  tags?: InorganicToken[] | null;
+  tags?: InorganicTag[] | null;
 };
 
 /**
  * The class of environment that the stone appears in.
  */
-export type EnvironmentClass =
+export type EnvironmentClassTag =
   /**
    * Will appear in every stone.
    */
@@ -8310,7 +8310,7 @@ export type EnvironmentClass =
 /**
  * The type of inclusion that the stone has.
  */
-export type InclusionType =
+export type InclusionTypeTag =
   /**
    * Large ovoids that occupy their entire 48x48 embark tile. Microcline is an example. When mined, stone has a 25% yield (as with layer stones).
    */
@@ -8333,9 +8333,9 @@ export type InclusionType =
   | "None";
 
 /**
- * Tokens that can be used in inorganic raws.
+ * Tags that can be used in inorganic raws.
  */
-export type InorganicToken =
+export type InorganicTag =
   /**
    * Used on metals, causes the metal to be made into wafers instead of bars.
    */
@@ -8444,7 +8444,7 @@ export type Material = {
   /**
    * The type of the material is also the trigger to start tracking a material
    */
-  materialType?: MaterialType | null;
+  materialType?: MaterialTypeTag | null;
   /**
    * The material might have a name, but its more likely that there is only an identifier to
    * refer to another creature/plant/reaction, which are listed elsewhere.
@@ -8454,7 +8454,7 @@ export type Material = {
   /**
    * For the coal tag, it specifies the type of fuel that can be used. It will never be None.
    */
-  fuelType?: FuelType | null;
+  fuelType?: FuelTypeTag | null;
   /**
    * Linked creature identifier (and then `material_name` might be "skin", like for "`CREATURE_MAT:DWARF:SKIN`")
    */
@@ -8480,7 +8480,7 @@ export type Material = {
   /**
    * Usage tags
    */
-  usage?: MaterialUsage[] | null;
+  usage?: MaterialUsageTag[] | null;
   value?: number | null;
   color?: Color | null;
   stateNames?: StateName | null;
@@ -8504,7 +8504,7 @@ export type Material = {
 /**
  * A material fuel type that can be set in a material definition.
  */
-export type FuelType =
+export type FuelTypeTag =
   /**
    * Charcoal or coal
    */
@@ -8525,7 +8525,7 @@ export type FuelType =
 /**
  * A material property that can be set in a material definition.
  */
-export type MaterialProperty =
+export type MaterialPropertyTag =
   /**
    * Imports the properties of the specified preexisting material template.
    */
@@ -8881,7 +8881,7 @@ export type MaterialProperty =
 /**
  * A material state that can be set in a material definition.
  */
-export type MaterialState =
+export type MaterialStateTag =
   /**
    * Solid state of the material
    */
@@ -8922,7 +8922,7 @@ export type MaterialState =
 /**
  * A material template
  */
-export type MaterialType =
+export type MaterialTypeTag =
   /**
    * An inorganic material
    */
@@ -9035,7 +9035,7 @@ export type MaterialType =
 /**
  * A material usage that can be set in a material definition.
  */
-export type MaterialUsage =
+export type MaterialUsageTag =
   /**
    * Lets the game know that an animal was likely killed in the production of this item.
    * Entities opposed to killing animals (Elves in vanilla) will refuse to accept these items in trade.
@@ -9381,7 +9381,7 @@ export type Plant = {
   /**
    * List of biomes this plant can grow in
    */
-  biomes?: Biome[] | null;
+  biomes?: BiomeTag[] | null;
   /**
    * Growth Tokens define the growths of the plant (leaves, fruit, etc.)
    */
@@ -9482,11 +9482,11 @@ export type PlantGrowth = {
    * Plant growths are not given an identifier, since they are just supporting
    * data for the plant definition. They are defined instead by the type of growth.
    */
-  growthType: GrowthType;
+  growthType: PlantGrowthTypeTag;
   /**
    * The name of the growth. This is actually defined with `GROWTH_NAME` key in the raws.
    */
-  name: SingPlurName;
+  name: Name;
   /**
    * The item grown by this growth. This is actually defined with `GROWTH_ITEM` key in the raws.
    * This is a string until we make a proper item structure. Technically there are 2 arguments:
@@ -9497,7 +9497,7 @@ export type PlantGrowth = {
    * Specifies on which part of the plant this growth grows. This is defined with `GROWTH_HOST_TILE` key.
    * This can be unused, like in the case of crops where the plant is the growth (I think?).
    */
-  hostTiles?: PlantPart[] | null;
+  hostTiles?: PlantPartTag[] | null;
   /**
    * Controls the height on the trunk above which the growth begins to appear.
    * The first value is the percent of the trunk height where the growth begins appearing:
@@ -9524,13 +9524,13 @@ export type PlantGrowth = {
   /**
    * Where we gather some of the growth's tags.
    */
-  tags?: GrowthTag[] | null;
+  tags?: PlantGrowthTag[] | null;
 };
 
 /**
  * The growth tag of a plant
  */
-export type GrowthTag =
+export type PlantGrowthTag =
   /**
    * The beginning of a growth tag
    */
@@ -9583,7 +9583,7 @@ export type GrowthTag =
 /**
  * The types of growths
  */
-export type GrowthType =
+export type PlantGrowthTypeTag =
   /**
    * The growth is a leaf
    */
@@ -9644,7 +9644,7 @@ export type GrowthType =
 /**
  * Parts of a plant
  */
-export type PlantPart =
+export type PlantPartTag =
   /**
    * Twigs
    */
@@ -9706,9 +9706,9 @@ export type Position = {
   landHolder?: number | null;
   landName?: string | null;
   mandateMax?: number | null;
-  name?: SingPlurName | null;
-  nameMale?: SingPlurName | null;
-  nameFemale?: SingPlurName | null;
+  name?: Name | null;
+  nameMale?: Name | null;
+  nameFemale?: Name | null;
   number?: number | null;
   precedence?: number | null;
   rejectedClasses?: string[] | null;
@@ -9724,18 +9724,18 @@ export type Position = {
   requiredTomb?: number | null;
   requiresPopulation?: number | null;
   responsibilities?: string[] | null;
-  spouse?: SingPlurName | null;
-  spouseFemale?: SingPlurName | null;
-  spouseMale?: SingPlurName | null;
+  spouse?: Name | null;
+  spouseFemale?: Name | null;
+  spouseMale?: Name | null;
   squad?: string | null;
   succession?: string | null;
-  tags: PositionToken[];
+  tags: PositionTag[];
 };
 
 /**
  * Represents a position token
  */
-export type PositionToken =
+export type PositionTag =
   /**
    * The position holder is not subjected to the economy. Less than relevant right now.
    */
@@ -10086,11 +10086,7 @@ export type PositionToken =
 /**
  * A struct representing a seed material
  */
-export type SeedMaterial = {
-  name: SingPlurName;
-  color: Color;
-  material: string;
-};
+export type SeedMaterial = { name: Name; color: Color; material: string };
 
 /**
  * A struct representing a creature selection
@@ -10105,23 +10101,23 @@ export type SelectCreature = {
 /**
  * The rules for selecting a creature
  */
-export type SelectRules =
+export type SelectCreatureRuleTag =
   /**
    * Selects a previously defined caste
    */
-  | { selectCaste: string }
+  | { SelectCaste: string }
   /**
    * Selects a locally defined material. Can be ALL.
    */
-  | { selectMaterial: string }
+  | { SelectMaterial: string }
   /**
    * Selects a tissue for editing.
    */
-  | { selectTissue: string }
+  | { SelectTissue: string }
   /**
    * Adds an additional previously defined caste to the selection. Used after `[SELECT_CASTE]`.
    */
-  | { selectAdditionalCaste: string };
+  | { SelectAdditionalCaste: string };
 
 /**
  * A shrub in the raws.
@@ -10134,7 +10130,7 @@ export type Shrub = {
    * of their season tokens.
    * Default: empty (plant will not grow in farm plots)
    */
-  growingSeason?: SeasonToken[] | null;
+  growingSeason?: SeasonTag[] | null;
   /**
    * How long the plant takes to grow to harvest in a farm plot. Unit hundreds of ticks.
    * There are 1008 GROWDUR units in a season. Defaults to 300.
@@ -10228,7 +10224,7 @@ export type Shrub = {
 /**
  * The tokens for the seasons
  */
-export type SeasonToken =
+export type SeasonTag =
   /**
    * The spring season
    */
@@ -10253,7 +10249,7 @@ export type SeasonToken =
 /**
  * The tokens for the shrubs
  */
-export type ShrubToken =
+export type ShrubTag =
   /**
    * The spring season
    */
@@ -10370,14 +10366,14 @@ export type Syndrome = {
    * default is 0:0
    */
   concentrationAdded?: [number, number] | null;
-  tags?: SyndromeToken[] | null;
+  tags?: SyndromeTag[] | null;
   conditions?: string[] | null;
 };
 
 /**
  * Represents the tokens that can be used in a syndrome definition.
  */
-export type SyndromeToken =
+export type SyndromeTag =
   /**
    * Used to specify the name of the syndrome as it appears in-game. Names don't have to be unique;
    * It's perfectly acceptable to have multiple syndromes with identical names.
@@ -10569,7 +10565,7 @@ export type Tree = {
   /**
    * Where twigs appear, defaults to `[SideBranches, AboveBranches]`
    */
-  twigsPlacement?: TwigPlacement[] | null;
+  twigsPlacement?: TwigPlacementTag[] | null;
   /**
    * What this mushroom-cap is called. Only makes sense with `TREE_HAS_MUSHROOM_CAP`.
    */
@@ -10625,13 +10621,13 @@ export type Tree = {
   /**
    * Token tags for the tree.
    */
-  tags?: TreeToken[] | null;
+  tags?: TreeTag[] | null;
 };
 
 /**
  * The tokens for the tree parser
  */
-export type TreeToken =
+export type TreeTag =
   /**
    * A tree
    */
@@ -10808,7 +10804,7 @@ export type TreeToken =
 /**
  * The placement of twigs on a tree
  */
-export type TwigPlacement =
+export type TwigPlacementTag =
   /**
    * Twigs are placed on the side of the tree
    */
@@ -10872,7 +10868,7 @@ export type UnprocessedRaw = {
    * So when the raws are parsed from this into the actual object, we can apply these modifications
    * in order to get the final object.
    */
-  modifications: Modification[];
+  modifications: ModificationTag[];
   /**
    * Metadata to be passed on to the final object
    */
@@ -10886,12 +10882,12 @@ export type UnprocessedRaw = {
 /**
  * A struct representing a modification to a creature
  */
-export type Modification =
+export type ModificationTag =
   /**
    * `COPY_TAGS_FROM` tag
    */
   | {
-      copyTagsFrom: {
+      CopyTagsFrom: {
         /**
          * The creature to copy tags from
          */
@@ -10902,7 +10898,7 @@ export type Modification =
    * `APPLY_CREATURE_VARIATION` tag
    */
   | {
-      applyCreatureVariation: {
+      ApplyCreatureVariation: {
         /**
          * The creature to apply the variation from
          */
@@ -10915,7 +10911,7 @@ export type Modification =
    * When using tags from an existing creature, inserts new tags at the end of the creature.
    */
   | {
-      addToEnding: {
+      AddToEnding: {
         /**
          * The set of raws to add to the end of the object
          *
@@ -10930,7 +10926,7 @@ export type Modification =
    * When using tags from an existing creature, inserts new tags at the beginning of the creature.
    */
   | {
-      addToBeginning: {
+      AddToBeginning: {
         /**
          * The set of raws to add to the beginning of the object
          *
@@ -10945,7 +10941,7 @@ export type Modification =
    * When using tags from an existing creature, inserts new tags before the specified tag.
    */
   | {
-      addBeforeTag: {
+      AddBeforeTag: {
         /**
          * The tag to insert before
          *
@@ -10965,7 +10961,7 @@ export type Modification =
    * The main body of the object
    */
   | {
-      mainRawBody: {
+      MainRawBody: {
         /**
          * The set of raws that make up the object. This is usually defined first unless
          * its specified to be added to the end or beginning (or before a tag)
@@ -11078,15 +11074,14 @@ export type MechanicalProperties = {
 /**
  * A name with a singular, plural, and adjective form
  */
-export type Name = { singular: string; plural: string; adjective: string };
+export type Name = {
+  singular: string;
+  plural: string;
+  adjective: string | null;
+};
 
 /**
- * The name of a raw object with only singular and plural forms
- */
-export type SingPlurName = { singular: string; plural: string };
-
-/**
- * The object types that can be parsed by the parser.
+ * The various types of objects that are within the raw files.
  */
 export type ObjectType =
   /**
@@ -11372,7 +11367,7 @@ export type Dimensions = { x: number; y: number };
  * A custom graphic extension.
  */
 export type CustomGraphicExtension = {
-  extensionType: GraphicType;
+  extensionType: GraphicTypeTag;
   tilePageId?: string | null;
   value1?: number | null;
   value2?: number | null;
@@ -11397,7 +11392,8 @@ export type CustomGraphicExtension = {
  *
  * ```rust
  * use std::path::PathBuf;
- * use dfraw_json_parser::{ParserOptions, RawObject, ObjectType, RawModuleLocation};
+ * use dfraw_parser::metadata::{ParserOptions, ObjectType, RawModuleLocation};
+ * use dfraw_parser::traits::RawObject;
  *
  * let mut options = ParserOptions::new("path/to/dwarf_fortress");
  * options.add_location_to_parse(RawModuleLocation::Vanilla);

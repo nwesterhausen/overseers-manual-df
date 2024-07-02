@@ -230,6 +230,65 @@ impl SearchFilter {
     }
 }
 
+trait FilterableToken {
+    #[allow(clippy::borrowed_box)]
+    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool;
+}
+
+impl FilterableToken for CreatureTag {
+    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool {
+        if let Some(creature) = raw_object.as_any().downcast_ref::<Creature>() {
+            // Check if the creature has the token
+            creature.has_tag(self)
+        } else {
+            warn!(
+                "Failed to downcast raw object to creature {}",
+                raw_object.get_object_id()
+            );
+            false
+        }
+    }
+}
+impl FilterableToken for CasteTag {
+    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool {
+        if let Some(creature) = raw_object.as_any().downcast_ref::<Creature>() {
+            creature.has_caste_tag(self)
+        } else {
+            warn!(
+                "Failed to downcast raw object to creature {}",
+                raw_object.get_object_id()
+            );
+            false
+        }
+    }
+}
+impl FilterableToken for InorganicTag {
+    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool {
+        if let Some(inorganic) = raw_object.as_any().downcast_ref::<Inorganic>() {
+            inorganic.has_tag(self)
+        } else {
+            warn!(
+                "Failed to downcast raw object to inorganic {}",
+                raw_object.get_object_id()
+            );
+            false
+        }
+    }
+}
+impl FilterableToken for PlantTag {
+    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool {
+        if let Some(plant) = raw_object.as_any().downcast_ref::<Plant>() {
+            plant.has_tag(self)
+        } else {
+            warn!(
+                "Failed to downcast raw object to plant {}",
+                raw_object.get_object_id()
+            );
+            false
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use dfraw_json_parser::metadata::RawMetadata;
@@ -384,64 +443,5 @@ mod tests {
         search_filter.add_filter(filter2.clone());
 
         assert!(!search_filter.allowed(&raw_object));
-    }
-}
-
-trait FilterableToken {
-    #[allow(clippy::borrowed_box)]
-    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool;
-}
-
-impl FilterableToken for CreatureTag {
-    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool {
-        if let Some(creature) = raw_object.as_any().downcast_ref::<Creature>() {
-            // Check if the creature has the token
-            creature.has_tag(self)
-        } else {
-            warn!(
-                "Failed to downcast raw object to creature {}",
-                raw_object.get_object_id()
-            );
-            false
-        }
-    }
-}
-impl FilterableToken for CasteTag {
-    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool {
-        if let Some(creature) = raw_object.as_any().downcast_ref::<Creature>() {
-            creature.has_caste_tag(self)
-        } else {
-            warn!(
-                "Failed to downcast raw object to creature {}",
-                raw_object.get_object_id()
-            );
-            false
-        }
-    }
-}
-impl FilterableToken for InorganicTag {
-    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool {
-        if let Some(inorganic) = raw_object.as_any().downcast_ref::<Inorganic>() {
-            inorganic.has_tag(self)
-        } else {
-            warn!(
-                "Failed to downcast raw object to inorganic {}",
-                raw_object.get_object_id()
-            );
-            false
-        }
-    }
-}
-impl FilterableToken for PlantTag {
-    fn within(&self, raw_object: &Box<dyn RawObject>) -> bool {
-        if let Some(plant) = raw_object.as_any().downcast_ref::<Plant>() {
-            plant.has_tag(self)
-        } else {
-            warn!(
-                "Failed to downcast raw object to plant {}",
-                raw_object.get_object_id()
-            );
-            false
-        }
     }
 }

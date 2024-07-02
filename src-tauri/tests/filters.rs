@@ -1,10 +1,10 @@
 use app_lib::search_handler::filtering::*;
-use dfraw_json_parser::biome::Token as Biome;
-use dfraw_json_parser::creature::Token as CreatureTag;
-use dfraw_json_parser::creature_caste::Token as CreatureCasteTag;
-use dfraw_json_parser::inorganic::Token as InorganicTag;
-use dfraw_json_parser::plant::Token as PlantTag;
-use dfraw_json_parser::{ObjectType, RawModuleLocation};
+use dfraw_json_parser::metadata::{ObjectType, RawModuleLocation};
+use dfraw_json_parser::tags::BiomeTag;
+use dfraw_json_parser::tags::CasteTag;
+use dfraw_json_parser::tags::CreatureTag;
+use dfraw_json_parser::tags::InorganicTag;
+use dfraw_json_parser::tags::PlantTag;
 
 #[test]
 fn test_allowed_object_type() {
@@ -12,7 +12,7 @@ fn test_allowed_object_type() {
     let object_type = ObjectType::Creature;
     assert!(filter.allowed_object_type(&object_type));
 
-    let filter = Filter::CreatureCaste(CreatureCasteTag::AlcoholDependent);
+    let filter = Filter::CreatureCaste(CasteTag::AlcoholDependent);
     let object_type = ObjectType::Creature;
     assert!(filter.allowed_object_type(&object_type));
 
@@ -24,7 +24,7 @@ fn test_allowed_object_type() {
     let object_type = ObjectType::Inorganic;
     assert!(filter.allowed_object_type(&object_type));
 
-    let filter = Filter::Biome(Biome::AnyDesert);
+    let filter = Filter::Biome(BiomeTag::AnyDesert);
     let object_type = ObjectType::Creature;
     assert!(filter.allowed_object_type(&object_type));
     let object_type = ObjectType::Plant;
