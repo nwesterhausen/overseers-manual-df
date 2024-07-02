@@ -1,4 +1,4 @@
-use dfraw_json_parser::graphics::{Graphic, TilePage};
+use dfraw_json_parser::{Graphic, TilePage};
 use serde::{Deserialize, Serialize};
 use specta::Type;
 

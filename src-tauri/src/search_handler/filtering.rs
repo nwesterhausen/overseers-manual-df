@@ -1,10 +1,8 @@
 use dfraw_json_parser::{
-    biome::Token as Biome,
-    creature::{Creature, Token as CreatureTag},
-    creature_caste::Token as CreatureCasteTag,
-    inorganic::{Inorganic, Token as InorganicTag},
-    plant::{Plant, Token as PlantTag},
-    ObjectType, RawModuleLocation, RawObject,
+    metadata::{ObjectType, RawModuleLocation},
+    tags::{BiomeTag, CasteTag, CreatureTag, InorganicTag, PlantTag},
+    traits::RawObject,
+    Creature, Inorganic, Plant,
 };
 use serde::{Deserialize, Serialize};
 use specta::Type;
@@ -30,7 +28,7 @@ pub enum Filter {
     /// A creature token filter
     Creature(CreatureTag),
     /// A creature caste token filter
-    CreatureCaste(CreatureCasteTag),
+    CreatureCaste(CasteTag),
     /// An inorganic token filter
     Inorganic(InorganicTag),
     /// A plant token filter
@@ -38,7 +36,7 @@ pub enum Filter {
     /// Filter for a specific object type
     Object(ObjectType),
     /// Filter objects that exist in specific biomes
-    Biome(Biome),
+    Biome(BiomeTag),
     /// Filter objects that exist in specific modules
     Module(String),
     /// Filter objects that exist in specific locations
@@ -222,12 +220,10 @@ impl SearchFilter {
                 if filter_allowed {
                     return false;
                 }
-            } else {
-                if filter_allowed {
-                    allowed = true;
-                } else if self.required {
-                    return false;
-                }
+            } else if filter_allowed {
+                allowed = true;
+            } else if self.required {
+                return false;
             }
         }
         allowed
@@ -236,7 +232,7 @@ impl SearchFilter {
 
 #[cfg(test)]
 mod tests {
-    use dfraw_json_parser::RawMetadata;
+    use dfraw_json_parser::metadata::RawMetadata;
 
     use super::*;
 
@@ -250,7 +246,7 @@ mod tests {
         let object_type = ObjectType::Inorganic;
         assert!(filter.allowed_object_type(&object_type));
 
-        let filter = Filter::Biome(Biome::OceanTropical);
+        let filter = Filter::Biome(BiomeTag::OceanTropical);
         let object_type = ObjectType::Creature;
         assert!(filter.allowed_object_type(&object_type));
 
@@ -279,7 +275,7 @@ mod tests {
 
         let raw_object: Box<dyn RawObject> =
             Box::new(Creature::new("sample_creature", &sample_metadata));
-        let filter = Filter::Biome(Biome::OceanTropical);
+        let filter = Filter::Biome(BiomeTag::OceanTropical);
         assert!(filter.allow(&raw_object));
 
         let raw_object: Box<dyn RawObject> =
@@ -339,7 +335,7 @@ mod tests {
             filters: vec![
                 Filter::Creature(CreatureTag::ArtificialHiveable),
                 Filter::Object(ObjectType::Building),
-                Filter::Biome(Biome::AnyOcean),
+                Filter::Biome(BiomeTag::AnyOcean),
             ],
         };
 
@@ -372,7 +368,7 @@ mod tests {
         let raw_object: Box<dyn RawObject> =
             Box::new(Creature::new("sample_creature", &sample_metadata));
         let filter1 = Filter::Creature(CreatureTag::ArtificialHiveable);
-        let filter2 = Filter::Biome(Biome::AnyOcean);
+        let filter2 = Filter::Biome(BiomeTag::AnyOcean);
         let mut search_filter = SearchFilter::default();
         search_filter.add_filter(filter1.clone());
         search_filter.add_filter(filter2.clone());
@@ -382,7 +378,7 @@ mod tests {
         let raw_object: Box<dyn RawObject> =
             Box::new(Creature::new("sample_creature", &sample_metadata));
         let filter1 = Filter::Creature(CreatureTag::ArtificialHiveable);
-        let filter2 = Filter::Biome(Biome::AnyOcean);
+        let filter2 = Filter::Biome(BiomeTag::AnyOcean);
         let mut search_filter = SearchFilter::default();
         search_filter.add_filter(filter1.clone());
         search_filter.add_filter(filter2.clone());
@@ -410,7 +406,7 @@ impl FilterableToken for CreatureTag {
         }
     }
 }
-impl FilterableToken for CreatureCasteTag {
+impl FilterableToken for CasteTag {
     fn within(&self, raw_object: &Box<dyn RawObject>) -> bool {
         if let Some(creature) = raw_object.as_any().downcast_ref::<Creature>() {
             creature.has_caste_tag(self)

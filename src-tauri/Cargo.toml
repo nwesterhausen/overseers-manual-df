@@ -13,7 +13,7 @@ keywords = ["tauri", "dwarf_fortress", "gaming", "utility"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies.tauri-build]
-version = "2.0.0-beta.11"
+version = "2.0.0-beta.18"
 features = ['config-toml']
 
 [build-dependencies.built]
@@ -21,7 +21,7 @@ version = "0.7"
 features = ["git2", "chrono", "cargo-lock"]
 
 [build-dependencies.specta]
-version = "=2.0.0-rc.12"
+version = "=2.0.0-rc.13"
 features = ["typescript", "export"]
 
 [dependencies]
@@ -40,7 +40,7 @@ tracing = "0.1.26"
 tauri-plugin-updater = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
 
 [dependencies.tauri]
-version = "2.0.0-beta.17"
+version = "2.0.0-beta.23"
 features = ["protocol-asset"]
 
 # Required for adding invoke commands to tauri app
@@ -49,14 +49,14 @@ version = "1.0"
 features = ["derive"]
 
 [dependencies.specta]
-version = "=2.0.0-rc.12"
+version = "=2.0.0-rc.13"
 features = ["typescript", "export"]
 
 # Used to parse the raw files into json
 [dependencies.dfraw_json_parser]
-# version = "0.17"
+# version = "0.18"
 features = ["tauri"]
-path = "../../dfraw_json_parser/lib"
+path = "../../dfraw_json_parser/jsonlib"
 
 # Used to provide centralized logging
 [dependencies.tauri-plugin-log]

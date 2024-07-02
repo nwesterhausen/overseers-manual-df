@@ -1,4 +1,5 @@
-use dfraw_json_parser::{ObjectType, RawModuleLocation, RawObject};
+use dfraw_json_parser::metadata::{ObjectType, RawModuleLocation};
+use dfraw_json_parser::traits::RawObject;
 use serde::{Deserialize, Serialize};
 use specta::Type;
 use std::time::Duration;

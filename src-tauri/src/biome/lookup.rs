@@ -1,4 +1,4 @@
-use dfraw_json_parser::biome::Token as Biome;
+use dfraw_json_parser::tags::BiomeTag;
 
 /// Returns the description of a biome for a given biome token.
 ///
@@ -15,6 +15,6 @@ use dfraw_json_parser::biome::Token as Biome;
 /// Returns the description of the biome.
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
-pub async fn get_biome_description(biome_token: Biome) -> Result<String, ()> {
+pub async fn get_biome_description(biome_token: BiomeTag) -> Result<String, ()> {
     Ok(biome_token.to_string())
 }

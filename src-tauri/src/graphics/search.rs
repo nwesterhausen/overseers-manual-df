@@ -71,7 +71,7 @@ pub async fn get_graphics_for_identifier(
     };
     let tile_page_identifiers = graphic_raws
         .iter()
-        .flat_map(dfraw_json_parser::graphics::Graphic::get_tile_pages)
+        .flat_map(dfraw_json_parser::Graphic::get_tile_pages)
         .collect::<Vec<_>>();
 
     // Find the tile pages with the given identifiers

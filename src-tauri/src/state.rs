@@ -1,9 +1,6 @@
 use std::{collections::HashMap, sync::Mutex};
 
-use dfraw_json_parser::{
-    graphics::{Graphic, TilePage},
-    ModuleInfoFile, RawObject,
-};
+use dfraw_json_parser::{traits::RawObject, Graphic, InfoFile, TilePage};
 use serde::{Deserialize, Serialize};
 use specta::Type;
 
@@ -57,5 +54,5 @@ pub struct GraphicStorage {
 #[derive(Type, Default, Debug, Serialize, Deserialize)]
 pub struct ModuleInfoStorage {
     /// Holds all module info files
-    pub module_info_store: Mutex<Vec<ModuleInfoFile>>,
+    pub module_info_store: Mutex<Vec<InfoFile>>,
 }

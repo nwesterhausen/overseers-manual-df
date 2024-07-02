@@ -1,4 +1,5 @@
-use dfraw_json_parser::{biome::Token as Biome, ObjectType, RawModuleLocation};
+use dfraw_json_parser::metadata::{ObjectType, RawModuleLocation};
+use dfraw_json_parser::tags::BiomeTag;
 use serde::{Deserialize, Serialize};
 use specta::Type;
 
@@ -27,7 +28,7 @@ pub struct SearchOptions {
     pub locations: Vec<RawModuleLocation>,
     /// Biomes to include in the search results
     /// Default: All biomes
-    pub biomes: Vec<Biome>,
+    pub biomes: Vec<BiomeTag>,
     /// Modules to include in the search results
     /// These are specified by their `object_id` which is unique
     /// Default: All modules

@@ -1,6 +1,6 @@
 use dfraw_json_parser::{
-    creature::Creature, get_search_string, helpers::clone_raw_object_box, inorganic::Inorganic,
-    plant::Plant, ObjectType,
+    metadata::ObjectType, traits::searchable::get_search_string, utilities::clone_raw_object_box,
+    Creature, Inorganic, Plant,
 };
 use tauri::State;
 

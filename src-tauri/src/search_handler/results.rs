@@ -1,4 +1,4 @@
-use dfraw_json_parser::RawObject;
+use dfraw_json_parser::traits::RawObject;
 use serde::{Deserialize, Serialize};
 
 /// Search results

@@ -1,8 +1,9 @@
 use dfraw_json_parser::{
-    creature::{Creature, Token},
-    helpers::{clone_raw_object_box, clone_raw_vector_with_limit_and_page},
-    plant::Plant,
-    ObjectType, RawObject,
+    metadata::ObjectType,
+    tags::CreatureTag,
+    traits::RawObject,
+    utilities::{clone_raw_object_box, clone_raw_vector_with_limit_and_page},
+    Creature, Plant,
 };
 use tauri::State;
 
@@ -126,7 +127,7 @@ pub async fn search_raws(
                         // Filter by does_not_exist (if `show_does_not_exist` is false)
                         if raw.get_type() == &ObjectType::Creature {
                             let creature = raw.as_any().downcast_ref::<Creature>().unwrap();
-                            !creature.get_tags().contains(&Token::DoesNotExist)
+                            !creature.get_tags().contains(&CreatureTag::DoesNotExist)
                         } else {
                             true
                         }
@@ -257,7 +258,7 @@ pub async fn search_raws(
                     }
                     // Check for does_not_exist if `show_does_not_exist` is false
                     if !search_options.show_does_not_exist
-                        && creature.get_tags().contains(&Token::DoesNotExist)
+                        && creature.get_tags().contains(&CreatureTag::DoesNotExist)
                     {
                         return None;
                     }

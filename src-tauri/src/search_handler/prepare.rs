@@ -1,11 +1,9 @@
 use dfraw_json_parser::{
-    creature::Creature,
-    get_search_string,
-    graphics::{Graphic, TilePage},
-    helpers::clone_raw_object_box,
-    inorganic::Inorganic,
-    plant::Plant,
-    ModuleInfoFile, ObjectType, ParserOptions, ProgressPayload, ProgressTask, RawObject,
+    metadata::{ObjectType, ParserOptions},
+    traits::searchable::get_search_string,
+    traits::RawObject,
+    utilities::clone_raw_object_box,
+    Creature, Graphic, InfoFile, Inorganic, Plant, ProgressPayload, ProgressTask, TilePage,
 };
 use serde_json::json;
 use tauri::{AppHandle, Manager, State, Window};
@@ -328,7 +326,7 @@ fn update_tile_page_store(storage: &State<Storage>, graphics_storage: &State<Gra
 #[tauri::command]
 pub async fn get_module_info_files(
     module_info_storage: State<'_, ModuleInfoStorage>,
-) -> Result<Vec<ModuleInfoFile>, ()> {
+) -> Result<Vec<InfoFile>, ()> {
     #[allow(clippy::unwrap_used)]
     Ok(module_info_storage
         .module_info_store
@@ -336,5 +334,5 @@ pub async fn get_module_info_files(
         .unwrap()
         .iter()
         .cloned()
-        .collect::<Vec<ModuleInfoFile>>())
+        .collect::<Vec<InfoFile>>())
 }
