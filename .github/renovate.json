@@ -21,11 +21,11 @@
       "matchDepTypes": [
         "devDependencies"
       ],
-      "matchPackagePatterns": [
-        "@biomejs/biome",
-        "eslint"
-      ],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": [
+        "/@biomejs/biome/",
+        "/eslint/"
+      ]
     }
   ],
   "lockFileMaintenance": {
