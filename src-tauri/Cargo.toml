@@ -17,7 +17,7 @@ version = "2.0.0-beta.11"
 features = ['config-toml']
 
 [build-dependencies.built]
-version = "0.7"
+version = "0.8"
 features = ["git2", "chrono", "cargo-lock"]
 
 [build-dependencies.specta]
@@ -29,7 +29,7 @@ features = ["typescript", "export"]
 chrono = "0.4"
 # Used to load the .env file during build
 dotenvy_macro = "0.15.7"
-itertools = "0.13.0"
+itertools = "0.14.0"
 # Used for logging
 log = "0.4.21"
 # Used in our custom commands
