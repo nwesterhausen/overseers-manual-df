@@ -9476,16 +9476,30 @@ raw_types: ObjectType[];
  * Used to return only results with these token flags
  * 
  * These should be the keys (from `to_keys`) on `CreatureTag`, `CasteTag`, `PlantTag`, etc.
+ * (e.g. `FLIER`, `EGG_LAYER`, `FIREIMMUNE`)
  */
 required_flags: string[]; 
 /**
  * Used to return only results with these token-value pairings
  * 
  * These should be the keys (from `to_keys`) on `CreatureTag`, `CasteTag`, `PlantTag`, etc.
+ * (e.g. `LITTER_SIZE`, `POP_RATIO`, `CLUSTER_NUMBER`)
  * 
  * The value provided will be used for (minimum/exact value, maximum value)
  */
-numeric_filters: ([string, number, number | null])[] }
+numeric_filters: ([string, number, number | null])[]; 
+/**
+ * Limit the number of raws returned to this amount per page
+ * 
+ * Default: `50`
+ */
+limit: number; 
+/**
+ * Which page to return
+ * 
+ * Default: `1`
+ */
+page: number }
 
 /**
  * The tokens for the seasons

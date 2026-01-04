@@ -7,4 +7,6 @@ export const searchState = $state<SearchQuery>({
   required_flags: [],
   search_string: null,
   locations: [],
+  limit: 50,
+  page: 1,
 });
