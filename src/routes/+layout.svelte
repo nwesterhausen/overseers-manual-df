@@ -2,19 +2,20 @@
     import "./layout.css";
     import Navigation from "../components/Navigation.svelte";
     import { searchState } from "../search.svelte";
-    import { invoke } from "@tauri-apps/api/core";
+    import AdvancedSearch from "../components/AdvancedSearch.svelte";
 
+    let isAdvancedOpen = $state(false);
     let { children } = $props();
-
-    // invoke("parse_raws", {}).then((result) => console.log(result));
-
-    function handleSettings() {
-        console.log("Settings button clicked! Opening modal...");
-    }
 </script>
 
-<Navigation
-    bind:searchQuery={searchState.search_string}
-    onSettingsClick={handleSettings}
-/>
-{@render children()}
+<div class="min-h-screen flex flex-col">
+    <Navigation
+        bind:searchQuery={searchState.search_string}
+        onToggleAdvanced={() => (isAdvancedOpen = !isAdvancedOpen)}
+    />{#if isAdvancedOpen}
+        <AdvancedSearch />
+    {/if}
+    <main class="flex-grow">
+        {@render children()}
+    </main>
+</div>

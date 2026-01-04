@@ -20,7 +20,7 @@ async fn search_raws(
 ) -> Result<Vec<Box<dyn RawObject>>, String> {
     tracing::info!("search_raws::query:{query:?}");
     let db_client = state.db.lock().await;
-    let blobs = db_client.search_raws(&query).map_err(|e| {
+    let blobs = db_client.search_raws(&query.clean()).map_err(|e| {
         tracing::error!("{e}");
         e.to_string()
     })?;

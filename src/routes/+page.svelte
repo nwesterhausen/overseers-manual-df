@@ -3,13 +3,24 @@
     import { searchState } from "../search.svelte";
     import InfoCard from "../components/InfoCard.svelte";
     import type { RawObject } from "../bindings/DFRawParser";
-    let searchTerm = $state("");
 
     let results = $state<RawObject[]>([]);
 
     // Reactively search whenever the global term changes
     $effect(() => {
-        if (searchState.search_string && searchState.search_string.length > 2) {
+        if (
+            typeof searchState.search_string === "undefined" ||
+            searchState.search_string?.length === 0
+        ) {
+            invoke<RawObject[]>("search_raws", {
+                query: searchState,
+            })
+                .then((data) => (results = data))
+                .catch((error) => console.log(error));
+        } else if (
+            searchState.search_string &&
+            searchState.search_string.length > 2
+        ) {
             invoke<RawObject[]>("search_raws", {
                 query: searchState,
             })
