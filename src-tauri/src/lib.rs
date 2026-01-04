@@ -1,126 +1,69 @@
-//! This module contains the main entry point for the Tauri application, which sets up the application
-//! and runs it.
+use std::path::PathBuf;
 
-use state::{GraphicStorage, ModuleInfoStorage, Storage};
-use std::sync::Mutex;
-#[cfg(debug_assertions)]
-use tauri::Manager;
-use tauri_plugin_aptabase::EventTracker;
-use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
+use dfraw_parser::{metadata::ParserOptions, traits::RawObject};
+use dfraw_parser_sqlite_lib::{ClientOptions, DbClient, SearchQuery};
+use tauri::{async_runtime::Mutex, State};
 
-use dotenvy_macro::dotenv;
+struct AppState {
+    // We use Mutex because insert_module_data requires &mut self
+    db: Mutex<DbClient>,
+}
 
-/// A biome lookup module that provides descriptions for biomes.
-pub mod biome;
-/// Containers for the graphics data and search results.
-pub mod graphics;
-/// This module contains the information about the application, such as the version and build information.
-pub mod info;
-mod open_explorer;
-/// This module contains the handlers for the search functionality of the application.
-pub mod search_handler;
-/// This module contains the state of the application, including the storage of raws and the search lookup.
-pub mod state;
-/// This module contains the tracking of events in the application.
-pub mod tracking;
+#[tauri::command]
+async fn search_raws(
+    state: State<'_, AppState>,
+    query: SearchQuery,
+) -> Result<Vec<Box<dyn RawObject>>, String> {
+    let db_client = state.db.lock().await;
+    let blobs = db_client.search_raws(&query).map_err(|e| e.to_string())?;
 
-/// This function sets up and runs a Rust application using the Tauri framework, with various plugins
-/// and event handlers.
-/// # Panics
-/// This function will panic if the Tauri app fails to build or run.
+    let results = blobs
+        .into_iter()
+        // Deserialize the JSON blob back into a Boxed trait object
+        // typetag handles figuring out if it's a Creature, Plant, etc.
+        .filter_map(|blob| {
+            serde_json::from_slice::<Box<dyn dfraw_parser::traits::RawObject>>(&blob).ok()
+        })
+        .collect();
+
+    Ok(results)
+}
+
+#[tauri::command]
+async fn parse_raws(
+    state: State<'_, AppState>,
+    df_dir: Option<String>,
+    user_dir: Option<String>,
+    // Add other parser options as needed
+) -> Result<String, String> {
+    let mut db = state.db.lock().await;
+
+    let mut options = ParserOptions::new();
+    if let Some(dir) = df_dir {
+        options.set_dwarf_fortress_directory(&PathBuf::from(dir));
+    }
+    if let Some(dir) = user_dir {
+        options.set_user_data_directory(&PathBuf::from(dir));
+    }
+    let results = dfraw_parser::parse(&options).map_err(|e| e.to_string())?;
+
+    db.insert_parse_results(results)
+        .map_err(|e| e.to_string())?;
+
+    Ok("Parsing and storage complete".to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
-#[allow(clippy::large_stack_frames)]
 pub fn run() {
-    #[allow(clippy::expect_used)]
+    let options = ClientOptions::default();
+    let db_client = DbClient::init_db("overseer.db", options).expect("failed to init db");
+
     tauri::Builder::default()
-        // Add updater
-        .setup(|app| {
-            // Use the updater plugin only on desktop platforms (Windows, Linux, macOS)
-            #[cfg(desktop)]
-            app.handle()
-                .plugin(tauri_plugin_updater::Builder::new().build())?;
-            // Open the dev tools automatically when debugging the application
-            #[cfg(debug_assertions)]
-            {
-                if let Some(window) = app.get_webview_window("main") {
-                    window.open_devtools();
-                } else {
-                    tracing::warn!("Failed to open devtools");
-                }
-            }
-            Ok(())
+        .manage(AppState {
+            db: Mutex::new(db_client),
         })
-        // Set up shared state
-        .manage(Storage {
-            store: Mutex::default(),
-            search_lookup: Mutex::default(),
-        })
-        .manage(GraphicStorage {
-            graphics_store: Mutex::default(),
-            tile_page_store: Mutex::default(),
-        })
-        .manage(ModuleInfoStorage {
-            module_info_store: Mutex::default(),
-        })
-        // Add logging plugin
-        .plugin(
-            tauri_plugin_log::Builder::default()
-                .clear_targets()
-                .targets([
-                    Target::new(TargetKind::Webview),
-                    Target::new(TargetKind::LogDir {
-                        file_name: Some("webview.log".into()),
-                    })
-                    .filter(|metadata| metadata.target() == WEBVIEW_TARGET),
-                    Target::new(TargetKind::LogDir {
-                        file_name: Some("rust.log".into()),
-                    })
-                    .filter(|metadata| metadata.target() != WEBVIEW_TARGET),
-                ])
-                .format(move |out, message, record| {
-                    out.finish(format_args!(
-                        "{} [{}] {}",
-                        chrono::Local::now().format("%Y-%m-%d %H:%M:%S"),
-                        record.level(),
-                        message
-                    ));
-                })
-                .level(log::LevelFilter::Info)
-                .build(),
-        )
-        // Add window-state plugin
-        .plugin(tauri_plugin_window_state::Builder::default().build())
-        // Add fs plugin
-        .plugin(tauri_plugin_fs::init())
-        // Add window plugin
-        .plugin(tauri_plugin_dialog::init())
-        // Add process plugin
-        .plugin(tauri_plugin_process::init())
-        // Add simple storage plugin
-        .plugin(tauri_plugin_store::Builder::default().build())
-        // Add aptabase plugin
-        .plugin(tauri_plugin_aptabase::Builder::new(dotenv!("APTABASE_KEY")).build())
-        // Add invoke handlers
-        .invoke_handler(tauri::generate_handler![
-            search_handler::prepare::parse_and_store_raws,
-            search_handler::prepare::get_module_info_files,
-            search_handler::search::search_raws,
-            search_handler::util::get_search_string_for_object,
-            info::get_build_info,
-            graphics::search::get_graphics_for_identifier,
-            open_explorer::show_in_folder,
-            biome::lookup::get_biome_description,
-        ])
-        .build(tauri::generate_context!())
-        .expect("Error when building tauri app")
-        .run(|handler, event| match event {
-            tauri::RunEvent::Exit { .. } => {
-                handler.track_event("app_exited", None);
-                handler.flush_events_blocking();
-            }
-            tauri::RunEvent::Ready { .. } => {
-                handler.track_event("app_started", None);
-            }
-            _ => {}
-        });
+        .plugin(tauri_plugin_opener::init())
+        .invoke_handler(tauri::generate_handler![search_raws, parse_raws])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }
