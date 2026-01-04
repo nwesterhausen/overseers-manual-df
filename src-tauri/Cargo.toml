@@ -1,9 +1,12 @@
 [package]
-name = "overseers-reference"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+name = "overseers-manual-tauriapp"
+version = "0.2.0"
+description = "A Tauri App to analyze your Dwarf Fortress raw files and present a searchabled reference"
+authors = ["Nicholas Westerhausen"]
+license = "MIT"
+repository = "github.com:nwesterhausen/overseers-manual-df.git"
 edition = "2021"
+keywords = ["tauri", "dwarf_fortress", "gaming", "utility"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -14,17 +17,20 @@ edition = "2021"
 name = "overseers_reference_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
-[build-dependencies]
-tauri-build = { version = "2", features = [] }
+[build-dependencies.tauri-build]
+version = "2"
+features = ['config-toml']
 
 [dependencies]
 tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+
 [dependencies.dfraw_parser]
 version = "0"
 path = "../../dfraw_parser/lib"
+
 [dependencies.dfraw_parser_sqlite_lib]
 version = "0"
 path = "../../dfraw_parser/sqlite_lib"

@@ -2481,8 +2481,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "overseers-reference"
-version = "0.1.0"
+name = "overseers-manual-tauriapp"
+version = "0.2.0"
 dependencies = [
  "dfraw_parser",
  "dfraw_parser_sqlite_lib",
