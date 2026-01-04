@@ -3461,6 +3461,19 @@ material: string[] } } |
 "CannotBreatheAir"
 
 /**
+ * Options for configuring the database client behavior.
+ */
+export type ClientOptions = { 
+/**
+ * If true, the database will be wiped and re-initialized on startup.
+ */
+reset_database: boolean; 
+/**
+ * If true, existing raw definitions will be updated if the identifier exists in the module.
+ */
+overwrite_raws: boolean }
+
+/**
  * A struct representing a color in the format "foreground:background:brightness".
  */
 export type Color = { foreground: number; background: number; brightness: number }
@@ -9438,6 +9451,31 @@ identifier: string;
  * The metadata for this raw (includes the `ObjectType`, `RawModuleLocation` and other module info)
  */
 metadata: Metadata }
+
+/**
+ * A query for searching raw objects in the database.
+ */
+export type SearchQuery = { 
+/**
+ * A general text search string for names and descriptions.
+ */
+search_string: string | null; 
+/**
+ * Search specifically for an identifier (exact or partial).
+ */
+identifier_query: string | null; 
+/**
+ * Used to return only raws with type matching this
+ */
+raw_type_name: string | null; 
+/**
+ * Used to return only results with these token flags
+ */
+required_flags: string[]; 
+/**
+ * Used to return only results with these token-value pairings
+ */
+numeric_filters: ([string, number])[] }
 
 /**
  * The tokens for the seasons

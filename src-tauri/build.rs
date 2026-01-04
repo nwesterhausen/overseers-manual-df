@@ -11,5 +11,5 @@ fn main() {
         .expect("Writing type bindings to file failed.");
 
     // -- Tauri build step, should be last? --
-    tauri_build::build()
+    tauri_build::build();
 }

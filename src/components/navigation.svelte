@@ -5,7 +5,7 @@
     // searchQuery: current text
     // onSearch: a callback function to tell the parent the text changed
     let { searchQuery = $bindable(), onSettingsClick } = $props<{
-        searchQuery: string;
+        searchQuery: string | null;
         onSettingsClick: () => void;
     }>();
 </script>

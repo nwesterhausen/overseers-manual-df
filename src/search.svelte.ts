@@ -1,11 +1,9 @@
-// All the details for search to be available globally.
-// Includes the term and any filtering applied.
-export const searchState = $state({
-    term: "",
-    rawTypes: [],
-    locations: [],
-    requiredFlagTokens: [],
-    requiredTokenValues: [],
-    tokenValueMinimums: [],
-    tokenValueMaximums: [],
+import type { SearchQuery } from "./bindings/DFRawParser";
+
+export const searchState = $state<SearchQuery>({
+  identifier_query: null,
+  numeric_filters: [],
+  raw_type_name: null,
+  required_flags: [],
+  search_string: null,
 });

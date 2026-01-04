@@ -9,13 +9,20 @@ devUrl = "http://localhost:1420"
 beforeBuildCommand = "bun run build"
 frontendDist = "../build"
 
+[app.security]
+# This was the recommended tauri.security value
+csp = "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost"
+
+[app.security.assetProtocol]
+enable = true
+# We need to be able to access images from wherever the game data is stored.
+scope = ["**"]
+
 [[app.windows]]
 title = "Overseer's Reference for Dwarf Fortress"
 width = 1180
 height = 800
 fullscreen = false
-
-[app.security]
 
 [bundle]
 category = "Utility"

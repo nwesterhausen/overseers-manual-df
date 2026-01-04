@@ -9,12 +9,15 @@
 
     // Reactively search whenever the global term changes
     $effect(() => {
-        if (searchState.term.length > 2) {
+        if (searchState.search_string && searchState.search_string.length > 2) {
             invoke<RawObject[]>("search_raws", {
-                query: {
-                    search_string: searchState.term,
-                },
-            }).then((data) => (results = data));
+                query: searchState,
+            })
+                .then((data) => {
+                    console.log(data);
+                    results = data;
+                })
+                .catch((error) => console.log(error));
         }
     });
 </script>
@@ -24,7 +27,9 @@
         {#each results as item}
             <InfoCard title={item.identifier} description="" />
         {:else}
-            <p class="text-neutral-500">No results found for "{searchTerm}"</p>
+            <p class="text-neutral-500">
+                No results found for "{searchState.search_string}"
+            </p>
         {/each}
     </div>
 </main>
