@@ -13,10 +13,7 @@
             invoke<RawObject[]>("search_raws", {
                 query: searchState,
             })
-                .then((data) => {
-                    console.log(data);
-                    results = data;
-                })
+                .then((data) => (results = data))
                 .catch((error) => console.log(error));
         }
     });
@@ -25,7 +22,7 @@
 <main class="p-4">
     <div class="flex flex-wrap justify-center gap-4">
         {#each results as item}
-            <InfoCard title={item.identifier} description="" />
+            <InfoCard raw={item} />
         {:else}
             <p class="text-neutral-500">
                 No results found for "{searchState.search_string}"

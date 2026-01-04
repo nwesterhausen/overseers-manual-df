@@ -1,5 +1,11 @@
 <script lang="ts">
-    import { BookOpenText, Settings, SlidersHorizontal } from "@lucide/svelte";
+    import {
+        BookOpenText,
+        SearchIcon,
+        Settings,
+        SlidersHorizontal,
+    } from "@lucide/svelte";
+    import SettingsBtn from "./SettingsBtn.svelte";
 
     // Define props:
     // searchQuery: current text
@@ -18,20 +24,20 @@
     </div>
 
     <div class="navbar-center gap-2">
-        <input
-            type="search"
-            class="input input-sm input-bordered"
-            placeholder="Search raw files..."
-            bind:value={searchQuery}
-        />
+        <label class="input input-md input-bordered">
+            <SearchIcon class="h-5 w-5" />
+            <input
+                type="search"
+                placeholder="Search raw files..."
+                bind:value={searchQuery}
+            />
+        </label>
         <button class="btn btn-ghost px-1">
             <SlidersHorizontal class="h-5 w-5" />
         </button>
     </div>
 
     <div class="navbar-end">
-        <button class="btn btn-ghost px-1" onclick={onSettingsClick}>
-            <Settings class="h-5 w-5" />
-        </button>
+        <SettingsBtn />
     </div>
 </div>
