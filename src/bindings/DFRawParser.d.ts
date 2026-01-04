@@ -9465,17 +9465,27 @@ search_string: string | null;
  */
 identifier_query: string | null; 
 /**
- * Used to return only raws with type matching this
+ * Limit search to raws found within these locations
  */
-raw_type_name: string | null; 
+locations: RawModuleLocation[]; 
+/**
+ * Limit search to only be raws of this type
+ */
+raw_types: ObjectType[]; 
 /**
  * Used to return only results with these token flags
+ * 
+ * These should be the keys (from `to_keys`) on `CreatureTag`, `CasteTag`, `PlantTag`, etc.
  */
 required_flags: string[]; 
 /**
  * Used to return only results with these token-value pairings
+ * 
+ * These should be the keys (from `to_keys`) on `CreatureTag`, `CasteTag`, `PlantTag`, etc.
+ * 
+ * The value provided will be used for (minimum/exact value, maximum value)
  */
-numeric_filters: ([string, number])[] }
+numeric_filters: ([string, number, number | null])[] }
 
 /**
  * The tokens for the seasons
