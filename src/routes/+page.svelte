@@ -10,7 +10,7 @@
     // Reactively search whenever the global term changes
     $effect(() => {
         if (searchState.term.length > 2) {
-            invoke("search_raws", {
+            invoke<RawObject[]>("search_raws", {
                 query: {
                     search_string: searchState.term,
                 },
