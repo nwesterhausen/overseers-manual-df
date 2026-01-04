@@ -1,34 +1,28 @@
 <script lang="ts">
     import { invoke } from "@tauri-apps/api/core";
-    import InfoCard from "../components/info-card.svelte";
-    import Navigation from "../components/navigation.svelte";
+    import { searchState } from "../search.svelte";
+    import InfoCard from "../components/InfoCard.svelte";
+    import type { RawObject } from "../bindings/DFRawParser";
     let searchTerm = $state("");
 
-    // Example data for your Dwarf Fortress project
-    let creatures = $state([
-        { name: "Dwarf", desc: "Likes beer." },
-        { name: "Goblin", desc: "Likes stealing." },
-        { name: "Forgotten Beast", desc: "Likes destroying your fort." },
-    ]);
+    let results = $state<RawObject[]>([]);
 
-    // Derived state: This automatically updates when searchTerm changes
-    let filteredCreatures = $derived(
-        creatures.filter((c) =>
-            c.name.toLowerCase().includes(searchTerm.toLowerCase()),
-        ),
-    );
-
-    function handleSettings() {
-        console.log("Settings button clicked! Opening modal...");
-    }
+    // Reactively search whenever the global term changes
+    $effect(() => {
+        if (searchState.term.length > 2) {
+            invoke("search_raws", {
+                query: {
+                    search_string: searchState.term,
+                },
+            }).then((data) => (results = data));
+        }
+    });
 </script>
-
-<Navigation bind:searchQuery={searchTerm} onSettingsClick={handleSettings} />
 
 <main class="p-4">
     <div class="flex flex-wrap justify-center gap-4">
-        {#each filteredCreatures as item}
-            <InfoCard title={item.name} description={item.desc} />
+        {#each results as item}
+            <InfoCard title={item.identifier} description="" />
         {:else}
             <p class="text-neutral-500">No results found for "{searchTerm}"</p>
         {/each}
