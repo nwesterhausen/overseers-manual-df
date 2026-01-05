@@ -3512,10 +3512,6 @@ export type ConditionTag =
  */
 "corpse" | 
 /**
- * Condition of being a child
- */
-"child" | 
-/**
  * Condition of being a baby
  */
 "baby" | 
@@ -3572,29 +3568,71 @@ export type ConditionTag =
  */
 "remains" | 
 /**
- * Condition of being a vermin
+ * The default graphic for this vermin.
+ * 
+ * `[VERMIN]`
  */
 "vermin" | 
 /**
- * Condition of being a light vermin
+ * The alternating graphic for this vermin. Image cycles every 1 second.
+ * 
+ * `[VERMIN_ALT]`
  */
-"lightVermin" | 
+"verminAlt" | 
 /**
- * Condition of being a hive
- */
-"hive" | 
-/**
- * Condition of being a small swarm
+ * For swarming vermin like flies and fairies in small groups.
+ * 
+ * `[SWARM_SMALL]`
  */
 "swarmSmall" | 
 /**
- * Condition of being a medium swarm
+ * For swarming vermin like flies and fairies in medium-sized groups.
+ * 
+ * `[SWARM_MEDIUM]`
  */
 "swarmMedium" | 
 /**
- * Condition of being a large swarm
+ * For swarming vermin like flies and fairies in large groups.
+ * 
+ * `[SWARM_LARGE]`
  */
 "swarmLarge" | 
+/**
+ * Light-producing vermin, for fireflies etc. Does not replace `[VERMIN]`.
+ * 
+ * `[LIGHT_VERMIN]`
+ */
+"lightVermin" | 
+/**
+ * The alternating graphic for this light-producing vermin. Image cycles every 1 second.
+ * 
+ * `[LIGHT_VERMIN_ALT]`
+ */
+"lightVerminAlt" | 
+/**
+ * For swarming vermin like flies and fairies in small groups.
+ * 
+ * `[LIGHT_SWARM_SMALL]`
+ */
+"lightSwarmSmall" | 
+/**
+ * For swarming vermin like flies and fairies in medium-sized groups.
+ * 
+ * `[LIGHT_SWARM_MEDIUM]`
+ */
+"lightSwarmMedium" | 
+/**
+ * For swarming vermin like flies and fairies in large groups.
+ * 
+ * `[LIGHT_SWARM_LARGE]`
+ */
+"lightSwarmLarge" | 
+/**
+ * Vermin hives.
+ * 
+ * `[HIVE]`
+ */
+"hive" | 
 /**
  * Condition of being not an artifact
  */
@@ -3603,14 +3641,6 @@ export type ConditionTag =
  * Condition of being a crafted artifact
  */
 "craftedArtifact" | 
-/**
- * Condition of being dyed
- */
-"dye" | 
-/**
- * Condition of not being dyed
- */
-"notDyed" | 
 /**
  * Condition of being a crop
  */
@@ -3652,73 +3682,144 @@ export type ConditionTag =
  */
 "shrubDead" | 
 /**
- * Condition of not being a child
+ * Checks if the creature is a child or baby.
+ * 
+ * `[CONDITION_CHILD]`
+ */
+"child" | 
+/**
+ * Checks if the creature is an adult.
+ * 
+ * `[CONDITION_NOT_CHILD]`
  */
 "notChild" | 
 /**
- * Condition of being at least so many hauled
+ * Counts how many items the creature is hauling. Used for `[PACK_ANIMAL]`s in vanilla.
+ * 
+ * `[CONDITION_HAUL_COUNT_MIN:count]`
  */
 "haulCountMin" | 
 /**
- * Condition of being at most so many hauled
+ * Counts how many items the creature is hauling. Used for `[PACK_ANIMAL]`s in vanilla.
+ * 
+ * `[CONDITION_HAUL_COUNT_MAX:count]`
  */
 "haulCountMax" | 
-/**
- * Condition of being a worn item
- */
-"itemWorn" | 
-/**
- * Condition of having a profession
- */
-"professionCategory" | 
 /**
  * Condition of being a class
  */
 "class" | 
 /**
- * Condition of being a syndrome class
+ * Defines a body part graphic using standard body token selection criteria.
+ * 
+ * Selection is done with `BY_TYPE`, `BY_CATEGORY`, or `BY_TOKEN`
+ * 
+ * `[CONDITION_BP:selection:category, type, or token]`
+ */
+"bodyPart" | 
+/**
+ * Checks if current `[CONDITION_BP]`'s `[BP_APPEARANCE_MODIFIER]` falls within the chosen range.
+ * 
+ * `[BP_APPEARANCE_MODIFIER_RANGE]`
+ */
+"bodyPartAppearanceModifierRange" | 
+/**
+ * Checks if the current `[CONDITION_BP]` is present and not destroyed, pulped, or severed. Can also be applied to
+ * `[LG_CONDITION_BP]`.
+ * 
+ * `[BP_PRESENT]`
+ */
+"bodyPartPresent" | 
+/**
+ * Checks if the current `[CONDITION_BP]` is scarred. Seems to also require `[BP_PRESENT]` to avoid illogical results.
+ * 
+ * `[BP_SCARRED]`
+ */
+"bodyPartScarred" | 
+/**
+ * True if creature size is greater than defined size.
+ * 
+ * `[CONDITION_BODY_SIZE_MIN:size]`
+ */
+"bodySizeMin" | 
+/**
+ * True if creature size is less than defined size.
+ * 
+ * `[CONDITION_BODY_SIZE_MAX:size]`
+ */
+"bodySizeMax" | 
+/**
+ * Changes graphics based on any syndromes the creature is affected by. Vanilla values include:
+ * - `ZOMBIE`
+ * - `NECROMANCER`
+ * - `VAMPCURSE`
+ * - `RAISED_UNDEAD`
+ * - `DISTURBED_DEAD`
+ * - `GHOUL`
+ * 
+ * `[CONDITION_SYN_CLASS:class]`
  */
 "syndromeClass" | 
 /**
- * Condition of being a caste
- */
-"caste" | 
-/**
- * Condition of being a tissue layer
+ * Selects a tissue layer to use for checking other conditions.
+ * 
+ * `[CONDITION_TISSUE_LAYER:BY_CATEGORY:ALL:SKIN]`
+ * 
+ * `[CONDITION_TISSUE_LAYER:BY_CATEGORY:bp category or 'ALL':tissue layer or 'ALL']`
  */
 "tissueLayer" | 
 /**
- * Condition of being a material flag
- */
-"materialFlag" | 
-/**
- * Condition of being a material type
- */
-"materialType" | 
-/**
- * Condition of being off if an item is present
- */
-"shutOffIfItemPresent" | 
-/**
- * Condition of being a random part index
+ * Chooses a random layer among layers with a `CONDITION_RANDOM_PART_INDEX` with the same identifier. Index
+ * is which option this condition is, out of Range number of options.
+ * 
+ * `[CONDITION_RANDOM_PART_INDEX:HEAD:3:4]` is the third possible random head out of four total options.
+ * One of these random conditions each will be put into a set of four different sprites to add some random
+ * variation in the appearance of the creature's head.
+ * 
+ * `[CONDITION_RANDOM_PART_INDEX:identifier:index:range]`
  */
 "randomPartIndex" | 
 /**
- * Condition of being a ghost
+ * Checks if the creature is a ghost.
+ * 
+ * `[CONDITION_GHOST]`
  */
 "ghost" | 
 /**
- * Condition of being a tissue that may have color
+ * Checks the selected tissue's color. Accepts multiple color tokens, and is true if the any of the colors
+ * is present in the selected tissues.
+ * 
+ * `[TISSUE_MAY_HAVE_COLOR:color token:more color tokens]`
  */
 "tissueMayHaveColor" | 
 /**
- * Condition of being a tissue that is at least so long
+ * Checks the current `[CONDITION_TISSUE_LAYER]`'s `LENGTH` appearance modifier. Is true if the `LENGTH` is
+ * greater than the integer input.
+ * 
+ * `[TISSUE_MIN_LENGTH:length]`
  */
 "tissueMinLength" | 
 /**
- * Condition of being a tissue that is at most so long
+ * Checks the current `[CONDITION_TISSUE_LAYER]`'s `LENGTH` appearance modifier. Is true if the `LENGTH` is
+ * less than the integer input.
+ * 
+ * `[TISSUE_MAX_LENGTH:length]`
  */
 "tissueMaxLength" | 
+/**
+ * Checks the current `[CONDITION_TISSUE_LAYER]`'s `DENSITY` appearance modifier. Is true if the `DENSITY` is
+ * greater than the integer input.
+ * 
+ * `[TISSUE_MIN_DENSITY:desnsity]`
+ */
+"tissueMinDensity" | 
+/**
+ * Checks the current `[CONDITION_TISSUE_LAYER]`'s `DENSITY` appearance modifier. Is true if the `DENSITY` is
+ * less than the integer input.
+ * 
+ * `[TISSUE_MAX_DENSITY:desnsity]`
+ */
+"tissueMaxDensity" | 
 /**
  * Condition of being a tissue at least so curly
  */
@@ -3728,33 +3829,38 @@ export type ConditionTag =
  */
 "tissueMaxCurly" | 
 /**
- * Condition of being a tissue that may have a shape
+ * Checks the current `[CONDITION_TISSUE_LAYER]`'s shaping (hairstyle). Valid tokens are
+ * - `NEATLY_COMBED`
+ * - `BRAIDED`
+ * - `DOUBLE_BRAIDS`
+ * - `PONY_TAILS`
+ * - `CLEAN_SHAVEN `
+ * - `STANDARD_HAIR/BEARD/MOUSTACHE/SIDEBURNS_SHAPINGS`
+ * 
+ * `[TISSUE_MAY_HAVE_SHAPING:styling token]`
  */
 "tissueMayHaveShaping" | 
 /**
- * Condition of being a tissue that is not shaped
+ * Checks the current `[CONDITION_TISSUE_LAYER]`'s color. Accepts multiple color tokens, and is true if the
+ * any of the colors is present in the selected tissues.
+ * 
+ * `[TISSUE_NOT_SHAPED]`
  */
 "tissueNotShaped" | 
 /**
- * Condition of being a swapped tissue
+ * Checks if a tissue is sufficiently curly, and if so swaps to display a different image. The new image
+ * is defined by the tile page ID, x position, and y position.
+ * 
+ * This condition should be within a `[LAYER:... ]` that has a similar graphic to the on in the `TISSUE_SWAP`.
+ * The current `[CONDITION_TISSUE_LAYER]` group must also include a `[TISSUE_MIN_LENGTH]`.
+ * 
+ * `[TISSUE_SWAP:IF_MIN_CURLY:curl amount:tile page id:x pos:y pos]`
  */
 "tissueSwap" | 
 /**
  * Condition of being a specific layer (start layer definition)
  */
 "layer" | 
-/**
- * Condition of being a specific layer set of layers
- */
-"layerSet" | 
-/**
- * Condition of being a specific layer group
- */
-"layerGroup" | 
-/**
- * Condition of being a specific layer group set of layers
- */
-"endLayerGroup" | 
 /**
  * Condition of being the upper body
  */
@@ -3763,6 +3869,163 @@ export type ConditionTag =
  * Condition of being a copy of a template
  */
 "copyOfTemplate" | 
+/**
+ * Checks the current [CONDITION_ITEM_WORN]'s quality. 0 is base quality, 5 is masterwork.
+ * See `[CONDITION_MATERIAL_FLAG:NOT_ARTIFACT]` for non-artifact-quality items.
+ * 
+ * `[ITEM_QUALITY:quality id]`
+ */
+"itemQuality" | 
+/**
+ * Begins a layer group. Only the first-matching layer in a group will be rendered, so list more
+ * specific items at the beginning of the layer group and more general items towards the end.
+ * 
+ * `[LAYER_GROUP]`
+ */
+"layerGroup" | 
+/**
+ * Condition of being a specific layer group set of layers
+ * Begins defining a layer set for a creature's graphics.
+ * 
+ * `[LAYER_SET:condition]`
+ */
+"layerSet" | 
+/**
+ * Begins defining a palette for the layer set. Its name can then be referenced by `[USE_PALETTE]`.
+ * Unlike the palettes used to render all descriptor color tokens, it can be of arbitrary length.
+ * 
+ * `[LS_PALETTE:name]`
+ */
+"layerSetPalette" | 
+/**
+ * The file name of the 8bit RGBA (sometimes called 32bit) in the /graphics/images folder of the mod,
+ * such as `images/portraits/dwarf_portrait_body_palette.png`.
+ * 
+ * `[LS_PALETTE_FILE:file path]`
+ */
+"layerSetPaletteFile" | 
+/**
+ * Defines the default row of a layer set palette, conventionally 0. The exact color values on this row
+ * will be replaced on layer images with the colors in the same column, based on what row is passed as
+ * an argument to `[USE_PALETTE]`.
+ * 
+ * `[LS_PALETTE_DEFAULT:integer]`
+ */
+"layerSetPaletteDefault" | 
+/**
+ * Allows the entire layer group (rather than an individual layer) to be switched on and off depending on the
+ * conditions of a body part. Should accept the same tokens `[CONDITION_BP]` does.
+ * 
+ * Selection is done with `BY_TYPE`, `BY_CATEGORY`, or `BY_TOKEN`
+ * 
+ * `[LG_CONDITION_BP:selection:cateogry, type, or token]`
+ */
+"layerGroupBodyPart" | 
+/**
+ * Explicitly marks the end of a layer group, which allows layers after to not belong to any layer group.
+ * 
+ * `[END_LAYER_GROUP]`
+ */
+"endLayerGroup" | 
+/**
+ * Defines a clothing or armor graphic by the specific part it is equipped to, the type of armor it is, and the
+ * internal ID of that item. Additional arguments can be supplied to check for additional subtypes. Valid if any
+ * matching items are worn.
+ * 
+ * For example, a condition representing a right handed mitten or glove would be defined as:
+ * 
+ * `[CONDITION_ITEM_WORN:BY_TOKEN:RH:GLOVES:ITEM_GLOVES_MITTENS]` Also accepts the input `ANY_HELD` or `WIELD`
+ * (e.g. `WIELD:WEAPON:ANY`), though `ANY_HELD` has been bugged since v50.14.
+ * 
+ * Selection is done with `BY_CATEGORY` or `BY_TOKEN`
+ * 
+ * `[CONDITION_ITEM_WORN:selection:cateogry or token:armor type:item id]`
+ */
+"itemWorn" | 
+/**
+ * Causes the current layer to not be rendered if the creature has one of the items worn or equipped. Also accepts
+ * the input `ANY_HELD` or `WIELD` (e.g. `WIELD:WEAPON:ANY`). Note that `ANY_HELD` has been bugged since v50.14.
+ * 
+ * Selection is done with `BY_CATEGORY` or `BY_TOKEN`
+ * 
+ * `[SHUT_OFF_IF_ITEM_PRESENT:selection:cateogry or token:armor type:item id]`
+ */
+"shutOffIfItemPresent" | 
+/**
+ * Displays this layer if the creature is this caste. Only one caste is accepted for each condition, but multiple
+ * caste conditions can be used in one layer and the layer will be displayed if any of them match.
+ * 
+ * `[CONDITION_CASTE:caste name]`
+ */
+"caste" | 
+/**
+ * Represents which color the clothing is dyed. Partially-working.v50.15
+ * 
+ * Takes a descriptor color. Vanilla dye options:
+ * 
+ * - MIDNIGHT_BLUE - (Dimple cup)
+ * - EMERALD - (Blade weed)
+ * - RED - (Hide root)
+ * - BLACK - (Sliver barb)
+ * 
+ * `[CONDITION_DYE:cye color]`
+ */
+"dye" | 
+/**
+ * Checks if the clothing is dyed.v50.15
+ * 
+ * `[CONDITION_NOT_DYED]`
+ */
+"notDyed" | 
+/**
+ * Changes graphics based on the material an equipped item is made of. Specifying multiple of this condition for a
+ * layer uses the "AND" instead of "OR" logical operator, whether placed in the same line or on separate lines. Valid
+ * material flags are similar to reactant conditions including:
+ * 
+ * - `WOVEN_ITEM`
+ * - `ANY_X_MATERIAL` with X being:
+ * - `PLANT`, `SILK`, `YARN`, `LEATHER`, `WOOD`, `SHELL`, `BONE`, `STONE`, `GEM`, `TOOTH`, `HORN`, `PEARL`
+ * - `IS_DIVINE_MATERIAL`
+ * - `NOT_ARTIFACT`
+ * - `IS_CRAFTED_ARTIFACT` (Note that this token might not have ever worked.)
+ * - `METAL_ITEM_MATERIAL`
+ * - `GLASS_MATERIAL`
+ * - `FIRE_BUILD_SAFE`
+ * - `MAGMA_BUILD_SAFE`
+ * - `GROWN_NOT_CRAFTED`
+ * 
+ * `[CONDITION_MATERIAL_FLAG:flag]`
+ */
+"materialFlag" | 
+/**
+ * Changes graphics based on the material an equipped item is made of. Valid material types are `INORGANIC` or `METAL:IRON`
+ * where "iron" can be replaced with any weapons-grade metal. General material tokens are not functional.
+ * 
+ * `[CONDITION_MATERIAL_FLAG]` is a better option for any material condition other than metal.
+ * 
+ * `[CONDITION_MATERIAL_TYPE:material token]`
+ */
+"materialType" | 
+/**
+ * Colors the layer using that row of either the layer-set-specific `[LS_PALETTE]` or a predefined palette such as `DEFAULT`.
+ * 
+ * `[USE_PALETTE:layer set palette:row]
+ */
+"usePalette" | 
+/**
+ * Uses the default palette to render the layer based on the color of the current `[CONDITION_ITEM_WORN]`.
+ * 
+ * `[USE_STANDARD_PALETTE_FROM_ITEM]`
+ */
+"useStandardPaletteFromItem" | 
+/**
+ * Note: This condition is bugged and doesn't work since DFv50.14.
+ * 
+ * Checks the profession category of the creature to act as a condition. Multiple profession category tokens can be supplied as additional arguments, and will be valid for any of them. You can also use multiple of these tokens instead of listing them all in a single line, but this is functionally identical. Valid Profession tokens which are not categories will be ignored; values that do not match any existing Profession will be treated as NONE and thus apply to doctors, military, etc..
+ * 
+ * `[CONDITION_PROFESSION_CATEGORY:prefession tokens (one ore more)]
+ */
+"professionCategory" | 
 /**
  * Hammerman profession
  */
@@ -6697,7 +6960,24 @@ export type GaitTypeTag =
 /**
  * A struct representing a Graphic object.
  */
-export type Graphic = { metadata?: Metadata | null; identifier: string; objectId: string; casteIdentifier?: string | null; kind: GraphicTypeTag; sprites?: SpriteGraphic[] | null; layers?: ([string, SpriteLayer[]])[] | null; growths?: ([string, SpriteGraphic[]])[] | null; customExtensions?: CustomGraphicExtension[] | null; tags?: string[] | null }
+export type Graphic = { metadata?: Metadata | null; identifier: string; objectId: string; casteIdentifier?: string | null; kind: GraphicTypeTag; sprites?: SpriteGraphic[] | null; layers?: ([string, SpriteLayer[]])[] | null; growths?: ([string, SpriteGraphic[]])[] | null; customExtensions?: CustomGraphicExtension[] | null; tags?: string[] | null; palletes: GraphicPalette[] }
+
+/**
+ * A struct representing a Graphic object.
+ */
+export type GraphicPalette = { 
+/**
+ * Name of the palette
+ */
+name: string; 
+/**
+ * Relative file path to the palette file
+ */
+file: string; 
+/**
+ * Default row of the palette
+ */
+defaultRow: number }
 
 /**
  * The graphic type of the tile
@@ -9425,7 +9705,7 @@ export type RawModuleLocation =
 /**
  * The "downloaded" mods directory
  */
-"Mods" | 
+"WorkshopMods" | 
 /**
  * The vanilla data file location
  */
