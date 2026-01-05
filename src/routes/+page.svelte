@@ -6,27 +6,18 @@
 
     let results = $state<RawObject[]>([]);
 
-    // Reactively search whenever the global term changes
+    // Reactively search whenever any part of the global search query
     $effect(() => {
         if (
-            typeof searchState.search_string === "undefined" ||
-            searchState.search_string?.length === 0
-        ) {
-            invoke<RawObject[]>("search_raws", {
+            searchState.search_string === null ||
+            searchState.search_string?.length < 1 ||
+            searchState.search_string?.length > 2
+        )
+            invoke<[RawObject[], number]>("search_raws", {
                 query: searchState,
             })
-                .then((data) => (results = data))
+                .then((data) => (results = data[0]))
                 .catch((error) => console.log(error));
-        } else if (
-            searchState.search_string &&
-            searchState.search_string.length > 2
-        ) {
-            invoke<RawObject[]>("search_raws", {
-                query: searchState,
-            })
-                .then((data) => (results = data))
-                .catch((error) => console.log(error));
-        }
     });
 </script>
 

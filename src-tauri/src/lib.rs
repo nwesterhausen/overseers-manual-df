@@ -17,10 +17,10 @@ struct AppState {
 async fn search_raws(
     state: State<'_, AppState>,
     query: SearchQuery,
-) -> Result<Vec<Box<dyn RawObject>>, String> {
+) -> Result<(Vec<Box<dyn RawObject>>, u32), String> {
     tracing::info!("search_raws::query:{query:?}");
     let db_client = state.db.lock().await;
-    let blobs = db_client.search_raws(&query.clean()).map_err(|e| {
+    let (blobs, total_results) = db_client.search_raws(&query.clean()).map_err(|e| {
         tracing::error!("{e}");
         e.to_string()
     })?;
@@ -43,7 +43,7 @@ async fn search_raws(
 
     let count = results.len();
     tracing::info!("search_raws::result_count:{count}");
-    Ok(results)
+    Ok((results, total_results))
 }
 
 #[tauri::command]
