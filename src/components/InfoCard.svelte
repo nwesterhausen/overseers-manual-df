@@ -1,5 +1,6 @@
 <script lang="ts">
-    import type { Creature, RawObject } from "../bindings/DFRawParser";
+    import type { Creature, Plant, RawObject } from "../bindings/DFRawParser";
+    import { intoAndList, toTitleCase } from "../helpers";
 
     interface Props {
         raw: RawObject;
@@ -10,6 +11,7 @@
     let displayInfo = $derived.by(() => {
         let title = raw.identifier; // Default fallback
         let description = "No description available.";
+        let objectType = raw.metadata.objectType as string;
 
         switch (raw.metadata.objectType) {
             case "Creature": {
@@ -23,18 +25,41 @@
                     .join(" ");
                 break;
             }
-            // You can add more cases here as you implement other RawObject types
+            case "Plant": {
+                const plant = raw as unknown as Plant;
+                title = plant.name.singular;
+                if (
+                    typeof plant.prefStrings !== "undefined" &&
+                    plant.prefStrings !== null
+                ) {
+                    if (plant.prefStrings.length > 1) {
+                        description =
+                            "Liked for its " +
+                            plant.prefStrings.slice(0, -1).join(", ") +
+                            ", and " +
+                            plant.prefStrings.slice(-1) +
+                            ".";
+                    } else {
+                        description =
+                            "Liked for its " + plant.prefStrings.join("");
+                    }
+                }
+                break;
+            }
         }
 
-        return { title, description };
+        return { title, description, objectType };
     });
 </script>
 
 <div class="card card-compact w-72 bg-neutral/25">
     <div class="card-body">
-        <h2 class="card-title">{displayInfo.title}</h2>
+        <h2 class="card-title">{toTitleCase(displayInfo.title, true)}</h2>
         <p>{displayInfo.description}</p>
         <div class="card-actions justify-end">
+            <span class="text-xs absolute left-1.5 bottom-1.5"
+                >{displayInfo.objectType} Raw</span
+            >
             <button class="btn btn-primary btn-xs">Show Details</button>
         </div>
     </div>

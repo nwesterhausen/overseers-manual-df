@@ -15,7 +15,7 @@
     />{#if isAdvancedOpen}
         <AdvancedSearch />
     {/if}
-    <main class="flex-grow">
+    <main class="grow">
         {@render children()}
     </main>
 </div>
