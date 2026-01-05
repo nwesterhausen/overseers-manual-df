@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Creature, Plant, RawObject } from "../bindings/DFRawParser";
-    import { intoAndList, toTitleCase } from "../helpers";
+    import { toTitleCase } from "../helpers";
 
     interface Props {
         raw: RawObject;
@@ -12,6 +12,7 @@
         let title = raw.identifier; // Default fallback
         let description = "No description available.";
         let objectType = raw.metadata.objectType as string;
+        let rawJson = raw;
 
         switch (raw.metadata.objectType) {
             case "Creature": {
@@ -48,7 +49,7 @@
             }
         }
 
-        return { title, description, objectType };
+        return { title, description, objectType, rawJson };
     });
 </script>
 
@@ -60,7 +61,11 @@
             <span class="text-xs absolute left-1.5 bottom-1.5"
                 >{displayInfo.objectType} Raw</span
             >
-            <button class="btn btn-primary btn-xs">Show Details</button>
+            <button
+                class="btn btn-primary btn-xs"
+                onclick={() => console.log(displayInfo.rawJson)}
+                >Show Details</button
+            >
         </div>
     </div>
 </div>
