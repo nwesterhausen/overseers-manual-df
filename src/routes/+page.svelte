@@ -8,16 +8,11 @@
 
     // Reactively search whenever any part of the global search query
     $effect(() => {
-        if (
-            searchState.search_string === null ||
-            searchState.search_string?.length < 1 ||
-            searchState.search_string?.length > 2
-        )
-            invoke<[RawObject[], number]>("search_raws", {
-                query: searchState,
-            })
-                .then((data) => (results = data[0]))
-                .catch((error) => console.log(error));
+        invoke<[RawObject[], number]>("search_raws", {
+            query: searchState,
+        })
+            .then((data) => (results = data[0]))
+            .catch((error) => console.log(error));
     });
 </script>
 
