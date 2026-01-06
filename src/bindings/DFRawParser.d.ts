@@ -3500,21 +3500,56 @@ export type ConditionTag =
  */
 "condition" | 
 /**
- * Default condition
+ * Used when defining a default sprite image
+ * 
+ * `[DEFAULT:...]`
  */
 "default" | 
 /**
- * A condition of "being animated"
+ * Used when defining a child sprite image
+ * 
+ * `[CHILD:...]`
+ */
+"childPrime" | 
+/**
+ * Used when defining a baby sprite image
+ * 
+ * `[BABY:...]`
+ */
+"babyPrime" | 
+/**
+ * Displayed if the creature is raised from the dead, although it is not
+ * known how this is decided. Raised status is not related to having a
+ * syndrome with the class from `[CONDITION_SYN_CLASS]` or from having
+ * `[NOT_LIVING]`/`[OPPOSED_TO_LIFE]`.
+ * 
+ * Used when defining a sprite image.
+ * 
+ * `[ANIMATED:...]`
  */
 "animated" | 
 /**
- * Condition of being a corpse
+ * Displayed as soon as the creature dies.
+ * 
+ * `[CORPSE:...]`
  */
 "corpse" | 
 /**
- * Condition of being a baby
+ * Displayed in menus. Useful for large images that would extend beyond the
+ * menu boxes otherwise.
+ * 
+ * `[LIST_ICON]`
  */
-"baby" | 
+"listIcon" | 
+/**
+ * Displayed in interaction menus in Adventure Mode, overrides `LIST_ICON` when
+ * specified in a creature `CAN_DO_INTERACTION` using `CDI:TOKEN:token_name`.
+ * 
+ * Might accept referenced token_name before standard secondaries.
+ * 
+ * `[CDI_LIST_ICON]`
+ */
+"cdiListIcon" | 
 /**
  * Condition of being trained for hunting
  */
@@ -3523,10 +3558,6 @@ export type ConditionTag =
  * Condition of being trained for war
  */
 "trainedWar" | 
-/**
- * Condition of being a list icont
- */
-"listIcon" | 
 /**
  * Condition of being a skeleton
  */
@@ -3552,6 +3583,10 @@ export type ConditionTag =
  */
 "female" | 
 /**
+ * `[CONDITION_BABY]`
+ */
+"baby" | 
+/**
  * Condition of being a vampire
  */
 "vampireCursed" | 
@@ -3567,6 +3602,56 @@ export type ConditionTag =
  * Condition of being remains
  */
 "remains" | 
+/**
+ * Displayed if the unit escorts a tax collector (unused).
+ * 
+ * `[TAX_ESCORT]`
+ */
+"taxEscort" | 
+/**
+ * Displayed if the unit is law enforcement.
+ * 
+ * `[LAW_ENFORCE]`
+ */
+"lawEnforcement" | 
+/**
+ * Displayed if the creature is an adventurer.
+ * 
+ * `[ADVENTURER]`
+ */
+"adventurer" | 
+/**
+ * The creature is in the dark. Graphical replacement for `[GLOWTILE]`.
+ * 
+ * `[GLOW]`
+ */
+"glow" | 
+/**
+ * As `[GLOW]`, but with their left eye missing. If the sprite is facing forwards, then the
+ * visually leftmost eye should remain.
+ * 
+ * `[GLOW_LEFT_GONE]`
+ */
+"glowLeftGone" | 
+/**
+ * As `[GLOW]`, but with their left eye missing. If the sprite is facing forwards, then the
+ * visually leftmost eye should remain.
+ * 
+ * `[GLOW_RIGHT_GONE]`
+ */
+"glowRightGone" | 
+/**
+ * A child creature is in darkness. Does not have wound states.
+ * 
+ * `[GLOW_CHILD]`
+ */
+"glowChild" | 
+/**
+ * The sprite for a clutch of eggs.
+ * 
+ * `[EGG]`
+ */
+"egg" | 
 /**
  * The default graphic for this vermin.
  * 
