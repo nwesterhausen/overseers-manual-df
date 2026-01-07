@@ -821,6 +821,7 @@ dependencies = [
 name = "dfraw_parser_sqlite_lib"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "dfraw_parser",
  "rusqlite",
  "serde",
