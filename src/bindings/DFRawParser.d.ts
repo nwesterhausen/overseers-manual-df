@@ -9867,6 +9867,20 @@ limit: number;
 page: number }
 
 /**
+ * A structured response for search operations, containing the requested page of data
+ * and the total count of matches in the database.
+ */
+export type SearchResults<T> = { 
+/**
+ * The page of results found.
+ */
+results: T[]; 
+/**
+ * The total number of matches in the database (ignoring pagination limits).
+ */
+total_count: number }
+
+/**
  * The tokens for the seasons
  */
 export type SeasonTag = 

@@ -4,7 +4,7 @@ use dfraw_parser::{
     metadata::{ParserOptions, RawModuleLocation},
     traits::RawObject,
 };
-use dfraw_parser_sqlite_lib::{ClientOptions, DbClient, SearchQuery};
+use dfraw_parser_sqlite_lib::{ClientOptions, DbClient, SearchQuery, SearchResults};
 use tauri::{async_runtime::Mutex, State};
 use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
 
@@ -17,15 +17,16 @@ struct AppState {
 async fn search_raws(
     state: State<'_, AppState>,
     query: SearchQuery,
-) -> Result<(Vec<Box<dyn RawObject>>, u32), String> {
+) -> Result<SearchResults<Box<dyn RawObject>>, String> {
     tracing::info!("search_raws::query:{query:?}");
     let db_client = state.db.lock().await;
-    let (blobs, total_results) = db_client.search_raws(&query.clean()).map_err(|e| {
+    let search_results = db_client.search_raws(&query.clean()).map_err(|e| {
         tracing::error!("{e}");
         e.to_string()
     })?;
 
-    let results: Vec<Box<dyn dfraw_parser::traits::RawObject>> = blobs
+    let results: Vec<Box<dyn dfraw_parser::traits::RawObject>> = search_results
+        .results
         .into_iter()
         // Deserialize the JSON blob back into a Boxed trait object
         // typetag handles figuring out if it's a Creature, Plant, etc.
@@ -43,7 +44,10 @@ async fn search_raws(
 
     let count = results.len();
     tracing::info!("search_raws::result_count:{count}");
-    Ok((results, total_results))
+    Ok(SearchResults {
+        results,
+        total_count: search_results.total_count,
+    })
 }
 
 #[tauri::command]
