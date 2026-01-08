@@ -1,7 +1,7 @@
 <script lang="ts">
     import { slide } from "svelte/transition";
-    import { searchState } from "../search.svelte";
-    import type { ObjectType } from "../bindings/DFRawParser";
+    import { searchState } from "state/search.svelte";
+    import type { ObjectType } from "bindings/DFRawParser";
 
     // Mapping display names to your ObjectType enum
     const typeOptions: { label: string; value: ObjectType }[] = [

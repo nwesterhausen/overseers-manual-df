@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type { Creature, Plant, RawObject } from "../bindings/DFRawParser";
-    import { toTitleCase } from "../helpers";
+    import type { Creature, Plant, RawObject } from "bindings/DFRawParser";
+    import { toTitleCase } from "helpers";
 
     interface Props {
         raw: RawObject;

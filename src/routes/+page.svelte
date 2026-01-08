@@ -1,8 +1,8 @@
 <script lang="ts">
     import { invoke } from "@tauri-apps/api/core";
-    import { searchState } from "../search.svelte";
-    import InfoCard from "../components/InfoCard.svelte";
-    import type { RawObject, SearchResults } from "../bindings/DFRawParser";
+    import { searchState } from "state/search.svelte";
+    import InfoCard from "components/InfoCard.svelte";
+    import type { RawObject, SearchResults } from "bindings/DFRawParser";
 
     let search_results = $state<SearchResults<RawObject>>({
         results: [],

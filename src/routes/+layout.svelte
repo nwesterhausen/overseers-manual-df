@@ -1,8 +1,8 @@
 <script lang="ts">
     import "./layout.css";
-    import Navigation from "../components/Navigation.svelte";
-    import { searchState } from "../search.svelte";
-    import AdvancedSearch from "../components/AdvancedSearch.svelte";
+    import Navigation from "components/NavigationMenu.svelte";
+    import { searchState } from "state/search.svelte";
+    import AdvancedSearch from "components/AdvancedSearch.svelte";
 
     let isAdvancedOpen = $state(false);
     let { children } = $props();

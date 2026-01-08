@@ -2,10 +2,9 @@
     import {
         BookOpenText,
         SearchIcon,
-        Settings,
+        SettingsIcon,
         SlidersHorizontal,
     } from "@lucide/svelte";
-    import SettingsBtn from "./SettingsBtn.svelte";
 
     let { searchQuery = $bindable(), onToggleAdvanced } = $props<{
         searchQuery: string | null;
@@ -39,6 +38,8 @@
     </div>
 
     <div class="navbar-end">
-        <SettingsBtn />
+        <a class="btn btn-ghost px-1" href="/settings">
+            <SettingsIcon class="h-5 w-5" />
+        </a>
     </div>
 </div>
