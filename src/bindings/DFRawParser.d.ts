@@ -5740,7 +5740,15 @@ export type CustomGraphicExtension = { extensionType: GraphicTypeTag; tilePageId
 /**
  * A struct representing a Dimensions object.
  */
-export type Dimensions = { x: number; y: number }
+export type Dimensions = { 
+/**
+ * The x coordinate
+ */
+x: number; 
+/**
+ * The y coordinate
+ */
+y: number }
 
 /**
  * A struct representing an Entity object.
@@ -10144,6 +10152,51 @@ export type ShrubTag =
 export type SpriteGraphic = { primaryCondition: ConditionTag; tilePageId: string; offset: Dimensions; color?: ColorModificationTag | null; largeImage?: boolean | null; offset2?: Dimensions | null; secondaryCondition?: ConditionTag | null; colorPalletSwap?: number | null; targetIdentifier?: string | null; extraDescriptor?: string | null }
 
 /**
+ * A simplified struct for sprite graphic data
+ */
+export type SpriteGraphicData = { 
+/**
+ * database id for this sprite graphic
+ */
+id: string; 
+/**
+ * linked raw id (of graphics raw) this belongs to
+ */
+rawId: string; 
+/**
+ * identifier of tile page sprite is on
+ */
+tilePageIdentifier: string; 
+/**
+ * sprite offset x1
+ */
+offsetX: string; 
+/**
+ * sprite offset y1
+ */
+offsetY: string; 
+/**
+ * for large sprites, offset x2
+ */
+offsetX2: string | null; 
+/**
+ * for large sprites, offset y2
+ */
+offsetY2: string | null; 
+/**
+ * primary condition for the sprite
+ */
+primaryCondition: string; 
+/**
+ * secondary condition for the sprite
+ */
+secondaryCondition: string; 
+/**
+ * the identifier of the thing this sprite displays
+ */
+targetIdentifier: string }
+
+/**
  * A struct representing a `SpriteLayer` object.
  */
 export type SpriteLayer = { layerName: string; tilePageId: string; offset: Dimensions; offset2?: Dimensions | null; largeImage?: boolean | null; conditions?: ([ConditionTag, string])[] | null }
@@ -10367,6 +10420,43 @@ value: string }
  * A struct representing a `TilePage` object.
  */
 export type TilePage = { metadata?: Metadata | null; identifier: string; objectId: string; file: string; tileDim: Dimensions; pageDim: Dimensions }
+
+/**
+ * A simplified struct for tile page data
+ */
+export type TilePageData = { 
+/**
+ * database id for this page
+ */
+id: string; 
+/**
+ * linked id in database for the raw data of this tile page
+ */
+rawId: string; 
+/**
+ * identifier of the tile page
+ */
+identifier: string; 
+/**
+ * file path to tile page
+ */
+filePath: string; 
+/**
+ * width of tiles
+ */
+tileWidth: number; 
+/**
+ * height of tiles
+ */
+tileHeight: number; 
+/**
+ * width of page
+ */
+pageWidth: number; 
+/**
+ * height of page
+ */
+pageHeight: number }
 
 /**
  * The tokens used to define the tile page
