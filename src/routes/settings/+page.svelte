@@ -19,7 +19,9 @@
 <div class="p-4">
     <div class="">
         <h3 class="font-bold text-xl">Settings</h3>
-        <a href="/" class="btn btn-secondary btn-xs">&lt; back</a>
+        <button onclick={() => history.back()} class="btn btn-secondary btn-xs"
+            >&lt; back</button
+        >
     </div>
     <div class="tabs tabs-border">
         <input
