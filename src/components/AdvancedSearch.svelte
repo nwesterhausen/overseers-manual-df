@@ -1,20 +1,10 @@
 <script lang="ts">
     import { slide } from "svelte/transition";
     import { searchState } from "state/search.svelte";
-    import type { ObjectType, RawModuleLocation } from "bindings/DFRawParser";
     import { X } from "@lucide/svelte";
-
-    const typeOptions: { label: string; value: ObjectType }[] = [
-        { label: "Creature", value: "Creature" },
-        { label: "Plant", value: "Plant" },
-        { label: "Material", value: "Inorganic" }, // Mapping Material to Inorganic
-        { label: "Entity", value: "Entity" },
-    ];
-    const locationOptions: { label: string; value: RawModuleLocation }[] = [
-        { label: "Vanilla Raws", value: "Vanilla" },
-        { label: "Installed Raws", value: "InstalledMods" },
-        { label: "Workshop Mods", value: "WorkshopMods" },
-    ];
+    import { defaultSearchState } from "state/searchDefaults.svelte";
+    import { areDeeplyEqual } from "helpers";
+    import { locationOptions, typeOptions } from "searchOptions";
 
     // Sample list of tags
     const allTags = [
@@ -92,12 +82,14 @@
                         </label>
                     {/each}
 
-                    {#if searchState.raw_types.length > 0}
+                    {#if !areDeeplyEqual(searchState.raw_types, defaultSearchState.raw_types)}
                         <button
-                            onclick={() => (searchState.raw_types = [])}
+                            onclick={() =>
+                                (searchState.raw_types =
+                                    defaultSearchState.raw_types)}
                             class="btn btn-ghost btn-xs text-error"
                         >
-                            Clear Filters
+                            Reset to Default
                         </button>
                     {/if}
                 </div>
@@ -121,12 +113,14 @@
                         </label>
                     {/each}
 
-                    {#if searchState.raw_types.length > 0}
+                    {#if !areDeeplyEqual(searchState.locations, defaultSearchState.locations)}
                         <button
-                            onclick={() => (searchState.raw_types = [])}
+                            onclick={() =>
+                                (searchState.locations =
+                                    defaultSearchState.locations)}
                             class="btn btn-ghost btn-xs text-error"
                         >
-                            Clear Filters
+                            Reset to Default
                         </button>
                     {/if}
                 </div>
@@ -206,7 +200,7 @@
                 searchState.required_flags = [];
             }}
         >
-            Reset All Filters
+            Reset All to Default
         </button>
     </div>
 </div>

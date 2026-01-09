@@ -18,6 +18,7 @@ const config = {
       state: "./src/state",
       helpers: "./src/helpers.ts",
       highlighter: "./src/highlighter.svelte.ts",
+      searchOptions: "./src/searchOptions.svelte.ts",
     },
   },
 };
