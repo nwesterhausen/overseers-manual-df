@@ -9,9 +9,14 @@
     } from "@lucide/svelte";
     import ThemeToggler from "./ThemeToggler.svelte";
 
-    let { searchQuery = $bindable(), onToggleAdvanced } = $props<{
+    let {
+        searchQuery = $bindable(),
+        onToggleAdvanced,
+        advancedIsOpen = $bindable(),
+    } = $props<{
         searchQuery: string | null;
         onToggleAdvanced: () => void;
+        advancedIsOpen: boolean | null;
     }>();
 </script>
 
@@ -31,13 +36,16 @@
                 bind:value={searchQuery}
             />
         </label>
-        <button
-            class="btn btn-ghost px-1"
-            onclick={onToggleAdvanced}
-            title="Advanced Search"
-        >
-            <SlidersHorizontal class="h-5 w-5" />
-        </button>
+        <div class="tooltip tooltip-bottom" data-tip="Search Filters">
+            <button
+                class:btn-active={advancedIsOpen}
+                class="btn btn-ghost px-1"
+                onclick={onToggleAdvanced}
+                title="Advanced Search"
+            >
+                <SlidersHorizontal class="h-5 w-5" />
+            </button>
+        </div>
     </div>
 
     <div class="navbar-end">

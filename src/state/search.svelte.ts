@@ -6,7 +6,7 @@ export const searchState = $state<SearchQuery>({
   raw_types: ["Creature", "Inorganic", "Plant", "Entity"],
   required_flags: [],
   search_string: null,
-  locations: [],
+  locations: ["Vanilla"],
   limit: 50,
   page: 1,
 });

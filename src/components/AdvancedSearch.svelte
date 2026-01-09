@@ -1,13 +1,18 @@
 <script lang="ts">
     import { slide } from "svelte/transition";
     import { searchState } from "state/search.svelte";
-    import type { ObjectType } from "bindings/DFRawParser";
+    import type { ObjectType, RawModuleLocation } from "bindings/DFRawParser";
 
     const typeOptions: { label: string; value: ObjectType }[] = [
         { label: "Creature", value: "Creature" },
         { label: "Plant", value: "Plant" },
         { label: "Material", value: "Inorganic" }, // Mapping Material to Inorganic
         { label: "Entity", value: "Entity" },
+    ];
+    const locationOptions: { label: string; value: RawModuleLocation }[] = [
+        { label: "Vanilla Raws", value: "Vanilla" },
+        { label: "Installed Raws", value: "InstalledMods" },
+        { label: "Workshop Mods", value: "WorkshopMods" },
     ];
 </script>
 
@@ -30,6 +35,35 @@
                             class="checkbox checkbox-primary checkbox-sm"
                             value={option.value}
                             bind:group={searchState.raw_types}
+                        />
+                        <span class="text-sm select-none">{option.label}</span>
+                    </label>
+                {/each}
+
+                {#if searchState.raw_types.length > 0}
+                    <button
+                        onclick={() => (searchState.raw_types = [])}
+                        class="btn btn-ghost btn-xs text-error"
+                    >
+                        Clear Filters
+                    </button>
+                {/if}
+            </div>
+        </div>
+        <div>
+            <span class="text-xs font-bold uppercase opacity-60 block mb-2"
+                >Search Locations</span
+            >
+            <div class="flex flex-wrap gap-4">
+                {#each locationOptions as option}
+                    <label
+                        class="flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 rounded-lg transition-colors"
+                    >
+                        <input
+                            type="checkbox"
+                            class="checkbox checkbox-primary checkbox-sm"
+                            value={option.value}
+                            bind:group={searchState.locations}
                         />
                         <span class="text-sm select-none">{option.label}</span>
                     </label>

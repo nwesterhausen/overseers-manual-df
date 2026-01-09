@@ -36,7 +36,9 @@
         <Navigation
             bind:searchQuery={searchState.search_string}
             onToggleAdvanced={() => (isAdvancedOpen = !isAdvancedOpen)}
-        />{#if isAdvancedOpen}
+            bind:advancedIsOpen={isAdvancedOpen}
+        />
+        {#if isAdvancedOpen}
             <AdvancedSearch />
         {/if}
     </header>
