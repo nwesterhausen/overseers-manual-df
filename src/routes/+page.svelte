@@ -22,7 +22,7 @@
 <main class="p-4">
     <div class="flex flex-wrap justify-center gap-4">
         {#each search_results.results as item}
-            <InfoCard raw={item} />
+            <InfoCard raw={item.data} raw_id={item.id} />
         {:else}
             <p class="text-neutral-500">
                 No results found for "{searchState.search_string}"

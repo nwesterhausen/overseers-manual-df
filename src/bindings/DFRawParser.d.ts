@@ -9826,6 +9826,19 @@ identifier: string;
 metadata: Metadata }
 
 /**
+ * A carrier struct for passing the database id along with the object we retrieved.
+ */
+export type ResultWithId<T> = { 
+/**
+ * id of the object in the database on its respective table
+ */
+id: string; 
+/**
+ * the object retrieved
+ */
+data: T }
+
+/**
  * A query for searching raw objects in the database.
  */
 export type SearchQuery = { 
@@ -9882,7 +9895,7 @@ export type SearchResults<T> = {
 /**
  * The page of results found.
  */
-results: T[]; 
+results: ResultWithId<T>[]; 
 /**
  * The total number of matches in the database (ignoring pagination limits).
  */

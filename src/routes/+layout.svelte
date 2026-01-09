@@ -8,14 +8,14 @@
     let { children } = $props();
 </script>
 
-<div class="min-h-screen flex flex-col">
+<div class="min-h-screen flex flex-col overflow-hidden">
     <Navigation
         bind:searchQuery={searchState.search_string}
         onToggleAdvanced={() => (isAdvancedOpen = !isAdvancedOpen)}
     />{#if isAdvancedOpen}
         <AdvancedSearch />
     {/if}
-    <main class="grow">
+    <main class="grow overflow-y-auto">
         {@render children()}
     </main>
 </div>

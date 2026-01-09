@@ -4,9 +4,10 @@
 
     interface Props {
         raw: RawObject;
+        raw_id: string;
     }
 
-    let { raw }: Props = $props();
+    let { raw, raw_id }: Props = $props();
     // Use $derived to keep title and description in sync with the 'raw' prop
     let displayInfo = $derived.by(() => {
         let title = raw.identifier; // Default fallback
@@ -61,10 +62,8 @@
             <span class="text-xs absolute left-1.5 bottom-1.5"
                 >{displayInfo.objectType} Raw</span
             >
-            <button
-                class="btn btn-primary btn-xs"
-                onclick={() => console.log(displayInfo.rawJson)}
-                >Show Details</button
+            <a class="btn btn-primary btn-xs" href="/raw/{raw_id}"
+                >Show Details</a
             >
         </div>
     </div>

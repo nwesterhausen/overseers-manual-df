@@ -1,16 +1,35 @@
-use std::path::PathBuf;
+use std::{num::ParseIntError, path::PathBuf};
 
 use dfraw_parser::{
     metadata::{ParserOptions, RawModuleLocation},
     traits::RawObject,
 };
-use dfraw_parser_sqlite_lib::{ClientOptions, DbClient, SearchQuery, SearchResults};
+use dfraw_parser_sqlite_lib::{ClientOptions, DbClient, ResultWithId, SearchQuery, SearchResults};
 use tauri::{async_runtime::Mutex, State};
 use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
 
 struct AppState {
     // We use Mutex because insert_module_data requires &mut self
     db: Mutex<DbClient>,
+}
+
+#[tauri::command]
+async fn get_raw_by_id(
+    state: State<'_, AppState>,
+    id: String,
+) -> Result<Box<dyn RawObject>, String> {
+    tracing::info!("get_raw_by_id:{id}");
+    let raw_id: i64 = id.parse().map_err(|e: ParseIntError| {
+        tracing::error!("{e}");
+        e.to_string()
+    })?;
+    let db_client = state.db.lock().await;
+    let raw = db_client.get_raw(raw_id).map_err(|e| {
+        tracing::error!("{e}");
+        e.to_string()
+    })?;
+
+    Ok(raw)
 }
 
 #[tauri::command]
@@ -25,14 +44,17 @@ async fn search_raws(
         e.to_string()
     })?;
 
-    let results: Vec<Box<dyn dfraw_parser::traits::RawObject>> = search_results
+    let results: Vec<ResultWithId<Box<dyn dfraw_parser::traits::RawObject>>> = search_results
         .results
         .into_iter()
         // Deserialize the JSON blob back into a Boxed trait object
         // typetag handles figuring out if it's a Creature, Plant, etc.
         .filter_map(|blob| {
-            match serde_json::from_slice::<Box<dyn dfraw_parser::traits::RawObject>>(&blob) {
-                Ok(obj) => Some(obj),
+            match serde_json::from_slice::<Box<dyn dfraw_parser::traits::RawObject>>(&blob.data) {
+                Ok(obj) => Some(ResultWithId {
+                    id: blob.id,
+                    data: obj,
+                }),
                 Err(e) => {
                     // This will tell you EXACTLY why it's failing (e.g., "expected value at line 1")
                     tracing::error!("Failed to deserialize raw object: {e}");
@@ -114,7 +136,11 @@ pub fn run() {
                 .level(log::LevelFilter::Info)
                 .build(),
         )
-        .invoke_handler(tauri::generate_handler![search_raws, parse_raws])
+        .invoke_handler(tauri::generate_handler![
+            search_raws,
+            parse_raws,
+            get_raw_by_id
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
