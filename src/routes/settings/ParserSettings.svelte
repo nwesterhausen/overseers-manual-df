@@ -14,62 +14,76 @@
     }
 </script>
 
-<h4 class="font-bold text-lg">Parsing Options</h4>
-<fieldset class="fieldset">
-    <p>
-        If you're using the Steam version of Dwarf Fortress, its location will
-        be autodetected. If that fails or if you are using Itch or have it
-        installed somewhere else, set custom locations for where Dwarf Fortress
-        and your data are located.
+<div class="flex flex-wrap gap-4 flex-col w-9/12">
+    <p class="py-4 text-sm">
+        Configure what raw files should be parsed and from where. Overseer's
+        Reference Manual keeps a cache of the parsed raw files in a database to
+        provide faster lookups and to avoid having to rescan all raw files each
+        time its opened.
     </p>
-    <label class="form-control w-full">
-        <div class="label">
-            <span class="label-text font-semibold"
-                >Dwarf Fortress Directory</span
+    <p class="text-warning">todo: make this formatted like search options</p>
+    <div>
+        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
+            >Startup Action</span
+        >
+        <div>
+            <strong>radio options:</strong>
+            <ul>
+                <li>do nothing</li>
+                <li>parse and insert</li>
+                <li>parse and force update</li>
+                <li>reset then parse</li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
+            >Manual Actions</span
+        >
+        <div class="flex flex-row gap-4 mx-auto">
+            <button class="btn btn-primary btn-sm">Parse and Insert New</button>
+            <button class="btn btn-warning btn-sm"
+                >Parse and Force Update</button
+            >
+            <button class="btn btn-error btn-sm"
+                >Reset Database, Parse and Insert</button
             >
         </div>
-        <input
-            type="text"
-            placeholder="Auto-detected from Steam"
-            class="input input-bordered w-full"
-            bind:value={settingsState.df_dir}
-        />
-    </label>
-    <label class="form-control w-full">
-        <div class="label">
-            <span class="label-text font-semibold"
-                >Dwarf Fortress User Data Directory</span
-            >
+    </div>
+    <div>
+        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
+            >Directory Detection</span
+        >
+    </div>
+    <div>
+        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
+            >Directory Overrides</span
+        >
+    </div>
+    <div>
+        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
+            >Locations to Parse</span
+        >
+        <div class="flex flex-wrap gap-4 w-full mx-5">
+            {#each ["Vanilla", "InstalledMods", "Mods"] as location}
+                <label class="label">
+                    <input
+                        type="checkbox"
+                        class="toggle toggle-sm toggle-primary"
+                        checked={settingsState.parse_locations.includes(
+                            location as RawModuleLocation,
+                        )}
+                        onchange={() =>
+                            toggleLocation(location as RawModuleLocation)}
+                    />
+                    {location}{#if location == "Mods"}
+                        &nbsp;-&nbsp;Downloaded mods from Steam Workshop
+                    {:else if location == "InstalledMods"}
+                        &nbsp;-&nbsp;Mods that have been used in at least one
+                        world
+                    {/if}
+                </label>
+            {/each}
         </div>
-        <input
-            type="text"
-            placeholder="Auto-detected (in %AppData% or $HOME)"
-            class="input input-bordered w-full"
-            bind:value={settingsState.df_dir}
-        />
-    </label>
-</fieldset>
-<fieldset class="fieldset">
-    <legend class="bold">Locations</legend>
-    <p>
-        Choose what locations to include when parsing the raws. Choosing none
-        results in no raws parsed.
-    </p>
-    {#each ["Vanilla", "InstalledMods", "Mods"] as location}
-        <label class="label">
-            <input
-                type="checkbox"
-                class="toggle toggle-sm toggle-primary"
-                checked={settingsState.parse_locations.includes(
-                    location as RawModuleLocation,
-                )}
-                onchange={() => toggleLocation(location as RawModuleLocation)}
-            />
-            {location}{#if location == "Mods"}
-                &nbsp;-&nbsp;Downloaded mods from Steam Workshop
-            {:else if location == "InstalledMods"}
-                &nbsp;-&nbsp;Mods that have been used in at least one world
-            {/if}
-        </label>
-    {/each}
-</fieldset>
+    </div>
+</div>
