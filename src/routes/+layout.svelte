@@ -31,13 +31,15 @@
     });
 </script>
 
-<div class="min-h-screen flex flex-col overflow-hidden">
-    <Navigation
-        bind:searchQuery={searchState.search_string}
-        onToggleAdvanced={() => (isAdvancedOpen = !isAdvancedOpen)}
-    />{#if isAdvancedOpen}
-        <AdvancedSearch />
-    {/if}
+<div class="h-screen flex flex-col overflow-hidden">
+    <header class="shrink-0">
+        <Navigation
+            bind:searchQuery={searchState.search_string}
+            onToggleAdvanced={() => (isAdvancedOpen = !isAdvancedOpen)}
+        />{#if isAdvancedOpen}
+            <AdvancedSearch />
+        {/if}
+    </header>
     <main class="grow overflow-y-auto">
         {@render children()}
     </main>

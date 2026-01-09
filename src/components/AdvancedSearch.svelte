@@ -3,7 +3,6 @@
     import { searchState } from "state/search.svelte";
     import type { ObjectType } from "bindings/DFRawParser";
 
-    // Mapping display names to your ObjectType enum
     const typeOptions: { label: string; value: ObjectType }[] = [
         { label: "Creature", value: "Creature" },
         { label: "Plant", value: "Plant" },
