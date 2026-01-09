@@ -1,5 +1,7 @@
 <script lang="ts">
+    import { highlightJson } from "highlighter";
     import type { PageProps } from "./$types";
+    import { themeState } from "state/theme.svelte";
 
     let { data }: PageProps = $props();
 </script>
@@ -9,7 +11,11 @@
     {#if data.details}
         <article>
             <section class="mt-8">
-                {@html data.code}
+                {#await highlightJson(JSON.stringify(data.details, null, 2), themeState.mode)}
+                    <p>Loading...</p>
+                {:then html}
+                    {@html html}
+                {/await}
             </section>
         </article>
     {:else}

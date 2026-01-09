@@ -25,6 +25,7 @@
     "@tauri-apps/plugin-opener": "^2"
   },
   "devDependencies": {
+    "@catppuccin/daisyui": "^2.1.1",
     "@lucide/svelte": "^0.562.0",
     "@sveltejs/adapter-static": "^3.0.6",
     "@sveltejs/kit": "^2.9.0",

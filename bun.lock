@@ -11,6 +11,7 @@
         "@tauri-apps/plugin-opener": "^2",
       },
       "devDependencies": {
+        "@catppuccin/daisyui": "^2.1.1",
         "@lucide/svelte": "^0.562.0",
         "@sveltejs/adapter-static": "^3.0.6",
         "@sveltejs/kit": "^2.9.0",
@@ -30,6 +31,10 @@
     },
   },
   "packages": {
+    "@catppuccin/daisyui": ["@catppuccin/daisyui@2.1.1", "", { "dependencies": { "@catppuccin/palette": "^1.7.1" }, "peerDependencies": { "tailwindcss": "^4.0.17" } }, "sha512-PrZttjj8kwfDBJ34sR+DN25Xtjvxx4T5p8uu/iiGYZR8UOsNwzMlO/alYDBwwTOLzP1NKLNRax09kCT39+QM+A=="],
+
+    "@catppuccin/palette": ["@catppuccin/palette@1.7.1", "", {}, "sha512-aRc1tbzrevOTV7nFTT9SRdF26w/MIwT4Jwt4fDMc9itRZUDXCuEDBLyz4TQMlqO9ZP8mf5Hu4Jr6D03NLFc6Gw=="],
+
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.25.12", "", { "os": "aix", "cpu": "ppc64" }, "sha512-Hhmwd6CInZ3dwpuGTF8fJG6yoWmsToE+vYgD4nytZVxcu1ulHpUQRAB1UJ8+N1Am3Mz4+xOByoQoSZf4D+CpkA=="],
 
     "@esbuild/android-arm": ["@esbuild/android-arm@0.25.12", "", { "os": "android", "cpu": "arm" }, "sha512-VJ+sKvNA/GE7Ccacc9Cha7bpS8nyzVv0jdVgwNDaR4gDMC/2TTRc33Ip8qrNYUcpkOHUT5OZ0bUcNNVZQ9RLlg=="],

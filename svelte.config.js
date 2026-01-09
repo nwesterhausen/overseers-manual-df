@@ -17,6 +17,7 @@ const config = {
       bindings: "./src/bindings",
       state: "./src/state",
       helpers: "./src/helpers.ts",
+      highlighter: "./src/highlighter.svelte.ts",
     },
   },
 };

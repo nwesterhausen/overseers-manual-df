@@ -1,10 +1,13 @@
 <script lang="ts">
     import {
         BookOpenText,
+        MoonIcon,
         SearchIcon,
         SettingsIcon,
         SlidersHorizontal,
+        SunIcon,
     } from "@lucide/svelte";
+    import ThemeToggler from "./ThemeToggler.svelte";
 
     let { searchQuery = $bindable(), onToggleAdvanced } = $props<{
         searchQuery: string | null;
@@ -38,6 +41,7 @@
     </div>
 
     <div class="navbar-end">
+        <ThemeToggler />
         <a class="btn btn-ghost px-1" href="/settings">
             <SettingsIcon class="h-5 w-5" />
         </a>

@@ -1,9 +1,9 @@
-import type { SearchQuery } from "./bindings/DFRawParser";
+import type { SearchQuery } from "bindings/DFRawParser";
 
 export const searchState = $state<SearchQuery>({
   identifier_query: null,
   numeric_filters: [],
-  raw_types: [],
+  raw_types: ["Creature", "Inorganic", "Plant", "Entity"],
   required_flags: [],
   search_string: null,
   locations: [],

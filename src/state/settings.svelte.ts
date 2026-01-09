@@ -1,4 +1,4 @@
-import type { RawModuleLocation } from "./bindings/DFRawParser";
+import type { RawModuleLocation } from "bindings/DFRawParser";
 
 interface Settings {
   df_dir: string;

@@ -1,6 +1,3 @@
-import { createJavaScriptRegexEngine } from "shiki";
-import { createHighlighterCore } from "shiki/core";
-
 /**
  * Turns a string into one with the first letter of each word in upper case.
  *
@@ -39,24 +36,3 @@ export const intoAndList = function (arr: string[]): string {
   }
   return arr.join(", ");
 };
-
-const highlighterPromise = createHighlighterCore({
-  themes: [
-    import("@shikijs/themes/catppuccin-latte"),
-    import("@shikijs/themes/catppuccin-macchiato"),
-    // ...
-  ],
-  langs: [
-    import("@shikijs/langs/json"),
-    // ...
-  ],
-  engine: createJavaScriptRegexEngine(),
-});
-
-export async function highlightJson(code: string) {
-  const highlighter = await highlighterPromise;
-  return highlighter.codeToHtml(code, {
-    theme: "catppuccin-macchiato",
-    lang: "json",
-  });
-}
