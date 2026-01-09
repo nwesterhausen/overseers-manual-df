@@ -2,6 +2,7 @@
     import { slide } from "svelte/transition";
     import { searchState } from "state/search.svelte";
     import type { ObjectType, RawModuleLocation } from "bindings/DFRawParser";
+    import { X } from "@lucide/svelte";
 
     const typeOptions: { label: string; value: ObjectType }[] = [
         { label: "Creature", value: "Creature" },
@@ -14,6 +15,53 @@
         { label: "Installed Raws", value: "InstalledMods" },
         { label: "Workshop Mods", value: "WorkshopMods" },
     ];
+
+    // Sample list of tags
+    const allTags = [
+        "FLIER",
+        "EGG_LAYER",
+        "FIREIMMUNE",
+        "INTELLIGENT",
+        "AMPHIBIOUS",
+        "MAGMA_VISION",
+        "LARGE_PREDATOR",
+        "BENIGN",
+        "COMMON_DOMESTIC",
+    ];
+
+    let tagInput = $state("");
+    let showSuggestions = $state(false);
+
+    // Derived list of tags that match the current input
+    let filteredTags = $derived(
+        tagInput.length > 0
+            ? allTags.filter(
+                  (t) =>
+                      t.toLowerCase().includes(tagInput.toLowerCase()) &&
+                      !searchState.required_flags.includes(t),
+              )
+            : [],
+    );
+
+    function addTag(tag: string) {
+        if (!searchState.required_flags.includes(tag)) {
+            searchState.required_flags = [...searchState.required_flags, tag];
+        }
+        tagInput = "";
+        showSuggestions = false;
+    }
+
+    function removeTag(tag: string) {
+        searchState.required_flags = searchState.required_flags.filter(
+            (t) => t !== tag,
+        );
+    }
+
+    function handleKeydown(e: KeyboardEvent) {
+        if (e.key === "Enter" && filteredTags.length > 0) {
+            addTag(filteredTags[0]);
+        }
+    }
 </script>
 
 <div
@@ -21,63 +69,144 @@
     class="bg-base-200 border-b border-base-300 shadow-inner"
 >
     <div class="container mx-auto p-4 flex flex-col gap-4">
-        <div>
-            <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-                >Object Types</span
-            >
-            <div class="flex flex-wrap gap-4">
-                {#each typeOptions as option}
-                    <label
-                        class="flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 rounded-lg transition-colors"
-                    >
-                        <input
-                            type="checkbox"
-                            class="checkbox checkbox-primary checkbox-sm"
-                            value={option.value}
-                            bind:group={searchState.raw_types}
-                        />
-                        <span class="text-sm select-none">{option.label}</span>
-                    </label>
-                {/each}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Left Column: Checkbox filters -->
+            <div class="flex flex-col gap-4">
+                <span class="text-xs font-bold uppercase opacity-60 block mb-2"
+                    >Object Types</span
+                >
+                <div class="flex flex-wrap gap-4">
+                    {#each typeOptions as option}
+                        <label
+                            class="flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 rounded-lg transition-colors"
+                        >
+                            <input
+                                type="checkbox"
+                                class="checkbox checkbox-primary checkbox-sm"
+                                value={option.value}
+                                bind:group={searchState.raw_types}
+                            />
+                            <span class="text-sm select-none"
+                                >{option.label}</span
+                            >
+                        </label>
+                    {/each}
 
-                {#if searchState.raw_types.length > 0}
-                    <button
-                        onclick={() => (searchState.raw_types = [])}
-                        class="btn btn-ghost btn-xs text-error"
-                    >
-                        Clear Filters
-                    </button>
-                {/if}
+                    {#if searchState.raw_types.length > 0}
+                        <button
+                            onclick={() => (searchState.raw_types = [])}
+                            class="btn btn-ghost btn-xs text-error"
+                        >
+                            Clear Filters
+                        </button>
+                    {/if}
+                </div>
+                <span class="text-xs font-bold uppercase opacity-60 block mb-2"
+                    >Search Locations</span
+                >
+                <div class="flex flex-wrap gap-4">
+                    {#each locationOptions as option}
+                        <label
+                            class="flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 rounded-lg transition-colors"
+                        >
+                            <input
+                                type="checkbox"
+                                class="checkbox checkbox-primary checkbox-sm"
+                                value={option.value}
+                                bind:group={searchState.locations}
+                            />
+                            <span class="text-sm select-none"
+                                >{option.label}</span
+                            >
+                        </label>
+                    {/each}
+
+                    {#if searchState.raw_types.length > 0}
+                        <button
+                            onclick={() => (searchState.raw_types = [])}
+                            class="btn btn-ghost btn-xs text-error"
+                        >
+                            Clear Filters
+                        </button>
+                    {/if}
+                </div>
+            </div>
+
+            <!-- Right Column: Tag Inputs -->
+            <div class="flex flex-col gap-2">
+                <span class="text-xs font-bold uppercase opacity-60 block"
+                    >Required Flags (Tokens)</span
+                >
+
+                <div class="relative w-full">
+                    <input
+                        type="text"
+                        placeholder="Add tag (e.g. FLIER)..."
+                        class="input input-sm input-bordered w-full"
+                        bind:value={tagInput}
+                        onfocus={() => (showSuggestions = true)}
+                        onblur={() =>
+                            setTimeout(() => (showSuggestions = false), 200)}
+                        onkeydown={handleKeydown}
+                    />
+
+                    {#if showSuggestions && filteredTags.length > 0}
+                        <ul
+                            class="absolute z-100 mt-1 menu bg-base-100 w-full rounded-box border border-base-300 shadow-xl max-h-48 overflow-y-auto"
+                        >
+                            {#each filteredTags as tag}
+                                <li>
+                                    <button
+                                        onclick={() => addTag(tag)}
+                                        class="text-sm py-2">{tag}</button
+                                    >
+                                </li>
+                            {/each}
+                        </ul>
+                    {/if}
+                </div>
+
+                <!-- Active Tags Badges -->
+                <div class="flex flex-wrap gap-2 mt-2">
+                    {#each searchState.required_flags as tag}
+                        <div
+                            class="badge badge-primary gap-1 pl-3 pr-1 py-3 h-auto"
+                        >
+                            <span class="text-xs font-mono">{tag}</span>
+                            <button
+                                class="btn btn-ghost btn-xs btn-circle hover:bg-primary-focus p-0 min-h-0 h-4 w-4"
+                                onclick={() => removeTag(tag)}
+                            >
+                                <X size={12} />
+                            </button>
+                        </div>
+                    {:else}
+                        <span class="text-xs opacity-40 italic"
+                            >No flags required.</span
+                        >
+                    {/each}
+                </div>
+
+                <!-- Add valued flags here -->
             </div>
         </div>
-        <div>
-            <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-                >Search Locations</span
-            >
-            <div class="flex flex-wrap gap-4">
-                {#each locationOptions as option}
-                    <label
-                        class="flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 rounded-lg transition-colors"
-                    >
-                        <input
-                            type="checkbox"
-                            class="checkbox checkbox-primary checkbox-sm"
-                            value={option.value}
-                            bind:group={searchState.locations}
-                        />
-                        <span class="text-sm select-none">{option.label}</span>
-                    </label>
-                {/each}
+    </div>
 
-                {#if searchState.raw_types.length > 0}
-                    <button
-                        onclick={() => (searchState.raw_types = [])}
-                        class="btn btn-ghost btn-xs text-error"
-                    >
-                        Clear Filters
-                    </button>
-                {/if}
-            </div>
-        </div>
+    <div class="flex justify-end pt-2 border-t border-base-300">
+        <button
+            class="btn btn-ghost btn-xs text-error"
+            onclick={() => {
+                searchState.raw_types = [
+                    "Creature",
+                    "Inorganic",
+                    "Plant",
+                    "Entity",
+                ];
+                searchState.locations = ["Vanilla"];
+                searchState.required_flags = [];
+            }}
+        >
+            Reset All Filters
+        </button>
     </div>
 </div>
