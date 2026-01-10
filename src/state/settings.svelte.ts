@@ -5,6 +5,7 @@ interface Settings {
   user_dir: string;
   parse_locations: RawModuleLocation[];
   database_location: string;
+  randomizeImageRotation: boolean;
 }
 
 export const settingsState = $state<Settings>({
@@ -12,4 +13,5 @@ export const settingsState = $state<Settings>({
   user_dir: "",
   parse_locations: ["Vanilla"],
   database_location: "",
+  randomizeImageRotation: true,
 });

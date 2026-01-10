@@ -57,9 +57,17 @@
 
 <div class="card card-compact w-72 bg-neutral/25">
     <div class="card-body">
-        <h2 class="card-title">{toTitleCase(displayInfo.title, true)}</h2>
+        <div
+            class="card-title flex flex-wrap items-start justify-between gap-2"
+        >
+            <span class="flex-1 min-w-7/12">
+                {toTitleCase(displayInfo.title, true)}
+            </span>
+            <div class="shrink-0">
+                <SpriteImage identifier={raw.identifier} />
+            </div>
+        </div>
         <p>{displayInfo.description}</p>
-        <SpriteImage identifier={raw.identifier} />
         <div class="card-actions justify-end">
             <span class="text-xs absolute left-1.5 bottom-1.5"
                 >{displayInfo.objectType} Raw</span
