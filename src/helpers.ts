@@ -1,5 +1,3 @@
-import type { GraphicsResults } from "bindings/Structs";
-
 /**
  * Turns a string into one with the first letter of each word in upper case.
  *
@@ -11,19 +9,21 @@ export const toTitleCase = function (
   str: string,
   force: boolean = false,
 ): string {
-  if (str.length <= 1) {
-    return str.toLocaleUpperCase();
-  }
+  if (!str) return str;
 
-  let splitStr = str.split(" ");
-  if (splitStr.length > 1) {
-    return splitStr.map((s) => toTitleCase(s)).join(" ");
-  }
+  return str
+    .split(" ")
+    .map((word) => {
+      if (word.length === 0) return word;
 
-  if (force) {
-    return str[0].toLocaleUpperCase() + str.substring(1).toLocaleLowerCase();
-  }
-  return str[0].toLocaleUpperCase() + str.substring(1);
+      const head = word[0].toLocaleUpperCase();
+      const tail = force
+        ? word.substring(1).toLocaleLowerCase()
+        : word.substring(1);
+
+      return head + tail;
+    })
+    .join(" ");
 };
 
 /**

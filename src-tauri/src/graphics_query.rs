@@ -1,4 +1,5 @@
 use dfraw_parser::Dimensions;
+use dfraw_parser_sqlite_lib::SpriteGraphicData;
 use tauri::State;
 
 use crate::{AppState, GraphicsResult};
@@ -82,10 +83,7 @@ pub async fn get_graphics(
                     file_path: tp.file_path.clone(),
                     tile_dimensions,
                     page_dimensions,
-                    description: format!(
-                        "{}:{}",
-                        graphic.primary_condition, graphic.secondary_condition
-                    ),
+                    description: calculate_description(graphic),
                     offset,
                     offset_2,
                 }
@@ -94,6 +92,26 @@ pub async fn get_graphics(
         .collect();
 
     Ok(useful_results)
+}
+
+/// Creates a description based on the condition values.
+fn calculate_description(sprite: &SpriteGraphicData) -> String {
+    if sprite.primary_condition == sprite.secondary_condition {
+        if sprite.primary_condition.is_empty() {
+            return "DEFAULT".to_string();
+        }
+        sprite.primary_condition.clone()
+    } else {
+        if sprite.secondary_condition.is_empty()
+            || sprite.secondary_condition.eq(&"DEFAULT".to_string())
+        {
+            return sprite.primary_condition.to_string();
+        }
+        format!(
+            "{} {}",
+            sprite.primary_condition, sprite.secondary_condition
+        )
+    }
 }
 
 /// Calculates the position offset used when drawing a sprite off the tile sheet. This is used
