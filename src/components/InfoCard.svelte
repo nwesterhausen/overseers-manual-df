@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Creature, Plant, RawObject } from "bindings/DFRawParser";
     import { toTitleCase } from "helpers";
+    import SpriteImage from "./SpriteImage.svelte";
 
     interface Props {
         raw: RawObject;
@@ -58,6 +59,7 @@
     <div class="card-body">
         <h2 class="card-title">{toTitleCase(displayInfo.title, true)}</h2>
         <p>{displayInfo.description}</p>
+        <SpriteImage identifier={raw.identifier} />
         <div class="card-actions justify-end">
             <span class="text-xs absolute left-1.5 bottom-1.5"
                 >{displayInfo.objectType} Raw</span

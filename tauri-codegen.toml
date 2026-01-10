@@ -7,8 +7,8 @@ exclude = [
 use_cargo_expand = false
 
 [output]
-types_file = "src/bindings/Structs.ts"
-commands_file = "src/bindings/Commands.ts"
+types_file = "src/bindings/_Structs.ts"
+commands_file = "src/bindings/_Commands.ts"
 
 [naming]
 type_prefix = ""

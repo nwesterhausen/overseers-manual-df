@@ -1,3 +1,5 @@
+import type { GraphicsResults } from "bindings/Structs";
+
 /**
  * Turns a string into one with the first letter of each word in upper case.
  *
