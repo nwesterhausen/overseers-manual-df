@@ -98,38 +98,31 @@ pub async fn get_graphics(
 
 /// Calculates the position offset used when drawing a sprite off the tile sheet. This is used
 /// on the frontend to display the sprite to the end user.
+///
+/// Essentially this is figuring out on the page where to start drawing the sprite in px.
+/// It's up to the consumer of `GraphicsResult` to also use the tile dimensions to create the
+/// final bounding box.
 fn calculate_position_offset(
     offset: Dimensions,
     offset_2: Option<Dimensions>,
     page_dimensions: Dimensions,
     tile_dimensions: Dimensions,
 ) -> Dimensions {
-    let offset_x = if let Some(offset_2) = offset_2 {
-        if offset_2.x > offset.x {
-            offset_2.x
-        } else {
-            offset.x
-        }
-    } else {
-        offset.x
-    };
-    let pos_offset_x = page_dimensions.x - (offset.x + 1) * tile_dimensions.x
-        + tile_dimensions.x * (offset_x - offset.x + 1);
+    // Determine the boundary: use offset_2 if it's larger, otherwise stick with offset.
+    let max_off = offset_2
+        .map(|o2| o2.max_components(offset))
+        .unwrap_or(offset);
 
-    let offset_y = if let Some(offset_2) = offset_2 {
-        if offset_2.y > offset.y {
-            offset_2.y
-        } else {
-            offset.y
-        }
-    } else {
-        offset.y
+    // Helper to perform the specific coordinate math
+    let compute = |off: u32, max: u32, page_dim: u32, tile_dim: u32| -> u32 {
+        let anchor = page_dim.saturating_sub(off * tile_dim);
+        let extra_span = (max - off) * tile_dim;
+
+        anchor + extra_span
     };
-    let pos_offset_y = page_dimensions.y - (offset.y + 1) * tile_dimensions.y
-        + tile_dimensions.y * (offset_y - offset.y + 1);
 
     Dimensions {
-        x: pos_offset_x,
-        y: pos_offset_y,
+        x: compute(offset.x, max_off.x, page_dimensions.x, tile_dimensions.x),
+        y: compute(offset.y, max_off.y, page_dimensions.y, tile_dimensions.y),
     }
 }
