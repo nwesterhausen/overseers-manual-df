@@ -8,6 +8,8 @@
         SunIcon,
     } from "@lucide/svelte";
     import ThemeToggler from "./ThemeToggler.svelte";
+    import { settingsState } from "state/settings.svelte";
+    import { searchState } from "state/search.svelte";
 
     let {
         searchQuery = $bindable(),
@@ -33,7 +35,7 @@
             <input
                 type="search"
                 placeholder="Search raw files..."
-                bind:value={searchQuery}
+                bind:value={searchState.searchString}
             />
         </label>
         <div class="tooltip tooltip-bottom" data-tip="Search Filters">
