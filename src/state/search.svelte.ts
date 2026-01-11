@@ -1,12 +1,18 @@
 import type { SearchQuery } from "bindings/DFRawParser";
+import { defaultSearchState } from "./searchDefaults.svelte";
 
 export const searchState = $state<SearchQuery>({
-  identifier_query: null,
-  numeric_filters: [],
-  raw_types: ["Creature", "Inorganic", "Plant", "Entity"],
-  required_flags: [],
-  search_string: null,
+  identifierQuery: null,
+  numericFilters: [],
+  rawTypes: ["Creature", "Inorganic", "Plant", "Entity"],
+  requiredFlags: [],
+  searchString: null,
   locations: ["Vanilla"],
   limit: 50,
   page: 1,
 });
+
+export const resetSearchState = function () {
+  const defaultsSnapshot = structuredClone($state.snapshot(defaultSearchState));
+  Object.assign(searchState, defaultsSnapshot);
+};

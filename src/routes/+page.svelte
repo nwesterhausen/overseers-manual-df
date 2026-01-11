@@ -6,7 +6,7 @@
 
     let search_results = $state<SearchResults<RawObject>>({
         results: [],
-        total_count: 0,
+        totalCount: 0,
     });
 
     // Reactively search whenever any part of the global search query
@@ -25,7 +25,7 @@
             <InfoCard raw={item.data} raw_id={item.id} />
         {:else}
             <p class="text-neutral-500">
-                No results found for "{searchState.search_string}"
+                No results found for "{searchState.searchString}"
             </p>
         {/each}
     </div>

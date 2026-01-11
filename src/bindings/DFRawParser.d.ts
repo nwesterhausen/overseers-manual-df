@@ -3467,11 +3467,11 @@ export type ClientOptions = {
 /**
  * If true, the database will be wiped and re-initialized on startup.
  */
-reset_database: boolean; 
+resetDatabase: boolean; 
 /**
  * If true, existing raw definitions will be updated if the identifier exists in the module.
  */
-overwrite_raws: boolean }
+overwriteRaws: boolean }
 
 /**
  * A struct representing a color in the format "foreground:background:brightness".
@@ -9845,11 +9845,11 @@ export type SearchQuery = {
 /**
  * A general text search string for names and descriptions.
  */
-search_string: string | null; 
+searchString: string | null; 
 /**
  * Search specifically for an identifier (exact or partial).
  */
-identifier_query: string | null; 
+identifierQuery: string | null; 
 /**
  * Limit search to raws found within these locations
  */
@@ -9857,14 +9857,14 @@ locations: RawModuleLocation[];
 /**
  * Limit search to only be raws of this type
  */
-raw_types: ObjectType[]; 
+rawTypes: ObjectType[]; 
 /**
  * Used to return only results with these token flags
  * 
  * These should be the keys (from `to_keys`) on `CreatureTag`, `CasteTag`, `PlantTag`, etc.
  * (e.g. `FLIER`, `EGG_LAYER`, `FIREIMMUNE`)
  */
-required_flags: string[]; 
+requiredFlags: string[]; 
 /**
  * Used to return only results with these token-value pairings
  * 
@@ -9873,7 +9873,7 @@ required_flags: string[];
  * 
  * The value provided will be used for (minimum/exact value, maximum value)
  */
-numeric_filters: ([string, number, number | null])[]; 
+numericFilters: ([string, number, number | null])[]; 
 /**
  * Limit the number of raws returned to this amount per page
  * 
@@ -9899,7 +9899,7 @@ results: ResultWithId<T>[];
 /**
  * The total number of matches in the database (ignoring pagination limits).
  */
-total_count: number }
+totalCount: number }
 
 /**
  * The tokens for the seasons

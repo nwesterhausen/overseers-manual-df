@@ -1,17 +1,36 @@
 import type { RawModuleLocation } from "bindings/DFRawParser";
 
 interface Settings {
-  df_dir: string;
-  user_dir: string;
-  parse_locations: RawModuleLocation[];
-  database_location: string;
+  dfDirectory: string;
+  userDirectory: string;
+  parseLocations: RawModuleLocation[];
+  databaseLocation: string;
   randomizeImageRotation: boolean;
+  enableDirectoryDetection: boolean;
 }
 
 export const settingsState = $state<Settings>({
-  df_dir: "",
-  user_dir: "",
-  parse_locations: ["Vanilla"],
-  database_location: "",
+  dfDirectory: "",
+  userDirectory: "",
+  parseLocations: ["Vanilla"],
+  databaseLocation: "",
   randomizeImageRotation: true,
+  enableDirectoryDetection: true,
 });
+
+export const toggleDirectoryDetection = function () {
+  settingsState.enableDirectoryDetection =
+    !settingsState.enableDirectoryDetection;
+};
+
+export const toggleLocation = function (location: RawModuleLocation) {
+  if (settingsState.parseLocations.includes(location)) {
+    // Remove it if it's already there
+    settingsState.parseLocations = settingsState.parseLocations.filter(
+      (l) => l !== location,
+    );
+  } else {
+    // Add it if it's not
+    settingsState.parseLocations.push(location);
+  }
+};

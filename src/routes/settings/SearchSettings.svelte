@@ -1,6 +1,5 @@
 <script lang="ts">
     import { locationOptions, typeOptions } from "searchOptions";
-    import { searchState } from "state/search.svelte";
     import { defaultSearchState } from "state/searchDefaults.svelte";
 </script>
 
@@ -30,7 +29,7 @@
                         type="checkbox"
                         class="checkbox checkbox-primary checkbox-sm"
                         value={option.value}
-                        bind:group={defaultSearchState.raw_types}
+                        bind:group={defaultSearchState.rawTypes}
                     />
                     <span class="text-sm select-none">{option.label}</span>
                 </label>

@@ -1,17 +1,10 @@
 <script lang="ts">
     import type { RawModuleLocation } from "bindings/DFRawParser";
-    import { settingsState } from "state/settings.svelte";
-
-    function toggleLocation(location: RawModuleLocation) {
-        if (settingsState.parse_locations.includes(location)) {
-            // Remove it if it's already there
-            settingsState.parse_locations =
-                settingsState.parse_locations.filter((l) => l !== location);
-        } else {
-            // Add it if it's not
-            settingsState.parse_locations.push(location);
-        }
-    }
+    import {
+        settingsState,
+        toggleDirectoryDetection,
+        toggleLocation,
+    } from "state/settings.svelte";
 </script>
 
 <div class="tab-container">
@@ -48,6 +41,22 @@
     </div>
     <div>
         <span class="text-xs section-heading">Directory Detection</span>
+        <p class="pb-4 text-sm">
+            On Windows, uses the registry to find Steam and then Steam to find
+            where Dwarf Fortress is installed. On Linux, it looks into the Steam
+            directory in <code>$HOME</code>
+        </p>
+        <div class="custom-checkbox-container">
+            <label class="custom-checkbox-label">
+                <input
+                    type="checkbox"
+                    class="checkbox checkbox-primary checkbox-sm"
+                    checked={settingsState.enableDirectoryDetection}
+                    onchange={toggleDirectoryDetection}
+                />
+                Enable automatic Dwarf Fortress installation detection
+            </label>
+        </div>
     </div>
     <div>
         <span class="text-xs section-heading">Directory Overrides</span>
@@ -56,25 +65,27 @@
         <span class="text-xs section-heading">Locations to Parse</span>
         <div class="custom-checkbox-container">
             {#each ["Vanilla", "InstalledMods", "Mods"] as location}
-                <label class="custom-checkbox-label">
-                    <input
-                        type="checkbox"
-                        class="checkbox checkbox-primary checkbox-sm"
-                        checked={settingsState.parse_locations.includes(
-                            location as RawModuleLocation,
-                        )}
-                        onchange={() =>
-                            toggleLocation(location as RawModuleLocation)}
-                    />
-                    {location}
-                </label>
-                <span class="text-xs text-accent relative -left-20 -bottom-7">
-                    {#if location == "Mods"}
-                        Downloaded mods from Steam Workshop
-                    {:else if location == "InstalledMods"}
-                        Mods that have been used in at least one world
-                    {/if}
-                </span>
+                <div class="flex flex-col gap-1">
+                    <label class="custom-checkbox-label">
+                        <input
+                            type="checkbox"
+                            class="checkbox checkbox-primary checkbox-sm"
+                            checked={settingsState.parseLocations.includes(
+                                location as RawModuleLocation,
+                            )}
+                            onchange={() =>
+                                toggleLocation(location as RawModuleLocation)}
+                        />
+                        {location}
+                    </label>
+                    <span class="custom-checkbox-detail-label text-accent">
+                        {#if location == "Mods"}
+                            Downloaded mods from Steam Workshop
+                        {:else if location == "InstalledMods"}
+                            Mods that have been used in at least one world
+                        {/if}
+                    </span>
+                </div>
             {/each}
         </div>
     </div>

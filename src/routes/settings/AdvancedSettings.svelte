@@ -12,7 +12,7 @@
             type="text"
             placeholder="./database.db"
             class="input input-bordered w-full"
-            bind:value={settingsState.database_location}
+            bind:value={settingsState.databaseLocation}
         />
     </label>
 </fieldset>

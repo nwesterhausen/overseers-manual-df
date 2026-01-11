@@ -13,8 +13,11 @@
     @apply flex flex-wrap gap-4 flex-col w-9/12;
 }
 .custom-checkbox-container {
-    @apply flex flex-wrap gap-4 w-full mx-5;
+    @apply flex flex-wrap gap-x-8 gap-y-6 w-full mx-5 items-start;
 }
 .custom-checkbox-label {
-    @apply flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 rounded-lg transition-colors;
+    @apply flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 -ml-2 rounded-lg transition-colors;
+}
+.custom-checkbox-detail-label {
+    @apply text-sm ml-7 max-w-50 leading-tight;
 }

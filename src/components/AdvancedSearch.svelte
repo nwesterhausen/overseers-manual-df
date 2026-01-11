@@ -1,6 +1,6 @@
 <script lang="ts">
     import { slide } from "svelte/transition";
-    import { searchState } from "state/search.svelte";
+    import { resetSearchState, searchState } from "state/search.svelte";
     import { X } from "@lucide/svelte";
     import { defaultSearchState } from "state/searchDefaults.svelte";
     import { areDeeplyEqual } from "helpers";
@@ -28,21 +28,21 @@
             ? allTags.filter(
                   (t) =>
                       t.toLowerCase().includes(tagInput.toLowerCase()) &&
-                      !searchState.required_flags.includes(t),
+                      !searchState.requiredFlags.includes(t),
               )
             : [],
     );
 
     function addTag(tag: string) {
-        if (!searchState.required_flags.includes(tag)) {
-            searchState.required_flags = [...searchState.required_flags, tag];
+        if (!searchState.requiredFlags.includes(tag)) {
+            searchState.requiredFlags = [...searchState.requiredFlags, tag];
         }
         tagInput = "";
         showSuggestions = false;
     }
 
     function removeTag(tag: string) {
-        searchState.required_flags = searchState.required_flags.filter(
+        searchState.requiredFlags = searchState.requiredFlags.filter(
             (t) => t !== tag,
         );
     }
@@ -62,19 +62,15 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- Left Column: Checkbox filters -->
             <div class="flex flex-col gap-4">
-                <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-                    >Object Types</span
-                >
-                <div class="flex flex-wrap gap-4">
+                <span class="text-xs section-heading">Object Types</span>
+                <div class="custom-checkbox-container">
                     {#each typeOptions as option}
-                        <label
-                            class="flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 rounded-lg transition-colors"
-                        >
+                        <label class="custom-checkbox-label">
                             <input
                                 type="checkbox"
                                 class="checkbox checkbox-primary checkbox-sm"
                                 value={option.value}
-                                bind:group={searchState.raw_types}
+                                bind:group={searchState.rawTypes}
                             />
                             <span class="text-sm select-none"
                                 >{option.label}</span
@@ -82,25 +78,21 @@
                         </label>
                     {/each}
 
-                    {#if !areDeeplyEqual(searchState.raw_types, defaultSearchState.raw_types)}
+                    {#if !areDeeplyEqual(searchState.rawTypes, defaultSearchState.rawTypes)}
                         <button
                             onclick={() =>
-                                (searchState.raw_types =
-                                    defaultSearchState.raw_types)}
+                                (searchState.rawTypes =
+                                    defaultSearchState.rawTypes)}
                             class="btn btn-ghost btn-xs text-error"
                         >
                             Reset to Default
                         </button>
                     {/if}
                 </div>
-                <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-                    >Search Locations</span
-                >
-                <div class="flex flex-wrap gap-4">
+                <span class="text-xs section-heading">Search Locations</span>
+                <div class="custom-checkbox-container">
                     {#each locationOptions as option}
-                        <label
-                            class="flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 rounded-lg transition-colors"
-                        >
+                        <label class="custom-checkbox-label">
                             <input
                                 type="checkbox"
                                 class="checkbox checkbox-primary checkbox-sm"
@@ -128,7 +120,7 @@
 
             <!-- Right Column: Tag Inputs -->
             <div class="flex flex-col gap-2">
-                <span class="text-xs font-bold uppercase opacity-60 block"
+                <span class="text-xs section-heading"
                     >Required Flags (Tokens)</span
                 >
 
@@ -162,7 +154,7 @@
 
                 <!-- Active Tags Badges -->
                 <div class="flex flex-wrap gap-2 mt-2">
-                    {#each searchState.required_flags as tag}
+                    {#each searchState.requiredFlags as tag}
                         <div
                             class="badge badge-primary gap-1 pl-3 pr-1 py-3 h-auto"
                         >
@@ -189,16 +181,7 @@
     <div class="flex justify-end pt-2 border-t border-base-300">
         <button
             class="btn btn-ghost btn-xs text-error"
-            onclick={() => {
-                searchState.raw_types = [
-                    "Creature",
-                    "Inorganic",
-                    "Plant",
-                    "Entity",
-                ];
-                searchState.locations = ["Vanilla"];
-                searchState.required_flags = [];
-            }}
+            onclick={resetSearchState}
         >
             Reset All to Default
         </button>
