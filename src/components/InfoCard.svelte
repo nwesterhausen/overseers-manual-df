@@ -16,6 +16,8 @@
     }
 
     let { raw, raw_id }: Props = $props();
+    let biomesExpanded = $state(false);
+    const BIOME_LIMIT = 3;
 
     const mockTags = ["Edible Raw", "Edible Cooked", "Brewable"];
     const mockValueTags = ["Value: 2", "Growth: 100"];
@@ -71,6 +73,11 @@
             valueTags,
         };
     });
+    let visibleBiomes = $derived(
+        biomesExpanded
+            ? displayInfo.biomes
+            : displayInfo.biomes.slice(0, BIOME_LIMIT),
+    );
 </script>
 
 <div class="card info-card">
@@ -97,9 +104,19 @@
             <div>
                 <h3 class="info-card-subheading">Biomes</h3>
                 <div class="flex flex-wrap gap-1">
-                    {#each displayInfo.biomes as biome}
+                    {#each visibleBiomes as biome}
                         <span class="badge info-tag-badge">{biome}</span>
                     {/each}
+                    {#if displayInfo.biomes.length > BIOME_LIMIT}
+                        <button
+                            onclick={() => (biomesExpanded = !biomesExpanded)}
+                            class="btn btn-ghost btn-xs text-[10px] h-5 min-h-0 px-2 hover:bg-accent/20 text-accent"
+                        >
+                            {biomesExpanded
+                                ? "... Show Less"
+                                : `+${displayInfo.biomes.length - BIOME_LIMIT} more`}
+                        </button>
+                    {/if}
                 </div>
             </div>
 
