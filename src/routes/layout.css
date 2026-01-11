@@ -9,9 +9,6 @@
 .section-heading {
     @apply font-bold uppercase opacity-60 block mb-2;
 }
-.tab-container {
-    @apply flex flex-wrap gap-4 flex-col w-9/12;
-}
 .custom-checkbox-container {
     @apply flex flex-wrap gap-x-8 gap-y-6 w-full mx-5 items-start;
 }

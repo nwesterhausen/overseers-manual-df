@@ -2,6 +2,7 @@
     import SearchSettings from "./SearchSettings.svelte";
     import ParserSettings from "./ParserSettings.svelte";
     import AdvancedSettings from "./AdvancedSettings.svelte";
+    import "./page.css";
 
     let currentTab = $state(1);
 </script>

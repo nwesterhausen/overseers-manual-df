@@ -1,4 +1,5 @@
 <script lang="ts">
+    import "./page.css";
     import { highlightJson } from "highlighter";
     import type { PageProps } from "./$types";
     import { themeState } from "state/theme.svelte";
