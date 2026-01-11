@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { settingsState } from "state/settings.svelte";
-    import type { RawModuleLocation } from "bindings/DFRawParser";
     import SearchSettings from "./SearchSettings.svelte";
     import ParserSettings from "./ParserSettings.svelte";
     import AdvancedSettings from "./AdvancedSettings.svelte";

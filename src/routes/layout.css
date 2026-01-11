@@ -5,3 +5,16 @@
 }
 @plugin './catppuccinTheme.latte.ts';
 @plugin './catppuccinTheme.macchiato.ts';
+
+.section-heading {
+    @apply font-bold uppercase opacity-60 block mb-2;
+}
+.tab-container {
+    @apply flex flex-wrap gap-4 flex-col w-9/12;
+}
+.custom-checkbox-container {
+    @apply flex flex-wrap gap-4 w-full mx-5;
+}
+.custom-checkbox-label {
+    @apply flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 rounded-lg transition-colors;
+}

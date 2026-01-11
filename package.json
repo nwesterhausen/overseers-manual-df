@@ -19,27 +19,27 @@
   "homepage": "https://github.com/nwesterhausen/overseers-manual-df",
   "author": "Nicholas Westerhausen <nwesterhausen@gmail.com>",
   "dependencies": {
-    "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-fs": "~2",
-    "@tauri-apps/plugin-log": "~2",
-    "@tauri-apps/plugin-opener": "^2"
+    "@tauri-apps/api": "^2.9.1",
+    "@tauri-apps/plugin-fs": "~2.4.5",
+    "@tauri-apps/plugin-log": "~2.8.0",
+    "@tauri-apps/plugin-opener": "^2.5.3"
   },
   "devDependencies": {
     "@catppuccin/daisyui": "^2.1.1",
     "@lucide/svelte": "^0.562.0",
-    "@sveltejs/adapter-static": "^3.0.6",
-    "@sveltejs/kit": "^2.9.0",
-    "@sveltejs/vite-plugin-svelte": "^5.0.0",
-    "@tailwindcss/forms": "^0.5.10",
+    "@sveltejs/adapter-static": "^3.0.10",
+    "@sveltejs/kit": "^2.49.4",
+    "@sveltejs/vite-plugin-svelte": "^5.1.1",
+    "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.1.17",
-    "@tauri-apps/cli": "^2",
+    "@tailwindcss/vite": "^4.1.18",
+    "@tauri-apps/cli": "^2.9.6",
     "daisyui": "^5.5.14",
     "shiki": "^3.21.0",
-    "svelte": "^5.0.0",
-    "svelte-check": "^4.0.0",
-    "tailwindcss": "^4.1.17",
-    "typescript": "~5.6.2",
-    "vite": "^6.0.3"
+    "svelte": "^5.46.1",
+    "svelte-check": "^4.3.5",
+    "tailwindcss": "^4.1.18",
+    "typescript": "~5.6.3",
+    "vite": "^6.4.1"
   }
 }

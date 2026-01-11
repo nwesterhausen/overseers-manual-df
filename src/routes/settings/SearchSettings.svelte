@@ -11,9 +11,7 @@
         application.
     </p>
     <div>
-        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-            >Search Results</span
-        >
+        <span class="text-xs section-heading">Search Results</span>
         <label class="input w-full mx-5">
             <span class="label">Results per Page</span>
             <input
@@ -24,14 +22,10 @@
         </label>
     </div>
     <div>
-        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-            >Object Types</span
-        >
-        <div class="flex flex-wrap gap-4 w-full mx-5">
+        <span class="text-xs section-heading">Object Types</span>
+        <div class="custom-checkbox-container">
             {#each typeOptions as option}
-                <label
-                    class="flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 rounded-lg transition-colors"
-                >
+                <label class="custom-checkbox-label">
                     <input
                         type="checkbox"
                         class="checkbox checkbox-primary checkbox-sm"
@@ -44,14 +38,10 @@
         </div>
     </div>
     <div>
-        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-            >Search Locations</span
-        >
-        <div class="flex flex-wrap gap-4 w-full mx-5">
+        <span class="text-xs section-heading">Search Locations</span>
+        <div class="custom-checkbox-container">
             {#each locationOptions as option}
-                <label
-                    class="flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 rounded-lg transition-colors"
-                >
+                <label class="custom-checkbox-label">
                     <input
                         type="checkbox"
                         class="checkbox checkbox-primary checkbox-sm"
@@ -64,13 +54,9 @@
         </div>
     </div>
     <div>
-        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-            >Required Flags</span
-        >
+        <span class="text-xs section-heading">Required Flags</span>
     </div>
     <div>
-        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-            >Required Values</span
-        >
+        <span class="text-xs section-heading">Required Values</span>
     </div>
 </div>

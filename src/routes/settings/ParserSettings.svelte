@@ -14,7 +14,7 @@
     }
 </script>
 
-<div class="flex flex-wrap gap-4 flex-col w-9/12">
+<div class="tab-container">
     <p class="py-4 text-sm">
         Configure what raw files should be parsed and from where. Overseer's
         Reference Manual keeps a cache of the parsed raw files in a database to
@@ -23,9 +23,7 @@
     </p>
     <p class="text-warning">todo: make this formatted like search options</p>
     <div>
-        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-            >Startup Action</span
-        >
+        <span class="text-xs section-heading">Startup Action</span>
         <div>
             <strong>radio options:</strong>
             <ul>
@@ -37,9 +35,7 @@
         </div>
     </div>
     <div>
-        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-            >Manual Actions</span
-        >
+        <span class="text-xs section-heading">Manual Actions</span>
         <div class="flex flex-row gap-4 mx-auto">
             <button class="btn btn-primary btn-sm">Parse and Insert New</button>
             <button class="btn btn-warning btn-sm"
@@ -51,38 +47,34 @@
         </div>
     </div>
     <div>
-        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-            >Directory Detection</span
-        >
+        <span class="text-xs section-heading">Directory Detection</span>
     </div>
     <div>
-        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-            >Directory Overrides</span
-        >
+        <span class="text-xs section-heading">Directory Overrides</span>
     </div>
     <div>
-        <span class="text-xs font-bold uppercase opacity-60 block mb-2"
-            >Locations to Parse</span
-        >
-        <div class="flex flex-wrap gap-4 w-full mx-5">
+        <span class="text-xs section-heading">Locations to Parse</span>
+        <div class="custom-checkbox-container">
             {#each ["Vanilla", "InstalledMods", "Mods"] as location}
-                <label class="label">
+                <label class="custom-checkbox-label">
                     <input
                         type="checkbox"
-                        class="toggle toggle-sm toggle-primary"
+                        class="checkbox checkbox-primary checkbox-sm"
                         checked={settingsState.parse_locations.includes(
                             location as RawModuleLocation,
                         )}
                         onchange={() =>
                             toggleLocation(location as RawModuleLocation)}
                     />
-                    {location}{#if location == "Mods"}
-                        &nbsp;-&nbsp;Downloaded mods from Steam Workshop
-                    {:else if location == "InstalledMods"}
-                        &nbsp;-&nbsp;Mods that have been used in at least one
-                        world
-                    {/if}
+                    {location}
                 </label>
+                <span class="text-xs text-accent relative -left-20 -bottom-7">
+                    {#if location == "Mods"}
+                        Downloaded mods from Steam Workshop
+                    {:else if location == "InstalledMods"}
+                        Mods that have been used in at least one world
+                    {/if}
+                </span>
             {/each}
         </div>
     </div>
