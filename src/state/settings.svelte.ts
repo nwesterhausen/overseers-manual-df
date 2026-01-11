@@ -1,4 +1,5 @@
 import type { RawModuleLocation } from "bindings/DFRawParser";
+import type { StartupAction } from "searchOptions";
 
 interface Settings {
   dfDirectory: string;
@@ -7,6 +8,7 @@ interface Settings {
   databaseLocation: string;
   randomizeImageRotation: boolean;
   enableDirectoryDetection: boolean;
+  startupAction: StartupAction;
 }
 
 export const settingsState = $state<Settings>({
@@ -16,6 +18,7 @@ export const settingsState = $state<Settings>({
   databaseLocation: "",
   randomizeImageRotation: true,
   enableDirectoryDetection: true,
+  startupAction: "nothing",
 });
 
 export const toggleDirectoryDetection = function () {

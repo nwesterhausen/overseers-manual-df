@@ -8,15 +8,9 @@
         SunIcon,
     } from "@lucide/svelte";
     import ThemeToggler from "./ThemeToggler.svelte";
-    import { settingsState } from "state/settings.svelte";
     import { searchState } from "state/search.svelte";
 
-    let {
-        searchQuery = $bindable(),
-        onToggleAdvanced,
-        advancedIsOpen = $bindable(),
-    } = $props<{
-        searchQuery: string | null;
+    let { onToggleAdvanced, advancedIsOpen = $bindable() } = $props<{
         onToggleAdvanced: () => void;
         advancedIsOpen: boolean | null;
     }>();

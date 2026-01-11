@@ -1,7 +1,6 @@
 <script lang="ts">
     import "./layout.css";
     import Navigation from "components/NavigationMenu.svelte";
-    import { searchState } from "state/search.svelte";
     import AdvancedSearch from "components/AdvancedSearch.svelte";
     import { onMount } from "svelte";
     import { themeState } from "state/theme.svelte";
@@ -34,7 +33,6 @@
 <div class="h-screen flex flex-col overflow-hidden">
     <header class="shrink-0">
         <Navigation
-            bind:searchQuery={searchState.search_string}
             onToggleAdvanced={() => (isAdvancedOpen = !isAdvancedOpen)}
             bind:advancedIsOpen={isAdvancedOpen}
         />

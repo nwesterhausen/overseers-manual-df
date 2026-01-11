@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { RawModuleLocation } from "bindings/DFRawParser";
+    import { locationOptions, startupOptions } from "searchOptions";
     import {
         settingsState,
         toggleDirectoryDetection,
@@ -14,17 +14,21 @@
         provide faster lookups and to avoid having to rescan all raw files each
         time its opened.
     </p>
-    <p class="text-warning">todo: make this formatted like search options</p>
     <div>
         <span class="text-xs section-heading">Startup Action</span>
-        <div>
-            <strong>radio options:</strong>
-            <ul>
-                <li>do nothing</li>
-                <li>parse and insert</li>
-                <li>parse and force update</li>
-                <li>reset then parse</li>
-            </ul>
+        <div class="flex flex-row pt-3 gap-5">
+            {#each startupOptions as option}
+                <label class="label cursor-pointer justify-start gap-2 p-0">
+                    <input
+                        type="radio"
+                        name="startupAction"
+                        class="radio radio-sm radio-primary"
+                        value={option.value}
+                        bind:group={settingsState.startupAction}
+                    />
+                    <span class="label-text text-base">{option.label}</span>
+                </label>
+            {/each}
         </div>
     </div>
     <div>
@@ -64,24 +68,23 @@
     <div>
         <span class="text-xs section-heading">Locations to Parse</span>
         <div class="custom-checkbox-container">
-            {#each ["Vanilla", "InstalledMods", "Mods"] as location}
+            {#each locationOptions as location}
                 <div class="flex flex-col gap-1">
                     <label class="custom-checkbox-label">
                         <input
                             type="checkbox"
                             class="checkbox checkbox-primary checkbox-sm"
                             checked={settingsState.parseLocations.includes(
-                                location as RawModuleLocation,
+                                location.value,
                             )}
-                            onchange={() =>
-                                toggleLocation(location as RawModuleLocation)}
+                            onchange={() => toggleLocation(location.value)}
                         />
-                        {location}
+                        {location.label}
                     </label>
                     <span class="custom-checkbox-detail-label text-accent">
-                        {#if location == "Mods"}
+                        {#if location.value == "WorkshopMods"}
                             Downloaded mods from Steam Workshop
-                        {:else if location == "InstalledMods"}
+                        {:else if location.value == "InstalledMods"}
                             Mods that have been used in at least one world
                         {/if}
                     </span>
