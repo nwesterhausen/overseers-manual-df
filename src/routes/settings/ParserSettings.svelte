@@ -15,6 +15,33 @@
         time its opened.
     </p>
     <div>
+        <span class="text-xs section-heading">Locations to Parse</span>
+        <div class="custom-checkbox-container">
+            {#each locationOptions as location}
+                <div class="flex flex-col gap-1">
+                    <label class="custom-checkbox-label">
+                        <input
+                            type="checkbox"
+                            class="checkbox checkbox-primary checkbox-sm"
+                            checked={settingsState.parseLocations.includes(
+                                location.value,
+                            )}
+                            onchange={() => toggleLocation(location.value)}
+                        />
+                        {location.label}
+                    </label>
+                    <span class="custom-checkbox-detail-label text-accent">
+                        {#if location.value == "WorkshopMods"}
+                            Downloaded mods from Steam Workshop
+                        {:else if location.value == "InstalledMods"}
+                            Mods that have been used in at least one world
+                        {/if}
+                    </span>
+                </div>
+            {/each}
+        </div>
+    </div>
+    <div>
         <span class="text-xs section-heading">Startup Action</span>
         <div class="flex flex-row pt-3 gap-5">
             {#each startupOptions as option}
@@ -64,32 +91,5 @@
     </div>
     <div>
         <span class="text-xs section-heading">Directory Overrides</span>
-    </div>
-    <div>
-        <span class="text-xs section-heading">Locations to Parse</span>
-        <div class="custom-checkbox-container">
-            {#each locationOptions as location}
-                <div class="flex flex-col gap-1">
-                    <label class="custom-checkbox-label">
-                        <input
-                            type="checkbox"
-                            class="checkbox checkbox-primary checkbox-sm"
-                            checked={settingsState.parseLocations.includes(
-                                location.value,
-                            )}
-                            onchange={() => toggleLocation(location.value)}
-                        />
-                        {location.label}
-                    </label>
-                    <span class="custom-checkbox-detail-label text-accent">
-                        {#if location.value == "WorkshopMods"}
-                            Downloaded mods from Steam Workshop
-                        {:else if location.value == "InstalledMods"}
-                            Mods that have been used in at least one world
-                        {/if}
-                    </span>
-                </div>
-            {/each}
-        </div>
     </div>
 </div>

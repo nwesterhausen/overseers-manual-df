@@ -87,7 +87,7 @@
 
 <div>
     <div
-        class="w-9 h-9 border-2 border-accent rounded-lg bg-black/40 relative -top-2"
+        class="w-9 h-9 border-2 border-accent rounded-lg bg-black/90 relative -top-2"
     >
         {#if spriteData.length >= currentIdx && spriteData.length > 1}
             <div
