@@ -4,6 +4,8 @@
     import AdvancedSearch from "components/AdvancedSearch.svelte";
     import { onMount } from "svelte";
     import { themeState } from "state/theme.svelte";
+    import { settingsState } from "state/settings.svelte";
+    import { parserLogs } from "state/parserState.svelte";
 
     let isAdvancedOpen = $state(false);
     let { children } = $props();
@@ -36,6 +38,22 @@
             onToggleAdvanced={() => (isAdvancedOpen = !isAdvancedOpen)}
             bind:advancedIsOpen={isAdvancedOpen}
         />
+        {#if settingsState.appState === "parsing"}
+            <div
+                role="alert"
+                class={"alert alert-soft mx-2 place-content-center alert-" +
+                    parserLogs.currentLogLevel}
+            >
+                <span>{parserLogs.currentLog}</span>
+            </div>
+        {:else if settingsState.appState === "error"}
+            <div
+                role="alert"
+                class="alert alert-error alert-soft mx-2 place-content-center"
+            >
+                <span>{settingsState.errorMessage}</span>
+            </div>
+        {/if}
         {#if isAdvancedOpen}
             <AdvancedSearch />
         {/if}

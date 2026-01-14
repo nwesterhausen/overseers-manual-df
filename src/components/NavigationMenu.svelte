@@ -1,6 +1,7 @@
 <script lang="ts">
     import {
         BookOpenText,
+        History,
         MoonIcon,
         SearchIcon,
         SettingsIcon,
@@ -45,9 +46,22 @@
     </div>
 
     <div class="navbar-end">
-        <ThemeToggler />
-        <a class="btn btn-ghost px-1" href="/settings">
-            <SettingsIcon class="h-5 w-5" />
-        </a>
+        <div class="tooltip tooltip-left" data-tip="History">
+            <a
+                class="btn btn-ghost px-1"
+                title="Advanced Search"
+                href="/history"
+            >
+                <History class="h-5 w-5" />
+            </a>
+        </div>
+        <div class="tooltip tooltip-left" data-tip="Toggle Theme dark/light">
+            <ThemeToggler />
+        </div>
+        <div class="tooltip tooltip-left" data-tip="Settings">
+            <a class="btn btn-ghost px-1" href="/settings">
+                <SettingsIcon class="h-5 w-5" />
+            </a>
+        </div>
     </div>
 </div>

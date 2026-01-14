@@ -14,3 +14,12 @@ export interface GraphicsResult {
 }
 
 export type DbOptionOnParse = "insertOnly" | "forceUpdate" | "reset";
+
+export const PARSING_EVENT_LOG = "parsing-log";
+
+export type LogLevel = "trace" | "debug" | "info" | "warn" | "error" | "panic";
+
+export interface ParsingEventPayload {
+  level: LogLevel;
+  message: string;
+}

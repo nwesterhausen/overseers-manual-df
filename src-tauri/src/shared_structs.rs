@@ -33,3 +33,13 @@ pub enum DbOptionOnParse {
     /// Reset the database before parsing
     Reset,
 }
+
+/// A parsing event log message
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct ParsingEventPayload {
+    /// the log level
+    pub level: String,
+    /// the log message
+    pub message: String,
+}
