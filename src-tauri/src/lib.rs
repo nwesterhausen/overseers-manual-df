@@ -30,13 +30,7 @@ static LOG_GUARDS: OnceLock<(WorkerGuard, WorkerGuard)> = OnceLock::new();
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let options = ClientOptions::default();
-    let db_client = DbClient::init_db("overseer.db", options).expect("failed to init db");
-
     tauri::Builder::default()
-        .manage(AppState {
-            db: Mutex::new(db_client),
-        })
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
@@ -46,18 +40,50 @@ pub fn run() {
             get_graphics
         ])
         .setup(|app| {
+            let db_client = create_or_open_database(app.handle());
+
+            app.manage(AppState {
+                db: Mutex::new(db_client),
+            });
+
             register_tracing_subscribers(app.handle());
+
             Ok(())
         })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
 
+fn create_or_open_database(handle: &AppHandle) -> DbClient {
+    // Resolve the path to the data directory
+    // This resolves to: %APPDATA%\one.nwest.overseers-reference\ on Windows
+    // or ~/Library/Application Support/one.nwest.overseers-reference/ on macOS
+    let app_data_dir = handle
+        .path()
+        .resolve(APP_IDENTIFIER, BaseDirectory::Data)
+        .expect("failed to resolve app data directory");
+
+    // Ensure the directory exists
+    std::fs::create_dir_all(&app_data_dir).expect("failed to create app data directory");
+
+    // Define the full path to the database file
+    let db_path = app_data_dir.join("overseer.db");
+
+    // Initialize the DB with the absolute path
+    let db_client = DbClient::init_db(
+        db_path.to_str().expect("invalid path"),
+        ClientOptions::default(),
+    )
+    .expect("failed to init db");
+
+    db_client
+}
+
 fn register_tracing_subscribers(handle: &AppHandle) {
     // Resolve the logs directory
     let log_dir = handle
         .path()
-        .resolve(format!("{}/logs", APP_IDENTIFIER), BaseDirectory::Data)
+        .app_log_dir()
         .expect("Failed to resolve log directory");
 
     // Ensure the directory exists before rotating
