@@ -116,6 +116,13 @@ fn register_tracing_subscribers(handle: &AppHandle) {
         )
         .with_default(LevelFilter::OFF);
 
+    // Dynamic log level based on if in debug mode or not
+    let log_level = if cfg!(debug_assertions) {
+        LevelFilter::DEBUG
+    } else {
+        LevelFilter::INFO
+    };
+
     // Build Registry
     tracing_subscriber::registry()
         // Layer: Console (everything INFO+)
@@ -129,7 +136,7 @@ fn register_tracing_subscribers(handle: &AppHandle) {
             tracing_subscriber::fmt::layer()
                 .with_writer(file_writer)
                 .with_ansi(false)
-                .with_filter(LevelFilter::INFO),
+                .with_filter(log_level),
         )
         // Layer: parsing event emitter
         .with(
