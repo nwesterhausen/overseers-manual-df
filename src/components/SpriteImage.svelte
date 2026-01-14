@@ -1,10 +1,5 @@
 <script lang="ts">
-    import {
-        ArrowLeft,
-        ArrowRight,
-        ChevronLeft,
-        ChevronRight,
-    } from "@lucide/svelte";
+    import { ChevronLeft, ChevronRight } from "@lucide/svelte";
     import { invoke, convertFileSrc } from "@tauri-apps/api/core";
     import type { Dimensions } from "bindings/DFRawParser";
     import type { GraphicsResult } from "bindings/Structs";
@@ -19,6 +14,9 @@
     let timerId: ReturnType<typeof setTimeout>;
 
     $effect(() => {
+        // Reset index whenever the identifier changes to avoid out-of-bounds access
+        currentIdx = 0;
+
         invoke<GraphicsResult[]>("get_graphics", { identifier })
             .then((data) => (spriteData = data))
             .catch((error) => console.log(error));
@@ -89,12 +87,12 @@
     <div
         class="w-9 h-9 border-2 border-accent rounded-lg bg-black/90 relative -top-2"
     >
-        {#if spriteData.length >= currentIdx && spriteData.length > 1}
+        {#if spriteData[currentIdx]}
             <div
                 class="w-8 h-8"
-                style:background-image={"url(" +
+                style:background-image={"url('" +
                     convertFileSrc(spriteData[currentIdx].filePath) +
-                    ")"}
+                    "')"}
                 style:background-position={backgroundPositionFromOffset(
                     spriteData[currentIdx].positionOffset,
                 )}
@@ -128,7 +126,7 @@
             style:font-size="0.5rem"
             style:line-height="0.5rem"
         >
-            {spriteData.length > currentIdx
+            {spriteData[currentIdx]?.description
                 ? toTitleCase(spriteData[currentIdx].description, true)
                 : "No Graphic"}
         </span>
