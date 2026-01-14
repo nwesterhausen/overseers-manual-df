@@ -5,6 +5,7 @@
         toggleDirectoryDetection,
         toggleLocation,
     } from "state/settings.svelte";
+    import { executeParse } from "wrappers";
 </script>
 
 <div class="tab-container">
@@ -42,6 +43,23 @@
         </div>
     </div>
     <div>
+        <span class="text-xs section-heading">Manual Actions</span>
+        <div class="flex flex-row gap-4 mx-5">
+            <button
+                disabled={settingsState.appState !== "ready"}
+                class="btn btn-primary btn-sm"
+                onclick={() => executeParse("insertOnly")}
+                >Parse and Insert New</button
+            >
+            <button
+                disabled={settingsState.appState !== "ready"}
+                class="btn btn-warning btn-sm"
+                onclick={() => executeParse("forceUpdate")}
+                >Parse and Force Update</button
+            >
+        </div>
+    </div>
+    <div>
         <span class="text-xs section-heading">Startup Action</span>
         <div class="flex flex-row pt-3 gap-5">
             {#each startupOptions as option}
@@ -59,23 +77,11 @@
         </div>
     </div>
     <div>
-        <span class="text-xs section-heading">Manual Actions</span>
-        <div class="flex flex-row gap-4 mx-auto">
-            <button class="btn btn-primary btn-sm">Parse and Insert New</button>
-            <button class="btn btn-warning btn-sm"
-                >Parse and Force Update</button
-            >
-            <button class="btn btn-error btn-sm"
-                >Reset Database, Parse and Insert</button
-            >
-        </div>
-    </div>
-    <div>
         <span class="text-xs section-heading">Directory Detection</span>
         <p class="pb-4 text-sm">
-            On Windows, uses the registry to find Steam and then Steam to find
-            where Dwarf Fortress is installed. On Linux, it looks into the Steam
-            directory in <code>$HOME</code>
+            This attempts to automatically finds the installation directory
+            through steam's app manifest files and user data directory by
+            assuming the well-known path for it.
         </p>
         <div class="custom-checkbox-container">
             <label class="custom-checkbox-label">
@@ -88,8 +94,59 @@
                 Enable automatic Dwarf Fortress installation detection
             </label>
         </div>
+        <dl class="py-4 text-sm">
+            <dt>Windows</dt>
+            <dd>Locates the Steam directory by using the registry.</dd>
+            <dd>
+                Locates the User Directory by assuming <code
+                    >%APPDATA%&bsol;Bay 12 Games&bsol;Dwarf Fortress</code
+                >
+            </dd>
+            <dt>Linux</dt>
+            <dd>
+                Locates the Steam directory in <code>$HOME</code>, tries
+                standard and flatpak paths
+            </dd>
+            <dd>
+                Locates the User Directory by assuming <code
+                    >$HOME/.local/share/Bay 12 Games/Dwarf Fortress</code
+                >
+            </dd>
+        </dl>
     </div>
     <div>
         <span class="text-xs section-heading">Directory Overrides</span>
+        <p class="pb-4 text-sm">
+            If either one of these is set, its path is preferred over anything
+            auto-detected.
+        </p>
+        <div class="custom-text-input-container">
+            <div>
+                <legend class="custom-legend">Dwarf Fortress Directory</legend>
+                <label class="input">
+                    Path
+                    <input
+                        type="text"
+                        class="grow"
+                        placeholder="src/app/"
+                        bind:value={settingsState.dfDirectory}
+                    />
+                    <span class="badge badge-neutral badge-xs">Optional</span>
+                </label>
+            </div>
+            <div>
+                <legend class="custom-legend">User Data Directory</legend>
+                <label class="input">
+                    Path
+                    <input
+                        type="text"
+                        class="grow"
+                        placeholder="src/app/"
+                        bind:value={settingsState.userDirectory}
+                    />
+                    <span class="badge badge-neutral badge-xs">Optional</span>
+                </label>
+            </div>
+        </div>
     </div>
 </div>

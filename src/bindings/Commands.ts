@@ -2,8 +2,14 @@
 // This file was manually edited: Do not overwrite
 
 import { invoke } from "@tauri-apps/api/core";
-import type { GraphicsResult } from "./Structs";
-import type { RawObject, SearchQuery, SearchResults } from "./DFRawParser";
+import type { DbOptionOnParse, GraphicsResult } from "./Structs";
+import type {
+  LocationHelper,
+  RawModuleLocation,
+  RawObject,
+  SearchQuery,
+  SearchResults,
+} from "./DFRawParser";
 
 export async function getGraphics(
   identifier: string,
@@ -12,10 +18,15 @@ export async function getGraphics(
 }
 
 export async function parseRaws(
-  dfDir: string | null,
-  userDir: string | null,
+  directories: LocationHelper,
+  locations: RawModuleLocation[],
+  dbOption: DbOptionOnParse,
 ): Promise<string> {
-  return invoke<string>("parse_raws", { dfDir, userDir });
+  return invoke<string>("parse_raws", {
+    directories,
+    locations,
+    dbOption,
+  });
 }
 
 export async function getRawById(id: string): Promise<RawObject> {

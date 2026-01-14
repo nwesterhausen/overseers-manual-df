@@ -20,3 +20,16 @@ pub struct GraphicsResult {
     /// Position offselt used on frontend
     pub position_offset: Dimensions,
 }
+
+/// How the database should handle the parsed data
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[serde(rename_all = "camelCase")]
+pub enum DbOptionOnParse {
+    /// Insert only new data, avoiding overwriting anything existing
+    #[default]
+    InsertOnly,
+    /// Replace any existing data, anything outside of what is parsed will still exist
+    ForceUpdate,
+    /// Reset the database before parsing
+    Reset,
+}

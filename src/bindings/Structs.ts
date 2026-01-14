@@ -12,3 +12,5 @@ export interface GraphicsResult {
   description: string;
   positionOffset: Dimensions;
 }
+
+export type DbOptionOnParse = "insertOnly" | "forceUpdate" | "reset";

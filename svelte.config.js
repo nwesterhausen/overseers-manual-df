@@ -19,6 +19,7 @@ const config = {
       helpers: "./src/helpers.ts",
       highlighter: "./src/highlighter.svelte.ts",
       searchOptions: "./src/searchOptions.svelte.ts",
+      wrappers: "./src/wrappers.svelte.ts",
     },
   },
 };

@@ -9,12 +9,33 @@
 .section-heading {
     @apply font-bold uppercase opacity-60 block mb-2;
 }
+
 .custom-checkbox-container {
     @apply flex flex-wrap gap-x-8 gap-y-6 w-full mx-5 items-start;
 }
+
 .custom-checkbox-label {
     @apply flex items-center gap-2 cursor-pointer hover:bg-base-300 p-1 px-2 -ml-2 rounded-lg transition-colors;
 }
+
 .custom-checkbox-detail-label {
     @apply text-sm ml-7 max-w-50 leading-tight;
+}
+
+.custom-text-input-container {
+    @apply flex flex-wrap gap-y-4 gap-x-4;
+    .input {
+        @apply w-96;
+    }
+    .custom-legend {
+        @apply font-semibold uppercase pb-2;
+        font-size: 0.66rem;
+    }
+}
+
+dt {
+    @apply font-bold;
+}
+dd {
+    @apply ps-4;
 }
