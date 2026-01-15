@@ -3,6 +3,7 @@
     import { searchState } from "state/search.svelte";
     import InfoCard from "components/InfoCard.svelte";
     import type { RawObject, SearchResults } from "bindings/DFRawParser";
+    import { settingsState } from "state/settings.svelte";
 
     let search_results = $state<SearchResults<RawObject>>({
         results: [],
@@ -24,9 +25,11 @@
         {#each search_results.results as item}
             <InfoCard raw={item.data} raw_id={item.id} />
         {:else}
-            <p class="text-neutral-500">
-                No results found for "{searchState.searchString}"
-            </p>
+            {#if settingsState.appState === "ready"}
+                <p class="text-neutral-500">
+                    No results found for "{searchState.searchString}"
+                </p>
+            {/if}
         {/each}
     </div>
 </main>

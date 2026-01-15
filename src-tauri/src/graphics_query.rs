@@ -8,6 +8,7 @@ use crate::{AppState, GraphicsResult};
 pub async fn get_graphics(
     state: State<'_, AppState>,
     identifier: String,
+    viewport: Option<Dimensions>,
 ) -> Result<Vec<GraphicsResult>, String> {
     tracing::info!("get_graphics::identifier:{identifier:?}");
     let db_client = state.db.lock().await;
@@ -64,28 +65,60 @@ pub async fn get_graphics(
                     y: u32::try_from(graphic.offset_y).unwrap_or(0),
                 };
 
-                let offset_2 = if graphic.offset_x_2.is_none() {
-                    None
+                // Calculate the span of the sprite in tiles
+                let sprite_width_tiles = (graphic.offset_x_2.unwrap_or(graphic.offset_x)
+                    - graphic.offset_x)
+                    .unsigned_abs() as u32
+                    + 1;
+
+                let sprite_height_tiles = (graphic.offset_y_2.unwrap_or(graphic.offset_y)
+                    - graphic.offset_y)
+                    .unsigned_abs() as u32
+                    + 1;
+
+                // Calculate total pixel size of this specific sprite
+                let total_sprite_px_w = sprite_width_tiles * tile_dimensions.x;
+                let total_sprite_px_h = sprite_height_tiles * tile_dimensions.y;
+
+                // Calculate final CSS values based on viewport
+                let (bg_size, bg_position) = if let Some(vp) = viewport {
+                    // Scale based on the LARGEST pixel dimension of the sprite
+                    let max_sprite_px = total_sprite_px_w.max(total_sprite_px_h) as f32;
+                    let scale = vp.x as f32 / max_sprite_px;
+
+                    (
+                        format!(
+                            "{}px {}px",
+                            page_dimensions.x as f32 * scale,
+                            page_dimensions.y as f32 * scale
+                        ),
+                        // Position must point to the top-left tile, scaled down
+                        format!(
+                            "-{}px -{}px",
+                            (offset.x * tile_dimensions.x) as f32 * scale,
+                            (offset.y * tile_dimensions.y) as f32 * scale
+                        ),
+                    )
                 } else {
-                    Some(Dimensions {
-                        x: u32::try_from(graphic.offset_x_2.unwrap_or_default()).unwrap_or(0),
-                        y: u32::try_from(graphic.offset_y_2.unwrap_or_default()).unwrap_or(0),
-                    })
+                    (
+                        format!("{}px {}px", page_dimensions.x, page_dimensions.y),
+                        format!(
+                            "-{}px -{}px",
+                            offset.x * tile_dimensions.x,
+                            offset.y * tile_dimensions.y
+                        ),
+                    )
                 };
 
                 GraphicsResult {
-                    position_offset: calculate_position_offset(
-                        offset,
-                        offset_2,
-                        page_dimensions,
-                        tile_dimensions,
-                    ),
+                    bg_size,
+                    bg_position,
                     file_path: tp.file_path.clone(),
-                    tile_dimensions,
-                    page_dimensions,
+                    aspect_ratio: Dimensions {
+                        x: sprite_width_tiles,
+                        y: sprite_height_tiles,
+                    },
                     description: calculate_description(graphic),
-                    offset,
-                    offset_2,
                 }
             })
         })
@@ -111,36 +144,5 @@ fn calculate_description(sprite: &SpriteGraphicData) -> String {
             "{} {}",
             sprite.primary_condition, sprite.secondary_condition
         )
-    }
-}
-
-/// Calculates the position offset used when drawing a sprite off the tile sheet. This is used
-/// on the frontend to display the sprite to the end user.
-///
-/// Essentially this is figuring out on the page where to start drawing the sprite in px.
-/// It's up to the consumer of `GraphicsResult` to also use the tile dimensions to create the
-/// final bounding box.
-fn calculate_position_offset(
-    offset: Dimensions,
-    offset_2: Option<Dimensions>,
-    page_dimensions: Dimensions,
-    tile_dimensions: Dimensions,
-) -> Dimensions {
-    // Determine the boundary: use offset_2 if it's larger, otherwise stick with offset.
-    let max_off = offset_2
-        .map(|o2| o2.max_components(offset))
-        .unwrap_or(offset);
-
-    // Helper to perform the specific coordinate math
-    let compute = |off: u32, max: u32, page_dim: u32, tile_dim: u32| -> u32 {
-        let anchor = page_dim.saturating_sub(off * tile_dim);
-        let extra_span = (max - off) * tile_dim;
-
-        anchor + extra_span
-    };
-
-    Dimensions {
-        x: compute(offset.x, max_off.x, page_dimensions.x, tile_dimensions.x),
-        y: compute(offset.y, max_off.y, page_dimensions.y, tile_dimensions.y),
     }
 }

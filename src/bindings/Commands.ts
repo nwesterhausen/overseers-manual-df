@@ -4,6 +4,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import type { DbOptionOnParse, GraphicsResult } from "./Structs";
 import type {
+  Dimensions,
   LocationHelper,
   RawModuleLocation,
   RawObject,
@@ -13,8 +14,9 @@ import type {
 
 export async function getGraphics(
   identifier: string,
+  viewport: Dimensions | null,
 ): Promise<GraphicsResult[]> {
-  return invoke<GraphicsResult[]>("get_graphics", { identifier });
+  return invoke<GraphicsResult[]>("get_graphics", { identifier, viewport });
 }
 
 export async function parseRaws(

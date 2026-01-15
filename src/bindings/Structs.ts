@@ -5,12 +5,10 @@ import type { Dimensions } from "./DFRawParser";
 
 export interface GraphicsResult {
   filePath: string;
-  offset: Dimensions;
-  offset2: Dimensions | null;
-  tileDimensions: Dimensions;
-  pageDimensions: Dimensions;
+  bgSize: string;
+  bgPosition: string;
+  aspectRatio: Dimensions;
   description: string;
-  positionOffset: Dimensions;
 }
 
 export type DbOptionOnParse = "insertOnly" | "forceUpdate" | "reset";

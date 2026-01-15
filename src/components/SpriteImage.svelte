@@ -1,7 +1,7 @@
 <script lang="ts">
     import { ChevronLeft, ChevronRight } from "@lucide/svelte";
-    import { invoke, convertFileSrc } from "@tauri-apps/api/core";
-    import type { Dimensions } from "bindings/DFRawParser";
+    import { convertFileSrc } from "@tauri-apps/api/core";
+    import { getGraphics } from "bindings/Commands";
     import type { GraphicsResult } from "bindings/Structs";
     import { toTitleCase } from "helpers";
     import { settingsState } from "state/settings.svelte";
@@ -13,11 +13,14 @@
     let rotationInterval = 4; // in seconds, get's randomized within 1 second (.5 each way)
     let timerId: ReturnType<typeof setTimeout>;
 
+    // viewport is size of what we are displaying
+    const VIEWPORT = 32;
+
     $effect(() => {
         // Reset index whenever the identifier changes to avoid out-of-bounds access
         currentIdx = 0;
 
-        invoke<GraphicsResult[]>("get_graphics", { identifier })
+        getGraphics(identifier, { x: VIEWPORT, y: VIEWPORT })
             .then((data) => (spriteData = data))
             .catch((error) => console.log(error));
     });
@@ -44,14 +47,6 @@
     function handlePrev() {
         currentIdx = (currentIdx - 1 + spriteData.length) % spriteData.length;
         startRotation(); // Reset timer
-    }
-
-    /**
-     * Transforms the Dimension into a valid value for the style property "background-position"
-     * @param positionOffset dimension to transform
-     */
-    function backgroundPositionFromOffset(positionOffset: Dimensions): string {
-        return `${positionOffset.x}px ${positionOffset.y}px`;
     }
 
     /**
@@ -85,17 +80,27 @@
 
 <div>
     <div
-        class="w-9 h-9 border-2 border-accent rounded-lg bg-black/90 relative -top-2"
+        class="w-9 h-9 border-2 border-accent rounded-lg bg-black/90 relative -top-2 flex items-center justify-center"
     >
         {#if spriteData[currentIdx]}
+            {@const ratio = spriteData[currentIdx].aspectRatio}
+            {@const maxTiles = Math.max(ratio.x, ratio.y)}
             <div
-                class="w-8 h-8"
+                data-ratio={"ratio:" +
+                    ratio.x +
+                    "-" +
+                    ratio.y +
+                    " maxTiles:" +
+                    maxTiles}
+                style:width="{(ratio.x / maxTiles) * 100}%"
+                style:height="{(ratio.y / maxTiles) * 100}%"
                 style:background-image={"url('" +
                     convertFileSrc(spriteData[currentIdx].filePath) +
                     "')"}
-                style:background-position={backgroundPositionFromOffset(
-                    spriteData[currentIdx].positionOffset,
-                )}
+                style:background-position={spriteData[currentIdx].bgPosition}
+                style:background-size={spriteData[currentIdx].bgSize}
+                style:background-repeat="no-repeat"
+                style:image-rendering="pixelated"
             ></div>
             {#if spriteData.length > 1}
                 <button

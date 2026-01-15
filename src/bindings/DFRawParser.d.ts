@@ -3496,6 +3496,10 @@ export type ConditionTag =
  */
 "none" | 
 /**
+ * A portrait of the creature, used when interacting with them
+ */
+"portrait" | 
+/**
  * The start of a condition
  */
 "condition" | 

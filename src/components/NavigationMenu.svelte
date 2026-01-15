@@ -3,6 +3,7 @@
         BookOpenText,
         History,
         MoonIcon,
+        RefreshCcw,
         SearchIcon,
         SettingsIcon,
         SlidersHorizontal,
@@ -10,6 +11,7 @@
     } from "@lucide/svelte";
     import ThemeToggler from "./ThemeToggler.svelte";
     import { searchState } from "state/search.svelte";
+    import { executeParse } from "wrappers";
 
     let { onToggleAdvanced, advancedIsOpen = $bindable() } = $props<{
         onToggleAdvanced: () => void;
@@ -46,12 +48,17 @@
     </div>
 
     <div class="navbar-end">
-        <div class="tooltip tooltip-left" data-tip="History">
-            <a
+        <div class="tooltip tooltip-left" data-tip="Parse & Insert">
+            <button
                 class="btn btn-ghost px-1"
-                title="Advanced Search"
-                href="/history"
+                title="Parse and Insert"
+                onclick={() => executeParse("insertOnly")}
             >
+                <RefreshCcw class="h-5 w-5" />
+            </button>
+        </div>
+        <div class="tooltip tooltip-left" data-tip="History">
+            <a class="btn btn-ghost px-1" title="History" href="/history">
                 <History class="h-5 w-5" />
             </a>
         </div>
