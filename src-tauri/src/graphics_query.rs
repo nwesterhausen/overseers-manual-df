@@ -65,6 +65,17 @@ pub async fn get_graphics(
                     y: u32::try_from(graphic.offset_y).unwrap_or(0),
                 };
 
+                let offset_2 = graphic
+                    .offset_x_2
+                    .zip(graphic.offset_y_2)
+                    .and_then(|(x, y)| {
+                        // Use and_then if the conversion itself could return None/Result
+                        let x_u32 = u32::try_from(x).ok()?;
+                        let y_u32 = u32::try_from(y).ok()?;
+
+                        Some(Dimensions { x: x_u32, y: y_u32 })
+                    });
+
                 // Calculate the span of the sprite in tiles
                 let sprite_width_tiles = (graphic.offset_x_2.unwrap_or(graphic.offset_x)
                     - graphic.offset_x)
@@ -119,6 +130,10 @@ pub async fn get_graphics(
                         y: sprite_height_tiles,
                     },
                     description: calculate_description(graphic),
+                    offset,
+                    offset_2,
+                    tile_dimensions,
+                    page_dimensions,
                 }
             })
         })

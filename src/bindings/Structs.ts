@@ -8,7 +8,12 @@ export interface GraphicsResult {
   bgSize: string;
   bgPosition: string;
   aspectRatio: Dimensions;
+  offset: Dimensions;
+  offset2: Dimensions | null;
+  tileDimensions: Dimensions;
+  pageDimensions: Dimensions;
   description: string;
+  positionOffset: Dimensions;
 }
 
 export type DbOptionOnParse = "insertOnly" | "forceUpdate" | "reset";

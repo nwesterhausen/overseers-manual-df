@@ -17,6 +17,14 @@ pub struct GraphicsResult {
     ///
     /// Some sprites are tall or wide, have 2:3 or 3:1 as aspect ratios.
     pub aspect_ratio: Dimensions,
+    /// Sprite offset as pos x, y
+    pub offset: Dimensions,
+    /// Optional sprite 2nd offset (if large) as pos x, y
+    pub offset_2: Option<Dimensions>,
+    /// Tile size as x-px, y-px
+    pub tile_dimensions: Dimensions,
+    /// Page dimensions as x-tiles, y-tiles
+    pub page_dimensions: Dimensions,
     /// Conditions of sprite
     pub description: String,
 }
