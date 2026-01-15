@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Caste, Creature } from "bindings/DFRawParser";
-    import SpriteDisplay from "../SpriteDisplay.svelte";
+    import SpriteDisplay from "./SpriteDisplay.svelte";
 
     interface Props {
         raw: Creature;

@@ -14,6 +14,7 @@ export interface GraphicsResult {
   pageDimensions: Dimensions;
   description: string;
   positionOffset: Dimensions;
+  targetIdentifier: string;
 }
 
 export type DbOptionOnParse = "insertOnly" | "forceUpdate" | "reset";

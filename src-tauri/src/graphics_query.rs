@@ -14,7 +14,7 @@ pub async fn get_graphics(
     let db_client = state.db.lock().await;
 
     let mut matching_graphics = db_client
-        .get_sprite_graphics_for_target_identifier(&identifier)
+        .get_sprite_graphics_for_target_identifier_and_any_castes(&identifier)
         .map_err(|e| {
             tracing::error!("{e}");
             e.to_string()
@@ -134,6 +134,7 @@ pub async fn get_graphics(
                     offset_2,
                     tile_dimensions,
                     page_dimensions,
+                    target_identifier: graphic.target_identifier.clone(),
                 }
             })
         })

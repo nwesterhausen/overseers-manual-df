@@ -27,6 +27,8 @@ pub struct GraphicsResult {
     pub page_dimensions: Dimensions,
     /// Conditions of sprite
     pub description: String,
+    /// The target identifier of the sprite
+    pub target_identifier: String,
 }
 
 /// How the database should handle the parsed data
