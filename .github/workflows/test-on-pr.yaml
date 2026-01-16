@@ -27,26 +27,10 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Install bun
         uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
-      - name: Create Fake .env File (dotenvy_macro requirement)
-        run: |
-          touch src-tauri/.env
-          echo APTABASE_KEY=${{ secrets.APTABASE_KEY }} >> src-tauri/.env
       - name: Install Dependencies
-        # You can remove libayatana-appindicator3-dev if you don't use the system tray feature.
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends libwebkit2gtk-4.0-dev \
-              build-essential \
-              curl \
-              wget \
-              file \
-              libssl-dev \
-              libgtk-3-dev \
-              libayatana-appindicator3-dev \
-              librsvg2-dev
-          sudo apt-get install --no-install-recommends javascriptcoregtk-4.1 \
-              libsoup-3.0 \
-              webkit2gtk-4.1
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@89e9040de88b577a072e3760aaf59f585da083af # v0.0.5
       - name: Rust setup
@@ -83,25 +67,9 @@ jobs:
       - name: Install bun
         uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
       - name: Install Dependencies
-      # You can remove libayatana-appindicator3-dev if you don't use the system tray feature.
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends libwebkit2gtk-4.0-dev \
-              build-essential \
-              curl \
-              wget \
-              file \
-              libssl-dev \
-              libgtk-3-dev \
-              libayatana-appindicator3-dev \
-              librsvg2-dev
-          sudo apt-get install --no-install-recommends javascriptcoregtk-4.1 \
-              libsoup-3.0 \
-              webkit2gtk-4.1
-      - name: Create .env
-        run: |
-          touch src-tauri/.env
-          echo APTABASE_KEY=${{ secrets.APTABASE_KEY }} >> src-tauri/.env
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
       - name: Install Client Dependencies & Build
         run: |
           bun install
