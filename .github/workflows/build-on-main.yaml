@@ -6,9 +6,7 @@ on:
       - main
 env:
   CARGO_TERM_COLOR: always
-  # sccache enablement
-  SCCACHE_GHA_ENABLED: true
-  RUSTC_WRAPPER: sccache
+
 # For pushes to any branch, we want to test the build.
 # Force the build to run on the latest commit of the branch. If a new commit is pushed while the build is running, the build will be cancelled.
 # This is to ensure that the build is always run on the latest commit and doesn't waste resources on outdated commits.
@@ -33,12 +31,17 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
-      - name: Run sccache-cache
-        uses: mozilla-actions/sccache-action@89e9040de88b577a072e3760aaf59f585da083af # v0.0.5
-      - name: Rust setup
+      - name: Install Client Dependencies & Build
+        run: |
+          bun install
+          bun run build
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@7b1c307e0dcbda6122208f10795a713336a9b35a # master
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
         with:
-          toolchain: stable
+          workspaces: "./src-tauri -> target"
       - name: Install Client Dependencies & Build
         run: |
           bun install
