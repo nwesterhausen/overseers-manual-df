@@ -338,30 +338,116 @@ export type BiomeTag =
 "Unknown"
 
 /**
- * A struct representing a body size in the format `years:days:size_cm3`
+ * Represents a creature's body size at a specific age.
+ * 
+ * This structure is used to define growth stages for creatures in Dwarf Fortress raw files.
+ * It corresponds to the `[BODY_SIZE:YEARS:DAYS:SIZE_CM3]` tag.
  */
 export type BodySize = { years: number; days: number; sizeCm3: number }
 
 /**
  * A struct representing a creature caste.
+ * 
+ * Castes are specific subgroups within a creature species, often representing
+ * biological sexes, specialized roles, or unique variations specified in the raw files.
  */
-export type Caste = { identifier: string; tags?: CasteTag[] | null; description?: string | null; babyName?: Name | null; casteName?: Name | null; childName?: Name | null; 
+export type Caste = { 
 /**
- * Default \[0,0\]
+ * The unique name used in raw files for this caste (e.g., "MALE", "FEMALE").
  */
-clutchSize?: [number, number] | null; 
+identifier: string; 
 /**
- * Default \[0,0\]
+ * A collection of tags assigned to this caste.
  */
-litterSize?: [number, number] | null; 
+tags: CasteTag[] | null; 
 /**
- * Default \[0,0\]
+ * Flavor text shown in-game when examining a creature of this caste.
  */
-maxAge?: [number, number] | null; baby?: number | null; child?: number | null; difficulty?: number | null; eggSize?: number | null; grassTrample?: number | null; grazer?: number | null; lowLightVision?: number | null; petValue?: number | null; popRatio?: number | null; changeBodySizePercentage?: number | null; creatureClass?: string[] | null; bodySize?: BodySize[] | null; milkable?: Milkable | null; tile?: Tile | null; 
+description: string | null; 
+/**
+ * The specific name for a creature in its baby stage.
+ */
+babyName: Name | null; 
+/**
+ * The name used specifically for this caste.
+ */
+casteName: Name | null; 
+/**
+ * The name for a creature in its child stage.
+ */
+childName: Name | null; 
+/**
+ * The range of eggs produced per clutch, measured as `[min, max]`.
+ */
+clutchSize: [number, number] | null; 
+/**
+ * The range of offspring produced per birth, measured as `[min, max]`.
+ */
+litterSize: [number, number] | null; 
+/**
+ * The range of life expectancy in game ticks, measured as `[min, max]`.
+ */
+maxAge: [number, number] | null; 
+/**
+ * The age in game ticks at which a creature ceases to be a baby.
+ */
+baby: number | null; 
+/**
+ * The age in game ticks at which a creature ceases to be a child.
+ */
+child: number | null; 
+/**
+ * A rating used to determine the challenge level of the creature.
+ */
+difficulty: number | null; 
+/**
+ * The size of eggs laid by this caste, measured in cubic centimeters.
+ */
+eggSize: number | null; 
+/**
+ * The distance or frequency at which this creature tramples grass.
+ */
+grassTrample: number | null; 
+/**
+ * The grazing requirement for the creature to survive.
+ */
+grazer: number | null; 
+/**
+ * The level of vision the creature has in dark environments.
+ */
+lowLightVision: number | null; 
+/**
+ * The value assigned to the creature when kept as a pet.
+ */
+petValue: number | null; 
+/**
+ * The relative frequency this caste appears in wild populations.
+ */
+popRatio: number | null; 
+/**
+ * The percentage change applied to the base body size.
+ */
+changeBodySizePercentage: number | null; 
+/**
+ * The classes or categories this caste belongs to for targeting.
+ */
+creatureClass: string[] | null; 
+/**
+ * Growth stages and volume measurements.
+ */
+bodySize: BodySize[] | null; 
+/**
+ * Material and frequency information for milking.
+ */
+milkable: Milkable | null; 
+/**
+ * Character and color data for map representation.
+ */
+tile: Tile | null; 
 /**
  * The gaits by which the creature can move.
  */
-gaits?: Gait[] | null }
+gaits: Gait[] | null }
 
 /**
  * Tokens that can be found in a creature's caste definitions.
@@ -3474,9 +3560,24 @@ resetDatabase: boolean;
 overwriteRaws: boolean }
 
 /**
- * A struct representing a color in the format "foreground:background:brightness".
+ * Represents a Dwarf Fortress color triplet.
+ * 
+ * This format is used throughout the game raws to define the foreground,
+ * background, and brightness/intensity of tiles and text.
  */
-export type Color = { foreground: number; background: number; brightness: number }
+export type Color = { 
+/**
+ * The foreground color index (0-7).
+ */
+foreground: number; 
+/**
+ * The background color index (0-7).
+ */
+background: number; 
+/**
+ * The brightness or intensity toggle (0 or 1).
+ */
+brightness: number }
 
 /**
  * The color modification of the tile
@@ -4313,7 +4414,7 @@ export type Creature = {
  * The `metadata` field is of type `RawMetadata` and is used to provide additional information
  * about the raws the `Creature` is found in.
  */
-metadata?: Metadata | null; 
+metadata: Metadata | null; 
 /**
  * The `identifier` field is a string that represents the identifier of the creature. It is used
  * to uniquely identify the creature (however it is not guaranteed to be unique across object types
@@ -4331,19 +4432,19 @@ castes: Caste[];
 /**
  * Any tags that are not parsed into their own fields are stored in the `tags` field.
  */
-tags?: CreatureTag[] | null; 
+tags: CreatureTag[] | null; 
 /**
  * The biomes that this creature can be found in
  */
-biomes?: BiomeTag[] | null; 
+biomes: BiomeTag[] | null; 
 /**
  * Pref strings are things that make dwarves (or others?) like or dislike the creature.
  */
-prefStrings?: string[] | null; 
+prefStrings: string[] | null; 
 /**
  * The tile that represents the creature in the game (classic mode)
  */
-tile?: Tile | null; 
+tile: Tile | null; 
 /**
  * Determines the chances of a creature appearing within its environment, with higher values resulting in more frequent appearance.
  * 
@@ -4357,20 +4458,20 @@ tile?: Tile | null;
  * 
  * Note: not to be confused with `[POP_RATIO]`.
  */
-frequency?: number | null; 
+frequency: number | null; 
 /**
  * The minimum/maximum numbers of how many creatures per spawned cluster. Vermin fish with this token in combination with
  * temperate ocean and river biome tokens will perform seasonal migrations.
  * 
  * Defaults to [1,1] if not specified.
  */
-clusterNumber?: [number, number] | null; 
+clusterNumber: [number, number] | null; 
 /**
  * The minimum/maximum numbers of how many of these creatures are present in each world map tile of the appropriate region.
  * 
  * Defaults to [1,1] if not specified.
  */
-populationNumber?: [number, number] | null; 
+populationNumber: [number, number] | null; 
 /**
  * Depth that the creature appears underground. Numbers can be from 0 to 5. 0 is actually 'above ground' and can be used if the
  * creature is to appear both above and below ground. Values from 1-3 are the respective cavern levels, 4 is the magma sea and
@@ -4382,15 +4483,15 @@ populationNumber?: [number, number] | null;
  * 
  * Default [0, 0] (aboveground)
  */
-undergroundDepth?: [number, number] | null; 
+undergroundDepth: [number, number] | null; 
 /**
  * Like `[BABYNAME]`, but applied regardless of caste.
  */
-generalBabyName?: Name | null; 
+generalBabyName: Name | null; 
 /**
  * Like `[CHILDNAME]`, but applied regardless of caste.
  */
-generalChildName?: Name | null; 
+generalChildName: Name | null; 
 /**
  * The generic name for any creature of this type - will be used when distinctions between caste are unimportant. For names for specific castes,
  * use `[CASTE_NAME]` instead. If left undefined, the creature will be labeled as "nothing" by the game.
@@ -4402,13 +4503,13 @@ name: Name;
  * 
  * The vanilla giant animals and animal peoples are examples of this token combination.
  */
-copyTagsFrom?: string | null; 
+copyTagsFrom: string | null; 
 /**
  * Applies the specified creature variation.
  * 
  * These are stored "in the raw", i.e. how they appear in the raws. They are not handled until the end of the parsing process.
  */
-applyCreatureVariation?: string[] | null; 
+applyCreatureVariation: string[] | null; 
 /**
  * A generated field that is used to uniquely identify this object. It is generated from the `metadata`, `identifier`, and `ObjectType`.
  * 
@@ -4418,12 +4519,12 @@ objectId: string;
 /**
  * Various `SELECT_CREATUR` modifications.
  */
-selectCreatureVariation?: SelectCreature[] | null }
+selectCreatureVariation: SelectCreature[] | null }
 
 /**
  * A creature effect.
  */
-export type CreatureEffect = { severity: number; probability: number; affectedBodyPartsByCategory?: string[] | null; affectedBodyPartsByType?: string[] | null; affectedBodyPartsByToken?: string[] | null; tags?: CreatureEffectPropertyTag[] | null; start: number; peak: number; end: number; dwfStretch?: number | null }
+export type CreatureEffect = { severity: number; probability: number; affectedBodyPartsByCategory: string[] | null; affectedBodyPartsByType: string[] | null; affectedBodyPartsByToken: string[] | null; tags: CreatureEffectPropertyTag[] | null; start: number; peak: number; end: number; dwfStretch: number | null }
 
 /**
  * An enum representing a creature effect property tag.
@@ -5522,7 +5623,7 @@ export type CreatureVariation = {
 /**
  * Common Raw file Things
  */
-metadata?: Metadata | null; identifier: string; objectId: string; 
+metadata: Metadata | null; identifier: string; objectId: string; 
 /**
  * Creature variations are basically just a set of simple tag actions which are applied to
  * the creature which is being modified. The tags are applied in order EXCEPT for the convert
@@ -5739,7 +5840,7 @@ export type CreatureVariationTag =
 /**
  * A custom graphic extension.
  */
-export type CustomGraphicExtension = { extensionType: GraphicTypeTag; tilePageId?: string | null; value1?: number | null; value2?: number | null }
+export type CustomGraphicExtension = { extensionType: GraphicTypeTag; tilePageId: string | null; value1: number | null; value2: number | null }
 
 /**
  * A struct representing a Dimensions object.
@@ -5757,7 +5858,7 @@ y: number }
 /**
  * A struct representing an Entity object.
  */
-export type Entity = { metadata?: Metadata | null; identifier: string; objectId: string; tags: EntityTag[]; creature?: string | null; translation?: string | null; exclusiveStartBiome?: string | null; biomeSupport?: ([string, number])[] | null; settlementBiome?: string[] | null; startBiome?: string[] | null; likesSites?: string[] | null; toleratesSites?: string[] | null; worldConstructions?: string[] | null; maxPopNumber?: number | null; maxSitePopNumber?: number | null; maxStartingCivNumber?: number | null; permittedBuildings?: string[] | null; permittedJobs?: string[] | null; permittedReactions?: string[] | null; currency?: ([string, number])[] | null; artFacetModifier?: ([string, number])[] | null; artImageElementModifier?: ([string, number])[] | null; itemImprovementModifier?: ([string, number])[] | null; selectSymbols?: ([string, string])[] | null; subselectSymbols?: ([string, string])[] | null; cullSymbols?: ([string, string])[] | null; friendlyColor?: Color | null; religion?: string | null; religionSpheres?: string[] | null; sphereAlignments?: string[] | null; positions?: Position[] | null; landHolderTrigger?: string | null; siteVariablePositions?: string[] | null; variablePositions?: string[] | null; ethics?: ([string, string])[] | null; values?: ([string, number])[] | null; variableValues?: ([string, number, number])[] | null; activeSeason?: string | null; banditry?: number | null; progressTriggerPopulation?: number | null; progressTriggerProduction?: number | null; progressTriggerTrade?: number | null; progressTriggerPopulationSiege?: number | null; progressTriggerProductionSiege?: number | null; progressTriggerTradeSiege?: number | null; scholars?: string[] | null; ammo?: string[] | null; armors?: ([string, number])[] | null; diggers?: string[] | null; gloves?: ([string, number])[] | null; helms?: ([string, number])[] | null; instrument?: string[] | null; pants?: ([string, number])[] | null; shields?: string[] | null; shoes?: ([string, number])[] | null; siegeAmmo?: string[] | null; tool?: string[] | null; toys?: string[] | null; trapComponents?: string[] | null; weapons?: string[] | null; gemShape?: string[] | null; stoneShape?: string[] | null; sourceHfid?: number | null }
+export type Entity = { metadata: Metadata | null; identifier: string; objectId: string; tags: EntityTag[]; creature: string | null; translation: string | null; exclusiveStartBiome: string | null; biomeSupport: ([string, number])[] | null; settlementBiome: string[] | null; startBiome: string[] | null; likesSites: string[] | null; toleratesSites: string[] | null; worldConstructions: string[] | null; maxPopNumber: number | null; maxSitePopNumber: number | null; maxStartingCivNumber: number | null; permittedBuildings: string[] | null; permittedJobs: string[] | null; permittedReactions: string[] | null; currency: ([string, number])[] | null; artFacetModifier: ([string, number])[] | null; artImageElementModifier: ([string, number])[] | null; itemImprovementModifier: ([string, number])[] | null; selectSymbols: ([string, string])[] | null; subselectSymbols: ([string, string])[] | null; cullSymbols: ([string, string])[] | null; friendlyColor: Color | null; religion: string | null; religionSpheres: string[] | null; sphereAlignments: string[] | null; positions: Position[] | null; landHolderTrigger: string | null; siteVariablePositions: string[] | null; variablePositions: string[] | null; ethics: ([string, string])[] | null; values: ([string, number])[] | null; variableValues: ([string, number, number])[] | null; activeSeason: string | null; banditry: number | null; progressTriggerPopulation: number | null; progressTriggerProduction: number | null; progressTriggerTrade: number | null; progressTriggerPopulationSiege: number | null; progressTriggerProductionSiege: number | null; progressTriggerTradeSiege: number | null; scholars: string[] | null; ammo: string[] | null; armors: ([string, number])[] | null; diggers: string[] | null; gloves: ([string, number])[] | null; helms: ([string, number])[] | null; instrument: string[] | null; pants: ([string, number])[] | null; shields: string[] | null; shoes: ([string, number])[] | null; siegeAmmo: string[] | null; tool: string[] | null; toys: string[] | null; trapComponents: string[] | null; weapons: string[] | null; gemShape: string[] | null; stoneShape: string[] | null; sourceHfid: number | null }
 
 /**
  * Tokens that can be found in an entity raw file.
@@ -6920,19 +7021,21 @@ export type FuelTypeTag =
 "None"
 
 /**
- * Gaits are a way to describe how a creature moves. Defined in the raws with:
+ * A struct describing how a creature moves.
  * 
- * "GAIT:type:name:full speed:build up time:turning max:start speed:energy use"
+ * Gaits define the mechanics of movement modes like walking, swimming, or flying,
+ * including speed, acceleration, and energy costs. They are defined in raw files
+ * using the `[GAIT:type:name:full_speed:build_up:turning:start_speed:energy_use]` tag.
  * 
- * * use `NO_BUILD_UP` if you jump immediately to full speed
- * 
- * these optional flags go at the end:
+ * These optional flags go at the end:
  * 
  * * `LAYERS_SLOW` - fat/muscle layers slow the movement (muscle-slowing counter-acted by strength bonus)
  * * `STRENGTH` - strength attribute can speed/slow movement
  * * `AGILITY` - agility attribute can speed/slow movement
  * * `STEALTH_SLOWS:<n>` - n is percentage slowed
- * * it would be interesting to allow quirky attributes (like mental stats), but they aren't supported yet
+ * 
+ * Instead of specifying a `build_up` you can use `NO_BUILD_UP` to instantly get to speed.
+ * 
  * 
  * Examples:
  * 
@@ -6945,25 +7048,35 @@ export type FuelTypeTag =
  */
 export type Gait = { 
 /**
- * The type of gait
+ * The movement medium (e.g., [`GaitTypeTag::Walk`], [`GaitTypeTag::Swim`]).
  */
 gaitType: GaitTypeTag; 
 /**
- * The name of the gait
+ * The descriptive name of the movement (e.g., "Sprint", "Jog").
  */
 name: string; 
 /**
- * The maximum speed achievable by a creature using this gait.
+ * The maximum speed achievable, where lower values are faster.
  */
 maxSpeed: number; 
 /**
- * The energy use of the gait
+ * The time in game ticks required to reach full speed.
+ */
+buildUpTime: number; 
+/**
+ * The maximum speed at which the creature can turn effectively.
+ */
+turningMax: number; 
+/**
+ * The speed at which the creature begins moving from a standstill.
+ */
+startSpeed: number; 
+/**
+ * The fatigue or energy cost associated with this movement.
  */
 energyUse: number; 
 /**
- * The gait modifiers
- * 
- * These are optional, and may be empty.
+ * Optional modifiers affecting speed based on attributes or stealth.
  */
 modifiers: GaitModifierTag[] }
 
@@ -7057,7 +7170,7 @@ export type GaitTypeTag =
 /**
  * A struct representing a Graphic object.
  */
-export type Graphic = { metadata?: Metadata | null; identifier: string; objectId: string; casteIdentifier?: string | null; kind: GraphicTypeTag; sprites?: SpriteGraphic[] | null; layers?: ([string, SpriteLayer[]])[] | null; growths?: ([string, SpriteGraphic[]])[] | null; customExtensions?: CustomGraphicExtension[] | null; tags?: string[] | null; palletes: GraphicPalette[] }
+export type Graphic = { metadata: Metadata | null; identifier: string; objectId: string; casteIdentifier: string | null; kind: GraphicTypeTag; sprites: SpriteGraphic[] | null; layers: ([string, SpriteLayer[]])[] | null; growths: ([string, SpriteGraphic[]])[] | null; customExtensions: CustomGraphicExtension[] | null; tags: string[] | null; palletes: GraphicPalette[] }
 
 /**
  * A struct representing a Graphic object.
@@ -7593,7 +7706,15 @@ export type GrowthTag =
 /**
  * The 'HABIT_NUM' value which can be a number or "TEST_ALL"
  */
-export type HabitCount = "TestAll" | { Specific: number }
+export type HabitCount = 
+/**
+ * Test all possible habit values
+ */
+"TestAll" | 
+/**
+ * Test a specific number of habits
+ */
+{ Specific: number }
 
 /**
  * The type of inclusion that the stone has.
@@ -7623,12 +7744,12 @@ export type InclusionTypeTag =
 /**
  * Represents the `info.txt` file for a raw module
  */
-export type InfoFile = { identifier: string; objectId: string; location: RawModuleLocation; parentDirectory: string; numericVersion: number; displayedVersion: string; earliestCompatibleNumericVersion: number; earliestCompatibleDisplayedVersion: string; author: string; name: string; description: string; requiresIds?: string[] | null; conflictsWithIds?: string[] | null; requiresIdsBefore?: string[] | null; requiresIdsAfter?: string[] | null; steamData?: SteamData | null }
+export type InfoFile = { identifier: string; objectId: string; location: RawModuleLocation; parentDirectory: string; numericVersion: number; displayedVersion: string; earliestCompatibleNumericVersion: number; earliestCompatibleDisplayedVersion: string; author: string; name: string; description: string; requiresIds: string[] | null; conflictsWithIds: string[] | null; requiresIdsBefore: string[] | null; requiresIdsAfter: string[] | null; steamData: SteamData | null }
 
 /**
  * The raw representation of an inorganic object.
  */
-export type Inorganic = { identifier: string; metadata?: Metadata | null; objectId: string; material: Material; metalOreChance?: ([string, number])[] | null; threadMetalChance?: ([string, number])[] | null; environmentClass?: EnvironmentClassTag | null; environmentInclusionType?: InclusionTypeTag | null; environmentInclusionFrequency?: number | null; environmentClassSpecific?: string[] | null; tags?: InorganicTag[] | null }
+export type Inorganic = { identifier: string; metadata: Metadata | null; objectId: string; material: Material; metalOreChance: ([string, number])[] | null; threadMetalChance: ([string, number])[] | null; environmentClass: EnvironmentClassTag | null; environmentInclusionType: InclusionTypeTag | null; environmentInclusionFrequency: number | null; environmentClassSpecific: string[] | null; tags: InorganicTag[] | null }
 
 /**
  * Tags that can be used in inorganic raws.
@@ -7747,52 +7868,52 @@ export type Material = {
 /**
  * The type of the material is also the trigger to start tracking a material
  */
-materialType?: MaterialTypeTag | null; 
+materialType: MaterialTypeTag | null; 
 /**
  * The material might have a name, but its more likely that there is only an identifier to
  * refer to another creature/plant/reaction, which are listed elsewhere.
  * If there is no name provided, then it is a special hardcoded case, e.g. magma or green glass.
  */
-name?: string | null; 
+name: string | null; 
 /**
  * For the coal tag, it specifies the type of fuel that can be used. It will never be None.
  */
-fuelType?: FuelTypeTag | null; 
+fuelType: FuelTypeTag | null; 
 /**
  * Linked creature identifier (and then `material_name` might be "skin", like for "`CREATURE_MAT:DWARF:SKIN`")
  */
-creatureIdentifier?: string | null; 
+creatureIdentifier: string | null; 
 /**
  * Linked plant identifier (and then `material_name` might be "leaf", like for "`PLANT_MAT:BUSH_QUARRY:LEAF`")
  */
-plantIdentifier?: string | null; 
+plantIdentifier: string | null; 
 /**
  * If a material is defined within a creature itself, it will use `LOCAL_CREATURE_MAT` tag, which implies
  * that the material is only used by that creature. This is also true for plants and `LOCAL_PLANT_MAT`.
  */
-isLocalMaterial?: boolean | null; 
+isLocalMaterial: boolean | null; 
 /**
  * Within a reaction, there can be special material definitions. Todo: Figure this out.
  */
-reagentIdentifier?: string | null; reactionProductIdentifier?: string | null; 
+reagentIdentifier: string | null; reactionProductIdentifier: string | null; 
 /**
  * If material is defined from a template, we need a way to refer to that
  */
-templateIdentifier?: string | null; 
+templateIdentifier: string | null; 
 /**
  * Usage tags
  */
-usage?: MaterialUsageTag[] | null; value?: number | null; color?: Color | null; stateNames?: StateName | null; stateAdjectives?: StateName | null; stateColors?: StateName | null; temperatures?: Temperatures | null; 
+usage: MaterialUsageTag[] | null; value: number | null; color: Color | null; stateNames: StateName | null; stateAdjectives: StateName | null; stateColors: StateName | null; temperatures: Temperatures | null; 
 /**
  * Catch-all for remaining tags we identify but don't do anything with... yet.
  */
-properties?: string[] | null; syndromes?: Syndrome[] | null; mechanicalProperties?: MaterialMechanics | null; liquidDensity?: number | null; molarMass?: number | null; buildColor?: Color | null; displayColor?: Color | null; tile?: Tile | null; itemSymbol?: string | null }
+properties: string[] | null; syndromes: Syndrome[] | null; mechanicalProperties: MaterialMechanics | null; liquidDensity: number | null; molarMass: number | null; buildColor: Color | null; displayColor: Color | null; tile: Tile | null; itemSymbol: string | null }
 
 /**
  * Represents the specific yield, fracture, and elasticity of a material for the various
  * types of mechanical stress.
  */
-export type MaterialMechanics = { impact?: MechanicalProperties | null; compressive?: MechanicalProperties | null; tensile?: MechanicalProperties | null; torsion?: MechanicalProperties | null; shear?: MechanicalProperties | null; bending?: MechanicalProperties | null; maxEdge?: number | null; solidDensity?: number | null }
+export type MaterialMechanics = { impact: MechanicalProperties | null; compressive: MechanicalProperties | null; tensile: MechanicalProperties | null; torsion: MechanicalProperties | null; shear: MechanicalProperties | null; bending: MechanicalProperties | null; maxEdge: number | null; solidDensity: number | null }
 
 /**
  * A material property that can be set in a material definition.
@@ -8194,7 +8315,7 @@ export type MaterialStateTag =
 /**
  * A struct representing a material template
  */
-export type MaterialTemplate = { identifier: string; metadata?: Metadata | null; objectId: string; material: Material }
+export type MaterialTemplate = { identifier: string; metadata: Metadata | null; objectId: string; material: Material }
 
 /**
  * A material template
@@ -9075,31 +9196,31 @@ export type Plant = {
 /**
  * Common Raw file Things
  */
-metadata?: Metadata | null; identifier: string; objectId: string; name: Name; prefStrings?: string[] | null; tags?: PlantTag[] | null; 
+metadata: Metadata | null; identifier: string; objectId: string; name: Name; prefStrings: string[] | null; tags: PlantTag[] | null; 
 /**
  * Default [0, 0] (aboveground)
  */
-undergroundDepth?: [number, number] | null; 
+undergroundDepth: [number, number] | null; 
 /**
  * Default frequency is 50
  */
-frequency?: number | null; 
+frequency: number | null; 
 /**
  * List of biomes this plant can grow in
  */
-biomes?: BiomeTag[] | null; 
+biomes: BiomeTag[] | null; 
 /**
  * Growth Tokens define the growths of the plant (leaves, fruit, etc.)
  */
-growths?: PlantGrowth[] | null; 
+growths: PlantGrowth[] | null; 
 /**
  * If plant is a tree, it will have details about the tree.
  */
-treeDetails?: Tree | null; 
+treeDetails: Tree | null; 
 /**
  * If plant is a shrub, it will have details about the shrub.
  */
-shrubDetails?: Shrub | null; materials?: Material[] | null }
+shrubDetails: Shrub | null; materials: Material[] | null }
 
 /**
  * The graphic of the tile
@@ -9165,7 +9286,7 @@ item: string;
  * Specifies on which part of the plant this growth grows. This is defined with `GROWTH_HOST_TILE` key.
  * This can be unused, like in the case of crops where the plant is the growth (I think?).
  */
-hostTiles?: PlantPartTag[] | null; 
+hostTiles: PlantPartTag[] | null; 
 /**
  * Controls the height on the trunk above which the growth begins to appear.
  * The first value is the percent of the trunk height where the growth begins appearing:
@@ -9174,25 +9295,25 @@ hostTiles?: PlantPartTag[] | null;
  * The second value must be -1, but might be intended to control whether it starts height counting
  * from the bottom or top.
  */
-trunkHeightPercentage?: [number, number] | null; 
+trunkHeightPercentage: [number, number] | null; 
 /**
  * Currently has no effect.
  */
-density?: number | null; 
+density: number | null; 
 /**
  * Specifies the appearance of the growth. This is defined with `GROWTH_PRINT` key.
  * This is a string until we make a proper print structure.
  */
-print?: string | null; 
+print: string | null; 
 /**
  * Specifies at which part of the year the growth appears. Default is all year round.
  * Minimum: 0, Maximum: `402_200`. This is defined with `GROWTH_TIMING` key.
  */
-timing?: [number, number] | null; 
+timing: [number, number] | null; 
 /**
  * Where we gather some of the growth's tags.
  */
-tags?: PlantGrowthTag[] | null }
+tags: PlantGrowthTag[] | null }
 
 /**
  * The growth tag of a plant
@@ -9437,7 +9558,7 @@ export type PlantTag =
 /**
  * Represents a position in the government of an entity
  */
-export type Position = { identifier: string; allowedClasses?: string[] | null; allowedCreatures?: string[] | null; appointedBy?: string | null; color?: Color | null; commander?: string | null; demandMax?: number | null; executionSkill?: string | null; gender?: string | null; landHolder?: number | null; landName?: string | null; mandateMax?: number | null; name?: Name | null; nameMale?: Name | null; nameFemale?: Name | null; number?: number | null; precedence?: number | null; rejectedClasses?: string[] | null; rejectedCreatures?: string[] | null; replacedBy?: string | null; requiredBedroom?: number | null; requiredBoxes?: number | null; requiredCabinets?: number | null; requiredDining?: number | null; requiredOffice?: number | null; requiredRacks?: number | null; requiredStands?: number | null; requiredTomb?: number | null; requiresPopulation?: number | null; responsibilities?: string[] | null; spouse?: Name | null; spouseFemale?: Name | null; spouseMale?: Name | null; squad?: string | null; succession?: string | null; tags: PositionTag[] }
+export type Position = { identifier: string; allowedClasses: string[] | null; allowedCreatures: string[] | null; appointedBy: string | null; color: Color | null; commander: string | null; demandMax: number | null; executionSkill: string | null; gender: string | null; landHolder: number | null; landName: string | null; mandateMax: number | null; name: Name | null; nameMale: Name | null; nameFemale: Name | null; number: number | null; precedence: number | null; rejectedClasses: string[] | null; rejectedCreatures: string[] | null; replacedBy: string | null; requiredBedroom: number | null; requiredBoxes: number | null; requiredCabinets: number | null; requiredDining: number | null; requiredOffice: number | null; requiredRacks: number | null; requiredStands: number | null; requiredTomb: number | null; requiresPopulation: number | null; responsibilities: string[] | null; spouse: Name | null; spouseFemale: Name | null; spouseMale: Name | null; squad: string | null; succession: string | null; tags: PositionTag[] }
 
 /**
  * Represents a position token
@@ -9938,7 +10059,7 @@ export type SeedMaterial = { name: Name; color: Color; material: string }
 /**
  * A struct representing a creature selection
  */
-export type SelectCreature = { metadata?: Metadata | null; identifier: string; objectId: string; tags: string[] }
+export type SelectCreature = { metadata: Metadata | null; identifier: string; objectId: string; tags: string[] }
 
 /**
  * The rules for selecting a creature
@@ -9972,95 +10093,95 @@ export type Shrub = {
  * of their season tokens.
  * Default: empty (plant will not grow in farm plots)
  */
-growingSeason?: SeasonTag[] | null; 
+growingSeason: SeasonTag[] | null; 
 /**
  * How long the plant takes to grow to harvest in a farm plot. Unit hundreds of ticks.
  * There are 1008 GROWDUR units in a season. Defaults to 300.
  */
-growDuration?: number | null; 
+growDuration: number | null; 
 /**
  * Has no known effect. Previously set the value of the harvested plant.
  */
-value?: number | null; 
+value: number | null; 
 /**
  * The tile used when the plant is harvested whole, or is ready to be picked from a farm plot. May either be a cp437
  * tile number, or a character between single quotes. See character table. Defaults to 231 (τ).
  */
-pickedTile?: number | null; 
+pickedTile: number | null; 
 /**
  * The tile used when a plant harvested whole has wilted. Defaults to 169 (⌐).
  */
-deadPickedTile?: number | null; 
+deadPickedTile: number | null; 
 /**
  * The tile used to represent this plant when it is wild, alive, and has no growths. Defaults to 34 (").
  */
-shrubTile?: number | null; 
+shrubTile: number | null; 
 /**
  * The tile used to represent this plant when it is dead in the wild. Defaults to 34 (").
  */
-deadShrubTile?: number | null; 
+deadShrubTile: number | null; 
 /**
  * The maximum stack size collected when gathered via herbalism (possibly also from farm plots?). Defaults to 5.
  */
-clusterSize?: number | null; 
+clusterSize: number | null; 
 /**
  * The color of the plant when it has been picked whole, or when it is ready for harvest in a farm plot. Defaults to 2:0:0 (dark green).
  */
-pickedColor?: Color | null; 
+pickedColor: Color | null; 
 /**
  * The color of the plant when it has been picked whole, but has wilted. Defaults to 0:0:1 (dark gray).
  */
-deadPickedColor?: Color | null; 
+deadPickedColor: Color | null; 
 /**
  * The color of the plant when it is alive, wild, and has no growths. Defaults to 2:0:0 (dark green).
  */
-shrubColor?: Color | null; 
+shrubColor: Color | null; 
 /**
  * The color of the plant when it is dead in the wild. Defaults to 6:0:0 (brown).
  */
-deadShrubColor?: Color | null; 
+deadShrubColor: Color | null; 
 /**
  * The shrub will drown once the water on its tile reaches this level. Defaults to 4.
  */
-shrubDrownLevel?: number | null; 
+shrubDrownLevel: number | null; 
 /**
  * Names a drink made from the plant, allowing it to be used in entity resources.
  * Previously also permitted brewing the plant into alcohol made of this material.
  * Now, a `MATERIAL_REACTION_PRODUCT` of type `DRINK_MAT` should be used on the proper plant material.
  */
-drink?: string | null; 
+drink: string | null; 
 /**
  * Permits milling the plant at a quern or millstone into a powder made of this material and allows its use in entity resources.
  * Said material should have `[POWDER_MISC_PLANT]` to permit proper stockpiling. This token makes the whole plant harvestable regardless
  * of which material is designated for milling.
  * For plants with millable growths, use only `MATERIAL_REACTION_PRODUCT` or `ITEM_REACTION_PRODUCT` tokens to define the milling products.
  */
-mill?: string | null; 
+mill: string | null; 
 /**
  * Permits processing the plant at a farmer's workshop to yield threads made of this material and allows its use in entity resources.
  * Said material should have `[THREAD_PLANT]` to permit proper stockpiling.
  */
-thread?: string | null; 
+thread: string | null; 
 /**
  * Causes the plant to yield plantable seeds made of this material and having these properties.
  * Said material should have `[SEED_MAT]` to permit proper stockpiling.
  */
-seed?: SeedMaterial | null; 
+seed: SeedMaterial | null; 
 /**
  * Permits processing the plant into a vial at a still to yield extract made of this material.
  * Said material should have `[EXTRACT_STORAGE:FLASK]`.
  */
-extractStillVial?: string | null; 
+extractStillVial: string | null; 
 /**
  * Permits processing the plant into a vial at a farmer's workshop to yield extract made of this material.
  * Said material should have `[EXTRACT_STORAGE:VIAL]`.
  */
-extractVial?: string | null; 
+extractVial: string | null; 
 /**
  * Permits processing the plant into a barrel at a farmer's workshop to yield extract made of this material.
  * Said material should have `[EXTRACT_STORAGE:BARREL]`.
  */
-extractBarrel?: string | null }
+extractBarrel: string | null }
 
 /**
  * The tokens for the shrubs
@@ -10166,7 +10287,7 @@ export type ShrubTag =
 /**
  * A struct representing a sprite graphic.
  */
-export type SpriteGraphic = { primaryCondition: ConditionTag; tilePageId: string; offset: Dimensions; color?: ColorModificationTag | null; largeImage?: boolean | null; offset2?: Dimensions | null; secondaryCondition?: ConditionTag | null; colorPalletSwap?: number | null; targetIdentifier?: string | null; extraDescriptor?: string | null }
+export type SpriteGraphic = { primaryCondition: ConditionTag; tilePageId: string; offset: Dimensions; color?: ColorModificationTag | null; largeImage: boolean | null; offset2: Dimensions | null; secondaryCondition?: ConditionTag | null; colorPalletSwap: number | null; targetIdentifier: string | null; extraDescriptor: string | null }
 
 /**
  * A simplified struct for sprite graphic data
@@ -10216,7 +10337,7 @@ targetIdentifier: string }
 /**
  * A struct representing a `SpriteLayer` object.
  */
-export type SpriteLayer = { layerName: string; tilePageId: string; offset: Dimensions; offset2?: Dimensions | null; largeImage?: boolean | null; conditions?: ([ConditionTag, string])[] | null }
+export type SpriteLayer = { layerName: string; tilePageId: string; offset: Dimensions; offset2: Dimensions | null; largeImage: boolean | null; conditions: ([ConditionTag, string])[] | null }
 
 /**
  * Represents the name of a materials 3 states (solid, liquid, gas)
@@ -10226,7 +10347,7 @@ export type StateName = { solid: string; liquid: string; gas: string }
 /**
  * The additional data specific to the steam workshop
  */
-export type SteamData = { title?: string | null; description?: string | null; tags?: string[] | null; keyValueTags?: string[] | null; metadata?: string[] | null; changelog?: string | null; fileId: string }
+export type SteamData = { title: string | null; description: string | null; tags: string[] | null; keyValueTags: string[] | null; metadata: string[] | null; changelog: string | null; fileId: string }
 
 /**
  * A struct representing a syndrome
@@ -10235,12 +10356,12 @@ export type Syndrome = {
 /**
  * Seen the `[SYN_IDENTIFIER:INEBRIATION]` tag in `material_templates.txt`
  */
-identifier?: string | null; name?: string | null; affectedClasses?: string[] | null; immuneClasses?: string[] | null; affectedCreatures?: ([string, string])[] | null; immuneCreatures?: ([string, string])[] | null; classes?: string[] | null; 
+identifier: string | null; name: string | null; affectedClasses: string[] | null; immuneClasses: string[] | null; affectedCreatures: ([string, string])[] | null; immuneCreatures: ([string, string])[] | null; classes: string[] | null; 
 /**
  * Seen the `[SYN_CONCENTRATION_ADDED:100:1000]` tag in `material_templates.txt`
  * default is 0:0
  */
-concentrationAdded?: [number, number] | null; tags?: SyndromeTag[] | null; conditions?: string[] | null }
+concentrationAdded: [number, number] | null; tags: SyndromeTag[] | null; conditions: string[] | null }
 
 /**
  * Represents the tokens that can be used in a syndrome definition.
@@ -10385,31 +10506,31 @@ export type Temperatures = {
  * before cooling down or heating up to equilibrium. The input for this token is not temperature,
  * but rather the specific heat capacity of the material.
  */
-specificHeat?: number | null; 
+specificHeat: number | null; 
 /**
  * This is the temperature at which the material will catch fire.
  */
-ignitionPoint?: number | null; 
+ignitionPoint: number | null; 
 /**
  * This is the temperature at which a liquid material will freeze, or a solid material will melt.
  * In Dwarf Fortress the melting point and freezing point coincide exactly; this is contrary to many
  * real-life materials, which can be supercooled.
  */
-meltingPoint?: number | null; 
+meltingPoint: number | null; 
 /**
  * This is the temperature at which the material will boil or condense. Water boils at 10180 °U
  */
-boilingPoint?: number | null; 
+boilingPoint: number | null; 
 /**
  * This is the temperature above which the material will begin to take heat damage.
  * Burning items without a heat damage point (or with an exceptionally high one) will take damage very slowly,
  * causing them to burn for a very long time (9 months and 16.8 days) before disappearing.
  */
-heatDamagePoint?: number | null; 
+heatDamagePoint: number | null; 
 /**
  * This is the temperature below which the material will begin to take frost damage.
  */
-coldDamagePoint?: number | null; 
+coldDamagePoint: number | null; 
 /**
  * A material's temperature can be forced to always be a certain value via the `MAT_FIXED_TEMP`
  * material definition token. The only standard material which uses this is nether-cap wood,
@@ -10417,12 +10538,12 @@ coldDamagePoint?: number | null;
  * to between its cold damage point and its heat damage point, then items made from that material
  * will never suffer cold/heat damage. This makes nether-caps fire-safe and magma-safe despite being a type of wood.
  */
-materialFixedTemperature?: number | null }
+materialFixedTemperature: number | null }
 
 /**
  * Representation of a character tile (literally a single character) that is used in DF Classic
  */
-export type Tile = { character: string; altCharacter?: string | null; color?: Color | null; glowCharacter?: string | null; glowColor?: Color | null }
+export type Tile = { character: string; altCharacter: string | null; color: Color | null; glowCharacter: string | null; glowColor: Color | null }
 
 /**
  * Custom wrapper for the Tile character used in tags
@@ -10436,7 +10557,7 @@ value: string }
 /**
  * A struct representing a `TilePage` object.
  */
-export type TilePage = { metadata?: Metadata | null; identifier: string; objectId: string; file: string; tileDim: Dimensions; pageDim: Dimensions }
+export type TilePage = { metadata: Metadata | null; identifier: string; objectId: string; file: string; tileDim: Dimensions; pageDim: Dimensions }
 
 /**
  * A simplified struct for tile page data
@@ -10508,133 +10629,133 @@ material: string;
 /**
  * What the trunk of the tree is named
  */
-trunkName?: Name | null; 
+trunkName: Name | null; 
 /**
  * The maximum z-level height of the trunk, starting from +2 z-levels above the ground.
  * Valid values: 1-8
  * Default: 1
  */
-maxTrunkHeight?: number | null; 
+maxTrunkHeight: number | null; 
 /**
  * Upper limit of trunk thickness, in tiles. Has a geometric effect on log yield.
  * Valid values: 1-3
  * Default: 1
  */
-maxTrunkDiameter?: number | null; 
+maxTrunkDiameter: number | null; 
 /**
  * The number of years the trunk takes to grow one z-level upward. Default: 1
  */
-trunkPeriod?: number | null; 
+trunkPeriod: number | null; 
 /**
  * The number of years the trunk takes to grow one tile wider. Default: 1
  */
-trunkWidthPeriod?: number | null; 
+trunkWidthPeriod: number | null; 
 /**
  * What thin branches of the tree are named.
  */
-branchName?: Name | null; 
+branchName: Name | null; 
 /**
  * How dense the branches grow on this tree.
  */
-branchDensity?: number | null; 
+branchDensity: number | null; 
 /**
  * The radius to which branches can reach. Appears to never reach further than seven tiles from the centre.
  * Does not depend on the trunk branching amount or where trunks are.
  * The values used in the game go from 0-3. Higher values than that can cause crashes.
  */
-branchRadius?: number | null; 
+branchRadius: number | null; 
 /**
  * What thick branches of the tree are named.
  */
-heavyBranchesName?: Name | null; 
+heavyBranchesName: Name | null; 
 /**
  * Similar to `BRANCH_DENSITY` for thick branches. Default: 0
  */
-heavyBranchDensity?: number | null; 
+heavyBranchDensity: number | null; 
 /**
  * Similar as `BRANCH_DENSITY` for thick branches. Values outside 0-3 can cause crashes. Default: 0
  */
-heavyBranchRadius?: number | null; 
+heavyBranchRadius: number | null; 
 /**
  * How much the trunk branches out. 0 makes the trunk straight (default)
  */
-trunkBranching?: number | null; 
+trunkBranching: number | null; 
 /**
  * What the roots of the tree are named.
  */
-rootName?: Name | null; 
+rootName: Name | null; 
 /**
  * Density of the root growth. Defaults to 0.
  */
-rootDensity?: number | null; 
+rootDensity: number | null; 
 /**
  * How wide the roots reach out. Defaults to 0.
  */
-rootRadius?: number | null; 
+rootRadius: number | null; 
 /**
  * What the twigs of the tree are named.
  */
-twigsName?: Name | null; 
+twigsName: Name | null; 
 /**
  * Where twigs appear, defaults to `[SideBranches, AboveBranches]`
  */
-twigsPlacement?: TwigPlacementTag[] | null; 
+twigsPlacement: TwigPlacementTag[] | null; 
 /**
  * What this mushroom-cap is called. Only makes sense with `TREE_HAS_MUSHROOM_CAP`.
  */
-capName?: Name | null; 
+capName: Name | null; 
 /**
  * Similar to the other PERIOD tags, influences the rate of the mushroom cap growth. Only makes sense with `TREE_HAS_MUSHROOM_CAP`. Default: 1
  */
-capPeriod?: number | null; 
+capPeriod: number | null; 
 /**
  * The radius of a mushroom cap. Only makes sense with `TREE_HAS_MUSHROOM_CAP`. Default: 0
  */
-capRadius?: number | null; 
+capRadius: number | null; 
 /**
  * The tile used for trees of this type on the world map. Defaults to 24 (↑).
  */
-treeTile?: string | null; 
+treeTile: string | null; 
 /**
  * The tile used for (un)dead trees and deciduous trees (generally in winter) of this type. Defaults to 198 (╞).
  */
-deadTreeTile?: string | null; 
+deadTreeTile: string | null; 
 /**
  * The tile used for saplings of this tree. Defaults to 231 (τ).
  */
-saplingTile?: string | null; 
+saplingTile: string | null; 
 /**
  * The tile used for dead saplings of this tree. Defaults to 231 (τ).
  */
-deadSaplingTile?: string | null; 
+deadSaplingTile: string | null; 
 /**
  * The color of the tree on the map. Defaults to 2:0:0 (dark green).
  */
-treeColor?: Color | null; 
+treeColor: Color | null; 
 /**
  * The color of the tree on the map when (un)dead. Defaults to 0:0:1 (dark gray).
  */
-deadTreeColor?: Color | null; 
+deadTreeColor: Color | null; 
 /**
  * The color of saplings of this tree. Defaults to 2:0:0 (dark green).
  */
-saplingColor?: Color | null; 
+saplingColor: Color | null; 
 /**
  * The color of dead saplings of this tree. Defaults to 0:0:1 (dark gray).
  */
-deadSaplingColor?: Color | null; 
+deadSaplingColor: Color | null; 
 /**
  * The sapling of this tree will drown once the water on its tile reaches this level. Defaults to 4.
  */
-saplingDrownLevel?: number | null; 
+saplingDrownLevel: number | null; 
 /**
  * The water depth at which this tree will drown. Exact behavior is unknown. Defaults to 7.
  */
-treeDrownLevel?: number | null; 
+treeDrownLevel: number | null; 
 /**
  * Token tags for the tree.
  */
-tags?: TreeTag[] | null }
+tags: TreeTag[] | null }
 
 /**
  * The tokens for the tree parser
