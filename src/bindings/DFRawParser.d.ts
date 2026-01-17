@@ -5876,11 +5876,11 @@ export type Dimensions = {
 /**
  * The x coordinate
  */
-x: number; 
+x: string; 
 /**
  * The y coordinate
  */
-y: number }
+y: string }
 
 /**
  * A struct representing an Entity object.
@@ -9085,7 +9085,8 @@ export type ObjectType =
  * 
  * ```rust
  * use std::path::PathBuf;
- * use dfraw_parser::metadata::{ParserOptions, ObjectType, RawModuleLocation};
+ * use dfraw_parser::metadata::{ParserOptions, RawModuleLocation};
+ * use dfraw_parser::tags::ObjectType;
  * use dfraw_parser::traits::RawObject;
  * 
  * let mut options = ParserOptions::new();

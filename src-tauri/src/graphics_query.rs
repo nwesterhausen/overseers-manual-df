@@ -50,42 +50,21 @@ pub async fn get_graphics(
                 .find(|t| t.identifier == graphic.tile_page_identifier);
 
             target_tile_page.map(|tp| {
-                let tile_dimensions = Dimensions {
-                    x: tp.tile_width,
-                    y: tp.tile_height,
-                };
-
-                let page_dimensions = Dimensions {
-                    x: tp.page_width,
-                    y: tp.page_height,
-                };
-
-                let offset = Dimensions {
-                    x: u32::try_from(graphic.offset_x).unwrap_or(0),
-                    y: u32::try_from(graphic.offset_y).unwrap_or(0),
-                };
+                let tile_dimensions = Dimensions::from((tp.tile_width, tp.tile_height));
+                let page_dimensions = Dimensions::from((tp.page_width, tp.page_height));
+                let offset = Dimensions::from((graphic.offset_x, graphic.offset_y));
 
                 let offset_2 = graphic
                     .offset_x_2
                     .zip(graphic.offset_y_2)
-                    .and_then(|(x, y)| {
-                        // Use and_then if the conversion itself could return None/Result
-                        let x_u32 = u32::try_from(x).ok()?;
-                        let y_u32 = u32::try_from(y).ok()?;
-
-                        Some(Dimensions { x: x_u32, y: y_u32 })
-                    });
+                    .map(Dimensions::from);
 
                 // Calculate the span of the sprite in tiles
-                let sprite_width_tiles = (graphic.offset_x_2.unwrap_or(graphic.offset_x)
-                    - graphic.offset_x)
-                    .unsigned_abs() as u32
-                    + 1;
+                let sprite_width_tiles =
+                    (graphic.offset_x_2.unwrap_or(graphic.offset_x) - graphic.offset_x) + 1;
 
-                let sprite_height_tiles = (graphic.offset_y_2.unwrap_or(graphic.offset_y)
-                    - graphic.offset_y)
-                    .unsigned_abs() as u32
-                    + 1;
+                let sprite_height_tiles =
+                    (graphic.offset_y_2.unwrap_or(graphic.offset_y) - graphic.offset_y) + 1;
 
                 // Calculate total pixel size of this specific sprite
                 let total_sprite_px_w = sprite_width_tiles * tile_dimensions.x;
