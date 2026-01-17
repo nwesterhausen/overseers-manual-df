@@ -22,6 +22,8 @@ jobs:
         with:
           egress-policy: audit
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        with:
+          lfs: true
       - name: Install bun
         uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
       - name: Install Dependencies
@@ -46,14 +48,7 @@ jobs:
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_PRIVATE_KEY_PASSWORD }}
-      - name: Show sccache stats
-        shell: bash
-        run: |
-          echo '## SCCACHE STATS' >> $GITHUB_STEP_SUMMARY
-          echo '| Metric | Value |' >> $GITHUB_STEP_SUMMARY
-          echo '|--------|-------|' >> $GITHUB_STEP_SUMMARY
-          ${SCCACHE_PATH} --show-stats | awk -F'[[:space:]][[:space:]]+' 'NR<=22{ print "| "$1" | "$2" |"}' >> $GITHUB_STEP_SUMMARY
-          echo '</hr>' >> $GITHUB_STEP_SUMMARY
+
   clippy:
     name: Clippy Check
     timeout-minutes: 30
@@ -64,6 +59,8 @@ jobs:
         with:
           egress-policy: audit
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        with:
+          lfs: true
       - name: Install bun
         uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
       - name: Install Dependencies
@@ -78,6 +75,7 @@ jobs:
         uses: dtolnay/rust-toolchain@f7ccc83f9ed1e5b9c81d8a67d7ad1a747e22a561 # master
         with:
           toolchain: nightly
+          components: clippy
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
