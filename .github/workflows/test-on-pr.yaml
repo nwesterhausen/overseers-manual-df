@@ -35,7 +35,7 @@ jobs:
         with:
           toolchain: nightly
       - name: Rust cache
-        uses: swatinem/rust-cache@v2
+        uses: swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2
         with:
           workspaces: "./src-tauri -> target"
 
@@ -77,7 +77,7 @@ jobs:
           toolchain: nightly
           components: clippy
       - name: Rust cache
-        uses: swatinem/rust-cache@v2
+        uses: swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2
         with:
           workspaces: "./src-tauri -> target"
 
