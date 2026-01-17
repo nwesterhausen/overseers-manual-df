@@ -1,0 +1,5 @@
+@reference '../layout.css';
+
+.tab-container {
+    @apply flex flex-wrap gap-4 flex-col w-9/12;
+}

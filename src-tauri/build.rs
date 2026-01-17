@@ -1,8 +1,15 @@
-//! Build script for the Overseer's Manual. This script gathers build-time information.
+use std::path::PathBuf;
+
 fn main() {
+    // -- Output bindings for use in frontend. --
+    let output_path = PathBuf::from("../src/bindings/DFRawParser.d.ts");
+    // Create output directory if missing
+    if let Some(parent) = output_path.parent() {
+        std::fs::create_dir_all(parent).expect("Failed to create bindings directory");
+    }
+    dfraw_json_parser::generate_bindings(&output_path)
+        .expect("Writing type bindings to file failed.");
+
+    // -- Tauri build step, should be last? --
     tauri_build::build();
-    #[allow(clippy::expect_used)]
-    // Collect some build-time information. This is used to populate the About dialog.
-    // The information includes environment information and build dependencies.
-    built::write_built_file().expect("Failed to acquire build-time information");
 }

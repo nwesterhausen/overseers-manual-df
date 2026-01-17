@@ -1,126 +1,149 @@
-//! This module contains the main entry point for the Tauri application, which sets up the application
-//! and runs it.
+use dfraw_parser_sqlite_lib::{ClientOptions, DbClient};
+use std::sync::OnceLock;
+use tauri::{async_runtime::Mutex, path::BaseDirectory, AppHandle, Manager};
+use tracing::level_filters::LevelFilter;
+use tracing_appender::non_blocking::WorkerGuard;
+use tracing_subscriber::{filter::Targets, prelude::*};
 
-use state::{GraphicStorage, ModuleInfoStorage, Storage};
-use std::sync::Mutex;
-#[cfg(debug_assertions)]
-use tauri::Manager;
-use tauri_plugin_aptabase::EventTracker;
-use tauri_plugin_log::{Target, TargetKind, WEBVIEW_TARGET};
+use graphics_query::*;
+use log_event::*;
+use parse_command::*;
+use raws_query::*;
+use search_query::*;
+use shared_structs::*;
+use utility::*;
 
-use dotenvy_macro::dotenv;
+mod graphics_query;
+mod log_event;
+mod parse_command;
+mod raws_query;
+mod search_query;
+mod shared_structs;
+mod utility;
 
-/// A biome lookup module that provides descriptions for biomes.
-pub mod biome;
-/// Containers for the graphics data and search results.
-pub mod graphics;
-/// This module contains the information about the application, such as the version and build information.
-pub mod info;
-mod open_explorer;
-/// This module contains the handlers for the search functionality of the application.
-pub mod search_handler;
-/// This module contains the state of the application, including the storage of raws and the search lookup.
-pub mod state;
-/// This module contains the tracking of events in the application.
-pub mod tracking;
+struct AppState {
+    db: Mutex<DbClient>,
+}
 
-/// This function sets up and runs a Rust application using the Tauri framework, with various plugins
-/// and event handlers.
-/// # Panics
-/// This function will panic if the Tauri app fails to build or run.
+static APP_IDENTIFIER: &str = "one.nwest.overseers-reference";
+static LOG_GUARDS: OnceLock<(WorkerGuard, WorkerGuard)> = OnceLock::new();
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
-#[allow(clippy::large_stack_frames)]
 pub fn run() {
-    #[allow(clippy::expect_used)]
     tauri::Builder::default()
-        // Add updater
+        .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_opener::init())
+        .invoke_handler(tauri::generate_handler![
+            search_raws,
+            parse_raws,
+            get_raw_by_id,
+            get_graphics
+        ])
         .setup(|app| {
-            // Use the updater plugin only on desktop platforms (Windows, Linux, macOS)
-            #[cfg(desktop)]
-            app.handle()
-                .plugin(tauri_plugin_updater::Builder::new().build())?;
-            // Open the dev tools automatically when debugging the application
-            #[cfg(debug_assertions)]
-            {
-                if let Some(window) = app.get_webview_window("main") {
-                    window.open_devtools();
-                } else {
-                    tracing::warn!("Failed to open devtools");
-                }
-            }
+            let db_client = create_or_open_database(app.handle());
+
+            app.manage(AppState {
+                db: Mutex::new(db_client),
+            });
+
+            register_tracing_subscribers(app.handle());
+
             Ok(())
         })
-        // Set up shared state
-        .manage(Storage {
-            store: Mutex::default(),
-            search_lookup: Mutex::default(),
-        })
-        .manage(GraphicStorage {
-            graphics_store: Mutex::default(),
-            tile_page_store: Mutex::default(),
-        })
-        .manage(ModuleInfoStorage {
-            module_info_store: Mutex::default(),
-        })
-        // Add logging plugin
-        .plugin(
-            tauri_plugin_log::Builder::default()
-                .clear_targets()
-                .targets([
-                    Target::new(TargetKind::Webview),
-                    Target::new(TargetKind::LogDir {
-                        file_name: Some("webview.log".into()),
-                    })
-                    .filter(|metadata| metadata.target() == WEBVIEW_TARGET),
-                    Target::new(TargetKind::LogDir {
-                        file_name: Some("rust.log".into()),
-                    })
-                    .filter(|metadata| metadata.target() != WEBVIEW_TARGET),
-                ])
-                .format(move |out, message, record| {
-                    out.finish(format_args!(
-                        "{} [{}] {}",
-                        chrono::Local::now().format("%Y-%m-%d %H:%M:%S"),
-                        record.level(),
-                        message
-                    ));
-                })
-                .level(log::LevelFilter::Info)
-                .build(),
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
+}
+
+fn create_or_open_database(handle: &AppHandle) -> DbClient {
+    // Resolve the path to the data directory
+    // This resolves to: %APPDATA%\one.nwest.overseers-reference\ on Windows
+    // or ~/Library/Application Support/one.nwest.overseers-reference/ on macOS
+    let app_data_dir = handle
+        .path()
+        .resolve(APP_IDENTIFIER, BaseDirectory::Data)
+        .expect("failed to resolve app data directory");
+
+    // Ensure the directory exists
+    std::fs::create_dir_all(&app_data_dir).expect("failed to create app data directory");
+
+    // Define the full path to the database file
+    let db_path = app_data_dir.join("overseer.db");
+
+    // Initialize the DB with the absolute path
+    let db_client = DbClient::init_db(
+        db_path.to_str().expect("invalid path"),
+        ClientOptions::default(),
+    )
+    .expect("failed to init db");
+
+    db_client
+}
+
+fn register_tracing_subscribers(handle: &AppHandle) {
+    // Resolve the logs directory
+    let log_dir = handle
+        .path()
+        .app_log_dir()
+        .expect("Failed to resolve log directory");
+
+    // Ensure the directory exists before rotating
+    std::fs::create_dir_all(&log_dir).ok();
+
+    // Perform versioned rotation before starting the logger
+    rotate_logs(&log_dir, "app.log", 5); // Keep up to 5 old versions
+
+    // Setup File Rotation (Daily: YYYY-MM-DD.log)
+    // Note: rolling::daily adds the date suffix automatically
+    let file_appender = tracing_appender::rolling::never(&log_dir, "app.log");
+    let (file_writer, file_guard) = tracing_appender::non_blocking(file_appender);
+
+    // Setup Terminal Output
+    let (stdout_writer, stdout_guard) = tracing_appender::non_blocking(std::io::stdout());
+
+    // Store guards so they aren't dropped when setup() ends
+    LOG_GUARDS.set((file_guard, stdout_guard)).ok();
+
+    // Filters for parsing event emitter
+    let tauri_parsing_filter = Targets::new()
+        .with_target("dfraw_parser::parser", LevelFilter::INFO)
+        .with_target(
+            "dfraw_parser_sqlite_lib::db::queries::insert_parse_results",
+            LevelFilter::INFO,
         )
-        // Add window-state plugin
-        .plugin(tauri_plugin_window_state::Builder::default().build())
-        // Add fs plugin
-        .plugin(tauri_plugin_fs::init())
-        // Add window plugin
-        .plugin(tauri_plugin_dialog::init())
-        // Add process plugin
-        .plugin(tauri_plugin_process::init())
-        // Add simple storage plugin
-        .plugin(tauri_plugin_store::Builder::default().build())
-        // Add aptabase plugin
-        .plugin(tauri_plugin_aptabase::Builder::new(dotenv!("APTABASE_KEY")).build())
-        // Add invoke handlers
-        .invoke_handler(tauri::generate_handler![
-            search_handler::prepare::parse_and_store_raws,
-            search_handler::prepare::get_module_info_files,
-            search_handler::search::search_raws,
-            search_handler::util::get_search_string_for_object,
-            info::get_build_info,
-            graphics::search::get_graphics_for_identifier,
-            open_explorer::show_in_folder,
-            biome::lookup::get_biome_description,
-        ])
-        .build(tauri::generate_context!())
-        .expect("Error when building tauri app")
-        .run(|handler, event| match event {
-            tauri::RunEvent::Exit { .. } => {
-                handler.track_event("app_exited", None);
-                handler.flush_events_blocking();
+        .with_target(
+            "dfraw_parser_sqlite_lib::db::queries::insert_modules",
+            LevelFilter::INFO,
+        )
+        .with_default(LevelFilter::OFF);
+
+    // Dynamic log level based on if in debug mode or not
+    let log_level = if cfg!(debug_assertions) {
+        LevelFilter::DEBUG
+    } else {
+        LevelFilter::INFO
+    };
+
+    // Build Registry
+    tracing_subscriber::registry()
+        // Layer: Console (everything INFO+)
+        .with(
+            tracing_subscriber::fmt::layer()
+                .with_writer(stdout_writer)
+                .with_filter(LevelFilter::INFO),
+        )
+        // Layer: File (everything INFO+, no ANSI colors)
+        .with(
+            tracing_subscriber::fmt::layer()
+                .with_writer(file_writer)
+                .with_ansi(false)
+                .with_filter(log_level),
+        )
+        // Layer: parsing event emitter
+        .with(
+            TauriTracingLayer {
+                app_handle: handle.clone(),
             }
-            tauri::RunEvent::Ready { .. } => {
-                handler.track_event("app_started", None);
-            }
-            _ => {}
-        });
+            .with_filter(tauri_parsing_filter),
+        )
+        .init();
 }

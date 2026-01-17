@@ -1,45 +1,34 @@
-productName = "overseers-manual-df"
-# Tracking version in package.json, which is updated automatically with semantic-release.
+"$schema" = "https://schema.tauri.app/config/2"
+productName = "overseers-reference"
 version = "../package.json"
-identifier = "one.nwest.games.dwarffortress.overseers-manual"
+identifier = "one.nwest.overseers-reference"
 
 [build]
-beforeBuildCommand = "bun run build"
 beforeDevCommand = "bun run dev"
-devUrl = "http://localhost:5173"
-frontendDist = "../dist"
+devUrl = "http://localhost:1420"
+beforeBuildCommand = "bun run build"
+frontendDist = "../build"
 
-# Don't forget to look at tauri.bundle.updater for additional updater configuration.
-[plugins.updater]
-pubkey = "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU1REM2MTc2RjQxRDI0QgpSV1JMMGtGdkY4WmRCYnh5TXFCZmlqY0FONHFWRXhVZlNhSDhwL3RUb3Y2MzkrZFBYYThvWHppcgo="
-# For the updater endpoint, since everything gets published on Github releases via an action (.i.e. automatically),
-# there is a neat project that turns the releases API into the API expected by tauri updater. This is that project:
-#   https://github.com/KilleenCode/tauri-update-cloudflare
-# The version specifically used by this project is also public (it's a fork of the above):
-#   https://github.com/nwesterhausen/tauri-update-cloudflare
-# The endpoint is hosted on Cloudflare Workers which has a free tier that allows for 100k requests a day, which so
-# far for this project has been more than enough.
-endpoints = [
-  # Primary on my domain (which matches app identifier domain
-  "https://overseers-manual-df.updates.nwest.one/v1/{{target}}/{{arch}}/{{current_version}}",
-  # Secondary fallback using Cloudflare Workers provided domain
-  "https://tauri-update-server.nwest.workers.dev/v1/{{target}}/{{arch}}/{{current_version}}",
-]
+[app.security]
+# This was the recommended tauri.security value
+csp = "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost"
+
+[app.security.assetProtocol]
+enable = true
+# We need to be able to access images from wherever the game data is stored.
+scope = ["**"]
+
+[[app.windows]]
+title = "Overseer's Reference for Dwarf Fortress"
+width = 1180
+height = 800
+fullscreen = false
 
 [bundle]
-active = true
 category = "Utility"
-copyright = "© 2024, Nicholas Westerhausen"
-externalBin = []
-icon = [
-  "icons/32x32.png",
-  "icons/128x128.png",
-  "icons/128x128@2x.png",
-  "icons/icon.icns",
-  "icons/icon.ico",
-]
+shortDescription = "An app to provide Dwarf Fortress players with personalized, raws-accurate references."
 longDescription = """
-Overseer's Reference manual will parse the vanilla and any downloaded raws to provide a way to look through
+Overseer's Reference will parse the vanilla and any downloaded raws to provide a way to look through
 the various creatures, plants, inorganic objects, and many other things in the game. It reads both object and
 graphics raws, and when it can, it will display images for the objects it lists.
 
@@ -64,27 +53,14 @@ And there is limited support for:
 - CreatureVariations
 - Entities
 
-For more on what parsing is supported and how, see the related project `dfraw_json_parser`.
+For more on what parsing is supported and how, see the related project `dfraw_parser`.
 """
-resources = []
-shortDescription = "A utility to browse the things represented in Dwarf Fortress raws"
+active = true
 targets = "all"
-
-[bundle.windows.wix]
-template = "custom.wxs"
-
-[app.security]
-# This was the recommended tauri.security value
-csp = "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost"
-
-[app.security.assetProtocol]
-enable = true
-# We need to be able to access images from wherever the game data is stored.
-scope = ["**"]
-
-[[app.windows]]
-fullscreen = false
-height = 800
-resizable = true
-title = "Overseer's Reference Manual"
-width = 1180
+icon = [
+  "icons/32x32.png",
+  "icons/128x128.png",
+  "icons/128x128@2x.png",
+  "icons/icon.icns",
+  "icons/icon.ico"
+]
