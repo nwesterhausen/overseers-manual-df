@@ -23,7 +23,8 @@ features = ['config-toml']
 
 [build-dependencies.dfraw_json_parser]
 version = "0"
-path = "../../dfraw_parser/jsonlib"
+#path = "../../dfraw_parser/jsonlib"
+git = "https://github.com/nwesterhausen/dfraw_parser"
 
 [dependencies]
 chrono = "0.4.42"
@@ -38,8 +39,10 @@ tracing-appender = "0.2.4"
 
 [dependencies.dfraw_parser]
 version = "0"
-path = "../../dfraw_parser/lib"
+# path = "../../dfraw_parser/lib"
+git = "https://github.com/nwesterhausen/dfraw_parser"
 
 [dependencies.dfraw_parser_sqlite_lib]
 version = "0"
-path = "../../dfraw_parser/sqlite_lib"
+# path = "../../dfraw_parser/sqlite_lib"
+git = "https://github.com/nwesterhausen/dfraw_parser"

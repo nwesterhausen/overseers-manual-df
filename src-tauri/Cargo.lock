@@ -671,6 +671,7 @@ checksum = "abd57806937c9cc163efc8ea3910e00a62e2aeb0b8119f1793a978088f8f6b04"
 [[package]]
 name = "dfraw_json_parser"
 version = "0.18.0"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#f823d757ddcd4a54a4072b4a7e97d519511b2ec0"
 dependencies = [
  "dfraw_parser",
  "dfraw_parser_sqlite_lib",
@@ -687,6 +688,7 @@ dependencies = [
 [[package]]
 name = "dfraw_parser"
 version = "0.18.0"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#f823d757ddcd4a54a4072b4a7e97d519511b2ec0"
 dependencies = [
  "dfraw_parser_proc_macros",
  "directories",
@@ -712,6 +714,7 @@ dependencies = [
 [[package]]
 name = "dfraw_parser_proc_macros"
 version = "0.1.0"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#f823d757ddcd4a54a4072b4a7e97d519511b2ec0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -721,6 +724,7 @@ dependencies = [
 [[package]]
 name = "dfraw_parser_sqlite_lib"
 version = "0.2.0"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#f823d757ddcd4a54a4072b4a7e97d519511b2ec0"
 dependencies = [
  "chrono",
  "dfraw_parser",
