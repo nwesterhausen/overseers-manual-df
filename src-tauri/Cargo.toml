@@ -46,3 +46,6 @@ git = "https://github.com/nwesterhausen/dfraw_parser"
 version = "0"
 # path = "../../dfraw_parser/sqlite_lib"
 git = "https://github.com/nwesterhausen/dfraw_parser"
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"
