@@ -25,7 +25,7 @@ jobs:
         with:
           lfs: true
       - name: Install bun
-        uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
+        uses: oven-sh/setup-bun@3d267786b128fe76c2f16a390aa2448b815359f3 # v2
       - name: Install Dependencies
         run: |
           sudo apt-get update
@@ -35,7 +35,7 @@ jobs:
         with:
           toolchain: nightly
       - name: Rust cache
-        uses: swatinem/rust-cache@v2
+        uses: swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2
         with:
           workspaces: "./src-tauri -> target"
 
@@ -62,7 +62,7 @@ jobs:
         with:
           lfs: true
       - name: Install bun
-        uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
+        uses: oven-sh/setup-bun@3d267786b128fe76c2f16a390aa2448b815359f3 # v2
       - name: Install Dependencies
         run: |
           sudo apt-get update
@@ -77,7 +77,7 @@ jobs:
           toolchain: nightly
           components: clippy
       - name: Rust cache
-        uses: swatinem/rust-cache@v2
+        uses: swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2
         with:
           workspaces: "./src-tauri -> target"
 

@@ -17,7 +17,7 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - uses: google-github-actions/release-please-action@e4dc86ba9405554aeba3c6bb2d169500e7d3b4ee # v4
+      - uses: googleapis/release-please-action@e4dc86ba9405554aeba3c6bb2d169500e7d3b4ee # v4
         id: release
         with:
           # this assumes that you have created a personal access token
@@ -59,7 +59,7 @@ jobs:
         with:
           lfs: true
       - name: Install bun
-        uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
+        uses: oven-sh/setup-bun@3d267786b128fe76c2f16a390aa2448b815359f3 # v2
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
         run: |
@@ -73,7 +73,7 @@ jobs:
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
       - name: Rust cache
-        uses: swatinem/rust-cache@v2
+        uses: swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2
         with:
           workspaces: "./src-tauri -> target"
 
@@ -82,7 +82,7 @@ jobs:
           bun install
           bun run build
       - name: Build the Tauri App
-        uses: tauri-apps/tauri-action@a130ac329546b42aff78d7ef0596fb9b764c1355 # dev
+        uses: tauri-apps/tauri-action@a5e8d02eebede9840d3c77437e8624c8f2836732 # dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
