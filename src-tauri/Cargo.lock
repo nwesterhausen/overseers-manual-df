@@ -697,7 +697,7 @@ checksum = "abd57806937c9cc163efc8ea3910e00a62e2aeb0b8119f1793a978088f8f6b04"
 [[package]]
 name = "dfraw_json_parser"
 version = "0.18.0"
-source = "git+https://github.com/nwesterhausen/dfraw_parser#fee1d20ac457e1c37c302b7e28ad2f0ba8e268fc"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#1250baf49dcec5dc04526c0d10d756daaabc8cfb"
 dependencies = [
  "dfraw_parser",
  "dfraw_parser_sqlite_lib",
@@ -714,7 +714,7 @@ dependencies = [
 [[package]]
 name = "dfraw_parser"
 version = "0.18.0"
-source = "git+https://github.com/nwesterhausen/dfraw_parser#fee1d20ac457e1c37c302b7e28ad2f0ba8e268fc"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#1250baf49dcec5dc04526c0d10d756daaabc8cfb"
 dependencies = [
  "dfraw_parser_proc_macros",
  "directories",
@@ -740,7 +740,7 @@ dependencies = [
 [[package]]
 name = "dfraw_parser_proc_macros"
 version = "0.1.0"
-source = "git+https://github.com/nwesterhausen/dfraw_parser#fee1d20ac457e1c37c302b7e28ad2f0ba8e268fc"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#1250baf49dcec5dc04526c0d10d756daaabc8cfb"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -750,7 +750,7 @@ dependencies = [
 [[package]]
 name = "dfraw_parser_sqlite_lib"
 version = "0.2.0"
-source = "git+https://github.com/nwesterhausen/dfraw_parser#fee1d20ac457e1c37c302b7e28ad2f0ba8e268fc"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#1250baf49dcec5dc04526c0d10d756daaabc8cfb"
 dependencies = [
  "chrono",
  "dfraw_parser",
@@ -5989,9 +5989,9 @@ dependencies = [
 
 [[package]]
 name = "zmij"
-version = "1.0.14"
+version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bd8f3f50b848df28f887acb68e41201b5aea6bc8a8dacc00fb40635ff9a72fea"
+checksum = "94f63c051f4fe3c1509da62131a678643c5b6fbdc9273b2b79d4378ebda003d2"
 
 [[package]]
 name = "zvariant"

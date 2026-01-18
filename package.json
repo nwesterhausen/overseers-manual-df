@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/nwesterhausen/overseers-manual-df",
   "author": "Nicholas Westerhausen <nwesterhausen@gmail.com>",
+  "engines": {
+    "node": ">=22.x"
+  },
   "dependencies": {
     "@tauri-apps/api": "^2.9.1",
     "@tauri-apps/plugin-fs": "~2.4.5",

@@ -2,10 +2,15 @@
 // This file was manually edited: Do not overwrite
 
 import { invoke } from "@tauri-apps/api/core";
-import type { DbOptionOnParse, GraphicsResult } from "./Structs";
+import type {
+  DbOptionOnParse,
+  GraphicsResult,
+  StoredSettings,
+} from "./Structs";
 import type {
   Dimensions,
   LocationHelper,
+  ParserOptions,
   RawModuleLocation,
   RawObject,
   SearchQuery,
@@ -39,4 +44,26 @@ export async function searchRaws(
   query: SearchQuery,
 ): Promise<SearchResults<RawObject>> {
   return invoke<SearchResults<RawObject>>("search_raws", { query });
+}
+
+export async function retrieveDwarfFortressDirectory(): Promise<string> {
+  return invoke<string>("retrieve_dwarf_fortress_directory");
+}
+
+export async function retrieveUserDataDirectory(): Promise<string> {
+  return invoke<string>("retrieve_user_data_directory");
+}
+
+export async function retrieveParserOptions(): Promise<ParserOptions> {
+  return invoke<ParserOptions>("retrieve_parser_options");
+}
+
+export async function retrieveStoredSettings(): Promise<StoredSettings> {
+  return invoke<StoredSettings>("retrieve_stored_settings");
+}
+
+export async function persistStoredSettings(
+  settings: StoredSettings,
+): Promise<void> {
+  return invoke<void>("persist_stored_settings", { settings });
 }

@@ -1,4 +1,4 @@
-use dfraw_parser::Dimensions;
+use dfraw_parser::{metadata::RawModuleLocation, Dimensions};
 use serde::{Deserialize, Serialize};
 
 /// Graphics query results
@@ -52,4 +52,24 @@ pub struct ParsingEventPayload {
     pub level: String,
     /// the log message
     pub message: String,
+}
+
+/// Settings used in the app, for ease of loading/storing/state
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct StoredSettings {
+    /// user-specified dwarf fortress directory
+    pub df_directory: Option<String>,
+    /// user-specified user data directory
+    pub user_directory: Option<String>,
+    /// selected locations to parse
+    pub parse_locations: Vec<RawModuleLocation>,
+    /// ? not sure if this makes sense, but the database location
+    pub database_location: String,
+    /// Whether to randomize when images are changed in the grid
+    pub randomize_image_rotation: bool,
+    /// Whether to have the app auto-detect the directories when parsing
+    pub enable_directory_detection: bool,
+    /// The specific startup action
+    pub startup_action: String,
 }

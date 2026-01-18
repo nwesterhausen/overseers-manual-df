@@ -5,19 +5,23 @@ use tracing::level_filters::LevelFilter;
 use tracing_appender::non_blocking::WorkerGuard;
 use tracing_subscriber::{filter::Targets, prelude::*};
 
+use app_query::*;
 use graphics_query::*;
 use log_event::*;
 use parse_command::*;
 use raws_query::*;
 use search_query::*;
+use settings_query::*;
 use shared_structs::*;
 use utility::*;
 
+mod app_query;
 mod graphics_query;
 mod log_event;
 mod parse_command;
 mod raws_query;
 mod search_query;
+mod settings_query;
 mod shared_structs;
 mod utility;
 
@@ -38,7 +42,12 @@ pub fn run() {
             search_raws,
             parse_raws,
             get_raw_by_id,
-            get_graphics
+            get_graphics,
+            retrieve_last_parser_options,
+            retrieve_last_user_data_directory,
+            retrieve_last_dwarf_fortress_directory,
+            retrieve_stored_settings,
+            persist_stored_settings,
         ])
         .setup(|app| {
             let db_client = create_or_open_database(app.handle());

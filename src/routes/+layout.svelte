@@ -4,13 +4,21 @@
     import AdvancedSearch from "components/AdvancedSearch.svelte";
     import { onMount } from "svelte";
     import { themeState } from "state/theme.svelte";
-    import { settingsState } from "state/settings.svelte";
+    import {
+        loadStoredSettings,
+        saveSettings,
+        settingsState,
+    } from "state/settings.svelte";
     import { parserLogs } from "state/parserState.svelte";
 
     let isAdvancedOpen = $state(false);
     let { children } = $props();
 
     onMount(() => {
+        // Load what was persisted to DB
+        loadStoredSettings();
+
+        // Theme init
         const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
         const updateTheme = (e: MediaQueryListEvent | MediaQueryList) => {
             themeState.mode = e.matches ? "dark" : "light";
@@ -22,6 +30,7 @@
 
         return () => darkQuery.removeEventListener("change", updateTheme);
     });
+    // Theme Watcher
     $effect(() => {
         const activeTheme =
             themeState.mode === "dark"
@@ -30,6 +39,28 @@
 
         document.documentElement.setAttribute("data-theme", activeTheme);
     });
+    // Settings changes watcher
+    $effect(() => {
+        // JSON.stringify is a cheap way to subscribe to all properties deeply.
+        JSON.stringify(settingsState);
+
+        // Don't run logic if we aren't ready (prevents saving immediately on mount)
+        if (settingsState.appState !== "ready") return;
+
+        // DEBOUNCE: Wait 1 second after the last change before saving
+        const timer = setTimeout(() => {
+            saveSettings();
+        }, 1000);
+
+        // CLEANUP: If state changes again before 1s, clear the previous timer
+        return () => {
+            clearTimeout(timer);
+        };
+    });
+
+    function retrieveSettings() {
+        throw new Error("Function not implemented.");
+    }
 </script>
 
 <div class="h-screen flex flex-col overflow-hidden">
