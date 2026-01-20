@@ -689,15 +689,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "deunicode"
-version = "1.6.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "abd57806937c9cc163efc8ea3910e00a62e2aeb0b8119f1793a978088f8f6b04"
-
-[[package]]
 name = "dfraw_json_parser"
 version = "0.18.0"
-source = "git+https://github.com/nwesterhausen/dfraw_parser#56e8ebf42b87f7ae23f5183ce8925a13e445be16"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#1215633f30a067bc80b34c3c85b634d7a6c02a6b"
 dependencies = [
  "dfraw_parser",
  "dfraw_parser_sqlite_lib",
@@ -714,7 +708,7 @@ dependencies = [
 [[package]]
 name = "dfraw_parser"
 version = "0.18.0"
-source = "git+https://github.com/nwesterhausen/dfraw_parser#56e8ebf42b87f7ae23f5183ce8925a13e445be16"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#1215633f30a067bc80b34c3c85b634d7a6c02a6b"
 dependencies = [
  "dfraw_parser_proc_macros",
  "directories",
@@ -726,7 +720,6 @@ dependencies = [
  "phf 0.13.1",
  "quick-xml",
  "serde",
- "slug",
  "specta",
  "strum",
  "strum_macros",
@@ -741,7 +734,7 @@ dependencies = [
 [[package]]
 name = "dfraw_parser_proc_macros"
 version = "0.1.0"
-source = "git+https://github.com/nwesterhausen/dfraw_parser#56e8ebf42b87f7ae23f5183ce8925a13e445be16"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#1215633f30a067bc80b34c3c85b634d7a6c02a6b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -751,10 +744,11 @@ dependencies = [
 [[package]]
 name = "dfraw_parser_sqlite_lib"
 version = "0.2.0"
-source = "git+https://github.com/nwesterhausen/dfraw_parser#56e8ebf42b87f7ae23f5183ce8925a13e445be16"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#1215633f30a067bc80b34c3c85b634d7a6c02a6b"
 dependencies = [
  "chrono",
  "dfraw_parser",
+ "itertools",
  "rusqlite",
  "serde",
  "serde_json",
@@ -3815,16 +3809,6 @@ name = "slab"
 version = "0.4.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7a2ae44ef20feb57a68b23d846850f861394c2e02dc425a50098ae8c90267589"
-
-[[package]]
-name = "slug"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "882a80f72ee45de3cc9a5afeb2da0331d58df69e4e7d8eeb5d3c7784ae67e724"
-dependencies = [
- "deunicode",
- "wasm-bindgen",
-]
 
 [[package]]
 name = "smallvec"

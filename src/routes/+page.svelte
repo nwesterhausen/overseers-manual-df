@@ -6,26 +6,28 @@
     import { settingsState } from "state/settings.svelte";
     import { onMount } from "svelte";
     import {
+        retrieveFavoriteRaws,
         retrieveLastInsertionDate,
         retrieveLastInsertionDuration,
         retrieveLastParseDuration,
         retrieveLastParseOperationDate,
+        searchRaws,
     } from "bindings/Commands";
 
     let search_results = $state<SearchResults<RawObject>>({
         results: [],
         totalCount: 0,
     });
+    let favorite_raws = $state<string[]>([]);
 
     // Reactively search whenever any part of the global search query
     $effect(() => {
-        invoke<SearchResults<RawObject>>("search_raws", {
-            query: searchState,
-        })
-            .then((data) => (search_results = data))
-            .catch((error) => console.log(error));
+        searchRaws(searchState.query)
+            .then((data) => {
+                search_results = data;
+            })
+            .catch(console.error);
     });
-
     // Test
     onMount(() => {
         retrieveLastParseDuration()
@@ -50,7 +52,7 @@
         {:else}
             {#if settingsState.appState === "ready"}
                 <p class="text-neutral-500">
-                    No results found for "{searchState.searchString}"
+                    No results found for "{searchState.query.searchString}"
                 </p>
             {/if}
         {/each}

@@ -10,8 +10,8 @@
         settingsState,
     } from "state/settings.svelte";
     import { parserLogs } from "state/parserState.svelte";
+    import { searchState } from "state/search.svelte";
 
-    let isAdvancedOpen = $state(false);
     let { children } = $props();
 
     onMount(() => {
@@ -65,10 +65,7 @@
 
 <div class="h-screen flex flex-col overflow-hidden">
     <header class="shrink-0">
-        <Navigation
-            onToggleAdvanced={() => (isAdvancedOpen = !isAdvancedOpen)}
-            bind:advancedIsOpen={isAdvancedOpen}
-        />
+        <Navigation />
         {#if settingsState.appState === "parsing"}
             <div
                 role="alert"
@@ -85,7 +82,7 @@
                 <span>{settingsState.errorMessage}</span>
             </div>
         {/if}
-        {#if isAdvancedOpen}
+        {#if searchState.showFilters}
             <AdvancedSearch />
         {/if}
     </header>

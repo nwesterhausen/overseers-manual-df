@@ -8,6 +8,7 @@ use crate::{format_time_delta, AppState};
 pub async fn retrieve_last_dwarf_fortress_directory(
     state: State<'_, AppState>,
 ) -> Result<String, String> {
+    tracing::info!("retrieve_last_dwarf_fortress_directory");
     let db_client = state.db.lock().await;
     let df_path = db_client.get_last_used_df_game_dir().map_err(|e| {
         tracing::error!("retrieve_dwarf_fortress_directory: {e}");
@@ -21,6 +22,7 @@ pub async fn retrieve_last_dwarf_fortress_directory(
 pub async fn retrieve_last_user_data_directory(
     state: State<'_, AppState>,
 ) -> Result<String, String> {
+    tracing::info!("retrieve_last_user_data_directory");
     let db_client = state.db.lock().await;
     let user_data_path = db_client.get_last_used_df_user_dir().map_err(|e| {
         tracing::error!("retrieve_user_data_directory: {e}");
@@ -34,6 +36,7 @@ pub async fn retrieve_last_user_data_directory(
 pub async fn retrieve_last_parser_options(
     state: State<'_, AppState>,
 ) -> Result<ParserOptions, String> {
+    tracing::info!("retrieve_last_parser_options");
     let db_client = state.db.lock().await;
     let parser_options = db_client
         .get_last_used_parser_options()
@@ -48,6 +51,7 @@ pub async fn retrieve_last_parser_options(
 /// Get the last parse duration as a `chrono::TimeDelta`
 #[tauri::command]
 pub async fn retrieve_last_parse_duration(state: State<'_, AppState>) -> Result<String, String> {
+    tracing::info!("retrieve_last_parse_duration");
     let db_client = state.db.lock().await;
     db_client
         .get_last_parse_duration()
@@ -64,6 +68,7 @@ pub async fn retrieve_last_parse_duration(state: State<'_, AppState>) -> Result<
 pub async fn retrieve_last_insertion_duration(
     state: State<'_, AppState>,
 ) -> Result<String, String> {
+    tracing::info!("retrieve_last_insertion_duration");
     let db_client = state.db.lock().await;
     db_client
         .get_last_insertion_duration()
@@ -80,6 +85,7 @@ pub async fn retrieve_last_insertion_duration(
 pub async fn retrieve_recent_search_terms(
     state: State<'_, AppState>,
 ) -> Result<Vec<String>, String> {
+    tracing::info!("retrieve_recent_search_terms");
     let db_client = state.db.lock().await;
     let terms = db_client.get_recent_search_terms().map_err(|e| {
         tracing::error!("retrieve_recent_search_terms: {e}");
@@ -91,6 +97,7 @@ pub async fn retrieve_recent_search_terms(
 /// Retrieve the list of favorited raws
 #[tauri::command]
 pub async fn retrieve_favorite_raws(state: State<'_, AppState>) -> Result<Vec<i64>, String> {
+    tracing::info!("retrieve_favorite_raws");
     let db_client = state.db.lock().await;
     let favorites = db_client.get_favorite_raws().map_err(|e| {
         tracing::error!("retrieve_favorite_raws: {e}");
@@ -136,6 +143,7 @@ pub async fn persist_preferred_search_limit(
     state: State<'_, AppState>,
     limit: u32,
 ) -> Result<u32, String> {
+    tracing::info!("persist_preferred_search_limit::{limit}");
     let db_client = state.db.lock().await;
     match db_client.set_preferred_search_limit(limit) {
         Ok(()) => Ok(limit),
@@ -149,6 +157,7 @@ pub async fn persist_preferred_search_limit(
 /// Get the preferred page limit
 #[tauri::command]
 pub async fn retrieve_preferred_search_limit(state: State<'_, AppState>) -> Result<u32, String> {
+    tracing::info!("retrieve_preferred_search_limit");
     let db_client = state.db.lock().await;
     db_client.get_preferred_search_limit().map_err(|e| {
         tracing::error!("retrieve_preferred_search_limit: {e}");
@@ -159,6 +168,7 @@ pub async fn retrieve_preferred_search_limit(state: State<'_, AppState>) -> Resu
 /// Get the time the last insertion was done
 #[tauri::command]
 pub async fn retrieve_last_insertion_date(state: State<'_, AppState>) -> Result<String, String> {
+    tracing::info!("retrieve_last_insertion_date");
     let db_client = state.db.lock().await;
     let date = db_client
         .get_last_insertion_date()
@@ -175,6 +185,7 @@ pub async fn retrieve_last_insertion_date(state: State<'_, AppState>) -> Result<
 pub async fn retrieve_last_parse_operation_date(
     state: State<'_, AppState>,
 ) -> Result<String, String> {
+    tracing::info!("retrieve_last_parse_operation_date");
     let db_client = state.db.lock().await;
     let date = db_client
         .get_last_parse_operation_date()

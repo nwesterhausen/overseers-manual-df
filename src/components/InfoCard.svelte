@@ -1,7 +1,6 @@
 <script lang="ts">
     import type {
         BiomeTag,
-        CreatureTag,
         Creature,
         Plant,
         RawObject,
@@ -9,8 +8,7 @@
     import { toTitleCase } from "helpers";
     import SpriteImage from "./SpriteImage.svelte";
     import { ChevronDown, Star } from "@lucide/svelte";
-    import { addFavoriteRaw, removeFavoriteRaw } from "bindings/Commands";
-    import { invoke } from "@tauri-apps/api/core";
+    import { favorites } from "state/favorites.svelte";
 
     interface Props {
         raw: RawObject;
@@ -82,20 +80,14 @@
             ? displayInfo.biomes
             : displayInfo.biomes.slice(0, BIOME_LIMIT),
     );
-    let isFavorite = $state(false);
-    function toggleFavorite() {
-        if (isFavorite) {
-            removeFavoriteRaw(raw_id).catch(console.error);
-        } else {
-            addFavoriteRaw(raw_id).catch(console.error);
-        }
-        isFavorite = !isFavorite;
-    }
+    let isFavorite = $derived(favorites.has(raw_id));
 </script>
 
 <div class="card info-card">
     <div class="tooltip tooltip-down absolute top-1 left-1" data-tip="Favorite">
-        <button class="btn btn-ghost h-4 p-0" onclick={toggleFavorite}
+        <button
+            class="btn btn-ghost h-4 p-0"
+            onclick={() => favorites.toggle(raw_id)}
             ><Star
                 class="w-4 h-4"
                 fill={isFavorite ? "#ffff00" : "#00000000"}

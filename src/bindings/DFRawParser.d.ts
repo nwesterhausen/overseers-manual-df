@@ -10046,7 +10046,13 @@ limit: number;
  * 
  * Default: `1`
  */
-page: number }
+page: number; 
+/**
+ * Limit results to only include favorited raws
+ * 
+ * Default: false
+ */
+favoritesOnly: boolean }
 
 /**
  * A structured response for search operations, containing the requested page of data
