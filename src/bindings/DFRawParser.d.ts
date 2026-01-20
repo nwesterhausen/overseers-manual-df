@@ -4538,7 +4538,7 @@ copyTagsFrom: string | null;
  */
 applyCreatureVariation: string[] | null; 
 /**
- * A generated field that is used to uniquely identify this object. It is generated from the `metadata`, `identifier`, and `ObjectType`.
+ * A generated id that is used to uniquely identify this object. It is generated from the `metadata`, `identifier`, and `ObjectType`.
  * 
  * This field is always serialized.
  */
@@ -7769,11 +7769,6 @@ export type InclusionTypeTag =
 "None"
 
 /**
- * Represents the `info.txt` file for a raw module
- */
-export type InfoFile = { identifier: string; objectId: string; location: RawModuleLocation; parentDirectory: string; numericVersion: number; displayedVersion: string; earliestCompatibleNumericVersion: number; earliestCompatibleDisplayedVersion: string; author: string; name: string; description: string; requiresIds: string[] | null; conflictsWithIds: string[] | null; requiresIdsBefore: string[] | null; requiresIdsAfter: string[] | null; steamData: SteamData | null }
-
-/**
  * The raw representation of an inorganic object.
  */
 export type Inorganic = { identifier: string; metadata: Metadata | null; objectId: string; material: Material; metalOreChance: ([string, number])[] | null; threadMetalChance: ([string, number])[] | null; environmentClass: EnvironmentClassTag | null; environmentInclusionType: InclusionTypeTag | null; environmentInclusionFrequency: number | null; environmentClassSpecific: string[] | null; tags: InorganicTag[] | null }
@@ -8802,7 +8797,7 @@ export type MechanicalProperties = { yield: number; fracture: number; elasticity
  * be hidden or not when exporting. By default, it is set to `true`, meaning that the raw metadata will
  * be hidden unless specified in the `ParsingOptions` struct.
  */
-export type Metadata = { moduleObjectId: string; moduleName: string; moduleVersion: string; rawFilePath: string; rawIdentifier: string; objectType: ObjectType; rawModuleLocation: RawModuleLocation }
+export type Metadata = { moduleObjectId: string; moduleName: string; moduleVersion: string; rawFilePath: string; rawIdentifier: string; objectType: ObjectType; rawModuleLocation: RawModuleLocation; moduleNumericVersion: number }
 
 /**
  * How often a creature can be milked and what material it produces
@@ -8883,6 +8878,11 @@ raws: string[] } } |
  * This should be the entire raw in order to apply.
  */
 raws: string[] } }
+
+/**
+ * Represents the `info.txt` file for a raw module
+ */
+export type ModuleInfo = { identifier: string; objectId: string; location: RawModuleLocation; parentDirectory: string; numericVersion: number; displayedVersion: string; earliestCompatibleNumericVersion: number; earliestCompatibleDisplayedVersion: string; author: string; name: string; description: string; requiresIds: string[] | null; conflictsWithIds: string[] | null; requiresIdsBefore: string[] | null; requiresIdsAfter: string[] | null; steamData: SteamData | null }
 
 /**
  * A name with a singular, plural, and adjective form
@@ -9064,7 +9064,11 @@ export type ObjectType =
 /**
  * A creature caste
  */
-"CreatureCaste"
+"CreatureCaste" | 
+/**
+ * A module's info.txt file
+ */
+"ModuleInfo"
 
 /**
  * # Parsing Options
@@ -9976,7 +9980,11 @@ identifier: string;
 /**
  * The metadata for this raw (includes the `ObjectType`, `RawModuleLocation` and other module info)
  */
-metadata: Metadata }
+metadata: Metadata; 
+/**
+ * A deterministed uuid for the object
+ */
+objectId: string }
 
 /**
  * A carrier struct for passing the database id along with the object we retrieved.

@@ -39,18 +39,18 @@ pub async fn parse_raws(
 
     match db_option {
         DbOptionOnParse::InsertOnly => db
-            .insert_parse_results(results)
+            .insert_parse_results(&results)
             .map_err(|e| e.to_string())?,
         DbOptionOnParse::ForceUpdate => {
             // somhow specify to force update
 
-            db.insert_parse_results(results)
+            db.insert_parse_results(&results)
                 .map_err(|e| e.to_string())?;
         }
         DbOptionOnParse::Reset => {
             // call a db reset command
 
-            db.insert_parse_results(results)
+            db.insert_parse_results(&results)
                 .map_err(|e| e.to_string())?;
         }
     }

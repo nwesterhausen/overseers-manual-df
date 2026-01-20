@@ -8,7 +8,9 @@
     } from "bindings/DFRawParser";
     import { toTitleCase } from "helpers";
     import SpriteImage from "./SpriteImage.svelte";
-    import { ChevronDown } from "@lucide/svelte";
+    import { ChevronDown, Star } from "@lucide/svelte";
+    import { addFavoriteRaw, removeFavoriteRaw } from "bindings/Commands";
+    import { invoke } from "@tauri-apps/api/core";
 
     interface Props {
         raw: RawObject;
@@ -31,6 +33,7 @@
         let valueTags: string[] = mockValueTags;
         let module =
             raw.metadata.moduleName + " v" + raw.metadata.moduleVersion;
+        let objectId = raw.objectId;
 
         switch (raw.metadata.objectType) {
             case "Creature": {
@@ -71,6 +74,7 @@
             biomes,
             flags,
             valueTags,
+            objectId,
         };
     });
     let visibleBiomes = $derived(
@@ -78,9 +82,26 @@
             ? displayInfo.biomes
             : displayInfo.biomes.slice(0, BIOME_LIMIT),
     );
+    let isFavorite = $state(false);
+    function toggleFavorite() {
+        if (isFavorite) {
+            removeFavoriteRaw(raw_id).catch(console.error);
+        } else {
+            addFavoriteRaw(raw_id).catch(console.error);
+        }
+        isFavorite = !isFavorite;
+    }
 </script>
 
 <div class="card info-card">
+    <div class="tooltip tooltip-down absolute top-1 left-1" data-tip="Favorite">
+        <button class="btn btn-ghost h-4 p-0" onclick={toggleFavorite}
+            ><Star
+                class="w-4 h-4"
+                fill={isFavorite ? "#ffff00" : "#00000000"}
+            /></button
+        >
+    </div>
     <div class="card-body gap-3">
         <div class="flex justify-between items-start">
             <div class="flex-1">
@@ -148,8 +169,11 @@
         </div>
 
         <div class="card-actions place-content-end">
-            <span class="text-xs absolute left-1.5 bottom-1.5"
+            <span class="text-xs absolute left-1.25 bottom-1"
                 >{displayInfo.objectType} Raw</span
+            >
+            <span class="text-xs text-secondary absolute right-1.25 bottom-1"
+                >{displayInfo.objectId}</span
             >
 
             <div class="join">

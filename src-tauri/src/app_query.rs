@@ -102,6 +102,7 @@ pub async fn retrieve_favorite_raws(state: State<'_, AppState>) -> Result<Vec<i6
 /// Add a favorite raw
 #[tauri::command]
 pub async fn add_favorite_raw(state: State<'_, AppState>, raw_id: i64) -> Result<String, String> {
+    tracing::info!("add_favorite_raw::{raw_id}");
     let db_client = state.db.lock().await;
     match db_client.add_favorite_raw(raw_id) {
         Ok(()) => Ok(String::from("Favorite added.")),
@@ -118,6 +119,7 @@ pub async fn remove_favorite_raw(
     state: State<'_, AppState>,
     raw_id: i64,
 ) -> Result<String, String> {
+    tracing::info!("remove_favorite_raw::{raw_id}");
     let db_client = state.db.lock().await;
     match db_client.remove_favorite_raw(raw_id) {
         Ok(()) => Ok(String::from("Favorite removed.")),

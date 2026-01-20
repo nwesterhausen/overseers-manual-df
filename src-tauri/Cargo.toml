@@ -36,6 +36,7 @@ tauri-plugin-fs = "2"
 tracing = "0.1"
 tracing-subscriber = {version = "0.3.22", features = ["registry", "env-filter"] }
 tracing-appender = "0.2.4"
+uuid = {version = "0", features = ["serde", "v5"] }
 
 [dependencies.dfraw_parser]
 version = "0"

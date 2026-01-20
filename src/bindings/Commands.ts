@@ -84,12 +84,12 @@ export async function retrieveFavoriteRaws(): Promise<string[]> {
   return invoke<string[]>("retrieve_favorite_raws");
 }
 
-export async function addFavoriteRaw(raw_id: string): Promise<string> {
-  return invoke<string>("add_favorite_raw", { raw_id });
+export async function addFavoriteRaw(rawId: string): Promise<string> {
+  return invoke<string>("add_favorite_raw", { rawId });
 }
 
-export async function removeFavoriteRaw(raw_id: string): Promise<string> {
-  return invoke<string>("remove_favorite_raw", { raw_id });
+export async function removeFavoriteRaw(rawId: string): Promise<string> {
+  return invoke<string>("remove_favorite_raw", { rawId });
 }
 
 export async function persistPreferredSearchLimit(
