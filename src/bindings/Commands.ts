@@ -67,3 +67,45 @@ export async function persistStoredSettings(
 ): Promise<void> {
   return invoke<void>("persist_stored_settings", { settings });
 }
+
+export async function retrieveLastParseDuration(): Promise<string> {
+  return invoke<string>("retrieve_last_parse_duration");
+}
+
+export async function retrieveLastInsertionDuration(): Promise<string> {
+  return invoke<string>("retrieve_last_insertion_duration");
+}
+
+export async function retrieveRecentSearchTerms(): Promise<string[]> {
+  return invoke<string[]>("retrieve_recent_search_terms");
+}
+
+export async function retrieveFavoriteRaws(): Promise<string[]> {
+  return invoke<string[]>("retrieve_favorite_raws");
+}
+
+export async function addFavoriteRaw(raw_id: string): Promise<string> {
+  return invoke<string>("add_favorite_raw", { raw_id });
+}
+
+export async function removeFavoriteRaw(raw_id: string): Promise<string> {
+  return invoke<string>("remove_favorite_raw", { raw_id });
+}
+
+export async function persistPreferredSearchLimit(
+  limit: number,
+): Promise<number> {
+  return invoke<number>("persist_preferred_search_limit", { limit });
+}
+
+export async function retrievePreferredSearchLimit(): Promise<number> {
+  return invoke<number>("retrieve_preferred_search_limit");
+}
+
+export async function retrieveLastInsertionDate(): Promise<string> {
+  return invoke<string>("retrieve_last_insertion_date");
+}
+
+export async function retrieveLastParseOperationDate(): Promise<string> {
+  return invoke<string>("retrieve_last_parse_operation_date");
+}

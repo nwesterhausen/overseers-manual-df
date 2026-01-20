@@ -48,6 +48,16 @@ pub fn run() {
             retrieve_last_dwarf_fortress_directory,
             retrieve_stored_settings,
             persist_stored_settings,
+            retrieve_last_parse_duration,
+            retrieve_last_insertion_duration,
+            retrieve_recent_search_terms,
+            retrieve_favorite_raws,
+            add_favorite_raw,
+            remove_favorite_raw,
+            retrieve_preferred_search_limit,
+            persist_preferred_search_limit,
+            retrieve_last_insertion_date,
+            retrieve_last_parse_operation_date,
         ])
         .setup(|app| {
             let db_client = create_or_open_database(app.handle());

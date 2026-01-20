@@ -4,6 +4,13 @@
     import InfoCard from "components/InfoCard.svelte";
     import type { RawObject, SearchResults } from "bindings/DFRawParser";
     import { settingsState } from "state/settings.svelte";
+    import { onMount } from "svelte";
+    import {
+        retrieveLastInsertionDate,
+        retrieveLastInsertionDuration,
+        retrieveLastParseDuration,
+        retrieveLastParseOperationDate,
+    } from "bindings/Commands";
 
     let search_results = $state<SearchResults<RawObject>>({
         results: [],
@@ -17,6 +24,22 @@
         })
             .then((data) => (search_results = data))
             .catch((error) => console.log(error));
+    });
+
+    // Test
+    onMount(() => {
+        retrieveLastParseDuration()
+            .then((data) => console.log("last_parse_duration", data))
+            .catch((e) => console.error("last_parse_duration", e));
+        retrieveLastInsertionDuration()
+            .then((data) => console.log("last_insertion_duration", data))
+            .catch((e) => console.error("last_insertion_duration", e));
+        retrieveLastInsertionDate()
+            .then((data) => console.log("last_insertion_date", data))
+            .catch((e) => console.error("last_insertion_date", e));
+        retrieveLastParseOperationDate()
+            .then((data) => console.log("last_parse_date", data))
+            .catch((e) => console.error("last_parse_date", e));
     });
 </script>
 
