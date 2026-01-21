@@ -11,6 +11,7 @@
     } from "state/settings.svelte";
     import { parserLogs } from "state/parserState.svelte";
     import { searchState } from "state/search.svelte";
+    import { highlightJson } from "highlighter";
 
     let { children } = $props();
 
@@ -23,6 +24,7 @@
         const updateTheme = (e: MediaQueryListEvent | MediaQueryList) => {
             themeState.mode = e.matches ? "dark" : "light";
         };
+        new Promise(() => highlightJson("")).catch(console.error);
 
         updateTheme(darkQuery);
 
