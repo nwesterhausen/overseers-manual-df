@@ -1,53 +1,19 @@
 <script lang="ts">
-    import { invoke } from "@tauri-apps/api/core";
     import { searchState } from "state/search.svelte";
     import InfoCard from "components/InfoCard.svelte";
-    import type { RawObject, SearchResults } from "bindings/DFRawParser";
     import { settingsState } from "state/settings.svelte";
-    import { onMount } from "svelte";
-    import {
-        retrieveFavoriteRaws,
-        retrieveLastInsertionDate,
-        retrieveLastInsertionDuration,
-        retrieveLastParseDuration,
-        retrieveLastParseOperationDate,
-        searchRaws,
-    } from "bindings/Commands";
+    import { resultsState } from "state/results.svelte";
 
-    let search_results = $state<SearchResults<RawObject>>({
-        results: [],
-        totalCount: 0,
-    });
-    let favorite_raws = $state<string[]>([]);
-
-    // Reactively search whenever any part of the global search query
+    // Reactively search whenever any part of the search state changes. Includes page num
+    // and toggling "only favorties".
     $effect(() => {
-        searchRaws(searchState.query)
-            .then((data) => {
-                search_results = data;
-            })
-            .catch(console.error);
-    });
-    // Test
-    onMount(() => {
-        retrieveLastParseDuration()
-            .then((data) => console.log("last_parse_duration", data))
-            .catch((e) => console.error("last_parse_duration", e));
-        retrieveLastInsertionDuration()
-            .then((data) => console.log("last_insertion_duration", data))
-            .catch((e) => console.error("last_insertion_duration", e));
-        retrieveLastInsertionDate()
-            .then((data) => console.log("last_insertion_date", data))
-            .catch((e) => console.error("last_insertion_date", e));
-        retrieveLastParseOperationDate()
-            .then((data) => console.log("last_parse_date", data))
-            .catch((e) => console.error("last_parse_date", e));
+        resultsState.search();
     });
 </script>
 
-<main class="p-4">
+<main class="p-4 flex flex-col items-center gap-4">
     <div class="flex flex-wrap justify-center gap-4">
-        {#each search_results.results as item}
+        {#each resultsState.list as item}
             <InfoCard raw={item.data} raw_id={item.id} />
         {:else}
             {#if settingsState.appState === "ready"}
@@ -57,6 +23,28 @@
             {/if}
         {/each}
     </div>
-</main>
 
-<style></style>
+    {#if resultsState.totalCount > 0}
+        <div class="flex items-center gap-4 py-4">
+            <button
+                class="btn variant-filled-surface"
+                onclick={() => resultsState.prevPage()}
+                disabled={!resultsState.hasPrev}
+            >
+                Previous
+            </button>
+
+            <span class="text-sm">
+                Page {resultsState.page} of {resultsState.totalPages}
+            </span>
+
+            <button
+                class="btn variant-filled-surface"
+                onclick={() => resultsState.nextPage()}
+                disabled={!resultsState.hasNext}
+            >
+                Next
+            </button>
+        </div>
+    {/if}
+</main>
