@@ -1,6 +1,5 @@
 <script lang="ts">
     import type { Creature, Plant, RawObject } from "bindings/DFRawParser";
-    import { toTitleCase } from "helpers";
     import SpriteImage from "./SpriteImage.svelte";
     import { favorites } from "state/favorites.svelte";
     import ActionMenu from "./ActionMenu.svelte";
@@ -8,6 +7,8 @@
     import ValueTags from "./ValueTags.svelte";
     import Flags from "./Flags.svelte";
     import { Star } from "@lucide/svelte";
+    import Footer from "./Footer.svelte";
+    import Header from "./Header.svelte";
 
     interface Props {
         raw: RawObject;
@@ -68,14 +69,7 @@
     </div>
     <div class="card-body gap-3">
         <div class="flex justify-between items-start">
-            <div class="flex-1">
-                <h2 class="info-card-title">
-                    {toTitleCase(displayInfo.title, true)}
-                </h2>
-                <p class="info-card-module-title">
-                    {displayInfo.module}
-                </p>
-            </div>
+            <Header title={displayInfo.title} module={displayInfo.module} />
             <div class="shrink-0">
                 <SpriteImage identifier={raw.identifier} />
             </div>
@@ -91,15 +85,10 @@
         </div>
 
         <div class="card-actions place-content-end">
-            <span class="text-xs font-mono absolute left-1.25 bottom-1"
-                >{displayInfo.objectType}</span
-            >
-            <span
-                style="font-size:0.5rem"
-                class="text-primary/75 font-mono absolute right-1.25 bottom-1"
-                >{displayInfo.objectId}</span
-            >
-
+            <Footer
+                objectType={displayInfo.objectType}
+                objectId={displayInfo.objectId}
+            />
             <div class="join">
                 <ActionMenu {rawId} />
             </div>
