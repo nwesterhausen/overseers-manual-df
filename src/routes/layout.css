@@ -39,3 +39,19 @@ dt {
 dd {
     @apply ps-4;
 }
+
+.info-card {
+    @apply w-80 bg-base-200 shadow-xl border border-base-300;
+}
+.info-card-title {
+    @apply card-title text-xl font-bold leading-tight;
+}
+.info-card-module-title {
+    @apply text-xs italic text-accent font-medium;
+}
+.info-card-subheading {
+    @apply text-[10px] font-bold text-info uppercase tracking-wider mb-1;
+}
+.info-tag-badge {
+    @apply badge-sm border-secondary text-[10px];
+}
