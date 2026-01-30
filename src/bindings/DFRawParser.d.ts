@@ -4538,9 +4538,15 @@ copyTagsFrom: string | null;
  */
 applyCreatureVariation: string[] | null; 
 /**
- * A generated id that is used to uniquely identify this object. It is generated from the `metadata`, `identifier`, and `ObjectType`.
+ * A generated id that is used to uniquely identify this object.
  * 
- * This field is always serialized.
+ * This is deterministic based on the following:
+ * * The raw's `identifier`
+ * * The raw's [`ObjectType`]
+ * * [`RawModuleLocation`] where the raw was found
+ * * The containing module's `numeric_version`
+ * 
+ * See [`crate::utilities::generate_object_id`]
  */
 objectId: string; 
 /**
@@ -5650,7 +5656,19 @@ export type CreatureVariation = {
 /**
  * Common Raw file Things
  */
-metadata: Metadata | null; identifier: string; objectId: string; 
+metadata: Metadata | null; identifier: string; 
+/**
+ * A generated id that is used to uniquely identify this object.
+ * 
+ * This is deterministic based on the following:
+ * * The raw's `identifier`
+ * * The raw's [`ObjectType`]
+ * * [`RawModuleLocation`] where the raw was found
+ * * The containing module's `numeric_version`
+ * 
+ * See [`crate::utilities::generate_object_id`]
+ */
+objectId: string; 
 /**
  * Creature variations are basically just a set of simple tag actions which are applied to
  * the creature which is being modified. The tags are applied in order EXCEPT for the convert
@@ -5885,7 +5903,19 @@ y: string }
 /**
  * A struct representing an Entity object.
  */
-export type Entity = { metadata: Metadata | null; identifier: string; objectId: string; tags: EntityToken[]; creature: string | null; translation: string | null; exclusiveStartBiome: string | null; biomeSupport: ([string, number])[] | null; settlementBiome: string[] | null; startBiome: string[] | null; likesSites: string[] | null; toleratesSites: string[] | null; worldConstructions: string[] | null; maxPopNumber: number | null; maxSitePopNumber: number | null; maxStartingCivNumber: number | null; permittedBuildings: string[] | null; permittedJobs: string[] | null; permittedReactions: string[] | null; currency: ([string, number])[] | null; artFacetModifier: ([string, number])[] | null; artImageElementModifier: ([string, number])[] | null; itemImprovementModifier: ([string, number])[] | null; selectSymbols: ([string, string])[] | null; subselectSymbols: ([string, string])[] | null; cullSymbols: ([string, string])[] | null; friendlyColor: Color | null; religion: string | null; religionSpheres: string[] | null; sphereAlignments: string[] | null; positions: Position[] | null; landHolderTrigger: string | null; siteVariablePositions: string[] | null; variablePositions: string[] | null; ethics: ([string, string])[] | null; values: ([string, number])[] | null; variableValues: ([string, number, number])[] | null; activeSeason: string | null; banditry: number | null; progressTriggerPopulation: number | null; progressTriggerProduction: number | null; progressTriggerTrade: number | null; progressTriggerPopulationSiege: number | null; progressTriggerProductionSiege: number | null; progressTriggerTradeSiege: number | null; scholars: string[] | null; ammo: string[] | null; armors: ([string, number])[] | null; diggers: string[] | null; gloves: ([string, number])[] | null; helms: ([string, number])[] | null; instrument: string[] | null; pants: ([string, number])[] | null; shields: string[] | null; shoes: ([string, number])[] | null; siegeAmmo: string[] | null; tool: string[] | null; toys: string[] | null; trapComponents: string[] | null; weapons: string[] | null; gemShape: string[] | null; stoneShape: string[] | null; sourceHfid: number | null }
+export type Entity = { metadata: Metadata | null; identifier: string; 
+/**
+ * A generated id that is used to uniquely identify this object.
+ * 
+ * This is deterministic based on the following:
+ * * The raw's `identifier`
+ * * The raw's [`ObjectType`]
+ * * [`RawModuleLocation`] where the raw was found
+ * * The containing module's `numeric_version`
+ * 
+ * See [`crate::utilities::generate_object_id`]
+ */
+objectId: string; tags: EntityToken[]; creature: string | null; translation: string | null; exclusiveStartBiome: string | null; biomeSupport: ([string, number])[] | null; settlementBiome: string[] | null; startBiome: string[] | null; likesSites: string[] | null; toleratesSites: string[] | null; worldConstructions: string[] | null; maxPopNumber: number | null; maxSitePopNumber: number | null; maxStartingCivNumber: number | null; permittedBuildings: string[] | null; permittedJobs: string[] | null; permittedReactions: string[] | null; currency: ([string, number])[] | null; artFacetModifier: ([string, number])[] | null; artImageElementModifier: ([string, number])[] | null; itemImprovementModifier: ([string, number])[] | null; selectSymbols: ([string, string])[] | null; subselectSymbols: ([string, string])[] | null; cullSymbols: ([string, string])[] | null; friendlyColor: Color | null; religion: string | null; religionSpheres: string[] | null; sphereAlignments: string[] | null; positions: Position[] | null; landHolderTrigger: string | null; siteVariablePositions: string[] | null; variablePositions: string[] | null; ethics: ([string, string])[] | null; values: ([string, number])[] | null; variableValues: ([string, number, number])[] | null; activeSeason: string | null; banditry: number | null; progressTriggerPopulation: number | null; progressTriggerProduction: number | null; progressTriggerTrade: number | null; progressTriggerPopulationSiege: number | null; progressTriggerProductionSiege: number | null; progressTriggerTradeSiege: number | null; scholars: string[] | null; ammo: string[] | null; armors: ([string, number])[] | null; diggers: string[] | null; gloves: ([string, number])[] | null; helms: ([string, number])[] | null; instrument: string[] | null; pants: ([string, number])[] | null; shields: string[] | null; shoes: ([string, number])[] | null; siegeAmmo: string[] | null; tool: string[] | null; toys: string[] | null; trapComponents: string[] | null; weapons: string[] | null; gemShape: string[] | null; stoneShape: string[] | null; sourceHfid: number | null }
 
 /**
  * Tokens that can be found in an entity raw file.
@@ -7196,8 +7226,64 @@ export type GaitTypeToken =
 
 /**
  * A struct representing a Graphic object.
+ * 
+ * Stores data about layers and sprites defined in the graphic raw.
  */
-export type Graphic = { metadata: Metadata | null; identifier: string; objectId: string; casteIdentifier: string | null; kind: GraphicTypeToken; sprites: SpriteGraphic[] | null; layers: ([string, SpriteLayer[]])[] | null; growths: ([string, SpriteGraphic[]])[] | null; customExtensions: CustomGraphicExtension[] | null; tags: string[] | null; palletes: GraphicPalette[] }
+export type Graphic = { 
+/**
+ * The `metadata` field is of type `RawMetadata` and is used to provide additional information
+ * about the raws the `Graphic` is found in.
+ */
+metadata: Metadata | null; 
+/**
+ * The `identifier` field is a string that represents the identifier of the graphic. It is used
+ * to uniquely identify the graphic
+ */
+identifier: string; 
+/**
+ * A generated id that is used to uniquely identify this object.
+ * 
+ * This is deterministic based on the following:
+ * * The raw's `identifier`
+ * * The raw's [`ObjectType`]
+ * * [`RawModuleLocation`] where the raw was found
+ * * The containing module's `numeric_version`
+ * 
+ * See [`crate::utilities::generate_object_id`]
+ */
+objectId: string; 
+/**
+ * An optional identifier targeting a specific caste
+ */
+casteIdentifier: string | null; 
+/**
+ * The type of graphic
+ */
+kind: GraphicTypeToken; 
+/**
+ * A vector of sprites defined in the raw
+ */
+sprites: SpriteGraphic[] | null; 
+/**
+ * A vector of layers defined in the raw
+ */
+layers: ([string, SpriteLayer[]])[] | null; 
+/**
+ * A vector of growths defined in the raw
+ */
+growths: ([string, SpriteGraphic[]])[] | null; 
+/**
+ * A vector of custom extensions defined in the raw
+ */
+customExtensions: CustomGraphicExtension[] | null; 
+/**
+ * A vector of the defined tags in the raw
+ */
+tags: string[] | null; 
+/**
+ * The palletes used or defined in the raw
+ */
+palletes: GraphicPalette[] }
 
 /**
  * A struct representing a Graphic object.
@@ -7771,7 +7857,19 @@ export type InclusionTypeToken =
 /**
  * The raw representation of an inorganic object.
  */
-export type Inorganic = { identifier: string; metadata: Metadata | null; objectId: string; material: Material; metalOreChance: ([string, number])[] | null; threadMetalChance: ([string, number])[] | null; environmentClass: EnvironmentClassToken | null; environmentInclusionType: InclusionTypeToken | null; environmentInclusionFrequency: number | null; environmentClassSpecific: string[] | null; tags: InorganicToken[] | null }
+export type Inorganic = { identifier: string; metadata: Metadata | null; 
+/**
+ * A generated id that is used to uniquely identify this object.
+ * 
+ * This is deterministic based on the following:
+ * * The raw's `identifier`
+ * * The raw's [`ObjectType`]
+ * * [`RawModuleLocation`] where the raw was found
+ * * The containing module's `numeric_version`
+ * 
+ * See [`crate::utilities::generate_object_id`]
+ */
+objectId: string; material: Material; metalOreChance: ([string, number])[] | null; threadMetalChance: ([string, number])[] | null; environmentClass: EnvironmentClassToken | null; environmentInclusionType: InclusionTypeToken | null; environmentInclusionFrequency: number | null; environmentClassSpecific: string[] | null; tags: InorganicToken[] | null }
 
 /**
  * Tags that can be used in inorganic raws.
@@ -8337,7 +8435,19 @@ export type MaterialStateToken =
 /**
  * A struct representing a material template
  */
-export type MaterialTemplate = { identifier: string; metadata: Metadata | null; objectId: string; material: Material }
+export type MaterialTemplate = { identifier: string; metadata: Metadata | null; 
+/**
+ * A generated id that is used to uniquely identify this object.
+ * 
+ * This is deterministic based on the following:
+ * * The raw's `identifier`
+ * * The raw's [`ObjectType`]
+ * * [`RawModuleLocation`] where the raw was found
+ * * The containing module's `numeric_version`
+ * 
+ * See [`crate::utilities::generate_object_id`]
+ */
+objectId: string; material: Material }
 
 /**
  * A material template
@@ -8797,7 +8907,17 @@ export type MechanicalProperties = { yield: number; fracture: number; elasticity
  * be hidden or not when exporting. By default, it is set to `true`, meaning that the raw metadata will
  * be hidden unless specified in the `ParsingOptions` struct.
  */
-export type Metadata = { moduleObjectId: string; moduleName: string; moduleVersion: string; rawFilePath: string; rawIdentifier: string; objectType: ObjectType; rawModuleLocation: RawModuleLocation; moduleNumericVersion: number }
+export type Metadata = { 
+/**
+ * A generated id that is used to uniquely identify this object.
+ * 
+ * This is deterministic based on the following:
+ * * The modules's `identifier`
+ * * [`ObjectType::ModuleInfo`]
+ * * [`RawModuleLocation`] where the raw was found
+ * * The containing module's `numeric_version`
+ */
+moduleObjectId: string; moduleName: string; moduleVersion: string; rawFilePath: string; rawIdentifier: string; objectType: ObjectType; rawModuleLocation: RawModuleLocation; moduleNumericVersion: number }
 
 /**
  * How often a creature can be milked and what material it produces
@@ -8882,7 +9002,19 @@ raws: string[] } }
 /**
  * Represents the `info.txt` file for a raw module
  */
-export type ModuleInfo = { identifier: string; objectId: string; location: RawModuleLocation; parentDirectory: string; numericVersion: number; displayedVersion: string; earliestCompatibleNumericVersion: number; earliestCompatibleDisplayedVersion: string; author: string; name: string; description: string; requiresIds: string[] | null; conflictsWithIds: string[] | null; requiresIdsBefore: string[] | null; requiresIdsAfter: string[] | null; steamData: SteamData | null }
+export type ModuleInfo = { identifier: string; 
+/**
+ * A generated id that is used to uniquely identify this object.
+ * 
+ * This is deterministic based on the following:
+ * * The modules's `identifier`
+ * * [`ObjectType::ModuleInfo`]
+ * * [`RawModuleLocation`] where the raw was found
+ * * The containing module's `numeric_version`
+ * 
+ * See [`crate::utilities::generate_object_id`]
+ */
+objectId: string; location: RawModuleLocation; parentDirectory: string; numericVersion: number; displayedVersion: string; earliestCompatibleNumericVersion: number; earliestCompatibleDisplayedVersion: string; author: string; name: string; description: string; requiresIds: string[] | null; conflictsWithIds: string[] | null; requiresIdsBefore: string[] | null; requiresIdsAfter: string[] | null; steamData: SteamData | null }
 
 /**
  * A name with a singular, plural, and adjective form
@@ -9264,7 +9396,19 @@ export type Plant = {
 /**
  * Common Raw file Things
  */
-metadata: Metadata | null; identifier: string; objectId: string; name: Name; prefStrings: string[] | null; tags: PlantToken[] | null; 
+metadata: Metadata | null; identifier: string; 
+/**
+ * A generated id that is used to uniquely identify this object.
+ * 
+ * This is deterministic based on the following:
+ * * The raw's `identifier`
+ * * The raw's [`ObjectType`]
+ * * [`RawModuleLocation`] where the raw was found
+ * * The containing module's `numeric_version`
+ * 
+ * See [`crate::utilities::generate_object_id`]
+ */
+objectId: string; name: Name; prefStrings: string[] | null; tags: PlantToken[] | null; 
 /**
  * Default [0, 0] (aboveground)
  */
@@ -10010,15 +10154,21 @@ export type RawModuleLocation =
  */
 export type RawObject = { 
 /**
- * The object identifier
+ * The raw object's identifier
  */
 identifier: string; 
 /**
- * The metadata for this raw (includes the `ObjectType`, `RawModuleLocation` and other module info)
+ * The raw object's metadata, which can be used to get additional information
  */
 metadata: Metadata; 
 /**
- * A deterministed uuid for the object
+ * A generated id that is used to uniquely identify this object.
+ * 
+ * This is deterministic based on the following:
+ * * The raw's `identifier`
+ * * The raw's [`ObjectType`]
+ * * [`RawModuleLocation`] where the raw was found
+ * * The containing module's `numeric_version`
  */
 objectId: string }
 
@@ -10137,7 +10287,19 @@ export type SeedMaterial = { name: Name; color: Color; material: string }
 /**
  * A struct representing a creature selection
  */
-export type SelectCreature = { metadata: Metadata | null; identifier: string; objectId: string; tags: string[] }
+export type SelectCreature = { metadata: Metadata | null; identifier: string; 
+/**
+ * A generated id that is used to uniquely identify this object.
+ * 
+ * This is deterministic based on the following:
+ * * The raw's `identifier`
+ * * The raw's [`ObjectType`]
+ * * [`RawModuleLocation`] where the raw was found
+ * * The containing module's `numeric_version`
+ * 
+ * See [`crate::utilities::generate_object_id`]
+ */
+objectId: string; tags: string[] }
 
 /**
  * The rules for selecting a creature
@@ -10415,7 +10577,31 @@ targetIdentifier: string }
 /**
  * A struct representing a `SpriteLayer` object.
  */
-export type SpriteLayer = { layerName: string; tilePageId: string; offset: Dimensions; offset2: Dimensions | null; largeImage: boolean | null; conditions: ([ConditionToken, string])[] | null }
+export type SpriteLayer = { 
+/**
+ * Name of the layer (its identifier)
+ */
+layerName: string; 
+/**
+ * Identifier of the tile page used by this layer
+ */
+tilePageId: string; 
+/**
+ * The position in the tile page that is the top-left corner of the defined sprite
+ */
+offset: Dimensions; 
+/**
+ * Optionally defines the bottom-right position in the tile page (for non-square sprites)
+ */
+offset2: Dimensions | null; 
+/**
+ * Whether the sprite is a large image (i.e., includes a 2nd offset)
+ */
+largeImage: boolean | null; 
+/**
+ * An array of required conditions for this sprite to be visible/used
+ */
+conditions: ([ConditionToken, string])[] | null }
 
 /**
  * Represents the name of a materials 3 states (solid, liquid, gas)
@@ -10615,7 +10801,19 @@ value: string }
 /**
  * A struct representing a `TilePage` object.
  */
-export type TilePage = { metadata: Metadata | null; identifier: string; objectId: string; file: string; tileDim: Dimensions; pageDim: Dimensions }
+export type TilePage = { metadata: Metadata | null; identifier: string; 
+/**
+ * A generated id that is used to uniquely identify this object.
+ * 
+ * This is deterministic based on the following:
+ * * The raw's `identifier`
+ * * The raw's [`ObjectType`]
+ * * [`RawModuleLocation`] where the raw was found
+ * * The containing module's `numeric_version`
+ * 
+ * See [`crate::utilities::generate_object_id`]
+ */
+objectId: string; file: string; tileDim: Dimensions; pageDim: Dimensions }
 
 /**
  * A simplified struct for tile page data
