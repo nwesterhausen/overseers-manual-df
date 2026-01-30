@@ -1,5 +1,5 @@
 use dfraw_parser::Dimensions;
-use dfraw_parser_sqlite_lib::SpriteGraphicData;
+use dfraw_parser_sqlite_lib::models::SpriteGraphicData;
 use tauri::State;
 
 use crate::{AppState, GraphicsResult};
