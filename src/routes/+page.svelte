@@ -1,6 +1,6 @@
 <script lang="ts">
     import { searchState } from "state/search.svelte";
-    import InfoCard from "components/InfoCard.svelte";
+    import InfoCard from "components/InfoCard/index.svelte";
     import { settingsState } from "state/settings.svelte";
     import { resultsState } from "state/results.svelte";
 
@@ -14,7 +14,7 @@
 <main class="p-4 flex flex-col items-center gap-4">
     <div class="flex flex-wrap justify-center gap-4">
         {#each resultsState.list as item}
-            <InfoCard raw={item.data} raw_id={item.id} />
+            <InfoCard raw={item.data} rawId={item.id} />
         {:else}
             {#if settingsState.appState === "ready"}
                 <p class="text-neutral-500">

@@ -5894,11 +5894,11 @@ export type Dimensions = {
 /**
  * The x coordinate
  */
-x: string; 
+x: number; 
 /**
  * The y coordinate
  */
-y: string }
+y: number }
 
 /**
  * A struct representing an Entity object.
@@ -10548,19 +10548,19 @@ tilePageIdentifier: string;
 /**
  * sprite offset x1
  */
-offsetX: string; 
+offsetX: number; 
 /**
  * sprite offset y1
  */
-offsetY: string; 
+offsetY: number; 
 /**
  * for large sprites, offset x2
  */
-offsetX2: string | null; 
+offsetX2: number | null; 
 /**
  * for large sprites, offset y2
  */
-offsetY2: string | null; 
+offsetY2: number | null; 
 /**
  * primary condition for the sprite
  */

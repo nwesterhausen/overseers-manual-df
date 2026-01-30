@@ -1,6 +1,6 @@
 <script lang="ts">
     import type {
-        BiomeTag,
+        BiomeToken,
         Creature,
         Plant,
         RawObject,
@@ -9,13 +9,14 @@
     import SpriteImage from "./SpriteImage.svelte";
     import { ChevronDown, Star } from "@lucide/svelte";
     import { favorites } from "state/favorites.svelte";
+    import ActionMenu from "./ActionMenu.svelte";
 
     interface Props {
         raw: RawObject;
-        raw_id: string;
+        rawId: string;
     }
 
-    let { raw, raw_id }: Props = $props();
+    let { raw, rawId }: Props = $props();
     let biomesExpanded = $state(false);
     const BIOME_LIMIT = 3;
 
@@ -26,7 +27,7 @@
         let title = raw.identifier;
         let description = "No description available.";
         let objectType = raw.metadata.objectType as string;
-        let biomes: BiomeTag[] = [];
+        let biomes: BiomeToken[] = [];
         let flags: string[] = mockTags;
         let valueTags: string[] = mockValueTags;
         let module =
@@ -80,14 +81,14 @@
             ? displayInfo.biomes
             : displayInfo.biomes.slice(0, BIOME_LIMIT),
     );
-    let isFavorite = $derived(favorites.has(raw_id));
+    let isFavorite = $derived(favorites.has(rawId));
 </script>
 
 <div class="card info-card">
     <div class="tooltip tooltip-down absolute top-1 left-1" data-tip="Favorite">
         <button
             class="btn btn-ghost h-4 p-0"
-            onclick={() => favorites.toggle(raw_id)}
+            onclick={() => favorites.toggle(rawId)}
             ><Star
                 class="w-4 h-4"
                 fill={isFavorite ? "#ffff00" : "#00000000"}
@@ -161,51 +162,24 @@
         </div>
 
         <div class="card-actions place-content-end">
-            <span class="text-xs absolute left-1.25 bottom-1"
-                >{displayInfo.objectType} Raw</span
+            <span class="text-xs font-mono absolute left-1.25 bottom-1"
+                >{displayInfo.objectType}</span
             >
-            <span class="text-xs text-secondary absolute right-1.25 bottom-1"
+            <span
+                style="font-size:0.5rem"
+                class="text-primary/75 font-mono absolute right-1.25 bottom-1"
                 >{displayInfo.objectId}</span
             >
 
             <div class="join">
-                <a class="btn btn-primary btn-xs join-item" href="/raw/{raw_id}"
-                    >More Detail</a
-                >
-                <div class="dropdown dropdown-top dropdown-end">
-                    <details>
-                        <summary
-                            class="btn btn-primary btn-xs join-item border-l-primary-focus list-none"
-                        >
-                            <ChevronDown class="w-4 h-4" />
-                        </summary>
-                        <ul
-                            class="dropdown-content z-1 menu p-1 shadow bg-base-100 rounded-box w-40 text-xs"
-                        >
-                            <li>
-                                <button type="button">Open Raw File</button>
-                            </li>
-                            <li>
-                                <button type="button">Search Module</button>
-                            </li>
-                            <li><button type="button">Find Similar</button></li>
-                            <div class="divider my-0"></div>
-                            <li>
-                                <button type="button">View Raw (JSON)</button>
-                            </li>
-                            <li>
-                                <button type="button">View Raw (Parsed)</button>
-                            </li>
-                        </ul>
-                    </details>
-                </div>
+                <ActionMenu {rawId} />
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    @reference '../routes/layout.css';
+    @reference '../../routes/layout.css';
 
     .info-card {
         @apply w-80 bg-base-200 shadow-xl border border-base-300;

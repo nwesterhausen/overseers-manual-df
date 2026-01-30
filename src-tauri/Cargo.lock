@@ -691,7 +691,7 @@ dependencies = [
 [[package]]
 name = "dfraw_json_parser"
 version = "0.18.0"
-source = "git+https://github.com/nwesterhausen/dfraw_parser#bfcd17d5fa543b67f123c561b424928d127a48d9"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#038fb125387d3903903f900cd3121b0ff928162d"
 dependencies = [
  "dfraw_parser",
  "dfraw_parser_sqlite_lib",
@@ -708,7 +708,7 @@ dependencies = [
 [[package]]
 name = "dfraw_parser"
 version = "0.18.0"
-source = "git+https://github.com/nwesterhausen/dfraw_parser#bfcd17d5fa543b67f123c561b424928d127a48d9"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#038fb125387d3903903f900cd3121b0ff928162d"
 dependencies = [
  "dfraw_parser_proc_macros",
  "directories",
@@ -733,7 +733,7 @@ dependencies = [
 [[package]]
 name = "dfraw_parser_proc_macros"
 version = "0.1.0"
-source = "git+https://github.com/nwesterhausen/dfraw_parser#bfcd17d5fa543b67f123c561b424928d127a48d9"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#038fb125387d3903903f900cd3121b0ff928162d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -743,7 +743,7 @@ dependencies = [
 [[package]]
 name = "dfraw_parser_sqlite_lib"
 version = "0.2.0"
-source = "git+https://github.com/nwesterhausen/dfraw_parser#bfcd17d5fa543b67f123c561b424928d127a48d9"
+source = "git+https://github.com/nwesterhausen/dfraw_parser#038fb125387d3903903f900cd3121b0ff928162d"
 dependencies = [
  "chrono",
  "dfraw_parser",
@@ -5926,18 +5926,18 @@ dependencies = [
 
 [[package]]
 name = "zerocopy"
-version = "0.8.36"
+version = "0.8.37"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dafd85c832c1b68bbb4ec0c72c7f6f4fc5179627d2bc7c26b30e4c0cc11e76cc"
+checksum = "7456cf00f0685ad319c5b1693f291a650eaf345e941d082fc4e03df8a03996ac"
 dependencies = [
  "zerocopy-derive",
 ]
 
 [[package]]
 name = "zerocopy-derive"
-version = "0.8.36"
+version = "0.8.37"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7cb7e4e8436d9db52fbd6625dbf2f45243ab84994a72882ec8227b99e72b439a"
+checksum = "1328722bbf2115db7e19d69ebcc15e795719e2d66b60827c6a69a117365e37a0"
 dependencies = [
  "proc-macro2",
  "quote",
