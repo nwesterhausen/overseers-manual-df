@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { locationOptions, startupOptions } from "searchOptions";
+    import { locationOptions, startupOptions } from "options";
+    import { appState } from "state/app.svelte";
     import {
         settingsState,
         toggleDirectoryDetection,
@@ -46,13 +47,13 @@
         <span class="text-xs section-heading">Manual Actions</span>
         <div class="flex flex-row gap-4 mx-5">
             <button
-                disabled={settingsState.appState !== "ready"}
+                disabled={appState.status !== "ready"}
                 class="btn btn-primary btn-sm"
                 onclick={() => executeParse("insertOnly")}
                 >Parse and Insert New</button
             >
             <button
-                disabled={settingsState.appState !== "ready"}
+                disabled={appState.status !== "ready"}
                 class="btn btn-warning btn-sm"
                 onclick={() => executeParse("forceUpdate")}
                 >Parse and Force Update</button

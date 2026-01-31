@@ -71,5 +71,20 @@ pub struct StoredSettings {
     /// Whether to have the app auto-detect the directories when parsing
     pub enable_directory_detection: bool,
     /// The specific startup action
-    pub startup_action: String,
+    pub startup_action: StartupAction,
+}
+
+/// Action to be taken at the app startup.
+#[derive(Serialize, Deserialize, Debug, Copy, PartialEq, Eq, Clone, Default)]
+#[serde(rename_all = "camelCase")]
+pub enum StartupAction {
+    /// Do nothing
+    #[default]
+    Nothing,
+    /// Parse based on parse settings, then update app database non-destructively
+    ParseAndInsert,
+    /// Parse based on parse settings, then update app database
+    ParseAndUpdate,
+    /// Reset app database, then parse and update database
+    ResetAndParse,
 }

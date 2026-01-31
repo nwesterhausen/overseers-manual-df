@@ -90,7 +90,7 @@
                 objectId={displayInfo.objectId}
             />
             <div class="join">
-                <ActionMenu {rawId} />
+                <ActionMenu {rawId} moduleId={raw.metadata.moduleObjectId} />
             </div>
         </div>
     </div>

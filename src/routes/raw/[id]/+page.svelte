@@ -1,8 +1,5 @@
 <script lang="ts">
-    import "./page.css";
-    import { highlightJson } from "highlighter";
     import type { PageProps } from "./$types";
-    import { themeState } from "state/theme.svelte";
     import CreatureDetail from "./CreatureDetail.svelte";
     import DefaultDetail from "./DefaultDetail.svelte";
     import { type Creature } from "bindings/DFRawParser";

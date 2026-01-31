@@ -10,7 +10,6 @@
         SunIcon,
     } from "@lucide/svelte";
     import ThemeToggler from "./ThemeToggler.svelte";
-    import { searchState } from "state/search.svelte";
     import { executeParse } from "wrappers";
     import SearchBox from "./SearchBox.svelte";
 </script>

@@ -1,7 +1,7 @@
 <script lang="ts">
     import "./layout.css";
     import Navigation from "components/NavigationMenu.svelte";
-    import AdvancedSearch from "components/AdvancedSearch.svelte";
+    import AdvancedSearch from "components/AdvancedSearch/index.svelte";
     import { onMount } from "svelte";
     import { themeState } from "state/theme.svelte";
     import {
@@ -12,6 +12,7 @@
     import { parserLogs } from "state/parserState.svelte";
     import { searchState } from "state/search.svelte";
     import { highlightJson } from "highlighter";
+    import { appState } from "state/app.svelte";
 
     let { children } = $props();
 
@@ -47,7 +48,7 @@
         JSON.stringify(settingsState);
 
         // Don't run logic if we aren't ready (prevents saving immediately on mount)
-        if (settingsState.appState !== "ready") return;
+        if (appState.status !== "ready") return;
 
         // DEBOUNCE: Wait 1 second after the last change before saving
         const timer = setTimeout(() => {
@@ -59,16 +60,12 @@
             clearTimeout(timer);
         };
     });
-
-    function retrieveSettings() {
-        throw new Error("Function not implemented.");
-    }
 </script>
 
 <div class="h-screen flex flex-col overflow-hidden">
     <header class="shrink-0">
         <Navigation />
-        {#if settingsState.appState === "parsing"}
+        {#if appState.status === "parsing"}
             <div
                 role="alert"
                 class={"alert alert-soft mx-2 place-content-center alert-" +
@@ -76,12 +73,12 @@
             >
                 <span>{parserLogs.currentLog}</span>
             </div>
-        {:else if settingsState.appState === "error"}
+        {:else if appState.status === "error"}
             <div
                 role="alert"
                 class="alert alert-error alert-soft mx-2 place-content-center"
             >
-                <span>{settingsState.errorMessage}</span>
+                <span>{appState.errorMessage}</span>
             </div>
         {/if}
         {#if searchState.showFilters}

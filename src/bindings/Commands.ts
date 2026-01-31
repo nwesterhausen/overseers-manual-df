@@ -40,6 +40,10 @@ export async function getRawById(id: string): Promise<RawObject> {
   return invoke<RawObject>("get_raw_by_id", { id });
 }
 
+export async function getRawFileById(id: string): Promise<string> {
+  return invoke<string>("get_reconstructed_raw_by_id", { id });
+}
+
 export async function searchRaws(
   query: SearchQuery,
 ): Promise<SearchResults<RawObject>> {

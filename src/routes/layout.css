@@ -55,3 +55,7 @@ dd {
 .info-tag-badge {
     @apply badge-sm border-secondary text-[10px];
 }
+
+.tab-container {
+    @apply flex flex-wrap gap-4 flex-col w-9/12;
+}

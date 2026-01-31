@@ -1,6 +1,5 @@
 import type { ObjectType, RawModuleLocation } from "bindings/DFRawParser";
-
-export type StartupAction = "nothing" | "parseInsert" | "parseUpdate" | "reset";
+import type { StartupAction } from "bindings/Structs";
 
 export const typeOptions: { label: string; value: ObjectType }[] = [
   { label: "Creature", value: "Creature" },
@@ -15,7 +14,7 @@ export const locationOptions: { label: string; value: RawModuleLocation }[] = [
 ];
 export const startupOptions: { label: string; value: StartupAction }[] = [
   { label: "Do nothing", value: "nothing" },
-  { label: "Parse and insert", value: "parseInsert" },
-  { label: "Parse and force update", value: "parseUpdate" },
-  { label: "Reset then parse", value: "reset" },
+  { label: "Parse and insert", value: "parseAndInsert" },
+  { label: "Parse and force update", value: "parseAndUpdate" },
+  { label: "Reset then parse", value: "resetAndParse" },
 ];

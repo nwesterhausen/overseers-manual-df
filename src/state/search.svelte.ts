@@ -17,6 +17,7 @@ export const searchState = $state<SearchState>({
     limit: 12,
     page: 1,
     favoritesOnly: false,
+    inModules: [],
   },
   showFilters: false,
 });

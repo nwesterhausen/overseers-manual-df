@@ -10,4 +10,5 @@ export const defaultSearchState = $state<SearchQuery>({
   limit: 12,
   page: 1,
   favoritesOnly: false,
+  inModules: [],
 });

@@ -43,6 +43,7 @@ pub fn run() {
             search_raws,
             parse_raws,
             get_raw_by_id,
+            get_reconstructed_raw_by_id,
             get_graphics,
             retrieve_last_parser_options,
             retrieve_last_user_data_directory,
