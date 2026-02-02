@@ -1,4 +1,4 @@
-use dfraw_parser::{metadata::RawModuleLocation, Dimensions};
+use dfraw_parser::{custom_types::Dimensions, metadata::RawModuleLocation};
 use serde::{Deserialize, Serialize};
 
 /// Graphics query results

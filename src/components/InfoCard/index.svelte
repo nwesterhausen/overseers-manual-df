@@ -28,7 +28,7 @@
         switch (raw.metadata.objectType) {
             case "Creature": {
                 const creature = raw as unknown as Creature;
-                title = creature.name.singular || raw.identifier;
+                title = raw.identifier;
                 description = creature.castes
                     .map((c) => c.description)
                     .filter(Boolean)
