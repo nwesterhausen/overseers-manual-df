@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { locationOptions, typeOptions } from "searchOptions";
+    import { locationOptions, typeOptions } from "options";
     import { defaultSearchState } from "state/searchDefaults.svelte";
 </script>
 

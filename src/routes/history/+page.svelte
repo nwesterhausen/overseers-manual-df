@@ -1,6 +1,5 @@
 <script lang="ts">
     import { parserLogs } from "state/parserState.svelte";
-    import "./page.css";
 </script>
 
 <div class="p-4">

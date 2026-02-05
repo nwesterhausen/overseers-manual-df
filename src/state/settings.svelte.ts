@@ -1,25 +1,12 @@
 import {
   persistStoredSettings,
-  retrieveDwarfFortressDirectory,
   retrieveStoredSettings,
-  retrieveUserDataDirectory,
 } from "bindings/Commands";
 import type { LocationHelper, RawModuleLocation } from "bindings/DFRawParser";
-import type { StartupAction } from "searchOptions";
+import type { StoredSettings } from "bindings/Structs";
+import { appState } from "./app.svelte";
 
-interface Settings {
-  dfDirectory: string;
-  userDirectory: string;
-  parseLocations: RawModuleLocation[];
-  databaseLocation: string;
-  randomizeImageRotation: boolean;
-  enableDirectoryDetection: boolean;
-  startupAction: StartupAction;
-  appState: "loading" | "parsing" | "ready" | "error";
-  errorMessage: string;
-}
-
-export const settingsState = $state<Settings>({
+export const settingsState = $state<StoredSettings>({
   dfDirectory: "",
   userDirectory: "",
   parseLocations: ["Vanilla"],
@@ -27,8 +14,6 @@ export const settingsState = $state<Settings>({
   randomizeImageRotation: true,
   enableDirectoryDetection: true,
   startupAction: "nothing",
-  appState: "ready",
-  errorMessage: "",
 });
 
 /**
@@ -64,9 +49,11 @@ export const toggleLocation = function (location: RawModuleLocation) {
 export const getLocationHelper = function (): LocationHelper {
   return {
     df_directory:
-      settingsState.dfDirectory.length > 0 ? settingsState.dfDirectory : null,
+      settingsState.dfDirectory && settingsState.dfDirectory.length > 0
+        ? settingsState.dfDirectory
+        : null,
     user_data_directory:
-      settingsState.userDirectory.length > 0
+      settingsState.userDirectory && settingsState.userDirectory.length > 0
         ? settingsState.userDirectory
         : null,
   };
@@ -77,7 +64,7 @@ export const getLocationHelper = function (): LocationHelper {
  */
 export const loadStoredSettings = async () => {
   try {
-    settingsState.appState = "loading";
+    appState.status = "loading";
 
     // Example: Invoke your Tauri command
     // Replace 'get_settings' with your actual backend command
@@ -95,13 +82,13 @@ export const loadStoredSettings = async () => {
     settingsState.parseLocations = storedSettings.parseLocations;
     settingsState.randomizeImageRotation =
       storedSettings.randomizeImageRotation;
-    settingsState.startupAction = settingsState.startupAction as StartupAction;
+    settingsState.startupAction = settingsState.startupAction;
 
-    settingsState.appState = "ready";
+    appState.status = "ready";
   } catch (error) {
     console.error("Failed to load settings:", error);
-    settingsState.errorMessage = String(error);
-    settingsState.appState = "error";
+    appState.errorMessage = String(error);
+    appState.status = "error";
   }
 };
 /**
@@ -110,7 +97,7 @@ export const loadStoredSettings = async () => {
  */
 export const saveSettings = async () => {
   // This prevents the "Load Loop" where loading data triggers a save.
-  if (settingsState.appState !== "ready") return;
+  if (appState.status !== "ready") return;
 
   try {
     await persistStoredSettings({

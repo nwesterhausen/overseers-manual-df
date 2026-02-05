@@ -1,3 +1,4 @@
+use chrono::Utc;
 use dfraw_parser::metadata::{LocationHelper, ParserOptions, RawModuleLocation};
 use tauri::State;
 
@@ -23,22 +24,33 @@ pub async fn parse_raws(
     if let Some(dir) = directories.get_user_data_directory() {
         options.set_user_data_directory(&dir);
     }
+    let start_time = Utc::now();
     let results = dfraw_parser::parse(&options).map_err(|e| e.to_string())?;
+    let duration = Utc::now() - start_time;
+    db.set_last_parse_duration(&duration).map_err(|e| {
+        tracing::error!("parse_raws:: setting duration: {e}");
+        e.to_string()
+    })?;
+    db.set_last_parse_operation_utc_datetime(&Utc::now())
+        .map_err(|e| {
+            tracing::error!("parse_raws:: setting date: {e}");
+            e.to_string()
+        })?;
 
     match db_option {
         DbOptionOnParse::InsertOnly => db
-            .insert_parse_results(results)
+            .insert_parse_results(&results)
             .map_err(|e| e.to_string())?,
         DbOptionOnParse::ForceUpdate => {
             // somhow specify to force update
 
-            db.insert_parse_results(results)
+            db.insert_parse_results(&results)
                 .map_err(|e| e.to_string())?;
         }
         DbOptionOnParse::Reset => {
             // call a db reset command
 
-            db.insert_parse_results(results)
+            db.insert_parse_results(&results)
                 .map_err(|e| e.to_string())?;
         }
     }

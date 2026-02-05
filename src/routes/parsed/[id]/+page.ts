@@ -1,12 +1,12 @@
 import type { PageLoad } from "./$types";
-import { getRawById } from "bindings/Commands";
+import { getRawFileById } from "bindings/Commands";
 
 export const load: PageLoad = async ({ params }) => {
   const rawId = params.id; // part of the path.. [id]
 
   try {
     // Fetch the specified raw
-    const raw = await getRawById(rawId);
+    const raw = await getRawFileById(rawId);
     return {
       details: raw,
     };

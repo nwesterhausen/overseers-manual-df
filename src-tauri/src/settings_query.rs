@@ -14,8 +14,12 @@ pub async fn retrieve_stored_settings(
             e.to_string()
         })
         .and_then(|settings_string| {
+            if settings_string.is_empty() {
+                return Ok(StoredSettings::default());
+            }
+
             serde_json::from_str::<StoredSettings>(&settings_string).map_err(|e| {
-                tracing::error!("retrieve_stored_settings: {e}");
+                tracing::error!("retrieve_stored_settings (deserialize): {e}");
                 e.to_string()
             })
         })

@@ -1,37 +1,50 @@
 <script lang="ts">
-    import { invoke } from "@tauri-apps/api/core";
     import { searchState } from "state/search.svelte";
-    import InfoCard from "components/InfoCard.svelte";
-    import type { RawObject, SearchResults } from "bindings/DFRawParser";
+    import InfoCard from "components/InfoCard/index.svelte";
     import { settingsState } from "state/settings.svelte";
+    import { resultsState } from "state/results.svelte";
 
-    let search_results = $state<SearchResults<RawObject>>({
-        results: [],
-        totalCount: 0,
-    });
-
-    // Reactively search whenever any part of the global search query
+    // Reactively search whenever any part of the search state changes. Includes page num
+    // and toggling "only favorties".
     $effect(() => {
-        invoke<SearchResults<RawObject>>("search_raws", {
-            query: searchState,
-        })
-            .then((data) => (search_results = data))
-            .catch((error) => console.log(error));
+        resultsState.search();
     });
 </script>
 
-<main class="p-4">
+<main class="p-4 flex flex-col items-center gap-4">
     <div class="flex flex-wrap justify-center gap-4">
-        {#each search_results.results as item}
-            <InfoCard raw={item.data} raw_id={item.id} />
+        {#each resultsState.list as item}
+            <InfoCard raw={item.data} rawId={item.id} />
         {:else}
             {#if settingsState.appState === "ready"}
                 <p class="text-neutral-500">
-                    No results found for "{searchState.searchString}"
+                    No results found for "{searchState.query.searchString}"
                 </p>
             {/if}
         {/each}
     </div>
-</main>
 
-<style></style>
+    {#if resultsState.totalCount > 0}
+        <div class="flex items-center gap-4 py-4">
+            <button
+                class="btn variant-filled-surface"
+                onclick={() => resultsState.prevPage()}
+                disabled={!resultsState.hasPrev}
+            >
+                Previous
+            </button>
+
+            <span class="text-sm">
+                Page {resultsState.page} of {resultsState.totalPages}
+            </span>
+
+            <button
+                class="btn variant-filled-surface"
+                onclick={() => resultsState.nextPage()}
+                disabled={!resultsState.hasNext}
+            >
+                Next
+            </button>
+        </div>
+    {/if}
+</main>

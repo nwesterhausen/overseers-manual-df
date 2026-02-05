@@ -7,6 +7,8 @@ export const defaultSearchState = $state<SearchQuery>({
   requiredFlags: [],
   searchString: null,
   locations: ["Vanilla"],
-  limit: 50,
+  limit: 12,
   page: 1,
+  favoritesOnly: false,
+  inModules: [],
 });

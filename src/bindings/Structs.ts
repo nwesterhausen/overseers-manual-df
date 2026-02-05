@@ -35,5 +35,11 @@ export interface StoredSettings {
   databaseLocation: string;
   randomizeImageRotation: boolean;
   enableDirectoryDetection: boolean;
-  startupAction: string;
+  startupAction: StartupAction;
 }
+
+export type StartupAction =
+  | "nothing"
+  | "parseAndInsert"
+  | "parseAndUpdate"
+  | "resetAndParse";

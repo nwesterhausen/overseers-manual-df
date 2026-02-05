@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { appState } from "state/app.svelte";
     import { settingsState } from "state/settings.svelte";
     import { executeParse } from "wrappers";
 </script>
@@ -16,7 +17,7 @@
         </label>
     </div>
     <button
-        disabled={settingsState.appState !== "ready"}
+        disabled={appState.status !== "ready"}
         class="btn btn-error btn-sm"
         onclick={() => executeParse("reset")}
         >Reset Database, Parse and Insert</button
